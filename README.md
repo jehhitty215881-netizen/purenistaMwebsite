@@ -11,23 +11,11 @@ en.html      ← 英文版
 
 ---
 
-## AI 視覺輔助
+## 已移除的功能
 
-不需要部署任何後端。在網頁的 ④ 進階選項：
-
-1. 勾選「使用 AI 視覺輔助」
-2. 在「① 直接填你自己的 API key」貼上 console.anthropic.com 申請的 key
-3. 選模型（`claude-haiku-4-5` 最便宜，`claude-sonnet-5` 較準）
-
-key 存在這台裝置的瀏覽器，只送到 `api.anthropic.com`，不經過你的網站。
-
-⚠️ 共用電腦不建議填。**絕對不要把 key 寫進 HTML 再上傳**——那會公開給所有人。
-
-### 什麼時候才需要 Cloudflare Worker
-
-只有當你想**開放給其他玩家使用**、由你付所有人的 API 費用時才需要。
-那種情況 key 不能放在訪客的瀏覽器裡，必須放伺服器端。
-需要的話跟我說，我再給你 worker 檔案。
+之前版本有一個「AI 視覺輔助」選項，需要使用者自己填 API key 或架設 Cloudflare Worker／
+Netlify Function 才能用。因為大部分人不會、也不想處理部署，這個功能已經整個拿掉。
+現在的人物／臉部辨識全部是本地端純 JavaScript（LBP cascade），不需要任何設定或網路連線。
 
 ---
 
@@ -37,8 +25,8 @@ key 存在這台裝置的瀏覽器，只送到 `api.anthropic.com`，不經過�
 |---|---|
 | `netlify.toml` | Netlify 專用設定，GitHub Pages 讀不到 |
 | `_redirects` | Netlify 專用。只做 `/en` → `/en.html`，但站內連結都直接寫 `en.html` |
-| `netlify/functions/analyze.js` | GitHub Pages 不能跑 serverless |
-| `cloudflare/worker.js` | 是貼進 Cloudflare 後台的，不是放網站的檔案 |
+| `netlify/functions/analyze.js` | 原本是 AI 視覺輔助的後端，功能已移除 |
+| `cloudflare/worker.js` | 同上，AI 視覺輔助的自架端點，功能已移除 |
 
 ---
 
