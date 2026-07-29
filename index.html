@@ -6431,10 +6431,21 @@ function compositionScore(opts) {
        observations worth saying out loud, so they now drive the commentary too. */
     if(a.v3form&&a.v3form.score){
       var FS=a.v3form.score;
-      var LOW=[['rhythm',0.12,'fx_rhythm_lo',74,'ae-prin'],['grad',0.20,'fx_grad_lo',72,'ae-light'],
+      /* 'grad' and 'rep' were in this list and should never have been. The ten principles are
+         DEVICES, not requirements - not using gradation or repetition is not an error, any
+         more than not using symmetry is. Worse, 'grad' does not measure what the advice
+         claimed: it is the R-squared of a linear or radial ramp fitted across the frame, so a
+         picture with dark hair against a white veil scores 13 because its structure is local,
+         not because it is flat. One real piece measured grad 13 with a tonal span of 175 and
+         contrast 76 - about as far from flat as a picture gets - and was told it looked flat.
+         I picked that metric because it had the widest spread without checking what it meant,
+         which is the exact mistake this whole module exists to avoid. Flatness is already
+         covered honestly by the tonal-span trigger below.
+         What stays here are the ones that are faults in kind: the subject failing to separate,
+         clutter, placement with no relationship, and neither-unified-nor-varied. */
+      var LOW=[['rhythm',0.12,'fx_rhythm_lo',74,'ae-prin'],
                ['prop',0.22,'fx_prop_lo',76,'ae-comp'],['contr',0.60,'fx_contr_lo',80,'ae-light'],
-               ['simp',0.40,'fx_simp_lo',77,'ae-prin'],['uv',0.58,'fx_uv_lo',68,'ae-prin'],
-               ['rep',0.25,'fx_rep_lo',64,'ae-prin']];
+               ['simp',0.40,'fx_simp_lo',77,'ae-prin'],['uv',0.58,'fx_uv_lo',68,'ae-prin']];
       for(var li=0;li<LOW.length;li++){
         var Lw=LOW[li];
         if(FS[Lw[0]]!==undefined&&FS[Lw[0]]<Lw[1])
