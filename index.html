@@ -5553,15 +5553,21 @@ function compositionScore(opts) {
   else if (ad >= 4.0) tiltPts = 0;
   else tiltPts = 30 * (1 - (ad - 1.0) / 3.0);
 
-  var s = thirdsPts + nsPts + balPts + tiltPts;
+  /* Outside photography the tilt term is meaningless, and leaving it in cost twice: it
+     handed every drawing a flat 21 points for an untestable property, and it compressed
+     everything else into the remaining 70. Dropping it and rescaling the three criteria that
+     do apply gives them the full range - which is part of why scores all looked alike. */
+  var judgePhoto = (typeof currentView === 'undefined') || currentView === 'photo';
+  var s = judgePhoto ? (thirdsPts + nsPts + balPts + tiltPts)
+                     : (thirdsPts + nsPts + balPts) / 70 * 100;
 
-  if (tiltTrusted && ad > 1.5)
+  if (judgePhoto && tiltTrusted && ad > 1.5)
     reasons.push({ k: "tilt", deg: ad, dir: t.deg > 0 ? "left" : "right" });
   if (opts.ns.verdict === "frag") reasons.push({ k: "frag", n: opts.ns.clutter });
   if (opts.ns.verdict === "uneven") reasons.push({ k: "uneven", d: opts.ns.dirImb, r: opts.ns.imbalance });
   if (opts.ns.verdict === "crowd") reasons.push({ k: "crowd" });
   // a visibly tilted frame caps the score: good spacing must not excuse it
-  if (tiltTrusted && ad > 2.0) s = Math.min(s, 62 - (ad - 2.0) * 6);
+  if (judgePhoto && tiltTrusted && ad > 2.0) s = Math.min(s, 62 - (ad - 2.0) * 6);
   if (opts.alignBad) { s = Math.min(s, 65); reasons.push({ k: "align" }); }
   if (opts.shot && opts.shot.cropBottom && (opts.shot.type === "full" || opts.shot.type === "half")) {
     s -= 6; reasons.push({ k: "feet" });
@@ -6096,7 +6102,23 @@ function compositionScore(opts) {
                         :flatBands(full);
     var overflow=panel.has?overflowRatio(full,panel):0;
     var frameBreak=panel.has&&(manualBreak||overflow>0.035);
-    if(panel.has&&!border.has){border={has:true,top:panel.top,bottom:panel.bottom,left:panel.left,right:panel.right,color:border.color,colorRgb:border.colorRgb};}
+    if(panel.has&&!border.has){
+      // detectBorder returns #FFFFFF as an unused placeholder when it finds nothing, and
+      // carrying that over labelled a solid black surround as white. Measure it instead.
+      var _fc=(function(){
+        var fd=full.getContext('2d').getImageData(0,0,full.width,full.height).data;
+        var fw=full.width,fh=full.height,r=0,g=0,b=0,n=0,x,y,p;
+        for(y=0;y<fh;y++)for(x=0;x<fw;x++){
+          if(x>=panel.left&&x<fw-panel.right&&y>=panel.top&&y<fh-panel.bottom)continue;
+          p=(y*fw+x)*4;r+=fd[p];g+=fd[p+1];b+=fd[p+2];n++;}
+        if(!n)return {hex:'#FFFFFF',rgb:[255,255,255]};
+        r=Math.round(r/n);g=Math.round(g/n);b=Math.round(b/n);
+        function h2(v){return ('0'+v.toString(16)).slice(-2).toUpperCase();}
+        return {hex:'#'+h2(r)+h2(g)+h2(b),rgb:[r,g,b]};
+      })();
+      border={has:true,top:panel.top,bottom:panel.bottom,left:panel.left,right:panel.right,
+              color:_fc.hex,colorRgb:_fc.rgb};
+    }
     var workCanvas=panel.has?cropCanvas(full,panel.left,panel.top,panel.right,panel.bottom):full;
     // downscale work canvas for segmentation stability
     var wc=downscaleCanvas(workCanvas,420);
@@ -6334,7 +6356,12 @@ function compositionScore(opts) {
     var R=a.v3reasons||[], issues=[], praise=[];
     function reason(k){for(var i=0;i<R.length;i++)if(R[i].k===k)return R[i];return null;}
 
-    var rt=reason('tilt');
+    /* Tilt is a camera property: the horizon was not level. A drawing has no horizon and no
+       camera, so what the detector finds is the dominant orientation of the ARTWORK - and at
+       weight 100 that became "the one thing to fix" and dragged the verdict to "composition
+       failed". One real illustration measured 1.58 degrees after the frame crop, just over the
+       1.5 threshold, and was told to rotate the picture by an amount nobody can see. */
+    var rt=a.judgeAsPhoto?reason('tilt'):null;
     if(rt) issues.push({w:100,kind:'tilt',sec:'ae-comp',t:tt('v3_tilt').replace('{D}',rt.dir==='left'?tt('v3_dleft'):tt('v3_dright'))
         .replace(/\{A\}/g,fx(rt.deg,1)).replace('{R}',rt.dir==='left'?tt('v3_rcw'):tt('v3_rccw'))});
     var rf=reason('frag');
