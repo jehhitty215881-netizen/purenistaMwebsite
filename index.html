@@ -2925,8 +2925,17 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>更新紀錄 <span class="tag ok">持續維護中</span></h3>
     <p class="cond">這裡會列出每次網站更新的內容，讓大家知道網站一直有人在維護、修 bug、加新功能。</p>
     <div class="chg-entry">
-      <div class="chg-ver">目前版本 <span class="chg-build">v4.9.0730</span></div>
-      <p class="fine">之後每次更新，會在這裡補上這個版本新增／修正了什麼——例如新增了什麼工具、修了什麼 bug。</p>
+      <div class="chg-ver">Version 4.9.0730 <span class="chg-build">目前版本・構圖判讀修正</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>新增</b></p>
+      <ul class="tips">
+        <li>「對角線構圖」新增第二套判斷邏輯：偵測到同一個對角方向有 4 條以上長線同向、反向最多 1 條，就算對角構圖成立。修好了像人物斜躺、樹枝斜切這類明顯是對角構圖、卻一直偵測不到的問題。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>修正</b></p>
+      <ul class="tips">
+        <li>修正「打破圖案」誤判：以前只要沒偵測到「重複圖案」，也可能被錯判成「打破圖案」；現在改成沒有重複圖案，就不會出現打破圖案。</li>
+        <li>修正一處變數命名衝突，避免調整對角線判斷時意外影響到「放射線構圖」的準確度。</li>
+      </ul>
+      <p class="fine">這版把累積的 26 張作品重新跑過一次、逐張人工比對，找出上面兩個 bug。</p>
     </div>
   </div>
 </section>

@@ -2922,8 +2922,17 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>Changelog <span class="tag ok">actively maintained</span></h3>
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
     <div class="chg-entry">
-      <div class="chg-ver">Current build <span class="chg-build">v4.9.0730</span></div>
-      <p class="fine">Future updates will list what changed in each version here — new tools added, bugs fixed, and so on.</p>
+      <div class="chg-ver">Version 4.9.0730 <span class="chg-build">current · composition-read fixes</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Added</b></p>
+      <ul class="tips">
+        <li>Added a second detection path for <b>diagonal composition</b>: it now also fires when 4+ long lines run the same diagonal direction with at most 1 line running the opposite way. This fixes clearly-diagonal pieces (a reclining figure, a branch sweeping across frame) that previously went undetected.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Fixed</b></p>
+      <ul class="tips">
+        <li>Fixed a false positive on <b>"pattern break"</b>: previously it could fire even when no "repeating pattern" was detected at all; now pattern break can only appear alongside an actual repeating pattern.</li>
+        <li>Fixed a variable-naming collision that could let diagonal-detection changes accidentally affect the accuracy of radial composition readings.</li>
+      </ul>
+      <p class="fine">This pass re-ran all 26 accumulated sample pieces and manually cross-checked each one, which is how the two bugs above were found.</p>
     </div>
   </div>
 </section>
