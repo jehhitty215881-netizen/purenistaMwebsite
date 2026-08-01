@@ -59,6 +59,8 @@ section.show{display:block;animation:fade .25s ease}
 .lort.show{display:block;animation:fade .25s ease}
 .bdt{display:none}
 .bdt.show{display:block;animation:fade .25s ease}
+.trt{display:none}
+.trt.show{display:block;animation:fade .25s ease}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){section.show,.dot{animation:none!important}}
 
@@ -283,7 +285,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .chk-gauge-good{position:absolute;top:0;height:100%;background:rgba(61,142,138,.32);border-radius:4px}
 .chk-gauge-pt{position:absolute;top:-3px;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.18);transform:translateX(-50%)}
 .v-ok .chk-gauge-pt{background:var(--teal)} .v-warn .chk-gauge-pt{background:var(--gold)} .v-bad .chk-gauge-pt{background:#C0554E} .v-info .chk-gauge-pt{background:var(--violet)}
-.chk-v2-section{margin-top:18px;padding-top:4px}.buildtag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--violet-soft);color:var(--violet);font-size:10.5px;font-weight:800;letter-spacing:.06em;vertical-align:middle;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.cpall{margin:10px 0 2px}.cpall h4{margin:0 0 6px;font-size:12px;font-weight:800;color:var(--ink);letter-spacing:.04em}.cpall .note{margin:0 0 10px;font-size:11.5px;color:var(--ink-soft);line-height:1.65}.cpall .grp{margin:0 0 9px}.cpall .grp>b{display:block;font-size:10.5px;color:var(--ink-soft);font-weight:800;letter-spacing:.1em;margin:0 0 5px}.cpall .row{display:flex;flex-wrap:wrap;gap:5px}.cpall a{display:inline-flex;align-items:baseline;gap:4px;text-decoration:none;font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);transition:.15s}.cpall a.hit{border-color:var(--violet);background:var(--violet-soft);color:var(--ink)}.cpall a.hit i{font-style:normal;font-weight:800;color:var(--violet);font-size:10.5px}.cpall a:focus-visible{outline:3px solid var(--violet);outline-offset:2px}.cm-fix{margin:6px 0 0;padding-left:1.75em}.cm-fix>li{margin:7px 0;line-height:1.7;padding-left:2px}.cm-fix>li::marker{color:var(--rose);font-weight:800}.cm-keep,.cm-body ul{padding-left:1.35em}.chk-brief{background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin:0 0 14px}.chk-brief h4{margin:0 0 8px;font-size:13px;letter-spacing:.08em;color:var(--ink-soft);font-weight:800}.chk-brief .band{font-size:16px;font-weight:800;color:var(--ink);line-height:1.55;margin:0 0 10px;word-break:break-word}.chk-brief dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:start}.chk-brief dt{font-size:11.5px;font-weight:800;color:var(--rose);white-space:nowrap;padding-top:2px}.chk-brief dd{margin:0;font-size:13.5px;line-height:1.65;color:var(--ink);min-width:0;overflow-wrap:anywhere}.chk-brief .hint{margin:10px 0 0;font-size:11.5px;color:var(--ink-soft)}.rep-seg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 12px;padding-bottom:2px}.rep-seg::-webkit-scrollbar{display:none}.rep-seg button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:999px;cursor:pointer}.rep-seg button.on{background:var(--ink);border-color:var(--ink);color:#fff}.rept{display:none}.rept.show{display:block}.gname{display:block;font-size:.55em;letter-spacing:.16em;font-weight:800;color:var(--ink-soft);margin:0 0 2px;text-transform:uppercase}.chk-v2-section>h3{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.chk-v2-section .tag{font-size:11px}
+.chk-v2-section{margin-top:18px;padding-top:4px}.buildtag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--violet-soft);color:var(--violet);font-size:10.5px;font-weight:800;letter-spacing:.06em;vertical-align:middle;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.cpall{margin:10px 0 2px}.cpall h4{margin:0 0 6px;font-size:12px;font-weight:800;color:var(--ink);letter-spacing:.04em}.cpall .note{margin:0 0 10px;font-size:11.5px;color:var(--ink-soft);line-height:1.65}.cpall .grp{margin:0 0 9px}.cpall .grp>b{display:block;font-size:10.5px;color:var(--ink-soft);font-weight:800;letter-spacing:.1em;margin:0 0 5px}.cpall .row{display:flex;flex-wrap:wrap;gap:5px}.cpall a{display:inline-flex;align-items:baseline;gap:4px;text-decoration:none;font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);transition:.15s}.cpall a.hit{border-color:var(--violet);background:var(--violet-soft);color:var(--ink)}.cpall a.hit i{font-style:normal;font-weight:800;color:var(--violet);font-size:10.5px}.cpall a:focus-visible{outline:3px solid var(--violet);outline-offset:2px}.cm-fix{margin:6px 0 0;padding-left:1.75em}.cm-fix>li{margin:7px 0;line-height:1.7;padding-left:2px}.cm-fix>li::marker{color:var(--rose);font-weight:800}.cm-keep,.cm-body ul{padding-left:1.35em}.chk-brief{background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin:0 0 14px}.chk-dna{background:linear-gradient(135deg,var(--violet-soft),#EAF3FF)}.chg-entry{border-top:1px dashed var(--line);padding-top:12px;margin-top:12px}.chg-ver{font-weight:800;font-size:14px;color:var(--ink)}.chg-build{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--violet);background:var(--violet-soft);padding:2px 8px;border-radius:999px;margin-left:6px}.chk-brief h4{margin:0 0 8px;font-size:13px;letter-spacing:.08em;color:var(--ink-soft);font-weight:800}.chk-brief .band{font-size:16px;font-weight:800;color:var(--ink);line-height:1.55;margin:0 0 10px;word-break:break-word}.chk-brief dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:start}.chk-brief dt{font-size:11.5px;font-weight:800;color:var(--rose);white-space:nowrap;padding-top:2px}.chk-brief dd{margin:0;font-size:13.5px;line-height:1.65;color:var(--ink);min-width:0;overflow-wrap:anywhere}.chk-brief .hint{margin:10px 0 0;font-size:11.5px;color:var(--ink-soft)}.rep-seg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 12px;padding-bottom:2px}.rep-seg::-webkit-scrollbar{display:none}.rep-seg button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:999px;cursor:pointer}.rep-seg button.on{background:var(--ink);border-color:var(--ink);color:#fff}.rept{display:none}.rept.show{display:block}.gname{display:block;font-size:.55em;letter-spacing:.16em;font-weight:800;color:var(--ink-soft);margin:0 0 2px;text-transform:uppercase}.chk-v2-section>h3{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.chk-v2-section .tag{font-size:11px}
 
 /* ---------- 作品健檢 V2 additions ---------- */
 .chk-types{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 12px}
@@ -331,6 +333,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 <nav aria-label="Tabs">
   <button class="on" data-tab="calc">Quick Calc</button>
   <button data-tab="ratio">Trade Ratios</button>
+  <button data-tab="trade">Trade Smarts</button>
   <button data-tab="brand">BRAND Dyeing</button>
   <button data-tab="branddata">Brand data</button>
   <button data-tab="lore">Trivia</button>
@@ -343,6 +346,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <button data-tab="qa">Q&amp;A</button>
   <button data-tab="feedback">Feedback</button>
   <button data-tab="notes">Notes</button>
+  <button data-tab="changelog">Changelog</button>
   <a class="navlang" href="index.html">🌐 中文</a>
 </nav>
 
@@ -356,6 +360,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
   <div class="seg" id="calcNav" style="margin-bottom:14px">
     <button class="on" data-c="t-ratio">Ratio calc</button>
+    <button data-c="t-wizard">How to trade? Wizard</button>
     <button data-c="t-conv">Rarity</button>
     <button data-c="t-fee">Fee</button>
     <button data-c="t-dye">Dye cost</button>
@@ -465,6 +470,38 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       </div>
     </div>
     <p class="fine">BRAND <b>original-color</b> items are valued exactly like regular PRM items (by expiry time & popularity) — they have their own option above.</p>
+    <p id="ratioStat" style="font-size:11.5px;color:var(--ink-soft);margin-top:6px"></p>
+  </div>
+  <div class="card ctool" id="t-wizard">
+    <h3>Not sure how to trade? Wizard <span class="tag warn">Step by step</span></h3>
+    <p class="cond">No need to memorize every rule — answer the questions and it'll tell you which pricing logic to use.</p>
+    <div class="step" id="wzStep1">
+      <div class="step-label">This item is —</div>
+      <div class="opts" id="wzOpts1">
+        <button data-v="brand">A BRAND item</button>
+        <button data-v="normal">A regular item</button>
+      </div>
+    </div>
+    <div class="step" id="wzStep2" hidden>
+      <div class="step-label" id="wzLabel2"></div>
+      <div class="opts" id="wzOpts2"></div>
+    </div>
+    <div class="step" id="wzStep3" hidden>
+      <div class="step-label" id="wzLabel3"></div>
+      <div class="opts" id="wzOpts3"></div>
+    </div>
+    <div class="step" id="wzStep4" hidden>
+      <div class="step-label" id="wzLabel4"></div>
+      <div class="opts" id="wzOpts4"></div>
+    </div>
+    <div class="result">
+      <p class="placeholder" id="wzPlaceholder">Pick an answer above to see the suggested pricing approach here.</p>
+      <div id="wzResult" hidden>
+        <p class="result-desc" id="wzDesc" style="margin:6px auto 0;max-width:none;text-align:left"></p>
+        <div class="pill-note" id="wzNote" hidden></div>
+      </div>
+    </div>
+    <p id="wzStat" style="font-size:11.5px;color:var(--ink-soft);margin-top:10px"></p>
   </div>
   <div class="card ctool" id="t-vipshop">
     <h3>VIP point exchange calculator <span class="tag gold">Special tab · multi-select</span></h3>
@@ -526,6 +563,17 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <div class="row"><span>Current basket : expired item</span><span class="r">2 : 1 and up</span></div>
     <div class="row"><span>Current basket : dye item</span><span class="r">2 : 1 and up</span></div>
     <p class="fine">⚠️ Year-based ratios are <b>same-type trades</b> (PURE↔PURE / PRM↔PRM); for PURE-PRM conversion see "PURE vs PRM basket".</p>
+  </div>
+
+  <div class="card">
+    <h3>What decides value <span class="tag hot">Read the market</span></h3>
+    <p class="cond">A lot of people only know "BRAND #4 is expensive" without knowing why. These 5 factors decide where an item actually lands — the more stars, the bigger the pull on the ratio:</p>
+    <div class="row"><span>Age (the older, the fewer people have it)</span><span class="r t">★★★★</span></div>
+    <div class="row"><span>Popularity (character / colorway hype)</span><span class="r t">★★★★★</span></div>
+    <div class="row"><span>Circulation (how many were released, how many times traded)</span><span class="r">★★</span></div>
+    <div class="row"><span>Dye difficulty (needs original color? key item? time-limited?)</span><span class="r">★★★</span></div>
+    <div class="row"><span>Rerun chance (BRAND baskets never rerun; regular baskets sometimes might)</span><span class="r">★</span></div>
+    <p class="fine">Two items that are both "1 year expired" can still differ by more than 1:2 if one has low circulation and high popularity while the other is something everyone owns. Run through these 5 factors before opening a price — it beats memorizing numbers.</p>
   </div>
 
   <div class="card">
@@ -596,6 +644,88 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <li><b>BRAND #4</b>: the global server&#39;s first BRAND basket — and the priciest.</li>
       <li><b>From #7 on</b>, BRAND baskets multiplied; worth less than #4/#5 (still appreciates, just less).</li>
     </ul>
+  </div>
+</section>
+
+<!-- ================= Trade Smarts ================= -->
+<section id="trade">
+  <div class="seg" id="tradeSeg" style="margin-bottom:14px">
+    <button class="on" data-v="tr-nego">Negotiating</button>
+    <button data-v="tr-risk">Red flags</button>
+    <button data-v="tr-mistake">Rookie mistakes</button>
+  </div>
+
+  <div class="trt show" id="tr-nego">
+    <div class="card">
+      <h3>How to decline politely <span class="tag ok">No hard feelings</span></h3>
+      <p class="cond">If you get an offer you don't want, leaving them on read tends to sting. Try something like:</p>
+      <ul class="tips">
+        <li><b>Give a reason</b>"I'm keeping this one for a matching dye set I'm building — thanks for asking though!"</li>
+        <li><b>Don't put them down</b>avoid anything like "yours isn't good enough" — just saying "not looking for a trade right now" is enough.</li>
+        <li><b>Leave the door open</b>if it's really just the ratio that's off, try "let me think about the ratio, maybe we can talk again later" instead of a flat no.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>How to negotiate <span class="tag ok">Comfortable for both sides</span></h3>
+      <ul class="tips">
+        <li><b>Ask what they think first</b>"what ratio were you thinking?" finds middle ground faster than opening high yourself.</li>
+        <li><b>Use "the going rate," not "I feel like"</b>"stuff expired a year-plus usually goes around 1:2–3 in this community" lands better than "I feel like it's worth more" — and causes fewer arguments.</li>
+        <li><b>Move a little at a time</b>step toward each other from your opening offers instead of caving all at once — conceding too fast makes people wonder if your opener was made up.</li>
+        <li><b>Shelve it if you can't agree</b>"let's both think it over and circle back if we land on something" beats forcing it or getting heated.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>What's a "door-kick opener" <span class="tag warn">A testing lowball</span></h3>
+      <p class="cond">A door-kick opener means <b>deliberately opening way below</b> the going rate, to test whether you know the market and how easy you are to push around. Not every low offer is malicious, but common tells:</p>
+      <ul class="tips">
+        <li>The opener sits clearly below the ranges listed in "Old items · by expiry time" or "Dye item" tables.</li>
+        <li>They <b>jump up readily</b> once you point out the going rate — a sign they knew the rate all along and were just probing.</li>
+        <li>Openers like "just asking, no worries if not" that lower the pressure on you to say no.</li>
+      </ul>
+      <p class="fine">No need to get upset — just quote a ratio you're comfortable with. If they genuinely want the trade, they'll usually come back to a reasonable range.</p>
+    </div>
+    <div class="card">
+      <h3>Phrases that tend to backfire <span class="tag hot">Watch your wording</span></h3>
+      <ul class="tips">
+        <li><b>"Plenty of people are selling this anyway"</b>implies their item isn't worth much — even if true, it stings.</li>
+        <li><b>"Fine, forget it then"</b>turns a negotiation into a threat and usually shuts the conversation down entirely.</li>
+        <li><b>"Everyone else calculates it this way"</b>leaning on a vague "everyone" without showing an actual rate is less convincing, not more.</li>
+        <li><b>A cold "so?" after leaving them on read</b>even if the content is fine, the tone alone can make people feel disrespected and end the trade.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="trt" id="tr-risk">
+    <div class="card">
+      <h3>When to be extra careful <span class="tag hot">This is pattern-recognition, not a blacklist</span></h3>
+      <p class="cond">The point here isn't to suspect everyone — it's a handful of <b>common scam or pitfall patterns</b>. If several of these show up together, slow down.</p>
+      <ul class="tips">
+        <li><b>Constantly rushing the trade</b>a normal trader lets you double-check; unusual pressure is often about getting you to send before you look closely.</li>
+        <li><b>Refusing to state the ratio openly</b>insisting on discussing it privately with no screenshots leaves you with no record if things go wrong later.</li>
+        <li><b>Terms keep changing</b>the agreed ratio, order, or contents shift right up to the last second, wearing down your attention.</li>
+        <li><b>Asking you to send first</b>"show me you're serious first" or "I got scammed before so you go first" — a real trade should be simultaneous or witnessed by a trusted third party; sending first, alone, carries the most risk.</li>
+        <li><b>"I'll send it back later"</b>they take your item and stall on sending theirs with excuses — the longer it drags on, the harder it is to recover.</li>
+      </ul>
+      <p class="fine">Screenshot the agreed terms and ratio before trading. Try to trade simultaneously where possible, and for higher-value trades, ask a trusted third party to witness.</p>
+    </div>
+  </div>
+
+  <div class="trt" id="tr-mistake">
+    <div class="card">
+      <h3>Top 10 rookie mistakes <span class="tag warn">Read this before your first trade</span></h3>
+      <ul class="tips">
+        <li><b>1. Trading PURE for PRM at 1:1</b>PURE and PRM items cost different amounts to obtain — 1:1 usually shortchanges whoever's giving up the PRM item.</li>
+        <li><b>2. Not knowing LUCKYBAG counts as PURE</b>LUCKYBAG items are pulled with free stars, so they're priced like PURE items in a trade — not opened as if they were PRM.</li>
+        <li><b>3. Not knowing BRAND baskets never rerun</b>once a BRAND basket ends it's retired for good — the only way in is trading, and the older it is, the more it's usually worth. Regular-basket logic doesn't apply here.</li>
+        <li><b>4. Confusing "basket ended" with "dye expired"</b>"dye expired" isn't about how long ago the basket closed — it's about whether the item can <b>still be dyed</b>. The two price very differently (see the "Dye item" table).</li>
+        <li><b>5. Falling for the word "popular"</b>a seller calling their item popular doesn't make it so — check community discussion or circulation yourself instead of taking their word for it.</li>
+        <li><b>6. Trading same rarity, different type, at face value</b>a free SR and a paid SR aren't worth the same — confirm both sides are the same type before converting.</li>
+        <li><b>7. No screenshots</b>verbal agreements turn into "he said, she said" — screenshot the terms before you trade.</li>
+        <li><b>8. Sending first</b>whatever the reason given, whoever sends first always carries more risk — trade simultaneously whenever you can.</li>
+        <li><b>9. Treating a door-kick opener as the going rate</b>a first offer isn't automatically fair — check it against tables like "Old items · by expiry time" before accepting.</li>
+        <li><b>10. Letting a failed negotiation turn ugly</b>ratios not lining up is normal — "let me think about it" leaves the door open for a future trade far better than a snippy exchange does.</li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -710,7 +840,6 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
           <tr><td class="num">#15</td><td>Moon-Shadow → Today&#39;s</td><td>—</td></tr>
         </tbody>
       </table>
-      </ul>
       <p class="fine">Character names are unofficial fan translations.</p>
     </div>
     <div class="card">
@@ -2820,7 +2949,16 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 </ul>
 </section>
 
-
+<section id="changelog">
+  <div class="card">
+    <h3>Changelog <span class="tag ok">actively maintained</span></h3>
+    <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
+    <div class="chg-entry">
+      <div class="chg-ver">Current build <span class="chg-build">v4.9.0730</span></div>
+      <p class="fine">Future updates will list what changed in each version here — new tools added, bugs fixed, and so on.</p>
+    </div>
+  </div>
+</section>
 
 
 
@@ -3241,11 +3379,19 @@ document.querySelectorAll("#typeOpts button").forEach(b=>{
   });
 });
 function hideRes(){$("resultBody").hidden=true;$("placeholder").hidden=false;}
+let ratioCounted=false;
+function bumpRatioStat(){
+  if(ratioCounted)return;ratioCounted=true;
+  fetch("https://api.counterapi.dev/v1/tourmaline8b7d78/tool-ratio/up").then(r=>r.json()).then(d=>{
+    if(d&&d.count)$("ratioStat").textContent="✿ "+Number(d.count).toLocaleString()+" uses so far (community-wide)";
+  }).catch(()=>{});
+}
 function show(){
   const d=DATA[sel.type];
   const r=d.step3?d.result[sel.cond+"-"+sel.target]:d.result[sel.cond];
   if(!r)return hideRes();
   $("placeholder").hidden=true;$("resultBody").hidden=false;
+  bumpRatioStat();
   $("ratioDesc").textContent=r.desc;
   const noteEl=$("ratioNote");
   if(r.note){noteEl.hidden=false;noteEl.textContent="※ "+r.note;}else noteEl.hidden=true;
@@ -3265,6 +3411,77 @@ function show(){
     dots.appendChild(s);
   }
 }
+
+/* ---------- Not sure how to trade? Wizard ---------- */
+(function(){
+  const steps=[$("wzStep1"),$("wzStep2"),$("wzStep3"),$("wzStep4")];
+  const opts=[$("wzOpts1"),$("wzOpts2"),$("wzOpts3"),$("wzOpts4")];
+  const labels=[null,$("wzLabel2"),$("wzLabel3"),$("wzLabel4")];
+  let wzCounted=false;
+  function wzReset(from){
+    for(let i=from;i<steps.length;i++){steps[i].hidden=true;opts[i].innerHTML="";}
+    $("wzResult").hidden=true;$("wzPlaceholder").hidden=false;
+  }
+  function wzOpen(i,label,list){
+    labels[i].textContent=label;
+    opts[i].innerHTML="";
+    list.forEach(o=>{
+      const b=document.createElement("button");
+      b.textContent=o.t;b.dataset.v=o.v;
+      b.addEventListener("click",()=>{
+        opts[i].querySelectorAll("button").forEach(x=>x.classList.remove("on"));
+        b.classList.add("on");
+        wzReset(i+1);
+        o.next(o.v);
+      });
+      opts[i].appendChild(b);
+    });
+    steps[i].hidden=false;
+  }
+  function wzAnswer(desc,note){
+    $("wzPlaceholder").hidden=true;$("wzResult").hidden=false;
+    $("wzDesc").textContent=desc;
+    const n=$("wzNote");
+    if(note){n.hidden=false;n.textContent="※ "+note;}else n.hidden=true;
+    if(!wzCounted){
+      wzCounted=true;
+      fetch("https://api.counterapi.dev/v1/tourmaline8b7d78/tool-wizard/up").then(r=>r.json()).then(d=>{
+        if(d&&d.count)$("wzStat").textContent="✿ "+Number(d.count).toLocaleString()+" uses so far (community-wide)";
+      }).catch(()=>{});
+    }
+  }
+  $("wzOpts1").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
+    $("wzOpts1").querySelectorAll("button").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");
+    wzReset(1);
+    if(b.dataset.v==="normal"){
+      wzAnswer("A regular-basket item has no dye restrictions — just use the Ratio calculator with the standard PURE/PRM rules, no BRAND logic needed.");
+    }else{
+      wzOpen(1,"Is it —",[
+        {t:"Original color",v:"orig",next:()=>{
+          wzAnswer("BRAND original-color items are retired PRM items — price them with the \"BRAND original-color · by expiry time\" table in the Trade Ratios tab, based on how long it's been expired and how popular it is.");
+        }},
+        {t:"Dye version",v:"dye",next:()=>{
+          wzOpen(2,"Can it still be dyed?",[
+            {t:"Yes, still dyeable",v:"can",next:()=>{
+              wzOpen(3,"Is the basket still current?",[
+                {t:"Yes, current basket",v:"cur",next:()=>{
+                  wzAnswer("A current-basket dye item is priced the same as a regular current PRM item — use the standard ratios.");
+                }},
+                {t:"Expired, but still dyeable",v:"exp",next:()=>{
+                  wzAnswer("Use the \"Dye item\" table's \"expired · still dyeable\" rows — usually around 1:2–1:3 against a current PRM item.");
+                }}
+              ]);
+            }},
+            {t:"No, can't dye it anymore",v:"cant",next:()=>{
+              wzAnswer("A no-longer-dyeable, retired dye item should follow the \"no longer dyeable\" rows of the \"Dye item\" table, based on how long the dye window has been closed. Past 2–3 years it's hard to estimate — check around before pricing it.","Popular or high-rarity items don't follow the fixed table — they can go for more.");
+            }}
+          ]);
+        }}
+      ]);
+    }
+  }));
+})();
 
 /* ---------- PRM Star price table ---------- */
 const PRICES={
@@ -3400,6 +3617,14 @@ document.querySelectorAll("#bdSeg button").forEach(b=>b.addEventListener("click"
   document.querySelectorAll("#bdSeg button").forEach(x=>x.classList.remove("on"));
   b.classList.add("on");
   document.querySelectorAll(".bdt").forEach(c=>c.classList.remove("show"));
+  document.getElementById(b.dataset.v).classList.add("show");
+}));
+
+/* ---------- Trade Smarts sub-tabs ---------- */
+document.querySelectorAll("#tradeSeg button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#tradeSeg button").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on");
+  document.querySelectorAll(".trt").forEach(c=>c.classList.remove("show"));
   document.getElementById(b.dataset.v).classList.add("show");
 }));
 
@@ -6360,6 +6585,21 @@ function compositionScore(opts) {
       '</dl>'+
       '<p class="hint">'+tt('br_hint')+'</p></div>';
   }
+  function outfitDNA(a){
+    var map={};
+    map[tt('st_bw')]={label:'Black &amp; White Minimalist',trait:'strong light/dark contrast',mood:'stark and dramatic'};
+    map[tt('st_cine')]={label:'Cinematic',trait:'low-saturation, quiet tones',mood:'calm and narrative'};
+    map[tt('st_morandi')]={label:'Muted Grey',trait:'soft, restrained low-chroma colour',mood:'elegant and easy'};
+    map[tt('st_natural')]={label:'Natural',trait:'balanced, well-judged saturation',mood:'comfortable and natural'};
+    map[tt('st_vivid')]={label:'Vivid',trait:'bold, high-saturation colour',mood:'eye-catching and energetic'};
+    var d=map[a.style]||map[tt('st_natural')];
+    var warmDesc=a.warmRatio>.6?'warm-leaning, close and inviting':(a.warmRatio<.4?'cool-leaning, calm and reserved':'balanced warm/cool, emotionally neutral');
+    return 'Your work leans <b>'+d.label+'</b>, using '+d.trait+' to build a '+d.mood+' mood; overall it is '+warmDesc+'.';
+  }
+  function dnaCard(a){
+    return '<div class="chk-brief chk-dna"><h4>🧬 Outfit DNA</h4><p class="band">'+outfitDNA(a)+'</p>'+
+      '<p class="hint">Auto-generated from this image\'s colour style and warm/cool ratio — for reference only, not a definitive read.</p></div>';
+  }
   var REP_TABS=[['sum','rt_sum'],['comp','rt_comp'],['col','rt_col'],['det','rt_det']];
   function repGroupOf(part){
     var MAP=[['m_comp','comp'],['m_form','comp'],['m_portrait','comp'],['f_panel','comp'],
@@ -6828,7 +7068,7 @@ function compositionScore(opts) {
       modeLbl.textContent=tt('modelbl')+' · '+currentModes.map(function(m){return ({portrait:tt('mode_portrait'),fashion:tt('mode_fashion'),scene:tt('mode_scene'),collage:tt('mode_collage'),layout:tt('mode_layout')})[m];}).join(' + ');
       var lowColor=a.conf.color<60;
       palEl.innerHTML='<h3>'+tt('pal_title')+' <span class="tag ok">'+tt('pal_tag')+'</span></h3><p class="cond">'+tt('pal_desc')+'</p><div class="chk-sw">'+a.palette.map(function(o){var col=hex(o.r,o.g,o.b);return '<div><span style="background:'+col+'"></span><small>'+colorName(o.r,o.g,o.b)+'<br>'+col+'</small></div>';}).join('')+'</div>'+(lowColor?'<p class="fine">'+tt('pal_lowconf')+'</p>':'');
-      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v4.9.0730</span></h3>'+briefCard(a,rep.score)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'');
+      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v4.9.0730</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'');
       hideProg();
       result.style.display='block';result.scrollIntoView({behavior:'smooth',block:'start'});
     }catch(err){console.error(err);repEl.innerHTML='<p class="cond">'+tt('err')+'</p>';result.style.display='block';}

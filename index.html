@@ -64,6 +64,8 @@ section.show{display:block;animation:fade .25s ease}
 .lort.show{display:block;animation:fade .25s ease}
 .bdt{display:none}
 .bdt.show{display:block;animation:fade .25s ease}
+.trt{display:none}
+.trt.show{display:block;animation:fade .25s ease}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){section.show,.dot{animation:none!important}}
 
@@ -288,7 +290,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .chk-gauge-good{position:absolute;top:0;height:100%;background:rgba(61,142,138,.32);border-radius:4px}
 .chk-gauge-pt{position:absolute;top:-3px;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.18);transform:translateX(-50%)}
 .v-ok .chk-gauge-pt{background:var(--teal)} .v-warn .chk-gauge-pt{background:var(--gold)} .v-bad .chk-gauge-pt{background:#C0554E} .v-info .chk-gauge-pt{background:var(--violet)}
-.chk-v2-section{margin-top:18px;padding-top:4px}.buildtag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--violet-soft);color:var(--violet);font-size:10.5px;font-weight:800;letter-spacing:.06em;vertical-align:middle;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.cpall{margin:10px 0 2px}.cpall h4{margin:0 0 6px;font-size:12px;font-weight:800;color:var(--ink);letter-spacing:.04em}.cpall .note{margin:0 0 10px;font-size:11.5px;color:var(--ink-soft);line-height:1.65}.cpall .grp{margin:0 0 9px}.cpall .grp>b{display:block;font-size:10.5px;color:var(--ink-soft);font-weight:800;letter-spacing:.1em;margin:0 0 5px}.cpall .row{display:flex;flex-wrap:wrap;gap:5px}.cpall a{display:inline-flex;align-items:baseline;gap:4px;text-decoration:none;font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);transition:.15s}.cpall a.hit{border-color:var(--violet);background:var(--violet-soft);color:var(--ink)}.cpall a.hit i{font-style:normal;font-weight:800;color:var(--violet);font-size:10.5px}.cpall a:focus-visible{outline:3px solid var(--violet);outline-offset:2px}.cm-fix{margin:6px 0 0;padding-left:1.75em}.cm-fix>li{margin:7px 0;line-height:1.7;padding-left:2px}.cm-fix>li::marker{color:var(--rose);font-weight:800}.cm-keep,.cm-body ul{padding-left:1.35em}.chk-brief{background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin:0 0 14px}.chk-brief h4{margin:0 0 8px;font-size:13px;letter-spacing:.08em;color:var(--ink-soft);font-weight:800}.chk-brief .band{font-size:16px;font-weight:800;color:var(--ink);line-height:1.55;margin:0 0 10px;word-break:break-word}.chk-brief dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:start}.chk-brief dt{font-size:11.5px;font-weight:800;color:var(--rose);white-space:nowrap;padding-top:2px}.chk-brief dd{margin:0;font-size:13.5px;line-height:1.65;color:var(--ink);min-width:0;overflow-wrap:anywhere}.chk-brief .hint{margin:10px 0 0;font-size:11.5px;color:var(--ink-soft)}.rep-seg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 12px;padding-bottom:2px}.rep-seg::-webkit-scrollbar{display:none}.rep-seg button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:999px;cursor:pointer}.rep-seg button.on{background:var(--ink);border-color:var(--ink);color:#fff}.rept{display:none}.rept.show{display:block}.gname{display:block;font-size:.55em;letter-spacing:.16em;font-weight:800;color:var(--ink-soft);margin:0 0 2px;text-transform:uppercase}.chk-v2-section>h3{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.chk-v2-section .tag{font-size:11px}
+.chk-v2-section{margin-top:18px;padding-top:4px}.buildtag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--violet-soft);color:var(--violet);font-size:10.5px;font-weight:800;letter-spacing:.06em;vertical-align:middle;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.cpall{margin:10px 0 2px}.cpall h4{margin:0 0 6px;font-size:12px;font-weight:800;color:var(--ink);letter-spacing:.04em}.cpall .note{margin:0 0 10px;font-size:11.5px;color:var(--ink-soft);line-height:1.65}.cpall .grp{margin:0 0 9px}.cpall .grp>b{display:block;font-size:10.5px;color:var(--ink-soft);font-weight:800;letter-spacing:.1em;margin:0 0 5px}.cpall .row{display:flex;flex-wrap:wrap;gap:5px}.cpall a{display:inline-flex;align-items:baseline;gap:4px;text-decoration:none;font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);transition:.15s}.cpall a.hit{border-color:var(--violet);background:var(--violet-soft);color:var(--ink)}.cpall a.hit i{font-style:normal;font-weight:800;color:var(--violet);font-size:10.5px}.cpall a:focus-visible{outline:3px solid var(--violet);outline-offset:2px}.cm-fix{margin:6px 0 0;padding-left:1.75em}.cm-fix>li{margin:7px 0;line-height:1.7;padding-left:2px}.cm-fix>li::marker{color:var(--rose);font-weight:800}.cm-keep,.cm-body ul{padding-left:1.35em}.chk-brief{background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin:0 0 14px}.chk-dna{background:linear-gradient(135deg,var(--violet-soft),#EAF3FF)}.chg-entry{border-top:1px dashed var(--line);padding-top:12px;margin-top:12px}.chg-ver{font-weight:800;font-size:14px;color:var(--ink)}.chg-build{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--violet);background:var(--violet-soft);padding:2px 8px;border-radius:999px;margin-left:6px}.chk-brief h4{margin:0 0 8px;font-size:13px;letter-spacing:.08em;color:var(--ink-soft);font-weight:800}.chk-brief .band{font-size:16px;font-weight:800;color:var(--ink);line-height:1.55;margin:0 0 10px;word-break:break-word}.chk-brief dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:start}.chk-brief dt{font-size:11.5px;font-weight:800;color:var(--rose);white-space:nowrap;padding-top:2px}.chk-brief dd{margin:0;font-size:13.5px;line-height:1.65;color:var(--ink);min-width:0;overflow-wrap:anywhere}.chk-brief .hint{margin:10px 0 0;font-size:11.5px;color:var(--ink-soft)}.rep-seg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 12px;padding-bottom:2px}.rep-seg::-webkit-scrollbar{display:none}.rep-seg button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:999px;cursor:pointer}.rep-seg button.on{background:var(--ink);border-color:var(--ink);color:#fff}.rept{display:none}.rept.show{display:block}.gname{display:block;font-size:.55em;letter-spacing:.16em;font-weight:800;color:var(--ink-soft);margin:0 0 2px;text-transform:uppercase}.chk-v2-section>h3{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.chk-v2-section .tag{font-size:11px}
 
 /* ---------- 作品健檢 V2 additions ---------- */
 .chk-types{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 12px}
@@ -336,6 +338,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 <nav aria-label="分頁">
   <button class="on" data-tab="calc">快速換算</button>
   <button data-tab="ratio">交換比例</button>
+  <button data-tab="trade">交易心法</button>
   <button data-tab="brand">品牌染色</button>
   <button data-tab="branddata">品牌資料</button>
   <button data-tab="lore">科普</button>
@@ -348,6 +351,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <button data-tab="qa">QA</button>
   <button data-tab="feedback">意見專欄</button>
   <button data-tab="notes">備註</button>
+  <button data-tab="changelog">更新紀錄</button>
   <a class="navlang" href="en.html">🌐 English</a>
 </nav>
 
@@ -361,6 +365,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
   <div class="seg" id="calcNav" style="margin-bottom:14px">
     <button class="on" data-c="t-ratio">比例試算</button>
+    <button data-c="t-wizard">怎麼換？精靈</button>
     <button data-c="t-conv">稀有度</button>
     <button data-c="t-fee">手續費</button>
     <button data-c="t-dye">染色成本</button>
@@ -470,6 +475,38 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       </div>
     </div>
     <p class="fine">品牌「原色」與一般付費物同樣計算（看過期多久、熱門度），已獨立成「品牌原色物」選項。</p>
+    <p id="ratioStat" style="font-size:11.5px;color:var(--ink-soft);margin-top:6px"></p>
+  </div>
+  <div class="card ctool" id="t-wizard">
+    <h3>不知道怎麼換？精靈 <span class="tag warn">一步一步問</span></h3>
+    <p class="cond">不用自己先搞懂所有規則，跟著問題選下去，最後直接告訴你要套哪套估價邏輯。</p>
+    <div class="step" id="wzStep1">
+      <div class="step-label">這件物品是——</div>
+      <div class="opts" id="wzOpts1">
+        <button data-v="brand">品牌池物品</button>
+        <button data-v="normal">一般池物品</button>
+      </div>
+    </div>
+    <div class="step" id="wzStep2" hidden>
+      <div class="step-label" id="wzLabel2"></div>
+      <div class="opts" id="wzOpts2"></div>
+    </div>
+    <div class="step" id="wzStep3" hidden>
+      <div class="step-label" id="wzLabel3"></div>
+      <div class="opts" id="wzOpts3"></div>
+    </div>
+    <div class="step" id="wzStep4" hidden>
+      <div class="step-label" id="wzLabel4"></div>
+      <div class="opts" id="wzOpts4"></div>
+    </div>
+    <div class="result">
+      <p class="placeholder" id="wzPlaceholder">選擇後，這裡會顯示建議估價方式。</p>
+      <div id="wzResult" hidden>
+        <p class="result-desc" id="wzDesc" style="margin:6px auto 0;max-width:none;text-align:left"></p>
+        <div class="pill-note" id="wzNote" hidden></div>
+      </div>
+    </div>
+    <p id="wzStat" style="font-size:11.5px;color:var(--ink-soft);margin-top:10px"></p>
   </div>
   <div class="card ctool" id="t-vipshop">
     <h3>VIP 點數兌換試算 <span class="tag gold">特殊區・可複選</span></h3>
@@ -530,6 +567,17 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <div class="row"><span>現池 換 過期物</span><span class="r">2 : 1 起</span></div>
     <div class="row"><span>現池 換 染色物</span><span class="r">2 : 1 起</span></div>
     <p class="fine">⚠️ 年份比例皆為<b>同類交換</b>（免↔免／付↔付）；免付<b>互換</b>見「免費池 vs 付費池」。</p>
+  </div>
+
+  <div class="card">
+    <h3>價值怎麼決定的 <span class="tag hot">看懂行情</span></h3>
+    <p class="cond">很多人只知道「品 4 比較貴」，卻說不出原因。以下 5 個因素決定一件物品的實際落點，星等越高代表對比例<b>拉抬越明顯</b>：</p>
+    <div class="row"><span>年代（越舊越少人有）</span><span class="r t">★★★★</span></div>
+    <div class="row"><span>人氣（角色／配色是否熱門）</span><span class="r t">★★★★★</span></div>
+    <div class="row"><span>流通量（當初出多少、換手多少次）</span><span class="r">★★</span></div>
+    <div class="row"><span>染色難度（要不要原色、鑰匙、限期）</span><span class="r">★★★</span></div>
+    <div class="row"><span>復刻可能（品牌池不復刻，一般池可能復刻）</span><span class="r">★</span></div>
+    <p class="fine">同樣是「過期 1 年」，一件流通量小又熱門的物品，跟一件人人都有的物品，比例可以差到 1 : 2 以上。開價前先把這 5 項想過一輪，比死背數字準。</p>
   </div>
 
   <div class="card">
@@ -600,6 +648,88 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <li><b>品 4</b>：國際服首個品牌池，也最貴。</li>
       <li><b>品 7 起</b>品牌變多，價值低於品 4、5（放久仍會漲，但有限）。</li>
     </ul>
+  </div>
+</section>
+
+<!-- ================= 交易心法 ================= -->
+<section id="trade">
+  <div class="seg" id="tradeSeg" style="margin-bottom:14px">
+    <button class="on" data-v="tr-nego">議價</button>
+    <button data-v="tr-risk">辨識風險</button>
+    <button data-v="tr-mistake">新手雷區</button>
+  </div>
+
+  <div class="trt show" id="tr-nego">
+    <div class="card">
+      <h3>怎麼婉拒 <span class="tag ok">不傷和氣</span></h3>
+      <p class="cond">收到不想換的邀約，直接已讀或已讀不回容易被記仇。可以這樣說：</p>
+      <ul class="tips">
+        <li><b>說明理由</b>「這件我想自留／已經有一致的染色線在收了，先謝謝你的邀約～」</li>
+        <li><b>不比較高低</b>避免說「你的不夠看」之類的話，單純表達「暫時不缺」就好。</li>
+        <li><b>留door</b>如果只是比例談不攏，可以說「比例部分要不要再想想，晚點再聊？」而不是直接句點。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>怎麼議價 <span class="tag ok">雙方都舒服</span></h3>
+      <ul class="tips">
+        <li><b>先問對方怎麼想</b>「你覺得這個比例大概多少？」比直接開高價更容易找到中間值。</li>
+        <li><b>用「行情」而不是「我覺得」</b>「這個過期一年多的物品社群大概都抓 1:2～3」比「我覺得應該值更多」更有說服力，也更不容易吵起來。</li>
+        <li><b>一次讓一點</b>從自己的開價往對方靠近，而不是一口氣讓到底——讓太快反而讓對方懷疑一開始是不是亂喊價。</li>
+        <li><b>談不攏就先擱著</b>「比例部分我們都想想，之後有共識再約」比硬凹或翻臉划算。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>什麼叫「踹門價」 <span class="tag warn">試探性開價</span></h3>
+      <p class="cond">踹門價指的是<b>故意開得比行情低很多</b>的第一次出價，用來試探對方懂不懂行情、好不好講話。不是每個低價都是惡意，但常見特徵：</p>
+      <ul class="tips">
+        <li>開價明顯低於「舊物・依過期時間」或「染色物」表列的合理範圍。</li>
+        <li>被指出行情後<b>立刻大方加碼</b>，說明一開始就知道行情，只是先探底。</li>
+        <li>用「先問問看而已」「不行就算了」當開場白，降低你拒絕的壓力。</li>
+      </ul>
+      <p class="fine">遇到踹門價不用生氣，直接報一個你能接受的比例即可；對方如果是真的想換，通常會回到合理範圍。</p>
+    </div>
+    <div class="card">
+      <h3>容易引起反感的話 <span class="tag hot">地雷話術</span></h3>
+      <ul class="tips">
+        <li><b>「這個很多人在賣吧」</b>暗示對方的東西不值錢，就算是事實也很傷感情。</li>
+        <li><b>「你不換就算了」</b>把議價變成威脅語氣，容易讓對方直接關閉溝通。</li>
+        <li><b>「別人都是這樣算的」</b>拿「別人」當壓力，卻拿不出具體行情，說服力反而更低。</li>
+        <li><b>已讀很久後只回「所以呢」</b>語氣冷淡會讓對方覺得不被尊重，就算內容沒問題也容易破局。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="trt" id="tr-risk">
+    <div class="card">
+      <h3>提高警覺的情況 <span class="tag hot">不是黑名單，是教辨識</span></h3>
+      <p class="cond">以下不是要你懷疑每個人，而是幾個常見的<b>詐騙／踩雷模式</b>，遇到多項同時出現時再多留意：</p>
+      <ul class="tips">
+        <li><b>一直催促交易</b>正常人會等你確認清楚，異常催促常是想讓你來不及檢查就送出。</li>
+        <li><b>不肯公開比例</b>堅持要私下講、不能截圖存證，事後說不清楚時你會缺乏依據。</li>
+        <li><b>條件一直在改</b>講好的比例、順序、內容在最後一刻反覆變動，讓你越換越模糊焦點。</li>
+        <li><b>要求你先送</b>「你先給我看看誠意」「我先前被騙過所以你先送」——正常交換應該同步或有第三方見證，單方先送風險最高。</li>
+        <li><b>「等等再還」</b>先收下你的東西，用各種理由拖延回禮，時間拖越久越難追回。</li>
+      </ul>
+      <p class="fine">建議交易前先截圖雙方約定的內容與比例，交換時盡量同步進行，金額或稀有度較高的交易可以找信任的第三方見證。</p>
+    </div>
+  </div>
+
+  <div class="trt" id="tr-mistake">
+    <div class="card">
+      <h3>新手常見錯誤 Top 10 <span class="tag warn">先看這篇再交換</span></h3>
+      <ul class="tips">
+        <li><b>1．用免費換付費，還開 1:1</b>免費物與付費物的取得成本不同，1:1 通常對付費方不划算。</li>
+        <li><b>2．不知道福袋算免費物</b>福袋是用免費星星抽的，交換時要比照免費池計價，不能當付費物開高比例。</li>
+        <li><b>3．不知道品牌池不復刻</b>品牌池結束後絕版，只能靠交換取得，年份越舊通常越珍貴，不能用一般池的邏輯去估價。</li>
+        <li><b>4．搞不清楚染色還能不能染</b>「染色過期」不是看池子結束多久，而是看還<b>能不能染</b>，兩者價格差很多（見「染色物」表）。</li>
+        <li><b>5．被「熱門」兩個字騙</b>賣方自稱熱門不代表真的熱門，先自己查查看社群討論度或流通量，別只聽單方說法。</li>
+        <li><b>6．同稀有度、不同屬性直接換</b>免費 SR 跟付費 SR 價值不同，換算前先確認雙方是同一屬性。</li>
+        <li><b>7．沒截圖就交易</b>口頭談好的比例事後常常各說各話，交易前把約定內容截圖起來。</li>
+        <li><b>8．單方先送</b>不論理由多合理，先送出的一方風險永遠比較高，能同步交換就盡量同步。</li>
+        <li><b>9．把踹門價當成行情</b>對方的第一次開價不一定合理，先對照「舊物・依過期時間」等表格再決定要不要接受。</li>
+        <li><b>10．談崩就情緒化收場</b>比例談不攏很正常，直接說「先想想」比互相酸言酸語更容易留下下次交換的機會。</li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -714,7 +844,6 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
           <tr><td class="num">#15</td><td>月影之 → 今日樣之</td><td>—</td></tr>
         </tbody>
       </table>
-      </ul>
     </div>
     <div class="card">
       <h3>每池固定結構 <span class="tag gold">Deux</span></h3>
@@ -2823,6 +2952,17 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 </ul>
 </section>
 
+<section id="changelog">
+  <div class="card">
+    <h3>更新紀錄 <span class="tag ok">持續維護中</span></h3>
+    <p class="cond">這裡會列出每次網站更新的內容，讓大家知道網站一直有人在維護、修 bug、加新功能。</p>
+    <div class="chg-entry">
+      <div class="chg-ver">目前版本 <span class="chg-build">v4.9.0730</span></div>
+      <p class="fine">之後每次更新，會在這裡補上這個版本新增／修正了什麼——例如新增了什麼工具、修了什麼 bug。</p>
+    </div>
+  </div>
+</section>
+
 <footer>非官方・玩家自製｜整理自社群通用規則・僅供參考 ✧<br>程式製作：棉花棠（ID 3728362）・需要更改請私訊<br>👁 瀏覽次數：<span id="viewCount">—</span></footer>
 </div>
 
@@ -3240,11 +3380,19 @@ document.querySelectorAll("#typeOpts button").forEach(b=>{
   });
 });
 function hideRes(){$("resultBody").hidden=true;$("placeholder").hidden=false;}
+let ratioCounted=false;
+function bumpRatioStat(){
+  if(ratioCounted)return;ratioCounted=true;
+  fetch("https://api.counterapi.dev/v1/tourmaline8b7d78/tool-ratio/up").then(r=>r.json()).then(d=>{
+    if(d&&d.count)$("ratioStat").textContent="✿ 累計已有 "+Number(d.count).toLocaleString()+" 人次使用過比例試算";
+  }).catch(()=>{});
+}
 function show(){
   const d=DATA[sel.type];
   const r=d.step3?d.result[sel.cond+"-"+sel.target]:d.result[sel.cond];
   if(!r)return hideRes();
   $("placeholder").hidden=true;$("resultBody").hidden=false;
+  bumpRatioStat();
   $("ratioDesc").textContent=r.desc;
   const noteEl=$("ratioNote");
   if(r.note){noteEl.hidden=false;noteEl.textContent="※ "+r.note;}else noteEl.hidden=true;
@@ -3264,6 +3412,77 @@ function show(){
     dots.appendChild(s);
   }
 }
+
+/* ---------- 怎麼換？精靈 ---------- */
+(function(){
+  const steps=[$("wzStep1"),$("wzStep2"),$("wzStep3"),$("wzStep4")];
+  const opts=[$("wzOpts1"),$("wzOpts2"),$("wzOpts3"),$("wzOpts4")];
+  const labels=[null,$("wzLabel2"),$("wzLabel3"),$("wzLabel4")];
+  let wzCounted=false;
+  function wzReset(from){
+    for(let i=from;i<steps.length;i++){steps[i].hidden=true;opts[i].innerHTML="";}
+    $("wzResult").hidden=true;$("wzPlaceholder").hidden=false;
+  }
+  function wzOpen(i,label,list){
+    labels[i].textContent=label;
+    opts[i].innerHTML="";
+    list.forEach(o=>{
+      const b=document.createElement("button");
+      b.textContent=o.t;b.dataset.v=o.v;
+      b.addEventListener("click",()=>{
+        opts[i].querySelectorAll("button").forEach(x=>x.classList.remove("on"));
+        b.classList.add("on");
+        wzReset(i+1);
+        o.next(o.v);
+      });
+      opts[i].appendChild(b);
+    });
+    steps[i].hidden=false;
+  }
+  function wzAnswer(desc,note){
+    $("wzPlaceholder").hidden=true;$("wzResult").hidden=false;
+    $("wzDesc").textContent=desc;
+    const n=$("wzNote");
+    if(note){n.hidden=false;n.textContent="※ "+note;}else n.hidden=true;
+    if(!wzCounted){
+      wzCounted=true;
+      fetch("https://api.counterapi.dev/v1/tourmaline8b7d78/tool-wizard/up").then(r=>r.json()).then(d=>{
+        if(d&&d.count)$("wzStat").textContent="✿ 累計已有 "+Number(d.count).toLocaleString()+" 人次使用過這個精靈";
+      }).catch(()=>{});
+    }
+  }
+  $("wzOpts1").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
+    $("wzOpts1").querySelectorAll("button").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");
+    wzReset(1);
+    if(b.dataset.v==="normal"){
+      wzAnswer("一般池物品沒有染色限制，直接到「比例試算」用免費/付費池的規則算就好，不用管品牌那套。");
+    }else{
+      wzOpen(1,"這件是——",[
+        {t:"原色",v:"orig",next:()=>{
+          wzAnswer("品牌原色是絕版付費物，比照「交換比例」分頁的「品牌原色・依過期時間」表計算，看過期多久＋熱不熱門。");
+        }},
+        {t:"染色",v:"dye",next:()=>{
+          wzOpen(2,"還能不能染？",[
+            {t:"能染",v:"can",next:()=>{
+              wzOpen(3,"是不是現池？",[
+                {t:"是現池",v:"cur",next:()=>{
+                  wzAnswer("現池染色物，換算方式同現池付費物，走一般比例即可。");
+                }},
+                {t:"已過期但還能染",v:"exp",next:()=>{
+                  wzAnswer("比照「染色物」表「已過期・還能染」那幾列，通常對現池付費物約 1:2～1:3。");
+                }}
+              ]);
+            }},
+            {t:"不能染",v:"cant",next:()=>{
+              wzAnswer("不能染的絕版染色物，比照「染色物」表「不能染」那幾列，依染色過期時間估價；過期 2～3 年以上難以估計，建議多方詢問行情再開價。","熱門款或高稀有度不適用固定表格，價格可能更高。");
+            }}
+          ]);
+        }}
+      ]);
+    }
+  }));
+})();
 
 /* ---------- P 星價格表 ---------- */
 const PRICES={
@@ -3398,6 +3617,14 @@ document.querySelectorAll("#bdSeg button").forEach(b=>b.addEventListener("click"
   document.querySelectorAll("#bdSeg button").forEach(x=>x.classList.remove("on"));
   b.classList.add("on");
   document.querySelectorAll(".bdt").forEach(c=>c.classList.remove("show"));
+  document.getElementById(b.dataset.v).classList.add("show");
+}));
+
+/* ---------- 交易心法子分頁 ---------- */
+document.querySelectorAll("#tradeSeg button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#tradeSeg button").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on");
+  document.querySelectorAll(".trt").forEach(c=>c.classList.remove("show"));
   document.getElementById(b.dataset.v).classList.add("show");
 }));
 
@@ -6359,6 +6586,21 @@ function compositionScore(opts) {
       '</dl>'+
       '<p class="hint">'+tt('br_hint')+'</p></div>';
   }
+  function outfitDNA(a){
+    var map={};
+    map[tt('st_bw')]={label:'極簡黑白',trait:'強烈的明暗對比',mood:'純粹而戲劇'};
+    map[tt('st_cine')]={label:'電影感',trait:'低飽和的沉靜色調',mood:'沉靜而有故事'};
+    map[tt('st_morandi')]={label:'高級灰',trait:'柔和內斂的低彩度',mood:'優雅而舒適'};
+    map[tt('st_natural')]={label:'自然系',trait:'恰到好處的彩度',mood:'舒適自然'};
+    map[tt('st_vivid')]={label:'鮮豔活潑',trait:'高飽和的強烈色彩',mood:'搶眼而有活力'};
+    var d=map[a.style]||map[tt('st_natural')];
+    var warmDesc=a.warmRatio>.6?'色調偏暖、親近溫潤':(a.warmRatio<.4?'色調偏冷、沉靜內斂':'冷暖均衡、情緒中性');
+    return '你的作品偏向<b>'+d.label+'</b>，擅長用'+d.trait+'營造'+d.mood+'的氛圍；'+warmDesc+'。';
+  }
+  function dnaCard(a){
+    return '<div class="chk-brief chk-dna"><h4>🧬 作品 DNA</h4><p class="band">'+outfitDNA(a)+'</p>'+
+      '<p class="hint">依這次分析出的色彩風格與冷暖比例自動生成，僅供參考，不是唯一解讀。</p></div>';
+  }
   var REP_TABS=[['sum','rt_sum'],['comp','rt_comp'],['col','rt_col'],['det','rt_det']];
   function repGroupOf(part){
     var MAP=[['m_comp','comp'],['m_form','comp'],['m_portrait','comp'],['f_panel','comp'],
@@ -6827,7 +7069,7 @@ function compositionScore(opts) {
       modeLbl.textContent=tt('modelbl')+' · '+currentModes.map(function(m){return ({portrait:tt('mode_portrait'),fashion:tt('mode_fashion'),scene:tt('mode_scene'),collage:tt('mode_collage'),layout:tt('mode_layout')})[m];}).join(' + ');
       var lowColor=a.conf.color<60;
       palEl.innerHTML='<h3>'+tt('pal_title')+' <span class="tag ok">'+tt('pal_tag')+'</span></h3><p class="cond">'+tt('pal_desc')+'</p><div class="chk-sw">'+a.palette.map(function(o){var col=hex(o.r,o.g,o.b);return '<div><span style="background:'+col+'"></span><small>'+colorName(o.r,o.g,o.b)+'<br>'+col+'</small></div>';}).join('')+'</div>'+(lowColor?'<p class="fine">'+tt('pal_lowconf')+'</p>':'');
-      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v4.9.0730</span></h3>'+briefCard(a,rep.score)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'');
+      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v4.9.0730</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'');
       hideProg();
       result.style.display='block';result.scrollIntoView({behavior:'smooth',block:'start'});
     }catch(err){console.error(err);repEl.innerHTML='<p class="cond">'+tt('err')+'</p>';result.style.display='block';}
