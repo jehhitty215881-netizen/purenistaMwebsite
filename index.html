@@ -311,6 +311,16 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .chk-conf-bar i.ok{background:var(--teal)} .chk-conf-bar i.warn{background:var(--gold)} .chk-conf-bar i.bad{background:#C0554E}
 .chk-conf-item small{flex:none;width:34px;text-align:right;font-weight:700;color:var(--ink)}
 .chk-debug{background:#1e1e2a;color:#b9f;font-size:11px;border-radius:10px;padding:12px;overflow:auto;line-height:1.5}
+.cc-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
+.cc-grid label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+.cc-grid textarea,#ccFreeText{width:100%;margin-top:5px;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:13px;color:var(--ink);background:var(--panel);resize:vertical}
+#ccFreeText{margin-top:6px}
+.cc-dim{border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.cc-dim h4{margin:0 0 4px;font-size:14px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.cc-dim h4 b{font-size:17px}
+.cc-dim p{margin:4px 0 0;font-size:13px;color:var(--ink-soft);line-height:1.55}
+.cc-dim .lowconf-tag{font-size:11px;font-weight:700;color:var(--rose);border:1px solid var(--rose);border-radius:999px;padding:1px 8px;white-space:nowrap}
+@media(min-width:640px){.cc-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -344,6 +354,8 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <button data-tab="lore">科普</button>
   <button data-tab="aes">美學專欄</button>
   <button data-tab="check">作品健檢</button>
+  <button data-tab="charcheck">角色健檢</button>
+  <button data-tab="colorinspire">配色靈感</button>
   <button data-tab="pull">抽卡花費</button>
   <button data-tab="vip">儲值・VIP</button>
   <button data-tab="market">彩虹市集</button>
@@ -763,7 +775,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
   <div class="bdt show" id="bd-deux">
     <div class="card">
-      <h3>Deux 各池一覽 <span class="tag warn">#4～#15</span></h3>
+      <h3>Deux 各池一覽 <span class="tag warn">#4～#16</span></h3>
       <table>
         <thead><tr><th>池</th><th>販售期間</th><th>主色調・三色線</th></tr></thead>
         <tbody>
@@ -779,9 +791,10 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
           <tr><td class="num">#13</td><td>2025/08/01–10/05</td><td>暗紫<br><span style="font-size:11.5px;color:var(--ink-soft)">原色 克洛諾斯（另有 禁錮、夜公演、洛恩）｜染 紅蓮／青藍／月輪</span></td></tr>
           <tr><td class="num">#14</td><td>2026/02/01–04/05</td><td>黑粉<br><span style="font-size:11.5px;color:var(--ink-soft)">原色 玫瑰（另有 波爾多、卡爾曼）｜染 白／青藍／黑（另有灰、藍、紫晶）</span></td></tr>
           <tr><td class="num">#15 ex</td><td>2026/03/01–05/03</td><td>粉白・月夜蝶和風<br><span style="font-size:11.5px;color:var(--ink-soft)">原色 白妙（另有 薄香、淡藤、曙）｜染 宵闇／水月／白夜（另有灰櫻、白藍、薄冰）</span></td></tr>
+          <tr><td class="num">#16</td><td>2026/08/01–10/04</td><td>灰白蕾絲・人偶回憶<br><span style="font-size:11.5px;color:var(--ink-soft)">原色 索拉納／阿爾特爾（銀，其餘染色未提供，待補）｜R眼 雷迪恩特／雷迪恩</span></td></tr>
         </tbody>
       </table>
-      <p class="fine">結束時間一律週日 22:59；上架 2023 年中起統一 05:00。ex＝extra 特別彈。「原色」為 SR 主裙原色名；<b>#4～#15 已全數</b>以遊戲內「女生／男生」原色分頁核對確認。</p>
+      <p class="fine">結束時間一律週日 22:59；上架 2023 年中起統一 05:00。ex＝extra 特別彈。「原色」為 SR 主裙原色名；<b>#4～#16 已全數</b>以遊戲內「女生／男生」原色分頁核對確認；<span style="color:var(--rose)">#16 目前只核對到角色道具與藝術道具清單（19/19）與販售期間，其他染色資訊之後補上。</span></p>
     </div>
     <div class="card">
       <h3>眼睛角色（成對） <span class="tag ok">對照</span></h3>
@@ -790,6 +803,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li><b>#8</b> 米內特／安莎＋里維埃拉／達祖爾　<b>#9</b> 克拉麗絲／克萊門特＋瑪格麗特／馬克西米利安</li>
         <li><b>#10</b> 伊內斯／勞爾＋蕾妮　<b>#12</b> 瓏月夜的碎片／月夜的二兔　<b>#13</b> 創世的歷史＋奈恩</li>
         <li><b>#14</b> 傑斯維／吉賽爾＋盧弗雷／露弗蕾莉亞　<b>#15</b> 希那／希希那＋川平子</li>
+        <li><b>#16</b> 索拉納／阿爾特爾（SR）＋雷迪恩特／雷迪恩（R）</li>
         <li><b>原色版 → 染色版前綴一覽</b>下表整理各池眼睛的前綴變化。</li>
       </ul>
     </div>
@@ -1150,6 +1164,9 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <details><summary>#15 ex 月夜蝶 · 蝴蝶古語的兩種寫法</summary>
         <p><span class="lb">取名</span>原色 <b>白妙</b>（萬葉集古語「純白」）；月夜的川平子／加波比良古＝<b>かはひらこ</b>（蝴蝶上古語）兩種寫法；玉響＝一瞬；薄香、淡藤、曙、月白、灰櫻、薄冰全是傳統色名。</p>
         <p><span class="lb en">英文</span>雛人形讀音成對 <b>Hiina</b>（女）／<b>Hihina</b>（男），Solar 版同構；髮型 Chitose／Hinako；主裙 Moon Butterfly <b>Trance</b>: White→Dusk／Silver／White Night；家族線收尾 <b>F.D-Papillon: White</b>（C.D／F.D 四卡到齊）。</p></details>
+      <details><summary>#16 人偶回憶 · 灰白蕾絲裡的兔子與紀念盒</summary>
+        <p><span class="lb">取名</span>原色角色 <b>索拉納 Solène</b>／<b>阿爾特爾 Altel</b>；Trésor＝法文「寶藏」（回憶的寶物）；Clarté（明亮）＋Douce（柔軟甜美）＋Coton（棉）疊字成一件衣名；Souvenir（回憶／紀念品）與 Douces Oreilles（柔軟的耳朵）、Lapin（兔子）、Chouchou（心肝寶貝）、Lapinette（小母兔）串起整池的兔子人偶主題；Voilage（薄紗窗簾）、Blanche（白，陰性形容詞）延續光影意象。</p>
+        <p><span class="lb en">英文</span>R 眼女版 <b>Radiant</b> 對男版 <b>Radian</b>（少一個 t，疑為官方拼字彩蛋，待下次核對）；男版頭飾 <b>Laureate Halo</b>（桂冠光環）呼應第二套髮型 <b>Aurelius</b>（拉丁「金色的」，羅馬式人名）——女線走法文人名 Solène／Éliane，男線在灰白之外摻了一絲羅馬古典感；<b>Silve</b> 首度出現在 Deux（銀 Argent 的縮寫造字，猜測），與同池 R 眼 Radiant/Radian、藝術道具 Sentimental Lapin Chouchou、Lapinette Stand 都是新詞彙，暫無法對到既有的 C.D／F.D 家族線或月相線索。</p></details>
     </div>
   </div>
   <div class="lort" id="lore-melem">
@@ -2609,6 +2626,79 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 </section>
 
 
+<section id="charcheck">
+  <div class="card">
+    <h3>角色健檢 <span class="tag ok">問卷＋描述雙軌評估</span></h3>
+    <p class="cond" style="margin:2px 0 12px">這個不是圖片分析。完整度、記憶點、發展潛力這些指標本來就無法從一張圖片算出來，需要你對角色本身的認識——所以用<b>問卷</b>和<b>自由描述</b>兩種方式輸入，填一種就能跑，兩種都填會互相對照、分數更準。<b>內容只在你的裝置上處理；只有勾選下方 AI 深度評論時，才會把內容送到 Anthropic 的 API。</b></p>
+
+    <p class="chk-opts-head">① 結構化問卷（每格都可留空，填越多完整度分數越準）：</p>
+    <div class="cc-grid" id="ccGrid">
+      <label>角色名稱／代稱<textarea id="ccName" rows="1" placeholder="例如：小維、Vi"></textarea></label>
+      <label>一句話概念<textarea id="ccConcept" rows="1" placeholder="例如：怕水的人魚公主，卻在陸地開潛水店"></textarea></label>
+      <label>外觀特徵<textarea id="ccLook" rows="2" placeholder="髮色髮型、瞳色、體型、標誌性穿著或配件…"></textarea></label>
+      <label>個性／說話方式<textarea id="ccPersonality" rows="2" placeholder="核心性格、口頭禪、與人互動的方式…"></textarea></label>
+      <label>背景故事<textarea id="ccBackstory" rows="2" placeholder="出身、重要經歷、轉捩點…"></textarea></label>
+      <label>目標／動機<textarea id="ccGoal" rows="2" placeholder="角色現在想要什麼？為什麼想要？"></textarea></label>
+      <label>弱點／缺陷<textarea id="ccFlaw" rows="2" placeholder="性格或能力上的破口，讓角色不完美的地方"></textarea></label>
+      <label>人際關係<textarea id="ccRelations" rows="2" placeholder="重要的人／關係，彼此之間的張力"></textarea></label>
+      <label>記憶點／賣點<textarea id="ccHook" rows="2" placeholder="一眼認出是TA的理由：外觀特徵、口癖、反差萌…"></textarea></label>
+      <label>世界觀／設定背景<textarea id="ccWorld" rows="2" placeholder="這個角色活在什麼樣的世界／規則裡"></textarea></label>
+    </div>
+
+    <p class="chk-opts-head">② 或貼一段完整描述（設定集、小說開頭、角色卡都可以，會與①互相對照）：</p>
+    <textarea id="ccFreeText" rows="6" placeholder="貼上角色的完整介紹、故事片段或角色卡內容…"></textarea>
+
+    <p class="chk-opts-head">③ 進階選項：</p>
+    <label class="chk-cb"><input type="checkbox" id="ccAI"><span>啟用 AI 深度評論（可免部署）<small>完整度／填寫覆蓋率不需要 AI，本地就能算，但記憶點、發展潛力、差異化這幾項本質上是質化判斷，本地量化模型只能粗估。開這個選項後，會把①②的內容送給 Claude 做質化評論——用的是「作品健檢」④進階選項裡同一組 API key／模型設定，沒填 key 則自動略過，只顯示本地量化結果。</small></label>
+
+    <button class="chk-run" id="ccRun" type="button">✨ 開始健檢</button>
+    <div class="chk-prg" id="ccPrg" hidden><div class="chk-prg-track" id="ccPrgTrack"><i id="ccPrgFill"></i></div><div class="chk-prg-lbl"><span id="ccPrgLbl"></span><b id="ccPrgPct"></b></div></div>
+  </div>
+
+  <div id="ccResult" style="display:none">
+    <div class="card" id="ccReport"></div>
+    <div class="card" id="ccScoreCard">
+      <h3>角色健檢結果</h3>
+      <div class="chk-score"><b id="ccScore">–</b><span class="of">/100</span><small id="ccScoreLbl"></small></div>
+      <p class="fine" id="ccScoreNote">分數是輔助參考，不是角色好壞的定論——尤其記憶點與差異化這類質化指標，最終還是要靠讀者／觀眾的真實反應驗證。</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="colorinspire">
+  <div class="card">
+    <h3>配色靈感生成器 <span class="tag ok">配色＋隨機靈感・同一套玩法</span></h3>
+    <p class="cond" style="margin:2px 0 12px">幫角色配色，或直接讓它幫你隨機生一套主題／設定／構圖／配色的靈感組合。三種輸入擇一即可，內容只在你的裝置上處理。</p>
+
+    <p class="chk-opts-head">① 關鍵字：</p>
+    <div class="conv" style="margin-bottom:12px">
+      <input type="text" id="ciKeyword" placeholder="例如：仙氣、森林、賽博、哥德…" style="flex:1">
+    </div>
+    <button class="chk-run" id="ciRunKw" type="button" style="margin-bottom:18px">🎨 依關鍵字產生配色</button>
+
+    <p class="chk-opts-head">② 或上傳圖片延伸：</p>
+    <label class="chk-drop" id="ciDrop">
+      <input type="file" id="ciFile" accept="image/*" hidden>
+      <span>點擊或拖曳圖片到這裡，抓出最接近的風格色票</span>
+    </label>
+
+    <p class="chk-opts-head" style="margin-top:18px">③ 或貼一段角色設定反推：</p>
+    <textarea id="ciCharText" rows="3" placeholder="貼上角色的個性、外觀、世界觀描述…"></textarea>
+    <div class="row-btns" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+      <button class="chk-run" id="ciRunText" type="button" style="flex:1">🎨 依描述產生配色</button>
+      <button class="chk-run" id="ciUseCc" type="button" style="flex:1;background:linear-gradient(135deg,var(--teal),var(--violet))">📋 帶入「角色健檢」問卷內容</button>
+    </div>
+
+    <p class="chk-opts-head" style="margin-top:22px">④ 不知道要選什麼？直接抽：</p>
+    <button class="chk-run" id="ciRunRand" type="button">🎲 隨機靈感（主題＋角色設定＋構圖＋配色）</button>
+    <p class="fine" id="ciStat" style="margin-top:8px"></p>
+  </div>
+
+  <div id="ciResult" style="display:none"></div>
+</section>
+
+
 <section id="pull">
   <div class="card">
     <h3>5＋1 花費 <span class="tag ok">星星</span></h3>
@@ -2777,7 +2867,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <ul class="tips">
       <li><b>2～3 月</b>：D 家（Deux）連出；3 月 D 池前頭有「ex」代表<b>櫻花主題</b>。</li>
       <li><b>5 月</b>：出 By(e)。</li>
-      <li><b>8 月</b>：D 家出<b>命運主題</b>。</li>
+      <li><b>8 月</b>：原本規律是 D 家出<b>命運主題</b>（#10、#13），但 #16 實際是<b>灰白蕾絲・人偶回憶系</b>，這條規律這次沒對上，之後預測要留意。</li>
       <li><b>11 月</b>：出 M（melem）。</li>
       <li><b>福袋</b>：<b>1 月</b>新年福袋、<b>7 月</b>週年福袋、<b>10 月</b>預計是聯名（依官方公告為主）。</li>
       <li><b>安可劇場</b>：目前來看約<b>半年上池一次</b>；第一次上架復刻為去年 12/1（非安可、單純投票復刻），再來是今年 5/1；依此節奏<b>下一輪預估 2026/10～11 前後</b>。</li>
@@ -2785,9 +2875,9 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   </div>
 
   <div class="card">
-    <h3>接下來會發生什麼 <span class="tag ok">2026/07/24 更新</span></h3>
+    <h3>接下來會發生什麼 <span class="tag ok">2026/08/02 更新</span></h3>
     <ul class="timeline">
-      <li><b>2026/08/01（六）</b>Deux #16 開池（預測）→ <b>10/04（日）22:59</b> 收池。<span style="color:var(--rose)">最近的一檔</span></li>
+      <li><b>2026/08/01（六）</b>Deux #16 已開池——<b>灰白蕾絲・人偶回憶系</b>（索拉納／阿爾特爾），與原本預測的「深色哥德延續」不同 → <b>10/04（日）22:59</b> 收池（已確認）。<span style="color:var(--rose)">最近的一檔</span></li>
       <li><b>2026/10</b>聯名福袋（預估）；安可劇場下一輪可能落在 10～11 月。</li>
       <li><b>2026/11/01（日）</b>melem #5 開池（預測）→ <b>2027/01/03（日）</b>收池。</li>
       <li><b>2027/01</b>新年福袋。</li>
@@ -2796,7 +2886,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <li><b>2027/05/07 前後（五）</b>By(e) #4 開池（預測）→ <b>07/11（日）</b>收池。</li>
       <li><b>2027/07</b>週年福袋。</li>
     </ul>
-    <p class="fine">7 月週年福袋已於本月登場；下一個大檔是 <b>8/1 的 Deux #16</b>。</p>
+    <p class="fine">7 月週年福袋已於本月登場；<b>8/1 的 Deux #16 已開池，主題確認為灰白蕾絲・人偶回憶系</b>，與去年同期（#10、#13）的深色系不同，8 月＝命運主題的規律可能不再成立，之後的預測信心會下修。</p>
   </div>
 
   <div class="card">
@@ -2804,14 +2894,14 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <table>
       <thead><tr><th>品牌</th><th>預測時間</th><th>預測主題・顏色</th><th>信心</th></tr></thead>
       <tbody>
-        <tr><td class="num">Deux #16</td><td><b>2026/08/01 – 10/04</b><br><span style="font-size:11.5px;color:var(--ink-soft)">#10、#13 皆 8/1 開池；收在 10 月第一個週日</span></td><td>深色哥德延續；黑＋深紫/深藍，或承接黑紫、轉黑紅</td><td class="num">高</td></tr>
+        <tr><td class="num">Deux #16</td><td><b>2026/08/01 – 10/04</b><br><span style="font-size:11.5px;color:var(--ink-soft)">開池與收池日皆已核對確認</span></td><td><span style="color:var(--teal)">已確認</span>：灰白蕾絲・人偶回憶系，原色角色索拉納／阿爾特爾，R眼雷迪恩特／雷迪恩。<b>不是</b>原先預測的深色哥德延續——8 月＝命運／深色主題的規律這次沒有成立。</td><td class="num">已確認</td></tr>
         <tr><td class="num">melem #5</td><td><b>2026/11/01 – 2027/01/03</b><br><span style="font-size:11.5px;color:var(--ink-soft)">#3/#4 皆 11/1 開池；收在 1 月第一個週日</span></td><td>紅黑進階，或引入新飽和色（深紫/墨綠）；料為暗黑寓言線的下一則（鏡→鴉→迷途羊→白雪公主→？）</td><td class="num">高</td></tr>
-        <tr><td class="num">Deux #17</td><td><b>2027/02/01 – 04/04</b><br><span style="font-size:11.5px;color:var(--ink-soft)">#11、#14 皆 2/1 開池</span></td><td>春季雙彈之一，與 #18 ex 一淺一深（若 #16 走深，#17 傾向淺——白/粉/光系）</td><td class="num">中高</td></tr>
+        <tr><td class="num">Deux #17</td><td><b>2027/02/01 – 04/04</b><br><span style="font-size:11.5px;color:var(--ink-soft)">#11、#14 皆 2/1 開池</span></td><td>春季雙彈之一，與 #18 ex 一淺一深；原本假設「#16 深→#17 淺」，但 #16 實際走灰白蕾絲人偶（淺色），對照組基準改變，色調方向暫不下判斷</td><td class="num">中</td></tr>
         <tr><td class="num">Deux #18 ex</td><td><b>2027/03/01 – 05/02</b><br><span style="font-size:11.5px;color:var(--ink-soft)">#12、#15 皆 3/1 開池</span></td><td>3 月和風（櫻花檔）；蝴蝶月方向可能延續或收尾</td><td class="num">中高</td></tr>
         <tr><td class="num">By(e) #4</td><td><b>約 2027/05/07 – 07/11</b><br><span style="font-size:11.5px;color:var(--ink-soft)">開池日逐年前移（05/24→05/09→05/08）且皆為週五；收在 7 月中的週日</span></td><td>玫瑰或新花主題；延續三線制、可能回收舊線變奏</td><td class="num">中高</td></tr>
       </tbody>
     </table>
-    <p class="fine">推算依據：品牌池販售約 2 個月、一律<b>週日 22:59</b> 收池；Deux 命運檔 8/1 開（#10/#13）、春季檔 2/1 開（#11/#14）、extra 3/1 開（#12/#15）；melem 固定 11/1 開（#3/#4）；By(e) 週五開池且逐年前移。<b>2026/07/24 重新核算</b>；下次核對 2026/08（#16 開池後）。僅供參考，實際以官方公告為準。</p>
+    <p class="fine">推算依據：品牌池販售約 2 個月、一律<b>週日 22:59</b> 收池；Deux 春季檔 2/1 開（#11/#14）、extra 3/1 開（#12/#15）；melem 固定 11/1 開（#3/#4）；By(e) 週五開池且逐年前移。<span style="color:var(--rose)">原本以為 Deux 8/1 檔固定走「命運／深色」主題（#10、#13），但 #16 實際是灰白蕾絲・人偶回憶系，這條規律這次沒對上，之後的主題預測信心一併下修。</span><b>2026/08/02 重新核算</b>；下次核對於 melem #5 開池前（2026/11 前後）。僅供參考，實際以官方公告為準。</p>
   </div>
 </section>
 
@@ -2925,7 +3015,21 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>更新紀錄 <span class="tag ok">持續維護中</span></h3>
     <p class="cond">這裡會列出每次網站更新的內容，讓大家知道網站一直有人在維護、修 bug、加新功能。</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 4.9.0730 <span class="chg-build">目前版本・構圖判讀修正</span></div>
+      <div class="chg-ver">Version 5.0.0802 <span class="chg-build">目前版本・新增配色靈感生成器</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>新增</b></p>
+      <ul class="tips">
+        <li>新分頁「配色靈感」（角色健檢後面）：把配色產生器和隨機靈感合併成同一套玩法，四種入口都能得到一組風格色票——
+          <b>①關鍵字</b>輸入，比對出最接近的風格色票；
+          <b>②上傳圖片延伸</b>，抓圖片主色調找最近似的風格；
+          <b>③貼角色設定反推</b>，可手動貼文字，也有一鍵「帶入角色健檢問卷內容」的按鈕；
+          <b>④🎲隨機靈感</b>，一次抽出「主題＋角色設定＋構圖建議＋配色」四樣組合，構圖直接沿用美學專欄已有的 18 種構圖類型。</li>
+        <li>色票庫收錄 17 種風格情緒（仙氣、暗黑幻想、賽博、糖果、森林、海洋、蒸氣龐克、哥德、廢土、宮廷、都市夜生活、沙漠、和風、機械、極地、馬戲團、復古），每種 5 色；主題池與角色設定池各 20 組；關鍵字比對附同義詞庫，中英文皆可輸入。</li>
+        <li>比照既有的瀏覽次數寫法接上 counterapi，開了 <code>feature-colorinspire</code> 這支 key，每次產生結果 +1，數字顯示在按鈕下方。</li>
+      </ul>
+      <p class="fine">關鍵字比對、圖片配色最近鄰比對、隨機抽取的不連續重複邏輯，都先在 Node 環境測過沒問題才寫進檔案；中英文兩個版本都做過語法檢查。</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 4.9.0730 <span class="chg-build">構圖判讀修正</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>新增</b></p>
       <ul class="tips">
         <li>「對角線構圖」新增第二套判斷邏輯：偵測到同一個對角方向有 4 條以上長線同向、反向最多 1 條，就算對角構圖成立。修好了像人物斜躺、樹枝斜切這類明顯是對角構圖、卻一直偵測不到的問題。</li>
@@ -3607,7 +3711,7 @@ document.querySelectorAll("#loreCommonSeg button").forEach(b=>b.addEventListener
   var DEBUG=/[?&]chkdebug=1/.test(location.search);
 
   /* ===== localized strings (injected per language) ===== */
-  var T={"hues": ["紅", "橙", "黃", "黃綠", "綠", "青綠", "青", "藍", "靛", "紫", "洋紅", "玫紅"], "lightPos": ["左上前側光", "上方頂光", "右上前側光", "左側光", "正面順光", "右側光", "左下光", "底光", "右下光"], "side_key": "側", "c_darkgray": "深黑灰", "c_softwhite": "柔白", "c_ltgray": "淺灰", "c_gray": "中性灰", "c_deep": "深", "c_light": "淺", "l_silhouette": "剪影／逆光極強", "l_back": "逆光", "l_even": "正面順光／均勻光", "e_even": "均勻", "e_over": "局部過曝", "e_under": "局部欠曝", "h_good": "細節保留良好", "h_mild": "輕微 clipping", "h_over": "主體局部過曝", "s_dead": "死黑（暗部無層次）", "s_press": "暗部略壓縮", "s_rich": "層次豐富", "r_vlow": "極低", "r_low": "低", "r_mid": "中", "r_midhi": "中高", "r_high": "高", "st_bw": "黑白／極低彩度", "st_cine": "低飽和電影感", "st_morandi": "莫蘭迪低彩色調", "st_natural": "自然平衡色調", "st_vivid": "鮮豔活潑", "wb_neutral": "中性", "wb_warm": "偏暖", "wb_cool": "偏冷", "warm": "暖", "cool": "冷", "t_tl": "左上三分點", "t_tr": "右上三分點", "t_bl": "左下三分點", "t_br": "右下三分點", "rot_clear": "明確", "rot_part": "部分吻合", "rot_none": "未使用", "sym_high": "高度對稱", "sym_mild": "輕微對稱", "sym_none": "不對稱", "ns_active": "主動留白・有呼吸感", "ns_passive": "被動空白", "ns_crowd": "偏擁擠", "p_left": "畫面左側", "p_right": "畫面右側", "p_center": "畫面中央", "el_top": "上三分之一", "el_mid": "中間", "el_bottom": "下三分之一", "g_in": "望向畫面內", "g_out": "望向畫面外", "g_unknown": "不確定", "gr_ample": "充足", "gr_tight": "侷促", "foc_conc": "集中", "foc_spread": "分散", "foc_none": "無明顯焦點", "fr_border": "外框裁切後分析框內內容", "fr_natural": "利用邊緣結構形成框景，強化深度", "cs_offcenter": "主體幾乎置中且未落在三分線上，可嘗試左右移動約 1/6 畫面，把主體放到三分交點增加張力。", "cs_gazeroom": "視線前方空間偏少，建議往視線反方向裁切，讓臉部前方多留一些呼吸空間。", "cs_tighten": "留白偏多、主體偏小，可裁切收緊，讓主體佔畫面比例提升。", "cs_balance": "左右視覺重量不平衡，可在較空的一側加入亮點，或把主體往中線微移。", "cs_keep": "視線方向已有充足空間、留白具呼吸感，構圖無需調整。", "cs_finetune": "構圖大致穩定，若想更精緻可微調主體與亮點的相對位置。", "sh_sharp": "清晰", "sh_soft": "輕微柔焦", "sh_blur": "明顯模糊", "sh_oof": "失焦", "n_low": "低", "n_mid": "中", "n_high": "高", "a_none": "無", "a_mild": "輕微壓縮", "a_block": "明顯壓縮方塊", "fe_ok": "正常", "fe_under": "輕微欠曝", "fe_over": "過曝", "es_sharp": "銳利", "es_soft": "輕微模糊", "sk_natural": "自然", "sk_smooth": "過度平滑（可能磨皮）", "sk_rough": "紋理較重", "to_ok": "自然", "to_mild": "輕微色偏", "to_shift": "明顯色偏", "to_cool": "偏冷／偏洋紅", "dof_shallow": "淺景深／強虛化", "dof_medium": "中等虛化", "dof_deep": "深景深／無虛化", "dof_flat_strong": "平面繪製・主體與背景強對比分離", "dof_flat_mid": "平面繪製・主體與背景中等分離", "dof_flat_low": "平面繪製・主體與背景對比較弱", "sep_clear": "清晰分離", "sep_part": "部分融合", "sep_merge": "背景干擾主體", "ty_wedding": "婚紗／婚禮", "ty_magazine": "雜誌封面", "ty_book": "書籍／專輯封面", "ty_cinema": "電影劇照・敘事影像", "ty_frame": "框架構圖", "ty_lightexp": "光影實驗", "ty_typo": "文字排版混合", "ty_portrait": "人像作品", "ty_fashion": "穿搭／全身", "ty_scene": "場景／靜物", "ty_collage": "拼貼／多格", "m_subject": "主體辨識", "m_light": "光線分析", "m_color": "色彩分析", "m_comp": "構圖分析", "m_sharp": "清晰度與畫質", "m_depth": "景深與層次", "m_port": "人像品質", "m_expert": "專家整體評論", "m_confoverview": "各模組信心值一覽", "f_status": "辨識狀態", "f_area": "主體佔畫面比例", "f_pos": "主體位置", "f_eyeline": "眼睛水平線", "f_gaze": "視線方向", "f_focus": "視覺焦點集中度", "f_secondary": "次要人物數量", "f_lightdir": "光線方向", "f_exposure": "曝光均勻度", "f_highlight": "高光細節保留", "f_shadow": "陰影層次", "f_richness": "色彩豐富度", "f_warmcool": "冷暖色比例", "f_style": "整體風格標籤", "f_wb": "白平衡傾向", "f_balance": "構圖平衡度", "f_thirds": "三分法使用", "f_symmetry": "對稱性", "f_negspace": "留白比例與品質", "f_gazeroom": "視線引導空間", "f_frame": "框架構圖", "f_sharpness": "主體清晰度", "f_noise": "影像雜訊", "f_artifacts": "壓縮瑕疵", "f_faceexp": "臉部曝光", "f_eyesharp": "眼睛清晰度", "f_skintex": "膚質紋理", "f_skintone": "膚色自然度", "f_dof": "景深", "f_separation": "主體與背景分離", "d_exposure": "僅統計主體遮罩內的 EV 近似分佈", "d_highlight": "純白背景／白牆／天空等非主體高亮區已排除，只看主體是否失去紋理", "lk_highcontrast": "側光＋主體過曝＋暗部死黑：光比偏大，亮暗兩端同時流失細節", "lk_centernofocus": "主體居中但缺乏明確焦點與視線引導，畫面稍顯平靜", "lk_bokeheye": "淺景深與清晰眼神呼應，主體立體、視覺聚焦明確", "lk_bw": "黑白處理，評圖聚焦在明暗層次與構圖，色彩相關指標略過", "lk_warmlow": "低彩度暖調，營造柔和、內斂的情緒氛圍", "lk_frame": "運用框架構圖，收束視線並強化空間深度", "lk_textblocks": "畫面中偵測到文字／標語區塊。字體風格化無法自動辨識內容，以下排版判讀僅依區塊位置與大小推估。⚠️ 蕾絲、亮片、花紋這類裝飾在像素上和文字幾乎一樣，所以偵測到的區塊數會明顯高估——實測一張作品目測 4~5 處文字，程式數出 25 處。請把排版判讀當成粗略參考。", "v3_tilt": "水平線{D}傾約 {A} 度，建議將畫面{R}旋轉 {A} 度校正。", "v3_dleft": "左", "v3_dright": "右", "v3_rcw": "順時針", "v3_rccw": "逆時針", "v3_frag": "畫面元素分散成 {N} 個區塊，沒有一塊完整的留白，建議合併成 2–3 組，並空出一塊乾淨區域。", "v3_uneven": "{D}的留白約為對側的 {R} 倍，空間分配失衡，建議移動主體或裁切修正。", "v3_ptop": "上方", "v3_pbottom": "下方", "v3_pleft": "左側", "v3_pright": "右側", "v3_crowd": "元素偏多，缺乏讓視線喘息的集中留白，建議刪減次要元素或加大邊界留白。", "v3_align": "文字區塊沒有共同的對齊基準，建議統一左緣或中線，建立網格。", "v3_feet": "人物下緣貼齊畫面底部，建議下方留出約 5–8% 的空間，避免被切斷感。", "v3_headcut": "頭頂被裁切，建議上方保留完整頭部並留少量空間。", "v3_small": "主體僅佔畫面約 {P}%，建議靠近拍攝或裁切，讓主體至少佔 35%。", "v3_color_add": "色彩集中在{H}系且彩度偏低，可加入少量{C}系作為視覺重點，拉開層次。", "v3_hi_over": "主體亮部已失去細節，建議降 0.7EV 或對高光測光。", "v3_sh_dead": "暗部壓成死黑，建議補光或後製提亮陰影找回層次。", "v3_exp_over": "局部過曝，建議降低曝光或避開直射光。", "v3_exp_under": "局部欠曝，建議增加曝光或補光。", "v3_oof": "主體失焦，建議確認對焦點並提高快門速度。", "v3_blur": "主體偏軟，可能手震，建議提高快門或使用穩定支撐。", "v3_ns_good": "留白大塊連續且圍繞主體，畫面有呼吸感", "v3_tech_good": "對焦與高光控制到位", "v3_band_a": "構圖精準，幾乎沒有明顯問題", "v3_band_b": "構圖大致良好，仍有小問題", "v3_band_c": "構圖有明顯問題，需要調整", "v3_band_d": "構圖失敗，建議重拍或重新排版", "v3_why": "扣分原因如下", "v3_fixlbl": "具體修正方向", "v3_keeplbl": "可以保留的優點", "v3_comp_lbl": "構圖評估", "v3_shotlbl": "景別判斷", "v3_full": "全身（人物佔畫面高度 80% 以上）", "v3_half": "半身（40–80%）", "v3_head": "頭像／特寫", "v3_nosubj": "未偵測到明確人物主體", "v3_sum_fix": "先把上面第一項修掉，這張的完成度會明顯不同。", "v3_sum_good": "基礎穩固，細節再收一點就很完整。", "v3_sum_ok": "方向可行，依上面的順序逐項調整即可。", "v6_viewlbl": "評判觀點", "v6_photo": "攝影師", "v6_design": "平面設計師", "v6_illust": "插畫師", "v6_learn": "延伸閱讀", "v6_note_photo": "以攝影師觀點評估：優先看曝光、對焦、水平與景深。", "v6_note_design": "以平面設計師觀點評估：優先看網格對齊、文字層級與負空間。", "v6_note_illust": "以插畫師觀點評估：優先看色彩調和、主體剪影與畫面重量，曝光與對焦不列入重點。", "v6_collage": "已依「拼貼／多格」標準評估：分區塊是刻意設計，不列為缺點；改看各區塊是否大小一致、間距整齊。", "v6_collage_uneven": "拼貼區塊的大小或間距不一致，建議統一格線與間隔。", "v3_scorelbl": "理論指標參考分數", "v3_disclaim": "這個分數是依構圖、曝光、色彩等「教科書理論指標」推算出來的參考值，不是作品好壞的定論。很多優秀作品會刻意打破規則。看完課本了吧——接下來試著實際操作看看，用眼睛和作品本身去驗證。", "lk_textmaybe": "畫面中可能含有文字或標語。本工具不會讀取文字內容，若要分析排版層級，請在上方切換到「文字 / 版面」模式後重新分析。", "lk_textblocks_faint": "畫面中可能有約 {N} 處文字／手寫字區塊，但特徵較弱（藝術字、與背景融合等），判讀信心較低，僅供參考。", "tc_exp_ok": "曝光均勻", "tc_exp_over": "局部過曝、亮部偏多", "tc_exp_under": "局部欠曝、暗部偏重", "tc_hi_over": "高光裁切、主體亮部細節流失", "tc_hi_mild": "高光略有溢出但大致保留", "tc_shadow_dead": "暗部偏黑、缺乏層次", "tc_sharp_ok": "主體邊緣清晰", "tc_sharp_oof": "主體明顯失焦", "tc_sharp_soft": "主體略帶柔焦", "tc_noise": "雜訊偏高", "tc_block": "可見壓縮方塊", "tc_ok": "曝光與清晰度整體穩定", "ae_warm": "暖色主導、情緒溫潤", "ae_cool": "冷色主導、氣氛沉靜", "ae_balanced": "冷暖平衡", "ae_thirds": "主體落在三分線上、構圖張力足", "ae_center": "主體置中、風格內斂", "ae_ns_active": "留白主動、畫面有呼吸感", "ae_ns_crowd": "元素偏滿、稍缺喘息空間", "ae_shallow": "淺景深帶出主體、空間感明確", "sum_fixtech": "整體有想法，但技術端（曝光／對焦／層次）需優先修正，修好後表現會明顯提升。", "sum_strong": "技術與美感兼具，是一張完成度高的作品。", "sum_solid": "基礎穩定，細節再打磨可更出色。", "cm_tech": "技術完成度", "cm_art": "藝術表現力", "cm_comp": "構圖建議", "conf": "信心", "lowconf": "可信度較低", "maybe": "可能", "refonly": "僅供參考，建議手動檢視", "na": "不適用", "yes": "是", "unit_people": "人", "colon": "：", "comma": "，", "stop": "。", "mid": "　·　", "p_open": "（", "p_close": "）", "subj_none": "未偵測到人物", "subj_ok": "成功", "subj_partial": "部分遮擋", "pal_title": "主體代表性色彩", "pal_tag": "已排除背景與極端明暗", "pal_desc": "依人物遮罩、視覺焦點權重與 LAB 分群排序，最多顯示 5 色。", "pal_lowconf": "因主體遮罩不穩定，色票僅供參考。", "rep_title": "V2 健檢結果", "rep_tag": "多維度交叉評估", "rep_foot": "※ 人物分割優先在裝置端執行；模型無法載入或風格化過高時會自動降低信心值並標示「可信度較低」。原始數值（Laplacian、EV 標準差等）僅在除錯模式顯示，一般只呈現轉譯後描述。結果為攝影與視覺分析輔助，不以單一閾值直接判定作品好壞。", "border_note": "偵測到外框，已裁切後只分析框內內容。邊框色", "sl_stable": "整體表現穩定", "sl_good": "基礎良好", "sl_adjust": "可再調整", "sl_fix": "建議優先修正", "modelbl": "V2 多維度交叉分析", "mode_portrait": "人像照", "mode_fashion": "穿搭 / 全身", "mode_scene": "場景 / 靜物", "mode_collage": "拼貼 / 多格", "mode_layout": "文字 / 版面", "analyze": "✨ 開始分析", "analyzing": "分析中…", "err": "分析時發生問題，請換一張圖片或重試。", "f_animeface": "動漫／插畫臉偵測", "af_off": "未使用（已由姿態關鍵點鎖定臉部）", "af_none": "已啟用，但未偵測到臉", "af_est": "（估算）", "unit_face": "張臉", "af_note": "此圖的姿態關鍵點無法鎖定，改用動漫／插畫臉部偵測（LBP cascade）輔助：偵測到 {N} 張臉。眼睛水平線由臉框推估（臉框上緣＋高度 35%），非關鍵點量測，僅供參考；此偵測不提供視線方向，因此「視線方向」維持不確定。", "af_credit": "動漫／插畫臉部偵測使用 lbpcascade_animeface（MIT License, © 2011 nagadomi）；cascade 由本站以純 JavaScript 實作，不依賴 OpenCV。參數 scaleFactor 1.1、minNeighbors 5、minSize 24×24。LBP cascade 對正面動漫臉最準，側臉、遮擋或寫實風格可能漏偵或誤偵。", "f_patterns": "構圖型態辨識", "cp_none": "未偵測到明確型態", "cp_note": "型態由邊緣方向、直線長度與主體形狀推算，百分比是「吻合程度」而非好壞分數。一張圖同時符合多種型態是正常的。", "cp_deliberate": "偵測到明確的結構性構圖，因此「主體置中、未落在三分線上」不列為缺點。", "cp_lead": "引導線", "cp_radial": "放射線／消失點", "cp_diagonal": "對角線", "cp_horiz": "水平線構圖", "cp_vert": "垂直線構圖", "cp_cross": "十字形構圖", "cp_triUp": "正三角構圖", "cp_triDown": "倒三角構圖", "cp_triGroup": "群像三角", "cp_center": "中心構圖", "cp_fill": "填滿畫面", "cp_edgeTension": "邊緣張力", "cp_phi": "黃金比例點", "cp_pattern": "重複圖案", "cp_patternBreak": "打破圖案", "cp_sCurve": "S 形曲線", "cp_cCurve": "C 形曲線", "cp_dutch": "傾斜／荷蘭角", "cpx_lead": "畫面中的線條收束到主體上，視線會自動被帶過去。", "cpx_radial": "線條自同一點向外發散，形成匯聚或爆發的張力。", "cpx_diagonal": "主要線條沿對角線走，畫面帶有速度與動感。", "cpx_horiz": "水平線主導，畫面平靜、遼闊、穩定。", "cpx_vert": "垂直線主導，畫面挺拔、有秩序感。", "cpx_cross": "一橫一豎交叉成十字，安定而肅穆。", "cpx_triUp": "主體輪廓下寬上窄，像正三角一樣穩。", "cpx_triDown": "主體輪廓上寬下窄，倒三角帶來張力與不安。", "cpx_triGroup": "多個主體的位置連成三角形，群像最穩的排法。", "cpx_center": "主體置中，直接、莊重、聚焦。", "cpx_fill": "主體撐滿甚至溢出邊界，壓迫感與親密感強烈。", "cpx_edgeTension": "主體被推到畫面邊緣，用不平衡製造心理張力。", "cpx_phi": "主體落在黃金比例點上，比三分線更收斂的古典位置。", "cpx_pattern": "畫面有規律重複的節奏。", "cpx_patternBreak": "規律中出現一個異類，自動成為視覺焦點。", "cpx_sCurve": "主要走向呈 S 形，視線流動緩慢、優雅有縱深。", "cpx_cCurve": "主要走向呈 C 形，帶有柔和的環抱感。", "cpx_dutch": "水平線刻意傾斜，製造不安與動勢；若不是刻意的，建議校正。", "m_form": "美的形式原理", "f_formtop": "主導原理", "f_formmap": "構圖背後的原理", "fp_none": "沒有特別突出的原理", "fp_note": "這十項是所有構圖法背後共通的底層邏輯。百分比是這張圖「體現該原理的程度」，不是分數——一張圖不需要十項都高，通常兩三項強就夠了。", "fp_rep": "反覆", "fp_grad": "漸變", "fp_sym": "對稱", "fp_bal": "均衡", "fp_harm": "調和", "fp_contr": "對比", "fp_prop": "比例", "fp_rhythm": "節奏", "fp_simp": "單純", "fp_uv": "統一與多樣", "fpx_rep": "相同或相似的元素規律地連續出現，產生視覺節奏。", "fpx_grad": "明暗或色彩呈現逐步變化的過渡，畫面有階調而非硬切。", "fpx_sym": "以中軸為基準，兩邊形狀與數量近似，莊重而穩定。", "fpx_bal": "兩邊不一樣但重量相等——對稱是雙胞胎，均衡是蹺蹺板。", "fpx_harm": "元素之間有共通性，色相集中在窄範圍內，和諧不衝突。", "fpx_contr": "異質元素互相襯托，拉開明暗、大小或色彩的差距。沒有對比就沒有焦點。", "fpx_prop": "主體的大小與位置落在有意識的比例關係上（三分、黃金比例）。", "fpx_rhythm": "重點以接近等距的間隔出現，視線像聽音樂一樣被帶著走。", "fpx_simp": "去掉不必要的裝飾，只留下最核心的形與色。", "fpx_uv": "在整體秩序中求變化，又在變化中維持整體感——太統一會單調，太多樣會混亂。", "fp_mapnote": "同一種構圖不是單一原理在作用，而是多項原理疊加。理解「為什麼」比背「把主體放交點」更有用。", "f_lightq": "光的質地", "f_tonality": "影調（反差）", "f_ambient": "陰影的環境色", "f_tempsplit": "冷暖分離", "f_formlight": "結構光（雕塑感）", "f_shafts": "體積光（耶穌光）", "lq_hard": "硬光", "lq_soft": "軟光（柔光）", "lq_mixed": "中性", "lq_hard_d": "影子邊緣銳利、明暗反差大，像正午陽光或聚光燈。戲劇性強、陽剛。", "lq_soft_d": "影子邊緣模糊、過渡平滑，像陰天或柔光罩。溫柔、唯美、藏細紋。", "lq_mixed_d": "軟硬之間，明暗有過渡但仍看得出方向。", "tn_high": "高反差（硬調）", "tn_mid": "中間調", "tn_low": "低反差（軟調）", "tn_high_d": "亮部很亮、暗部很暗，中間灰階少。衝擊力強，適合強烈情緒。", "tn_mid_d": "亮暗與中間調分布均勻。", "tn_low_d": "灰階豐富、沒有純黑純白。柔和舒服，日系空氣感常見。", "am_rich": "帶明顯環境色", "am_faint": "微弱環境色", "am_neutral": "偏中性", "am_dead": "暗部死黑", "am_rich_d": "陰影不是黑的，而是吃進了環境反射的顏色——印象派最重要的發現，也是寫實感的關鍵。", "am_faint_d": "陰影帶一點環境色，但還可以更明確。", "am_neutral_d": "陰影接近中性灰。若想要更真實的空間感，可讓暗部帶一點天光的藍或反射面的顏色。", "am_dead_d": "暗部大面積死黑、沒有任何資訊。這通常不是風格選擇而是曝光或後製壓太多。", "ts_yes": "明顯", "ts_no": "不明顯", "ts_hi": "亮部偏暖、暗部偏冷（黃金時刻／經典電影調）。", "ts_sh": "亮部偏冷、暗部偏暖（青藍高光＋暖影，賽博朋克常見）。", "ts_none": "亮部與暗部的色溫接近，畫面沒有冷暖層次。", "fl_yes": "光在揭示形體", "fl_part": "部分", "fl_no": "光沒在塑形", "fl_d": "結構光的條件：方向明確、中間調充足、亮暗兩端都還有細節。任一端被壓掉，形體就讀不出來了。", "sh_yes": "偵測到光柱", "sh_no": "無", "sh_d": "偵測到數道柔邊、近似平行的亮帶。硬邊的柵欄、欄杆不會被算進來。此判讀信心較低，請自行確認。", "lp_front": "正面光（順光）", "lp_side": "側光", "lp_side45": "前側光（45°）", "lp_back": "逆光", "lp_top": "頂光", "lp_bottom": "底光", "f_scheme": "配色法則", "f_palette": "風格色系", "cs_mono": "單色", "cs_analogous": "類似色", "cs_complementary": "互補色", "cs_splitcomp": "分裂互補色", "cs_triadic": "三角色", "cs_tetradic": "矩形（四角色）", "cs_achromatic": "無彩色", "csx_mono": "只用一個色相，靠明度與彩度拉層次。極度和諧、克制。", "csx_analogous": "色輪上相鄰的幾個色相，有共同色素，和諧中帶變化。自然界最常見的配色。", "csx_complementary": "色輪上正對面的兩色，對比最強。注意面積比例，常見安全公式是主色 70%、互補色 30%。", "csx_splitcomp": "主色搭配它互補色兩側的顏色。保有對比張力，但比直接互補更柔和、更難出錯。", "csx_triadic": "色輪上等邊三角形的三色，豐富、平衡又有活力。", "csx_tetradic": "兩組互補色並存，色彩極豐富但難控。關鍵是讓其中一色主導面積，其餘小面積點綴。", "csx_achromatic": "只用黑白灰，抽離色相，逼觀眾看光影、紋理與構圖本身。", "cs_note": "配色法則以畫家色輪（紅黃藍為等距三原色）判讀，非 RGB 色輪。百分比是幾何吻合度。", "pal_morandi": "莫蘭迪（高級灰）", "pal_macaron": "馬卡龍", "pal_earth": "大地色", "pal_mono": "黑白灰極簡", "pal_neon": "霓虹", "pal_retro": "復古褪色", "pal_cyber": "賽博朋克", "pal_memphis": "孟菲斯", "pal_note": "以整體彩度與明度的落點比對常見風格色系，僅供參考——這是氣質判斷，不是配方。", "m_portrait": "人像構圖", "m_typelayer": "文字層", "f_shotsize": "景別", "f_jointcut": "關節裁切", "f_headroom": "頭頂留白", "f_eyethird": "眼睛高度", "f_faceangle": "臉部角度", "ps_full": "全身像", "ps_threequarter": "七分身", "ps_half": "半身像", "ps_head": "大頭照", "ps_closeup": "特寫", "ps_d": "景別由哪些關節還留在畫面內推定。安全裁切點是大腿中段、上臂中段、小腿中段。", "jc_none": "沒踩到禁區", "jc_note": "在關節處裁切會產生「截肢」的視覺暗示，觀者會直覺感到不適。改切在大腿中段、上臂中段或小腿中段就沒事了。", "jc_ok": "身體沒有被切在關節上。", "jt_neck": "脖子", "jt_elbow": "手肘", "jt_wrist": "手腕", "jt_waist": "腰部", "jt_knee": "膝蓋", "jt_ankle": "腳踝", "je_top": "上緣", "je_bottom": "下緣", "je_left": "左緣", "je_right": "右緣", "hr_good": "適當", "hr_tight": "過緊", "hr_loose": "過多", "hr_none": "撞到上緣", "hr_okcrop": "刻意裁切（特寫可接受）", "hr_d": "以「頭高」為單位量。半身以上應保留完整頭部輪廓與微幅空間；過多會讓人像縮在下方顯得空盪。", "et_on": "接近上三分線", "et_off": "偏離上三分線", "et_d": "把眼睛放在九宮格上方兩個交點附近，最符合人類觀看習慣。這是人像最接近鐵律的一條。", "fa_front": "正面", "fa_threequarter": "半側面（約 45°）", "fa_profile": "側面", "fa_front_d": "直接對視，衝擊力與對話感最強，適合眼神有故事的時候。", "fa_threequarter_d": "最實用也最顯瘦的角度，能同時看到雙眼與臉部輪廓，光影在臉頰形成自然的立體過渡。", "fa_profile_d": "輪廓線條最強，適合五官立體的被攝者，也常用來表現沉思或眺望。", "f_textcontrast": "文字對比", "f_textmargin": "文字邊距", "tc_pass": "足夠", "tc_low": "偏低", "tc_fail": "不足", "tc_d": "以文字區塊內最亮與最暗的相對亮度比估算，門檻參考 WCAG（一般文字 4.5:1、大字 3:1）。若壓在複雜畫面上，加一條半透明底板或局部模糊是最穩的解法。", "tm_ok": "安全", "tm_tight": "太貼邊", "tm_d": "文字離畫面邊緣太近會顯得像印壞了。除非是刻意讓文字衝出邊界的手法，否則留一段安全邊距。", "tx_note": "只量得到文字區塊的位置、大小與對比——字體、字距、行長這些真正的排版重點需要 OCR 才能判讀，這裡不做臆測。", "pr_model": "載入模型…", "pr_seg": "分割主體…", "pr_anime": "偵測動漫臉部…", "pr_light": "量測光影與色彩…", "pr_comp": "分析構圖…", "pr_report": "產生報告…", "pr_dl_tf": "下載 TensorFlow.js", "pr_dl_bp": "下載 BodyPix 模型", "pr_dl_cv": "下載 OpenCV.js", "pr_dl_xml": "下載動漫臉部模型…", "pr_dl_wait": "連線中…", "af_opt": "啟用動漫／插畫臉部偵測", "af_opt_d": "只有插畫、2D 作品才會用到。模型約 1MB，在背景執行緒跑，不會卡住頁面。", "af_off_user": "未啟用（進階選項中可開啟）", "e_uneven": "明暗對比大", "tc_exp_uneven": "明暗對比大（風格取向，非缺陷）", "vs_opt": "使用 AI 視覺輔助（需自行部署）", "vs_opt_d": "把縮圖送到你自己的端點，由視覺模型判斷「角色在哪、哪些是背景裝飾、哪些是文字」。能處理側臉與被手遮住的臉——那是 cascade 做不到的。未部署則自動忽略，不影響其他分析。", "m_vision": "AI 視覺輔助", "f_vs_subjects": "辨識到的主體", "f_vs_shot": "景別（視覺判定）", "f_vs_focal": "視覺焦點", "f_vs_bg": "背景", "vs_none": "未偵測到主體", "vs_off": "未啟用", "vs_unconfigured": "端點未部署或未設定 API key", "vs_failed": "呼叫失敗，已改用本地分析", "vs_note": "主體位置由視覺模型判定，其餘所有數值（構圖幾何、色彩、光影）仍由本地運算，不經過網路。", "vs_facing_front": "正面", "vs_facing_three_quarter": "半側面", "vs_facing_profile": "側面", "vs_facing_away": "背向", "vs_facing_hidden": "看不到臉", "vs_anchored": "主體遮罩已依視覺判定收斂", "pr_vision": "AI 視覺分析中…", "tx_unknown": "未判定", "tx_why": "這張沒有可靠的文字依據，所以不做判讀。純靠像素分辨「文字」和「裝飾」在插畫上並不可行——實測 9 張圖，完全沒有文字的作品分數（0.52–0.65）和真的有整片文字的作品（0.61–0.71）範圍重疊，因為花瓣、星點、蕾絲會產生跟字符幾何上極相似的小團塊。要判讀文字層，請在②選「文字／版面」，或啟用 AI 視覺輔助。", "tx_src_vision": "文字位置由 AI 視覺輔助提供", "tx_src_layout": "已指定為文字／版面作品", "foc_mid": "適中", "d_focus": "以「一半的視覺重量集中在多少面積內」衡量。完全均勻分布是 50%，數字越小越集中。", "d_exposure_illust": "插畫模式下不判定過曝／欠曝——大片的純白或純黑通常是刻意的畫面設計，不是曝光失誤，而從像素無法區分兩者。這裡只描述明暗對比的幅度。", "m_colourtalk": "色彩評語", "ct_scheme": "配色屬於{S}。", "ct_mono": "整體收在單一色相裡，靠明度與彩度拉層次——這是最不容易出錯、也最容易顯得高級的做法，代價是層次全靠明暗，明度階梯要拉得夠開。", "ct_analogous": "用色輪上相鄰的色相，共用同一種色素，所以和諧中還有變化。自然界最常見的配色，安全且耐看。", "ct_complementary": "用了色輪正對面的兩色，對比最強。這種配色的成敗全在面積比例——常見的安全公式是主色約七成、互補色約三成，讓其中一方明確主導。", "ct_splitcomp": "分裂互補：主色搭配互補色兩側的顏色。保有冷暖對撞的張力，但比直接互補柔和，也更難出錯。", "ct_triadic": "三角色，色輪上等距的三個色相。豐富、平衡又有活力，適合活潑的主題，但要讓其中一色佔主導面積。", "ct_tetradic": "四角配色，等於兩組互補色並存。色彩極豐富但也最難控制，關鍵是讓一色主導、其餘小面積點綴。", "ct_achromatic": "抽掉色相之後，觀眾只能看光影、質感與構圖——這是把注意力逼回造型本身的做法。", "ct_sat_low": "整體彩度偏低（平均 {C}），走的是內斂、克制的路線。", "ct_sat_mid": "彩度適中（平均 {C}），色彩有存在感但不搶戲。", "ct_sat_high": "彩度偏高（平均 {C}），色彩本身就是主角。", "ct_light_high": "明度偏亮，整體輕盈、通透。", "ct_light_low": "明度偏暗，氛圍沉、重、內收。", "ct_style": "整體氣質最接近{P}。", "ct_warm": "暖色主導，畫面偏前進、親近。", "ct_cool": "冷色主導，畫面偏後退、冷靜。", "ct_split_hi": "亮部偏暖、暗部偏冷，這是黃金時刻與經典電影調的關係，最容易讓畫面看起來「有光」。", "ct_split_sh": "亮部偏冷、暗部偏暖，賽博朋克常見的反向冷暖。", "ct_split_flat": "亮部與暗部的色溫接近，畫面少了一層冷暖縱深；若想更立體，可以讓暗部帶一點環境反射的顏色。", "ct_amb_rich": "陰影裡吃進了環境色，不是死黑——這是讓光看起來真實的關鍵。", "ct_amb_neutral": "陰影接近中性灰。若想要更明確的空間感，可讓暗部帶一點天光的藍或反射面的顏色。", "ct_gray": "無彩色作品，色彩評語不適用；請看光影與構圖的部分。", "ct_tip_narrow": "若覺得畫面稍嫌平，可在小面積加入一個對比色作為點綴，不必超過整體的一成。", "ct_tip_wide": "色相跨度不小，若想更統整，可統一罩上一層淡色調，或壓低次要色的彩度。", "h_highkey": "高調（純白約 {P}%）", "d_highlight_illust": "插畫模式不判過曝。純白是顏料，不是曝光失誤，而這兩者從像素分不出來。這裡改成告訴你**主體有多少比例已經是完全平的純白**——那些地方沒有明暗資訊，形體不再被讀出來。純白設計本來就是在管理這個數字：留白要夠才透亮，但關鍵的轉折處若也一起平掉，立體感會消失。想確認的話，把作品轉灰階瞇眼看，剩下的形狀就是觀眾實際讀到的。", "s_lowkey": "低調（純黑約 {P}%）", "d_shadow_illust": "插畫模式不判死黑。大片純黑通常是刻意的畫面設計，這裡改成告訴你主體有多少比例是完全平的純黑——那些地方同樣沒有形體資訊。", "vs_ep_label": "端點網址（放在 Netlify 上留空即可；GitHub Pages 請填 Cloudflare Worker 網址）", "vs_ep_ph": "https://xxx.workers.dev", "d_photoonly": "曝光、對焦與腳下留白屬於攝影判準。你在②選的不是「攝影師」，所以這些只描述數值、不列為缺點。想要攝影標準的判讀，請把②改成「攝影師」。", "vs_mode_label": "兩種用法，擇一即可", "vs_key_label": "① 直接填你自己的 API key（免部署，最簡單）", "vs_key_ph": "sk-ant-...", "vs_key_warn": "key 只存在這台裝置的瀏覽器，只會送到 api.anthropic.com，不會傳給本站或任何第三方。適合你自己用。⚠️ 絕對不要把 key 寫進網頁原始碼再上傳——那等於公開。共用電腦也不建議填。", "vs_ep_label2": "② 或填自架端點網址（Cloudflare Worker／Netlify Function）", "vs_model_label": "模型", "vs_key_bad": "API key 被拒絕，請確認是否正確、額度是否足夠", "rt_sum": "總結", "rt_comp": "構圖", "rt_col": "色彩・光影", "rt_det": "細節", "br_title": "一句話結論", "br_fix": "最該改的一件事", "br_keep": "最該保留的一件事", "br_none_fix": "沒有明顯要改的地方", "br_none_keep": "—", "br_hint": "以下分頁是逐項的完整判讀，想細看再點。", "fb_opt": "角色刻意突出邊框／出血", "fb_opt_d": "作品有內框（白邊、黑條、色塊底），而角色的手腳或裙襬故意壓出框外。勾選會強制以內框為畫面來判讀構圖，並把溢出視為刻意設計。留空則自動偵測。", "f_panel": "內框偵測", "f_break": "突破邊框", "pn_none": "無內框（滿版）", "pn_found": "偵測到內框，已以內框為畫面判讀構圖", "pn_manual": "已手動指定為內框構圖", "fb_yes": "有，且視為刻意設計", "fb_no": "無", "fb_d": "溢出邊框是「打破邊框」的設計手法，不是缺陷。構圖以內框為準來評估，溢出的部分不列入扣分。", "pn_d": "白邊、黑條或色塊底屬於裱框，不是畫面內容。以整張圖去算構圖會把裱框的空白算成留白，重心也會被拉偏。", "cpall_head": "本站能偵測的 18 種構圖", "cpall_note": "亮起來的是這張作品驗出來的，灰的是沒偵測到。點任一項可以跳到美學專欄看說明。", "cpg_line": "線條類", "cpg_shape": "形狀類", "cpg_place": "位置類", "cpg_rhythm": "節奏類", "fx_rhythm_lo": "元素之間的間距太平均，畫面沒有節奏。試著讓兩三個元素靠近成一組、其他拉開距離——疏密有別才會有呼吸。", "fx_grad_lo": "明暗缺少漸進的層次，看起來偏平。讓亮部到暗部之間多一個過渡階，或把背景做出遠近的明度差。", "fx_prop_lo": "主體的位置與大小關係比較隨意。試著讓主體落在三分線或黃金比例點附近，或明確拉開主次的大小差。", "fx_contr_lo": "整體對比偏弱，主體不太跳得出來。加大主體與背景的明度差，或讓主體保留最亮（或最暗）的那一端。", "fx_simp_lo": "畫面元素偏多、偏碎。挑出真正想被看見的那一兩樣，其餘降低彩度或明度讓它們退到後面。", "fx_uv_lo": "統一與變化沒有拉開——要嘛太整齊、要嘛太雜。先決定一個貫穿全畫面的共通點（色調或形狀），再讓其中一處刻意打破它。", "fx_rep_lo": "缺少可以形成節拍的重複元素。少量重複（同樣的花、光點、形狀）會讓畫面比單一主體更耐看。", "kp_rhythm": "元素的疏密安排有節奏，不是平均鋪開", "kp_grad": "明暗有清楚的漸進層次，畫面有縱深", "kp_prop": "主體的位置與大小關係處理得好", "kp_contr": "主體與背景的對比明確，視線一眼就落在該落的地方", "kp_simp": "元素克制、不雜亂", "kp_uv": "統一之中有變化，這是最難拿捏的一項", "kp_rep": "重複元素形成了節拍感", "kp_harm": "色調統一，整體很和諧", "fx_span_lo": "主體的明暗範圍偏窄，畫面容易顯得平。不必全面加對比——把最亮的地方再推亮一階、另外壓深一小塊暗部，兩端各走一步就會立體很多。", "fx_focus_hi": "視覺重量散得很開，沒有明確的落點。挑一個區域讓它最亮、最鮮豔或細節最多，其他地方主動退讓——觀眾的眼睛需要一個先看的地方。", "fx_nopattern": "沒有偵測到明確的構圖型態，元素之間的結構關係比較鬆散。最容易上手的兩個作法：把主體移到三分線交點附近，或用畫面裡既有的線條（衣褶、光線、花莖）把視線引向主體。", "kp_span": "明暗跨度完整，從最亮到最暗都有層次", "kp_focus": "視覺焦點明確，一眼就知道要看哪裡", "kp_multipat": "同時成立多種構圖手法，結構關係經營得很扎實", "build_lbl": "版本", "fx_flat_both": "主體與背景的明暗差不夠，主體不太跳得出來，整體也偏平。不必全面加對比——把主體最亮的地方再推亮一階、背景壓深一小塊，兩端各走一步就會分開。"};
+  var T={"hues": ["紅", "橙", "黃", "黃綠", "綠", "青綠", "青", "藍", "靛", "紫", "洋紅", "玫紅"], "lightPos": ["左上前側光", "上方頂光", "右上前側光", "左側光", "正面順光", "右側光", "左下光", "底光", "右下光"], "side_key": "側", "c_darkgray": "深黑灰", "c_softwhite": "柔白", "c_ltgray": "淺灰", "c_gray": "中性灰", "c_deep": "深", "c_light": "淺", "l_silhouette": "剪影／逆光極強", "l_back": "逆光", "l_even": "正面順光／均勻光", "e_even": "均勻", "e_over": "局部過曝", "e_under": "局部欠曝", "h_good": "細節保留良好", "h_mild": "輕微 clipping", "h_over": "主體局部過曝", "s_dead": "死黑（暗部無層次）", "s_press": "暗部略壓縮", "s_rich": "層次豐富", "r_vlow": "極低", "r_low": "低", "r_mid": "中", "r_midhi": "中高", "r_high": "高", "st_bw": "黑白／極低彩度", "st_cine": "低飽和電影感", "st_morandi": "莫蘭迪低彩色調", "st_natural": "自然平衡色調", "st_vivid": "鮮豔活潑", "wb_neutral": "中性", "wb_warm": "偏暖", "wb_cool": "偏冷", "warm": "暖", "cool": "冷", "t_tl": "左上三分點", "t_tr": "右上三分點", "t_bl": "左下三分點", "t_br": "右下三分點", "rot_clear": "明確", "rot_part": "部分吻合", "rot_none": "未使用", "sym_high": "高度對稱", "sym_mild": "輕微對稱", "sym_none": "不對稱", "ns_active": "主動留白・有呼吸感", "ns_passive": "被動空白", "ns_crowd": "偏擁擠", "p_left": "畫面左側", "p_right": "畫面右側", "p_center": "畫面中央", "el_top": "上三分之一", "el_mid": "中間", "el_bottom": "下三分之一", "g_in": "望向畫面內", "g_out": "望向畫面外", "g_unknown": "不確定", "gr_ample": "充足", "gr_tight": "侷促", "foc_conc": "集中", "foc_spread": "分散", "foc_none": "無明顯焦點", "fr_border": "外框裁切後分析框內內容", "fr_natural": "利用邊緣結構形成框景，強化深度", "cs_offcenter": "主體幾乎置中且未落在三分線上，可嘗試左右移動約 1/6 畫面，把主體放到三分交點增加張力。", "cs_gazeroom": "視線前方空間偏少，建議往視線反方向裁切，讓臉部前方多留一些呼吸空間。", "cs_tighten": "留白偏多、主體偏小，可裁切收緊，讓主體佔畫面比例提升。", "cs_balance": "左右視覺重量不平衡，可在較空的一側加入亮點，或把主體往中線微移。", "cs_keep": "視線方向已有充足空間、留白具呼吸感，構圖無需調整。", "cs_finetune": "構圖大致穩定，若想更精緻可微調主體與亮點的相對位置。", "sh_sharp": "清晰", "sh_soft": "輕微柔焦", "sh_blur": "明顯模糊", "sh_oof": "失焦", "n_low": "低", "n_mid": "中", "n_high": "高", "a_none": "無", "a_mild": "輕微壓縮", "a_block": "明顯壓縮方塊", "fe_ok": "正常", "fe_under": "輕微欠曝", "fe_over": "過曝", "es_sharp": "銳利", "es_soft": "輕微模糊", "sk_natural": "自然", "sk_smooth": "過度平滑（可能磨皮）", "sk_rough": "紋理較重", "to_ok": "自然", "to_mild": "輕微色偏", "to_shift": "明顯色偏", "to_cool": "偏冷／偏洋紅", "dof_shallow": "淺景深／強虛化", "dof_medium": "中等虛化", "dof_deep": "深景深／無虛化", "dof_flat_strong": "平面繪製・主體與背景強對比分離", "dof_flat_mid": "平面繪製・主體與背景中等分離", "dof_flat_low": "平面繪製・主體與背景對比較弱", "sep_clear": "清晰分離", "sep_part": "部分融合", "sep_merge": "背景干擾主體", "ty_wedding": "婚紗／婚禮", "ty_magazine": "雜誌封面", "ty_book": "書籍／專輯封面", "ty_cinema": "電影劇照・敘事影像", "ty_frame": "框架構圖", "ty_lightexp": "光影實驗", "ty_typo": "文字排版混合", "ty_portrait": "人像作品", "ty_fashion": "穿搭／全身", "ty_scene": "場景／靜物", "ty_collage": "拼貼／多格", "m_subject": "主體辨識", "m_light": "光線分析", "m_color": "色彩分析", "m_comp": "構圖分析", "m_sharp": "清晰度與畫質", "m_depth": "景深與層次", "m_port": "人像品質", "m_expert": "專家整體評論", "m_confoverview": "各模組信心值一覽", "f_status": "辨識狀態", "f_area": "主體佔畫面比例", "f_pos": "主體位置", "f_eyeline": "眼睛水平線", "f_gaze": "視線方向", "f_focus": "視覺焦點集中度", "f_secondary": "次要人物數量", "f_lightdir": "光線方向", "f_exposure": "曝光均勻度", "f_highlight": "高光細節保留", "f_shadow": "陰影層次", "f_richness": "色彩豐富度", "f_warmcool": "冷暖色比例", "f_style": "整體風格標籤", "f_wb": "白平衡傾向", "f_balance": "構圖平衡度", "f_thirds": "三分法使用", "f_symmetry": "對稱性", "f_negspace": "留白比例與品質", "f_gazeroom": "視線引導空間", "f_frame": "框架構圖", "f_sharpness": "主體清晰度", "f_noise": "影像雜訊", "f_artifacts": "壓縮瑕疵", "f_faceexp": "臉部曝光", "f_eyesharp": "眼睛清晰度", "f_skintex": "膚質紋理", "f_skintone": "膚色自然度", "f_dof": "景深", "f_separation": "主體與背景分離", "d_exposure": "僅統計主體遮罩內的 EV 近似分佈", "d_highlight": "純白背景／白牆／天空等非主體高亮區已排除，只看主體是否失去紋理", "lk_highcontrast": "側光＋主體過曝＋暗部死黑：光比偏大，亮暗兩端同時流失細節", "lk_centernofocus": "主體居中但缺乏明確焦點與視線引導，畫面稍顯平靜", "lk_bokeheye": "淺景深與清晰眼神呼應，主體立體、視覺聚焦明確", "lk_bw": "黑白處理，評圖聚焦在明暗層次與構圖，色彩相關指標略過", "lk_warmlow": "低彩度暖調，營造柔和、內斂的情緒氛圍", "lk_frame": "運用框架構圖，收束視線並強化空間深度", "lk_textblocks": "畫面中偵測到文字／標語區塊。字體風格化無法自動辨識內容，以下排版判讀僅依區塊位置與大小推估。⚠️ 蕾絲、亮片、花紋這類裝飾在像素上和文字幾乎一樣，所以偵測到的區塊數會明顯高估——實測一張作品目測 4~5 處文字，程式數出 25 處。請把排版判讀當成粗略參考。", "v3_tilt": "水平線{D}傾約 {A} 度，建議將畫面{R}旋轉 {A} 度校正。", "v3_dleft": "左", "v3_dright": "右", "v3_rcw": "順時針", "v3_rccw": "逆時針", "v3_frag": "畫面元素分散成 {N} 個區塊，沒有一塊完整的留白，建議合併成 2–3 組，並空出一塊乾淨區域。", "v3_uneven": "{D}的留白約為對側的 {R} 倍，空間分配失衡，建議移動主體或裁切修正。", "v3_ptop": "上方", "v3_pbottom": "下方", "v3_pleft": "左側", "v3_pright": "右側", "v3_crowd": "元素偏多，缺乏讓視線喘息的集中留白，建議刪減次要元素或加大邊界留白。", "v3_align": "文字區塊沒有共同的對齊基準，建議統一左緣或中線，建立網格。", "v3_feet": "人物下緣貼齊畫面底部，建議下方留出約 5–8% 的空間，避免被切斷感。", "v3_headcut": "頭頂被裁切，建議上方保留完整頭部並留少量空間。", "v3_small": "主體僅佔畫面約 {P}%，建議靠近拍攝或裁切，讓主體至少佔 35%。", "v3_color_add": "色彩集中在{H}系且彩度偏低，可加入少量{C}系作為視覺重點，拉開層次。", "v3_hi_over": "主體亮部已失去細節，建議降 0.7EV 或對高光測光。", "v3_sh_dead": "暗部壓成死黑，建議補光或後製提亮陰影找回層次。", "v3_exp_over": "局部過曝，建議降低曝光或避開直射光。", "v3_exp_under": "局部欠曝，建議增加曝光或補光。", "v3_oof": "主體失焦，建議確認對焦點並提高快門速度。", "v3_blur": "主體偏軟，可能手震，建議提高快門或使用穩定支撐。", "v3_ns_good": "留白大塊連續且圍繞主體，畫面有呼吸感", "v3_tech_good": "對焦與高光控制到位", "v3_band_a": "構圖精準，幾乎沒有明顯問題", "v3_band_b": "構圖大致良好，仍有小問題", "v3_band_c": "構圖有明顯問題，需要調整", "v3_band_d": "構圖失敗，建議重拍或重新排版", "v3_why": "扣分原因如下", "v3_fixlbl": "具體修正方向", "v3_keeplbl": "可以保留的優點", "v3_comp_lbl": "構圖評估", "v3_shotlbl": "景別判斷", "v3_full": "全身（人物佔畫面高度 80% 以上）", "v3_half": "半身（40–80%）", "v3_head": "頭像／特寫", "v3_nosubj": "未偵測到明確人物主體", "v3_sum_fix": "先把上面第一項修掉，這張的完成度會明顯不同。", "v3_sum_good": "基礎穩固，細節再收一點就很完整。", "v3_sum_ok": "方向可行，依上面的順序逐項調整即可。", "v6_viewlbl": "評判觀點", "v6_photo": "攝影師", "v6_design": "平面設計師", "v6_illust": "插畫師", "v6_learn": "延伸閱讀", "v6_note_photo": "以攝影師觀點評估：優先看曝光、對焦、水平與景深。", "v6_note_design": "以平面設計師觀點評估：優先看網格對齊、文字層級與負空間。", "v6_note_illust": "以插畫師觀點評估：優先看色彩調和、主體剪影與畫面重量，曝光與對焦不列入重點。", "v6_collage": "已依「拼貼／多格」標準評估：分區塊是刻意設計，不列為缺點；改看各區塊是否大小一致、間距整齊。", "v6_collage_uneven": "拼貼區塊的大小或間距不一致，建議統一格線與間隔。", "v3_scorelbl": "理論指標參考分數", "v3_disclaim": "這個分數是依構圖、曝光、色彩等「教科書理論指標」推算出來的參考值，不是作品好壞的定論。很多優秀作品會刻意打破規則。看完課本了吧——接下來試著實際操作看看，用眼睛和作品本身去驗證。", "lk_textmaybe": "畫面中可能含有文字或標語。本工具不會讀取文字內容，若要分析排版層級，請在上方切換到「文字 / 版面」模式後重新分析。", "lk_textblocks_faint": "畫面中可能有約 {N} 處文字／手寫字區塊，但特徵較弱（藝術字、與背景融合等），判讀信心較低，僅供參考。", "tc_exp_ok": "曝光均勻", "tc_exp_over": "局部過曝、亮部偏多", "tc_exp_under": "局部欠曝、暗部偏重", "tc_hi_over": "高光裁切、主體亮部細節流失", "tc_hi_mild": "高光略有溢出但大致保留", "tc_shadow_dead": "暗部偏黑、缺乏層次", "tc_sharp_ok": "主體邊緣清晰", "tc_sharp_oof": "主體明顯失焦", "tc_sharp_soft": "主體略帶柔焦", "tc_noise": "雜訊偏高", "tc_block": "可見壓縮方塊", "tc_ok": "曝光與清晰度整體穩定", "ae_warm": "暖色主導、情緒溫潤", "ae_cool": "冷色主導、氣氛沉靜", "ae_balanced": "冷暖平衡", "ae_thirds": "主體落在三分線上、構圖張力足", "ae_center": "主體置中、風格內斂", "ae_ns_active": "留白主動、畫面有呼吸感", "ae_ns_crowd": "元素偏滿、稍缺喘息空間", "ae_shallow": "淺景深帶出主體、空間感明確", "sum_fixtech": "整體有想法，但技術端（曝光／對焦／層次）需優先修正，修好後表現會明顯提升。", "sum_strong": "技術與美感兼具，是一張完成度高的作品。", "sum_solid": "基礎穩定，細節再打磨可更出色。", "cm_tech": "技術完成度", "cm_art": "藝術表現力", "cm_comp": "構圖建議", "conf": "信心", "lowconf": "可信度較低", "maybe": "可能", "refonly": "僅供參考，建議手動檢視", "na": "不適用", "yes": "是", "unit_people": "人", "colon": "：", "comma": "，", "stop": "。", "mid": "　·　", "p_open": "（", "p_close": "）", "subj_none": "未偵測到人物", "subj_ok": "成功", "subj_partial": "部分遮擋", "pal_title": "主體代表性色彩", "pal_tag": "已排除背景與極端明暗", "pal_desc": "依人物遮罩、視覺焦點權重與 LAB 分群排序，最多顯示 5 色。", "pal_lowconf": "因主體遮罩不穩定，色票僅供參考。", "rep_title": "V2 健檢結果", "rep_tag": "多維度交叉評估", "rep_foot": "※ 人物分割優先在裝置端執行；模型無法載入或風格化過高時會自動降低信心值並標示「可信度較低」。原始數值（Laplacian、EV 標準差等）僅在除錯模式顯示，一般只呈現轉譯後描述。結果為攝影與視覺分析輔助，不以單一閾值直接判定作品好壞。", "border_note": "偵測到外框，已裁切後只分析框內內容。邊框色", "sl_stable": "整體表現穩定", "sl_good": "基礎良好", "sl_adjust": "可再調整", "sl_fix": "建議優先修正", "modelbl": "V2 多維度交叉分析", "mode_portrait": "人像照", "mode_fashion": "穿搭 / 全身", "mode_scene": "場景 / 靜物", "mode_collage": "拼貼 / 多格", "mode_layout": "文字 / 版面", "analyze": "✨ 開始分析", "analyzing": "分析中…", "err": "分析時發生問題，請換一張圖片或重試。", "f_animeface": "動漫／插畫臉偵測", "af_off": "未使用（已由姿態關鍵點鎖定臉部）", "af_none": "已啟用，但未偵測到臉", "af_est": "（估算）", "unit_face": "張臉", "af_note": "此圖的姿態關鍵點無法鎖定，改用動漫／插畫臉部偵測（LBP cascade）輔助：偵測到 {N} 張臉。眼睛水平線由臉框推估（臉框上緣＋高度 35%），非關鍵點量測，僅供參考；此偵測不提供視線方向，因此「視線方向」維持不確定。", "af_credit": "動漫／插畫臉部偵測使用 lbpcascade_animeface（MIT License, © 2011 nagadomi）；cascade 由本站以純 JavaScript 實作，不依賴 OpenCV。參數 scaleFactor 1.1、minNeighbors 5、minSize 24×24。LBP cascade 對正面動漫臉最準，側臉、遮擋或寫實風格可能漏偵或誤偵。", "f_patterns": "構圖型態辨識", "cp_none": "未偵測到明確型態", "cp_note": "型態由邊緣方向、直線長度與主體形狀推算，百分比是「吻合程度」而非好壞分數。一張圖同時符合多種型態是正常的。", "cp_deliberate": "偵測到明確的結構性構圖，因此「主體置中、未落在三分線上」不列為缺點。", "cp_lead": "引導線", "cp_radial": "放射線／消失點", "cp_diagonal": "對角線", "cp_horiz": "水平線構圖", "cp_vert": "垂直線構圖", "cp_cross": "十字形構圖", "cp_triUp": "正三角構圖", "cp_triDown": "倒三角構圖", "cp_triGroup": "群像三角", "cp_center": "中心構圖", "cp_fill": "填滿畫面", "cp_edgeTension": "邊緣張力", "cp_phi": "黃金比例點", "cp_pattern": "重複圖案", "cp_patternBreak": "打破圖案", "cp_sCurve": "S 形曲線", "cp_cCurve": "C 形曲線", "cp_dutch": "傾斜／荷蘭角", "cpx_lead": "畫面中的線條收束到主體上，視線會自動被帶過去。", "cpx_radial": "線條自同一點向外發散，形成匯聚或爆發的張力。", "cpx_diagonal": "主要線條沿對角線走，畫面帶有速度與動感。", "cpx_horiz": "水平線主導，畫面平靜、遼闊、穩定。", "cpx_vert": "垂直線主導，畫面挺拔、有秩序感。", "cpx_cross": "一橫一豎交叉成十字，安定而肅穆。", "cpx_triUp": "主體輪廓下寬上窄，像正三角一樣穩。", "cpx_triDown": "主體輪廓上寬下窄，倒三角帶來張力與不安。", "cpx_triGroup": "多個主體的位置連成三角形，群像最穩的排法。", "cpx_center": "主體置中，直接、莊重、聚焦。", "cpx_fill": "主體撐滿甚至溢出邊界，壓迫感與親密感強烈。", "cpx_edgeTension": "主體被推到畫面邊緣，用不平衡製造心理張力。", "cpx_phi": "主體落在黃金比例點上，比三分線更收斂的古典位置。", "cpx_pattern": "畫面有規律重複的節奏。", "cpx_patternBreak": "規律中出現一個異類，自動成為視覺焦點。", "cpx_sCurve": "主要走向呈 S 形，視線流動緩慢、優雅有縱深。", "cpx_cCurve": "主要走向呈 C 形，帶有柔和的環抱感。", "cpx_dutch": "水平線刻意傾斜，製造不安與動勢；若不是刻意的，建議校正。", "m_form": "美的形式原理", "f_formtop": "主導原理", "f_formmap": "構圖背後的原理", "fp_none": "沒有特別突出的原理", "fp_note": "這十項是所有構圖法背後共通的底層邏輯。百分比是這張圖「體現該原理的程度」，不是分數——一張圖不需要十項都高，通常兩三項強就夠了。", "fp_rep": "反覆", "fp_grad": "漸變", "fp_sym": "對稱", "fp_bal": "均衡", "fp_harm": "調和", "fp_contr": "對比", "fp_prop": "比例", "fp_rhythm": "節奏", "fp_simp": "單純", "fp_uv": "統一與多樣", "fpx_rep": "相同或相似的元素規律地連續出現，產生視覺節奏。", "fpx_grad": "明暗或色彩呈現逐步變化的過渡，畫面有階調而非硬切。", "fpx_sym": "以中軸為基準，兩邊形狀與數量近似，莊重而穩定。", "fpx_bal": "兩邊不一樣但重量相等——對稱是雙胞胎，均衡是蹺蹺板。", "fpx_harm": "元素之間有共通性，色相集中在窄範圍內，和諧不衝突。", "fpx_contr": "異質元素互相襯托，拉開明暗、大小或色彩的差距。沒有對比就沒有焦點。", "fpx_prop": "主體的大小與位置落在有意識的比例關係上（三分、黃金比例）。", "fpx_rhythm": "重點以接近等距的間隔出現，視線像聽音樂一樣被帶著走。", "fpx_simp": "去掉不必要的裝飾，只留下最核心的形與色。", "fpx_uv": "在整體秩序中求變化，又在變化中維持整體感——太統一會單調，太多樣會混亂。", "fp_mapnote": "同一種構圖不是單一原理在作用，而是多項原理疊加。理解「為什麼」比背「把主體放交點」更有用。", "f_lightq": "光的質地", "f_tonality": "影調（反差）", "f_ambient": "陰影的環境色", "f_tempsplit": "冷暖分離", "f_formlight": "結構光（雕塑感）", "f_shafts": "體積光（耶穌光）", "lq_hard": "硬光", "lq_soft": "軟光（柔光）", "lq_mixed": "中性", "lq_hard_d": "影子邊緣銳利、明暗反差大，像正午陽光或聚光燈。戲劇性強、陽剛。", "lq_soft_d": "影子邊緣模糊、過渡平滑，像陰天或柔光罩。溫柔、唯美、藏細紋。", "lq_mixed_d": "軟硬之間，明暗有過渡但仍看得出方向。", "tn_high": "高反差（硬調）", "tn_mid": "中間調", "tn_low": "低反差（軟調）", "tn_high_d": "亮部很亮、暗部很暗，中間灰階少。衝擊力強，適合強烈情緒。", "tn_mid_d": "亮暗與中間調分布均勻。", "tn_low_d": "灰階豐富、沒有純黑純白。柔和舒服，日系空氣感常見。", "am_rich": "帶明顯環境色", "am_faint": "微弱環境色", "am_neutral": "偏中性", "am_dead": "暗部死黑", "am_rich_d": "陰影不是黑的，而是吃進了環境反射的顏色——印象派最重要的發現，也是寫實感的關鍵。", "am_faint_d": "陰影帶一點環境色，但還可以更明確。", "am_neutral_d": "陰影接近中性灰。若想要更真實的空間感，可讓暗部帶一點天光的藍或反射面的顏色。", "am_dead_d": "暗部大面積死黑、沒有任何資訊。這通常不是風格選擇而是曝光或後製壓太多。", "ts_yes": "明顯", "ts_no": "不明顯", "ts_hi": "亮部偏暖、暗部偏冷（黃金時刻／經典電影調）。", "ts_sh": "亮部偏冷、暗部偏暖（青藍高光＋暖影，賽博朋克常見）。", "ts_none": "亮部與暗部的色溫接近，畫面沒有冷暖層次。", "fl_yes": "光在揭示形體", "fl_part": "部分", "fl_no": "光沒在塑形", "fl_d": "結構光的條件：方向明確、中間調充足、亮暗兩端都還有細節。任一端被壓掉，形體就讀不出來了。", "sh_yes": "偵測到光柱", "sh_no": "無", "sh_d": "偵測到數道柔邊、近似平行的亮帶。硬邊的柵欄、欄杆不會被算進來。此判讀信心較低，請自行確認。", "lp_front": "正面光（順光）", "lp_side": "側光", "lp_side45": "前側光（45°）", "lp_back": "逆光", "lp_top": "頂光", "lp_bottom": "底光", "f_scheme": "配色法則", "f_palette": "風格色系", "cs_mono": "單色", "cs_analogous": "類似色", "cs_complementary": "互補色", "cs_splitcomp": "分裂互補色", "cs_triadic": "三角色", "cs_tetradic": "矩形（四角色）", "cs_achromatic": "無彩色", "csx_mono": "只用一個色相，靠明度與彩度拉層次。極度和諧、克制。", "csx_analogous": "色輪上相鄰的幾個色相，有共同色素，和諧中帶變化。自然界最常見的配色。", "csx_complementary": "色輪上正對面的兩色，對比最強。注意面積比例，常見安全公式是主色 70%、互補色 30%。", "csx_splitcomp": "主色搭配它互補色兩側的顏色。保有對比張力，但比直接互補更柔和、更難出錯。", "csx_triadic": "色輪上等邊三角形的三色，豐富、平衡又有活力。", "csx_tetradic": "兩組互補色並存，色彩極豐富但難控。關鍵是讓其中一色主導面積，其餘小面積點綴。", "csx_achromatic": "只用黑白灰，抽離色相，逼觀眾看光影、紋理與構圖本身。", "cs_note": "配色法則以畫家色輪（紅黃藍為等距三原色）判讀，非 RGB 色輪。百分比是幾何吻合度。", "pal_morandi": "莫蘭迪（高級灰）", "pal_macaron": "馬卡龍", "pal_earth": "大地色", "pal_mono": "黑白灰極簡", "pal_neon": "霓虹", "pal_retro": "復古褪色", "pal_cyber": "賽博朋克", "pal_memphis": "孟菲斯", "pal_note": "以整體彩度與明度的落點比對常見風格色系，僅供參考——這是氣質判斷，不是配方。", "m_portrait": "人像構圖", "m_typelayer": "文字層", "f_shotsize": "景別", "f_jointcut": "關節裁切", "f_headroom": "頭頂留白", "f_eyethird": "眼睛高度", "f_faceangle": "臉部角度", "ps_full": "全身像", "ps_threequarter": "七分身", "ps_half": "半身像", "ps_head": "大頭照", "ps_closeup": "特寫", "ps_d": "景別由哪些關節還留在畫面內推定。安全裁切點是大腿中段、上臂中段、小腿中段。", "jc_none": "沒踩到禁區", "jc_note": "在關節處裁切會產生「截肢」的視覺暗示，觀者會直覺感到不適。改切在大腿中段、上臂中段或小腿中段就沒事了。", "jc_ok": "身體沒有被切在關節上。", "jt_neck": "脖子", "jt_elbow": "手肘", "jt_wrist": "手腕", "jt_waist": "腰部", "jt_knee": "膝蓋", "jt_ankle": "腳踝", "je_top": "上緣", "je_bottom": "下緣", "je_left": "左緣", "je_right": "右緣", "hr_good": "適當", "hr_tight": "過緊", "hr_loose": "過多", "hr_none": "撞到上緣", "hr_okcrop": "刻意裁切（特寫可接受）", "hr_d": "以「頭高」為單位量。半身以上應保留完整頭部輪廓與微幅空間；過多會讓人像縮在下方顯得空盪。", "et_on": "接近上三分線", "et_off": "偏離上三分線", "et_d": "把眼睛放在九宮格上方兩個交點附近，最符合人類觀看習慣。這是人像最接近鐵律的一條。", "fa_front": "正面", "fa_threequarter": "半側面（約 45°）", "fa_profile": "側面", "fa_front_d": "直接對視，衝擊力與對話感最強，適合眼神有故事的時候。", "fa_threequarter_d": "最實用也最顯瘦的角度，能同時看到雙眼與臉部輪廓，光影在臉頰形成自然的立體過渡。", "fa_profile_d": "輪廓線條最強，適合五官立體的被攝者，也常用來表現沉思或眺望。", "f_textcontrast": "文字對比", "f_textmargin": "文字邊距", "tc_pass": "足夠", "tc_low": "偏低", "tc_fail": "不足", "tc_d": "以文字區塊內最亮與最暗的相對亮度比估算，門檻參考 WCAG（一般文字 4.5:1、大字 3:1）。若壓在複雜畫面上，加一條半透明底板或局部模糊是最穩的解法。", "tm_ok": "安全", "tm_tight": "太貼邊", "tm_d": "文字離畫面邊緣太近會顯得像印壞了。除非是刻意讓文字衝出邊界的手法，否則留一段安全邊距。", "tx_note": "只量得到文字區塊的位置、大小與對比——字體、字距、行長這些真正的排版重點需要 OCR 才能判讀，這裡不做臆測。", "pr_model": "載入模型…", "pr_seg": "分割主體…", "pr_anime": "偵測動漫臉部…", "pr_light": "量測光影與色彩…", "pr_comp": "分析構圖…", "pr_report": "產生報告…", "pr_dl_tf": "下載 TensorFlow.js", "pr_dl_bp": "下載 BodyPix 模型", "pr_dl_cv": "下載 OpenCV.js", "pr_dl_xml": "下載動漫臉部模型…", "pr_dl_wait": "連線中…", "af_opt": "啟用動漫／插畫臉部偵測", "af_opt_d": "只有插畫、2D 作品才會用到。模型約 1MB，在背景執行緒跑，不會卡住頁面。", "af_off_user": "未啟用（進階選項中可開啟）", "e_uneven": "明暗對比大", "tc_exp_uneven": "明暗對比大（風格取向，非缺陷）", "vs_opt": "使用 AI 視覺輔助（需自行部署）", "vs_opt_d": "把縮圖送到你自己的端點，由視覺模型判斷「角色在哪、哪些是背景裝飾、哪些是文字」。能處理側臉與被手遮住的臉——那是 cascade 做不到的。未部署則自動忽略，不影響其他分析。", "m_vision": "AI 視覺輔助", "f_vs_subjects": "辨識到的主體", "f_vs_shot": "景別（視覺判定）", "f_vs_focal": "視覺焦點", "f_vs_bg": "背景", "vs_none": "未偵測到主體", "vs_off": "未啟用", "vs_unconfigured": "端點未部署或未設定 API key", "vs_failed": "呼叫失敗，已改用本地分析", "vs_note": "主體位置由視覺模型判定，其餘所有數值（構圖幾何、色彩、光影）仍由本地運算，不經過網路。", "vs_facing_front": "正面", "vs_facing_three_quarter": "半側面", "vs_facing_profile": "側面", "vs_facing_away": "背向", "vs_facing_hidden": "看不到臉", "vs_anchored": "主體遮罩已依視覺判定收斂", "pr_vision": "AI 視覺分析中…", "tx_unknown": "未判定", "tx_why": "這張沒有可靠的文字依據，所以不做判讀。純靠像素分辨「文字」和「裝飾」在插畫上並不可行——實測 9 張圖，完全沒有文字的作品分數（0.52–0.65）和真的有整片文字的作品（0.61–0.71）範圍重疊，因為花瓣、星點、蕾絲會產生跟字符幾何上極相似的小團塊。要判讀文字層，請在②選「文字／版面」，或啟用 AI 視覺輔助。", "tx_src_vision": "文字位置由 AI 視覺輔助提供", "tx_src_layout": "已指定為文字／版面作品", "foc_mid": "適中", "d_focus": "以「一半的視覺重量集中在多少面積內」衡量。完全均勻分布是 50%，數字越小越集中。", "d_exposure_illust": "插畫模式下不判定過曝／欠曝——大片的純白或純黑通常是刻意的畫面設計，不是曝光失誤，而從像素無法區分兩者。這裡只描述明暗對比的幅度。", "m_colourtalk": "色彩評語", "ct_scheme": "配色屬於{S}。", "ct_mono": "整體收在單一色相裡，靠明度與彩度拉層次——這是最不容易出錯、也最容易顯得高級的做法，代價是層次全靠明暗，明度階梯要拉得夠開。", "ct_analogous": "用色輪上相鄰的色相，共用同一種色素，所以和諧中還有變化。自然界最常見的配色，安全且耐看。", "ct_complementary": "用了色輪正對面的兩色，對比最強。這種配色的成敗全在面積比例——常見的安全公式是主色約七成、互補色約三成，讓其中一方明確主導。", "ct_splitcomp": "分裂互補：主色搭配互補色兩側的顏色。保有冷暖對撞的張力，但比直接互補柔和，也更難出錯。", "ct_triadic": "三角色，色輪上等距的三個色相。豐富、平衡又有活力，適合活潑的主題，但要讓其中一色佔主導面積。", "ct_tetradic": "四角配色，等於兩組互補色並存。色彩極豐富但也最難控制，關鍵是讓一色主導、其餘小面積點綴。", "ct_achromatic": "抽掉色相之後，觀眾只能看光影、質感與構圖——這是把注意力逼回造型本身的做法。", "ct_sat_low": "整體彩度偏低（平均 {C}），走的是內斂、克制的路線。", "ct_sat_mid": "彩度適中（平均 {C}），色彩有存在感但不搶戲。", "ct_sat_high": "彩度偏高（平均 {C}），色彩本身就是主角。", "ct_light_high": "明度偏亮，整體輕盈、通透。", "ct_light_low": "明度偏暗，氛圍沉、重、內收。", "ct_style": "整體氣質最接近{P}。", "ct_warm": "暖色主導，畫面偏前進、親近。", "ct_cool": "冷色主導，畫面偏後退、冷靜。", "ct_split_hi": "亮部偏暖、暗部偏冷，這是黃金時刻與經典電影調的關係，最容易讓畫面看起來「有光」。", "ct_split_sh": "亮部偏冷、暗部偏暖，賽博朋克常見的反向冷暖。", "ct_split_flat": "亮部與暗部的色溫接近，畫面少了一層冷暖縱深；若想更立體，可以讓暗部帶一點環境反射的顏色。", "ct_amb_rich": "陰影裡吃進了環境色，不是死黑——這是讓光看起來真實的關鍵。", "ct_amb_neutral": "陰影接近中性灰。若想要更明確的空間感，可讓暗部帶一點天光的藍或反射面的顏色。", "ct_gray": "無彩色作品，色彩評語不適用；請看光影與構圖的部分。", "ct_tip_narrow": "若覺得畫面稍嫌平，可在小面積加入一個對比色作為點綴，不必超過整體的一成。", "ct_tip_wide": "色相跨度不小，若想更統整，可統一罩上一層淡色調，或壓低次要色的彩度。", "h_highkey": "高調（純白約 {P}%）", "d_highlight_illust": "插畫模式不判過曝。純白是顏料，不是曝光失誤，而這兩者從像素分不出來。這裡改成告訴你**主體有多少比例已經是完全平的純白**——那些地方沒有明暗資訊，形體不再被讀出來。純白設計本來就是在管理這個數字：留白要夠才透亮，但關鍵的轉折處若也一起平掉，立體感會消失。想確認的話，把作品轉灰階瞇眼看，剩下的形狀就是觀眾實際讀到的。", "s_lowkey": "低調（純黑約 {P}%）", "d_shadow_illust": "插畫模式不判死黑。大片純黑通常是刻意的畫面設計，這裡改成告訴你主體有多少比例是完全平的純黑——那些地方同樣沒有形體資訊。", "vs_ep_label": "端點網址（放在 Netlify 上留空即可；GitHub Pages 請填 Cloudflare Worker 網址）", "vs_ep_ph": "https://xxx.workers.dev", "d_photoonly": "曝光、對焦與腳下留白屬於攝影判準。你在②選的不是「攝影師」，所以這些只描述數值、不列為缺點。想要攝影標準的判讀，請把②改成「攝影師」。", "vs_mode_label": "兩種用法，擇一即可", "vs_key_label": "① 直接填你自己的 API key（免部署，最簡單）", "vs_key_ph": "sk-ant-...", "vs_key_warn": "key 只存在這台裝置的瀏覽器，只會送到 api.anthropic.com，不會傳給本站或任何第三方。適合你自己用。⚠️ 絕對不要把 key 寫進網頁原始碼再上傳——那等於公開。共用電腦也不建議填。", "vs_ep_label2": "② 或填自架端點網址（Cloudflare Worker／Netlify Function）", "vs_model_label": "模型", "vs_key_bad": "API key 被拒絕，請確認是否正確、額度是否足夠", "rt_sum": "總結", "rt_comp": "構圖", "rt_col": "色彩・光影", "rt_det": "細節", "br_title": "一句話結論", "br_fix": "最該改的一件事", "br_keep": "最該保留的一件事", "br_none_fix": "沒有明顯要改的地方", "br_none_keep": "—", "br_hint": "以下分頁是逐項的完整判讀，想細看再點。", "fb_opt": "角色刻意突出邊框／出血", "fb_opt_d": "作品有內框（白邊、黑條、色塊底），而角色的手腳或裙襬故意壓出框外。勾選會強制以內框為畫面來判讀構圖，並把溢出視為刻意設計。留空則自動偵測。", "f_panel": "內框偵測", "f_break": "突破邊框", "pn_none": "無內框（滿版）", "pn_found": "偵測到內框，已以內框為畫面判讀構圖", "pn_manual": "已手動指定為內框構圖", "fb_yes": "有，且視為刻意設計", "fb_no": "無", "fb_d": "溢出邊框是「打破邊框」的設計手法，不是缺陷。構圖以內框為準來評估，溢出的部分不列入扣分。", "pn_d": "白邊、黑條或色塊底屬於裱框，不是畫面內容。以整張圖去算構圖會把裱框的空白算成留白，重心也會被拉偏。", "cpall_head": "本站能偵測的 18 種構圖", "cpall_note": "亮起來的是這張作品驗出來的，灰的是沒偵測到。點任一項可以跳到美學專欄看說明。", "cpg_line": "線條類", "cpg_shape": "形狀類", "cpg_place": "位置類", "cpg_rhythm": "節奏類", "fx_rhythm_lo": "元素之間的間距太平均，畫面沒有節奏。試著讓兩三個元素靠近成一組、其他拉開距離——疏密有別才會有呼吸。", "fx_grad_lo": "明暗缺少漸進的層次，看起來偏平。讓亮部到暗部之間多一個過渡階，或把背景做出遠近的明度差。", "fx_prop_lo": "主體的位置與大小關係比較隨意。試著讓主體落在三分線或黃金比例點附近，或明確拉開主次的大小差。", "fx_contr_lo": "整體對比偏弱，主體不太跳得出來。加大主體與背景的明度差，或讓主體保留最亮（或最暗）的那一端。", "fx_simp_lo": "畫面元素偏多、偏碎。挑出真正想被看見的那一兩樣，其餘降低彩度或明度讓它們退到後面。", "fx_uv_lo": "統一與變化沒有拉開——要嘛太整齊、要嘛太雜。先決定一個貫穿全畫面的共通點（色調或形狀），再讓其中一處刻意打破它。", "fx_rep_lo": "缺少可以形成節拍的重複元素。少量重複（同樣的花、光點、形狀）會讓畫面比單一主體更耐看。", "kp_rhythm": "元素的疏密安排有節奏，不是平均鋪開", "kp_grad": "明暗有清楚的漸進層次，畫面有縱深", "kp_prop": "主體的位置與大小關係處理得好", "kp_contr": "主體與背景的對比明確，視線一眼就落在該落的地方", "kp_simp": "元素克制、不雜亂", "kp_uv": "統一之中有變化，這是最難拿捏的一項", "kp_rep": "重複元素形成了節拍感", "kp_harm": "色調統一，整體很和諧", "fx_span_lo": "主體的明暗範圍偏窄，畫面容易顯得平。不必全面加對比——把最亮的地方再推亮一階、另外壓深一小塊暗部，兩端各走一步就會立體很多。", "fx_focus_hi": "視覺重量散得很開，沒有明確的落點。挑一個區域讓它最亮、最鮮豔或細節最多，其他地方主動退讓——觀眾的眼睛需要一個先看的地方。", "fx_nopattern": "沒有偵測到明確的構圖型態，元素之間的結構關係比較鬆散。最容易上手的兩個作法：把主體移到三分線交點附近，或用畫面裡既有的線條（衣褶、光線、花莖）把視線引向主體。", "kp_span": "明暗跨度完整，從最亮到最暗都有層次", "kp_focus": "視覺焦點明確，一眼就知道要看哪裡", "kp_multipat": "同時成立多種構圖手法，結構關係經營得很扎實", "build_lbl": "版本", "fx_flat_both": "主體與背景的明暗差不夠，主體不太跳得出來，整體也偏平。不必全面加對比——把主體最亮的地方再推亮一階、背景壓深一小塊，兩端各走一步就會分開。","ci_moods":{"xianqi":{"label":"仙氣飄逸","colors":[{"n":"霧白","h":"#F4F1F7"},{"n":"珍珠粉","h":"#EBD9E0"},{"n":"薰衣草紫","h":"#C9B8DD"},{"n":"香檳金","h":"#E8D5B0"},{"n":"霧灰藍","h":"#B9C4D0"}],"kw":["仙氣","夢幻","朦朧","薄紗","溫柔","純潔","飄逸","仙女","雲霧","輕盈"]},"darkfantasy":{"label":"暗黑幻想","colors":[{"n":"墨黑","h":"#1C1A22"},{"n":"深酒紅","h":"#5C1A2B"},{"n":"暗紫","h":"#3A2A52"},{"n":"鏽金","h":"#8A6A2E"},{"n":"灰綠","h":"#4A5245"}],"kw":["暗黑","神秘","詭譎","邪魅","黑暗","惡魔","詛咒","禁忌","陰森"]},"cyber":{"label":"賽博霓虹","colors":[{"n":"霓虹紫","h":"#B026FF"},{"n":"電光藍","h":"#00E5FF"},{"n":"深空黑","h":"#0D0D1A"},{"n":"螢光粉","h":"#FF2E92"},{"n":"警示黃","h":"#F5FF3D"}],"kw":["賽博","機械","霓虹","未來","科技","電子","駭客","人工智慧","義肢"]},"candy":{"label":"糖果甜心","colors":[{"n":"粉紅","h":"#FFC1D9"},{"n":"薄荷綠","h":"#B8F2D6"},{"n":"鵝黃","h":"#FFF3B0"},{"n":"天空藍","h":"#B8E1FF"},{"n":"奶油白","h":"#FFFBF0"}],"kw":["糖果","甜心","可愛","活潑","少女","甜點","蛋糕","粉嫩","天真","元氣"]},"forest":{"label":"森林草木","colors":[{"n":"苔綠","h":"#5C7A4E"},{"n":"深棕","h":"#4A3728"},{"n":"陽光黃","h":"#E8C468"},{"n":"樹皮灰","h":"#8A7B6C"},{"n":"嫩葉綠","h":"#A8C97F"}],"kw":["森林","精靈","樹","苔蘚","草木","自然","樹林","葉子","陽光","木頭","野外"]},"ocean":{"label":"海洋波光","colors":[{"n":"深海藍","h":"#1B4B6B"},{"n":"珊瑚粉","h":"#F4A488"},{"n":"泡沫白","h":"#EAF6F6"},{"n":"貝殼粉","h":"#F6DCE0"},{"n":"海藻綠","h":"#3E7C6B"}],"kw":["海洋","海","人魚","珊瑚","浪花","潛水","海邊","海水","貝殼","波浪"]},"steampunk":{"label":"蒸氣機械","colors":[{"n":"黃銅","h":"#B08D57"},{"n":"深褐","h":"#4A2E1F"},{"n":"鏽紅","h":"#8B3A2A"},{"n":"煙灰","h":"#5A5654"},{"n":"古銅金","h":"#C9A66B"}],"kw":["蒸氣","齒輪","黃銅","機械錶","發條","工業","蒸汽龐克","飛船","維多利亞"]},"gothic":{"label":"哥德暗夜","colors":[{"n":"墨黑","h":"#0F0D12"},{"n":"暗紅","h":"#6B1420"},{"n":"銀灰","h":"#9A98A0"},{"n":"深紫","h":"#2E1F3F"},{"n":"骨白","h":"#E8E4DC"}],"kw":["哥德","吸血鬼","蕾絲","黑暗貴族","墓園","蝙蝠","十字架","古堡"]},"wasteland":{"label":"廢土荒漠","colors":[{"n":"沙棕","h":"#B8946A"},{"n":"鏽鐵","h":"#6B4A3A"},{"n":"灰卡其","h":"#8C8570"},{"n":"焦黑","h":"#2A2622"},{"n":"警示黃","h":"#C9A227"}],"kw":["廢土","末世","荒漠","生存","破敗","輻射","流浪","廢墟","戰爭"]},"imperial":{"label":"古典宮廷","colors":[{"n":"酒紅","h":"#7A2333"},{"n":"金","h":"#C9A84C"},{"n":"象牙白","h":"#F3EBDD"},{"n":"深藍","h":"#1F3355"},{"n":"天鵝絨紫","h":"#4A2C4E"}],"kw":["宮廷","貴族","皇室","公主","王子","禮服","古典","華麗","王座"]},"neonnight":{"label":"都市夜生活","colors":[{"n":"深紫黑","h":"#1A1226"},{"n":"霓虹粉","h":"#FF4FA3"},{"n":"電藍","h":"#3DB8FF"},{"n":"暖橙燈","h":"#FFA552"},{"n":"柏油灰","h":"#3A3A42"}],"kw":["都市","夜生活","夜晚","霓虹燈","酒吧","街頭","車水馬龍","不夜城"]},"desert":{"label":"沙漠遊俠","colors":[{"n":"沙金","h":"#D9B673"},{"n":"赤陶","h":"#B4623E"},{"n":"天藍","h":"#8FC1E3"},{"n":"駝色","h":"#9C8060"},{"n":"仙人掌綠","h":"#6E8B5A"}],"kw":["沙漠","遊俠","綠洲","駱駝","沙丘","乾燥","仙人掌","流浪"]},"wafu":{"label":"和風物語","colors":[{"n":"藍染","h":"#2F4858"},{"n":"櫻粉","h":"#F6C9CE"},{"n":"抹茶綠","h":"#7A8B69"},{"n":"米白","h":"#F2EAD9"},{"n":"硃紅","h":"#B23A34"}],"kw":["和風","日式","櫻花","神社","武士","和服","抹茶","浮世繪"]},"mecha":{"label":"機械戰姬","colors":[{"n":"鋼灰","h":"#5A6169"},{"n":"警示橙","h":"#E8622C"},{"n":"冷白","h":"#E6EAEE"},{"n":"深藍","h":"#1F2B45"},{"n":"電光青","h":"#3DDDD0"}],"kw":["機甲","戰姬","駕駛艙","裝甲","戰鬥機","槍械","士兵","戰場"]},"polar":{"label":"極地探險","colors":[{"n":"冰藍","h":"#BFE3F0"},{"n":"雪白","h":"#F5FAFC"},{"n":"深藍灰","h":"#3A4E5C"},{"n":"極光綠","h":"#7FE3B4"},{"n":"銀","h":"#C7CDD1"}],"kw":["極地","冰雪","雪地","極光","探險","北極","企鵝","冰川"]},"circus":{"label":"馬戲團奇想","colors":[{"n":"紅","h":"#C4342B"},{"n":"金","h":"#E8B94A"},{"n":"奶油白","h":"#F3E8D6"},{"n":"深紫","h":"#4A2E5C"},{"n":"墨黑","h":"#221E1E"}],"kw":["馬戲團","小丑","雜耍","帳篷","魔術師","嘉年華"]},"retro":{"label":"復古老電影","colors":[{"n":"焦糖","h":"#B8763E"},{"n":"卡其","h":"#A89468"},{"n":"暗紅","h":"#7A3B32"},{"n":"米黃","h":"#E8D9B5"},{"n":"墨綠","h":"#3E4A38"}],"kw":["復古","懷舊","老電影","膠片","年代感","古董","黑白電影"]}},"ci_themes":[{"label":"仙氣飄飄","mood":"xianqi"},{"label":"暗黑幻想","mood":"darkfantasy"},{"label":"賽博龐克","mood":"cyber"},{"label":"森林精靈","mood":"forest"},{"label":"海洋公主","mood":"ocean"},{"label":"蒸氣龐克","mood":"steampunk"},{"label":"哥德蘿莉","mood":"gothic"},{"label":"廢土倖存者","mood":"wasteland"},{"label":"古典宮廷","mood":"imperial"},{"label":"都市夜生活","mood":"neonnight"},{"label":"沙漠遊俠","mood":"desert"},{"label":"和風物語","mood":"wafu"},{"label":"機械戰姬","mood":"mecha"},{"label":"極地探險","mood":"polar"},{"label":"馬戲團奇想","mood":"circus"},{"label":"復古老電影","mood":"retro"},{"label":"糖果甜心","mood":"candy"},{"label":"吸血鬼貴族","mood":"gothic"},{"label":"太空歌劇","mood":"cyber"},{"label":"校園日常","mood":"candy"}],"ci_traits":["怕生但堅強","外冷內熱","話多的路癡","過度謹慎的完美主義者","天生的樂觀派","藏著秘密的溫柔","嘴硬心軟","天然呆","腹黑軍師","正義感爆棚","社恐但很罩","慢熱但一旦熟就話很多","有點中二","老好人到吃虧","喜歡收集奇怪小物","對甜食沒有抵抗力","超級路痴","記憶力驚人","怕黑卻愛探險","外表兇但其實怕蟲"],"ci_result_h":"配色結果","ci_rand_h":"隨機靈感","ci_rand_tag":"主題／設定／構圖／配色一次抽","ci_rand_theme":"主題","ci_rand_trait":"角色設定","ci_rand_comp":"構圖建議","ci_from_kw":"依關鍵字「{Q}」判斷最接近的風格","ci_from_img":"依上傳圖片的主色調，延伸出最接近的風格色票","ci_from_text":"依角色描述判斷最接近的風格","ci_need_input":"請先輸入內容再產生","ci_img_fail":"圖片讀取失敗，請換一張再試","ci_stat":"✿ 累計已有 {N} 人次使用過配色靈感"};
   function tt(k){return T[k]!==undefined?T[k]:k;}
 
   /* ===================== math helpers ===================== */
@@ -7036,7 +7140,364 @@ function compositionScore(opts) {
   runBtn.addEventListener('click',function(){if(currentImg)run(currentImg);});
 })();
 
+/* ===================== 角色健檢 charcheck ===================== */
+(function(){
+  var els={name:'ccName',concept:'ccConcept',look:'ccLook',personality:'ccPersonality',
+    backstory:'ccBackstory',goal:'ccGoal',flaw:'ccFlaw',relations:'ccRelations',
+    hook:'ccHook',world:'ccWorld'};
+  function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+  function collect(){var d={};Object.keys(els).forEach(function(k){d[k]=val(els[k]);});d.freeText=val('ccFreeText');return d;}
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+  function bigrams(s){s=s.replace(/\s+/g,'');var set=new Set();for(var i=0;i<s.length-1;i++)set.add(s.slice(i,i+2));return set;}
+  function jaccard(a,b){if(!a.size||!b.size)return null;var inter=0;a.forEach(function(x){if(b.has(x))inter++;});var uni=a.size+b.size-inter;return uni?inter/uni:0;}
 
+  function heuristic(data){
+    var keys=Object.keys(els);
+    var filledCount=keys.filter(function(k){return data[k].length>=4;}).length;
+    var completeness=Math.round(filledCount/keys.length*100);
+    if(data.freeText.length>150)completeness=clamp(completeness+20,0,100);
+    completeness=clamp(completeness,0,100);
+
+    var hookLen=data.hook.length,memorability=30;
+    if(hookLen>=40)memorability=88;else if(hookLen>=15)memorability=75;else if(hookLen>0)memorability=50;
+    if(data.look.length>=15)memorability=clamp(memorability+5,0,100);
+
+    var potCount=(data.goal.length>=4?1:0)+(data.flaw.length>=4?1:0)+(data.relations.length>=4?1:0);
+    var potential=30+potCount*20;
+
+    var relatability=clamp(40+(data.flaw.length>=4?30:0)+(data.goal.length>=4?20:0),0,100);
+
+    var structured=keys.map(function(k){return data[k];}).join('');
+    var consistency=null;
+    if(structured.length>=8&&data.freeText.length>=20){
+      var sim=jaccard(bigrams(structured),bigrams(data.freeText));
+      consistency=sim===null?null:Math.round(clamp(sim*220,0,100));
+    }
+
+    var ch=data.concept+data.hook,uniq=new Set(ch.replace(/\s+/g,'').split(''));
+    var distinctiveness=ch.length?clamp(Math.round(uniq.size/Math.max(ch.length,1)*140),20,90):35;
+
+    return {completeness:completeness,memorability:memorability,potential:potential,
+      relatability:relatability,consistency:consistency,distinctiveness:distinctiveness};
+  }
+
+  var CC_PROMPT_HEAD=[
+    '你在協助一個角色設計自我檢核工具。以下是使用者填寫的角色問卷與／或自由描述。',
+    '請針對五個面向做質化評估，回傳嚴格 JSON，不要有其他文字、不要 markdown 圍籬：',
+    '{"memorability":{"score":0-100,"note":"一句話，不超過60字"},',
+    '"potential":{"score":0-100,"note":"..."},',
+    '"consistency":{"score":0-100,"note":"..."},',
+    '"distinctiveness":{"score":0-100,"note":"..."},',
+    '"relatability":{"score":0-100,"note":"..."},',
+    '"summary":"一句話總結，不超過60字",',
+    '"topFix":"最該補強的一件事，不超過50字",',
+    '"topKeep":"最該保留的一件事，不超過50字"}',
+    '',
+    '評估標準：',
+    '- memorability 記憶點：有沒有一眼能認出來的特徵（外觀、口癖、反差）',
+    '- potential 發展潛力：是否有能推動故事的目標／衝突／未解的張力',
+    '- consistency 一致性：問卷欄位彼此之間、以及與自由描述之間是否互相矛盾',
+    '- distinctiveness 差異化：相對於常見角色原型／套路有多大差異，是否落入刻板印象',
+    '- relatability 情感共鳴：讀者是否可能對這個角色產生情感投射或同理',
+    '- 若資訊嚴重不足以判斷某一項，score 給 50，note 誠實說明資訊不足，不要瞎猜。',
+    '- note 用你自己的話，不要重複使用者原文。',
+    '',
+    '使用者輸入：'
+  ].join('\n');
+
+  function buildPrompt(data){
+    var lines=[CC_PROMPT_HEAD];
+    var lbl={name:'名稱',concept:'一句話概念',look:'外觀',personality:'個性',backstory:'背景故事',
+      goal:'目標動機',flaw:'弱點缺陷',relations:'人際關係',hook:'記憶點賣點',world:'世界觀'};
+    Object.keys(els).forEach(function(k){if(data[k])lines.push(lbl[k]+'：'+data[k]);});
+    if(data.freeText)lines.push('自由描述：'+data.freeText);
+    return lines.join('\n');
+  }
+
+  function ccKey(){var el=document.getElementById('chkVisionKey');return el&&el.value?el.value.trim():'';}
+  function ccModel(){var el=document.getElementById('chkVisionModel');return (el&&el.value)||'claude-sonnet-5';}
+
+  async function ccAICall(promptText){
+    var res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'content-type':'application/json','x-api-key':ccKey(),
+        'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:ccModel(),max_tokens:900,messages:[{role:'user',content:[{type:'text',text:promptText}]}]})
+    });
+    if(res.status===401||res.status===403)return {error:'badkey'};
+    if(!res.ok)return {error:'failed'};
+    var j=await res.json();
+    var text=(j.content||[]).filter(function(c){return c.type==='text';}).map(function(c){return c.text;}).join('\n');
+    return {text:text};
+  }
+  function parseCCJson(raw){
+    if(!raw)return null;
+    var t=String(raw).trim().replace(/^```(?:json)?/i,'').replace(/```$/,'').trim();
+    var a=t.indexOf('{'),b=t.lastIndexOf('}');
+    if(a<0||b<a)return null;
+    try{return JSON.parse(t.slice(a,b+1));}catch(e){return null;}
+  }
+  function dimHTML(title,score,note,lowconf){
+    var s=(score==null)?'—':Math.round(score);
+    return '<div class="cc-dim"><h4><span>'+title+'</span><b>'+s+(score==null?'':'<small style="font-size:12px;font-weight:600"> /100</small>')+
+      (lowconf?' <span class="lowconf-tag">估算・低信心</span>':'')+'</b></h4><p>'+note+'</p></div>';
+  }
+
+  async function run(){
+    var data=collect();
+    var totalFilled=Object.keys(els).filter(function(k){return data[k].length>=4;}).length;
+    if(totalFilled<1&&data.freeText.length<20){
+      alert('至少填一項問卷欄位，或貼一段 20 字以上的描述再開始健檢。');
+      return;
+    }
+    var runBtn=document.getElementById('ccRun');
+    runBtn.disabled=true;runBtn.textContent='健檢中…';
+    var h=heuristic(data);
+    var dims={
+      memorability:{score:h.memorability,note:'依「記憶點／賣點」與「外觀特徵」欄位的填寫長度粗估，並非真的判讀是否好記。',low:true},
+      potential:{score:h.potential,note:'依「目標動機」「弱點缺陷」「人際關係」三格是否都有填寫粗估——三者俱全代表故事張力的基本材料都在。',low:true},
+      relatability:{score:h.relatability,note:'依「弱點缺陷」與「目標動機」是否填寫粗估——有缺陷又有渴望，通常比較容易讓人代入。',low:true},
+      distinctiveness:{score:h.distinctiveness,note:'依「一句話概念」與「記憶點」的用字豐富度做非常粗略的估算，無法真正判斷是否落入套路。',low:true},
+      consistency:{score:h.consistency,note:(h.consistency==null?'問卷與自由描述至少要有一邊夠完整才能比對，目前資訊不足，略過此項。':'依問卷欄位與自由描述之間的用字重疊度估算，重疊高不代表一定沒矛盾，僅供初步參考。'),low:true}
+    };
+    var aiUsed=false,aiFailNote='';
+    window._ccAISummary=null;
+    var aiEnabled=document.getElementById('ccAI').checked;
+    if(aiEnabled){
+      if(!ccKey()){
+        aiFailNote='已勾選 AI 深度評論，但沒有偵測到 API key（請到「作品健檢」④進階選項填入），已改用本地估算。';
+      }else{
+        try{
+          var res=await ccAICall(buildPrompt(data));
+          if(res.error==='badkey'){aiFailNote='API key 被拒絕，已改用本地估算。';}
+          else if(res.error){aiFailNote='AI 呼叫失敗，已改用本地估算。';}
+          else{
+            var parsed=parseCCJson(res.text);
+            if(parsed){
+              ['memorability','potential','consistency','distinctiveness','relatability'].forEach(function(k){
+                if(parsed[k]&&typeof parsed[k].score==='number'){
+                  dims[k]={score:clamp(parsed[k].score,0,100),note:parsed[k].note||'',low:false};
+                }
+              });
+              aiUsed=true;
+              window._ccAISummary={summary:parsed.summary||'',topFix:parsed.topFix||'',topKeep:parsed.topKeep||''};
+            }else{aiFailNote='AI 回傳格式無法解析，已改用本地估算。';}
+          }
+        }catch(e){aiFailNote='AI 呼叫時發生錯誤，已改用本地估算。';}
+      }
+    }
+    var parts=[h.completeness,dims.memorability.score,dims.potential.score,dims.distinctiveness.score,dims.relatability.score];
+    if(dims.consistency.score!=null)parts.push(dims.consistency.score);
+    var overall=Math.round(parts.reduce(function(a,b){return a+b;},0)/parts.length);
+
+    var reportEl=document.getElementById('ccReport');
+    var html='<h3>健檢結果 <span class="tag '+(aiUsed?'ok':'warn')+'">'+(aiUsed?'含 AI 質化評論':'本地量化估算')+'</span></h3>';
+    if(aiFailNote)html+='<p class="fine">'+aiFailNote+'</p>';
+    if(window._ccAISummary&&window._ccAISummary.summary)html+='<p class="cond"><b>一句話評語：</b>'+window._ccAISummary.summary+'</p>';
+    html+=dimHTML('完整度 Completeness',h.completeness,'依 10 項問卷欄位的填寫覆蓋率計算（回答越具體，這項越有意義）；若貼了 150 字以上的自由描述會額外加分。',false);
+    html+=dimHTML('記憶點 Memorability',dims.memorability.score,dims.memorability.note,dims.memorability.low);
+    html+=dimHTML('發展潛力 Potential',dims.potential.score,dims.potential.note,dims.potential.low);
+    html+=dimHTML('一致性 Consistency',dims.consistency.score,dims.consistency.note,dims.consistency.low);
+    html+=dimHTML('差異化 Distinctiveness',dims.distinctiveness.score,dims.distinctiveness.note,dims.distinctiveness.low);
+    html+=dimHTML('情感共鳴 Relatability',dims.relatability.score,dims.relatability.note,dims.relatability.low);
+    if(window._ccAISummary&&(window._ccAISummary.topFix||window._ccAISummary.topKeep)){
+      html+='<div class="cc-dim"><h4>最該補強</h4><p>'+(window._ccAISummary.topFix||'—')+'</p></div>';
+      html+='<div class="cc-dim"><h4>最該保留</h4><p>'+(window._ccAISummary.topKeep||'—')+'</p></div>';
+    }
+    if(!aiUsed)html+='<p class="fine">記憶點、發展潛力、一致性、差異化、情感共鳴這五項本質上需要質化判斷，本地估算僅供粗略參考。想要真正的評論，請在③勾選「啟用 AI 深度評論」並填入 API key。</p>';
+    reportEl.innerHTML=html;
+
+    document.getElementById('ccScore').textContent=overall;
+    var band=overall>=80?'角色骨架完整':overall>=60?'方向可行，還有補強空間':overall>=40?'建議先補齊關鍵欄位':'資訊太少，先從①填起';
+    document.getElementById('ccScoreLbl').textContent=band;
+
+    document.getElementById('ccResult').style.display='block';
+    document.getElementById('ccResult').scrollIntoView({behavior:'smooth',block:'start'});
+    runBtn.disabled=false;runBtn.textContent='✨ 開始健檢';
+  }
+
+  var runBtn=document.getElementById('ccRun');
+  if(runBtn)runBtn.addEventListener('click',run);
+
+  (function(){var cb=document.getElementById('ccAI');if(!cb)return;
+    try{if(localStorage.getItem('zccAI')==='1')cb.checked=true;}catch(e){}
+    cb.addEventListener('change',function(){try{localStorage.setItem('zccAI',cb.checked?'1':'0');}catch(e){}});
+  })();
+})();
+
+
+/* ===================== 配色靈感生成器 colorinspire ===================== */
+(function(){
+  var kwEl=document.getElementById('ciKeyword');
+  var runKwBtn=document.getElementById('ciRunKw');
+  var runRandBtn=document.getElementById('ciRunRand');
+  var fileInput=document.getElementById('ciFile');
+  var drop=document.getElementById('ciDrop');
+  var textEl=document.getElementById('ciCharText');
+  var runTextBtn=document.getElementById('ciRunText');
+  var useCcBtn=document.getElementById('ciUseCc');
+  var resEl=document.getElementById('ciResult');
+  var statEl=document.getElementById('ciStat');
+  if(!resEl) return;
+
+  var MOODS=T.ci_moods, THEMES=T.ci_themes, TRAITS=T.ci_traits;
+  var COMPS=['cp_lead','cp_radial','cp_diagonal','cp_horiz','cp_vert','cp_cross','cp_triUp','cp_triDown','cp_triGroup','cp_center','cp_fill','cp_edgeTension','cp_phi','cp_pattern','cp_patternBreak','cp_sCurve','cp_cCurve','cp_dutch'];
+  var MOODIDS=Object.keys(MOODS);
+  var lastTheme=null,lastTrait=null,lastComp=null,lastMood=null;
+
+  function pick(arr,last){
+    if(arr.length<=1) return arr[0];
+    var v; do{ v=arr[Math.floor(Math.random()*arr.length)]; }while(v===last);
+    return v;
+  }
+
+  function hsv2rgb(h,s,v){
+    h=((h%360)+360)%360;
+    var c=v*s,x=c*(1-Math.abs((h/60)%2-1)),m=v-c,r,g,b;
+    if(h<60){r=c;g=x;b=0;}else if(h<120){r=x;g=c;b=0;}else if(h<180){r=0;g=c;b=x;}
+    else if(h<240){r=0;g=x;b=c;}else if(h<300){r=x;g=0;b=c;}else{r=c;g=0;b=x;}
+    return [(r+m)*255,(g+m)*255,(b+m)*255];
+  }
+
+  // keyword / free-text -> best-matching mood id via substring containment against each
+  // mood's label, color names, and curated synonym list (works for Chinese text with no
+  // tokenization needed, since a real match is just "does this term appear in the text")
+  function matchMood(text){
+    if(!text) return null;
+    var t=text.toLowerCase();
+    var best=null,bestScore=0;
+    MOODIDS.forEach(function(id){
+      var m=MOODS[id];
+      var score=0;
+      var terms=[m.label].concat(m.colors.map(function(c){return c.n;})).concat(m.kw||[]);
+      terms.forEach(function(w){ if(w&&t.indexOf(w.toLowerCase())>=0)score++; });
+      if(score>bestScore){bestScore=score;best=id;}
+    });
+    return bestScore>0?best:null;
+  }
+
+  function renderPalette(moodId){
+    var m=MOODS[moodId];
+    return '<div class="chk-sw">'+m.colors.map(function(c){return '<div><span style="background:'+c.h+'"></span><small>'+c.n+'<br>'+c.h+'</small></div>';}).join('')+'</div>';
+  }
+
+  function bumpStat(){
+    fetch('https://api.counterapi.dev/v1/tourmaline8b7d78/feature-colorinspire/up').then(function(r){return r.json();}).then(function(d){
+      if(statEl&&d&&d.count)statEl.textContent=tt('ci_stat').replace('{N}',Number(d.count).toLocaleString());
+    }).catch(function(){});
+  }
+
+  function showResult(html){
+    resEl.style.display='block';
+    resEl.innerHTML=html;
+    resEl.scrollIntoView({behavior:'smooth',block:'start'});
+    bumpStat();
+  }
+
+  function moodCard(moodId,extra){
+    var m=MOODS[moodId];
+    return '<div class="card"><h3>'+tt('ci_result_h')+' <span class="tag ok">'+m.label+'</span></h3>'+(extra||'')+renderPalette(moodId)+'</div>';
+  }
+
+  // ① keyword input
+  if(runKwBtn)runKwBtn.addEventListener('click',function(){
+    var v=(kwEl.value||'').trim();
+    if(!v){ showResult('<div class="card"><p class="cond">'+tt('ci_need_input')+'</p></div>'); return; }
+    var id=matchMood(v)||pick(MOODIDS,lastMood);
+    lastMood=id;
+    showResult(moodCard(id,'<p class="cond">'+tt('ci_from_kw').replace('{Q}',v)+'</p>'));
+  });
+
+  // ② image upload -> extract dominant colors -> map to nearest mood by hue/sat/lightness, then show that mood's full palette
+  function extractQuickPalette(img,cb){
+    var m=Math.max(img.naturalWidth,img.naturalHeight),sc=m>200?200/m:1;
+    var w=Math.max(1,Math.round(img.naturalWidth*sc)),h=Math.max(1,Math.round(img.naturalHeight*sc));
+    var cv=document.createElement('canvas');cv.width=w;cv.height=h;
+    var g=cv.getContext('2d');g.drawImage(img,0,0,w,h);
+    var d;
+    try{ d=g.getImageData(0,0,w,h).data; }catch(e){ cb(null); return; }
+    var sumR=0,sumG=0,sumB=0,n=0,sumS=0,sumV=0;
+    for(var i=0;i<d.length;i+=4){
+      var r=d[i],gg=d[i+1],b=d[i+2];
+      sumR+=r;sumG+=gg;sumB+=b;n++;
+      var mx=Math.max(r,gg,b),mn=Math.min(r,gg,b);
+      sumS+=mx?((mx-mn)/mx):0; sumV+=mx/255;
+    }
+    cb({r:sumR/n,g:sumG/n,b:sumB/n,s:sumS/n,v:sumV/n});
+  }
+  function nearestMoodByStats(stats){
+    // nearest-neighbour match against every individual swatch (not the mood's averaged
+    // hue, which is meaningless once a palette spans several different hues)
+    function rgb2hsv(r,g,b){r/=255;g/=255;b/=255;var mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn,h=0;
+      if(d){if(mx===r)h=((g-b)/d)%6;else if(mx===g)h=(b-r)/d+2;else h=(r-g)/d+4;h*=60;if(h<0)h+=360;}
+      return [h,mx?d/mx:0,mx];}
+    var srcHsv=rgb2hsv(stats.r,stats.g,stats.b);
+    var best=null,bestD=1e9;
+    MOODIDS.forEach(function(id){
+      MOODS[id].colors.forEach(function(c){
+        var rr=parseInt(c.h.slice(1,3),16),gg2=parseInt(c.h.slice(3,5),16),bb=parseInt(c.h.slice(5,7),16);
+        var hv=rgb2hsv(rr,gg2,bb);
+        var dh=Math.min(Math.abs(hv[0]-srcHsv[0]),360-Math.abs(hv[0]-srcHsv[0]))/180;
+        var ds=Math.abs(hv[1]-stats.s), dv=Math.abs(hv[2]-stats.v);
+        var dist=dh*dh*3+ds*ds+dv*dv*0.25;
+        if(dist<bestD){bestD=dist;best=id;}
+      });
+    });
+    return best;
+  }
+  function loadImg(file){
+    if(!file||!/^image\//.test(file.type))return;
+    var url=URL.createObjectURL(file),img=new Image();
+    img.onload=function(){
+      extractQuickPalette(img,function(stats){
+        URL.revokeObjectURL(url);
+        if(!stats){ showResult('<div class="card"><p class="cond">'+tt('ci_img_fail')+'</p></div>'); return; }
+        var id=nearestMoodByStats(stats);
+        lastMood=id;
+        showResult(moodCard(id,'<p class="cond">'+tt('ci_from_img')+'</p>'));
+      });
+    };
+    img.src=url;
+  }
+  if(fileInput)fileInput.addEventListener('change',function(e){loadImg(e.target.files[0]);});
+  if(drop){
+    drop.addEventListener('dragover',function(e){e.preventDefault();drop.classList.add('over');});
+    drop.addEventListener('dragleave',function(){drop.classList.remove('over');});
+    drop.addEventListener('drop',function(e){e.preventDefault();drop.classList.remove('over');loadImg(e.dataTransfer.files[0]);});
+  }
+
+  // ③ character-setting reverse derivation
+  function runFromText(v){
+    if(!v){ showResult('<div class="card"><p class="cond">'+tt('ci_need_input')+'</p></div>'); return; }
+    var id=matchMood(v)||pick(MOODIDS,lastMood);
+    lastMood=id;
+    showResult(moodCard(id,'<p class="cond">'+tt('ci_from_text')+'</p>'));
+  }
+  if(runTextBtn)runTextBtn.addEventListener('click',function(){ runFromText((textEl.value||'').trim()); });
+  if(useCcBtn)useCcBtn.addEventListener('click',function(){
+    var parts=['ccConcept','ccLook','ccPersonality','ccBackstory','ccWorld'].map(function(id){
+      var el=document.getElementById(id); return el?el.value:'';
+    }).filter(Boolean);
+    var combined=parts.join(' ');
+    if(textEl)textEl.value=combined;
+    runFromText(combined);
+  });
+
+  // ④ random inspiration mix (theme + trait + composition + matching palette, all in one draw)
+  if(runRandBtn)runRandBtn.addEventListener('click',function(){
+    var theme=pick(THEMES,lastTheme); lastTheme=theme;
+    var trait=pick(TRAITS,lastTrait); lastTrait=trait;
+    var comp=pick(COMPS,lastComp); lastComp=comp;
+    var moodId=theme.mood; lastMood=moodId;
+    var html='<div class="card"><h3>'+tt('ci_rand_h')+' <span class="tag gold">'+tt('ci_rand_tag')+'</span></h3>'
+      +'<p class="cond">'+tt('ci_rand_theme')+tt('colon')+'<b>'+theme.label+'</b></p>'
+      +'<p class="cond">'+tt('ci_rand_trait')+tt('colon')+'<b>'+trait+'</b></p>'
+      +'<p class="cond">'+tt('ci_rand_comp')+tt('colon')+'<b>'+tt(comp)+'</b></p>'
+      +renderPalette(moodId)
+      +'</div>';
+    showResult(html);
+  });
+})();
 </script>
 </body>
 </html>
