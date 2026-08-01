@@ -360,7 +360,6 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
   <div class="seg" id="calcNav" style="margin-bottom:14px">
     <button class="on" data-c="t-ratio">Ratio calc</button>
-    <button data-c="t-wizard">How to trade? Wizard</button>
     <button data-c="t-conv">Rarity</button>
     <button data-c="t-fee">Fee</button>
     <button data-c="t-dye">Dye cost</button>
@@ -471,37 +470,6 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     </div>
     <p class="fine">BRAND <b>original-color</b> items are valued exactly like regular PRM items (by expiry time & popularity) — they have their own option above.</p>
     <p id="ratioStat" style="font-size:11.5px;color:var(--ink-soft);margin-top:6px"></p>
-  </div>
-  <div class="card ctool" id="t-wizard">
-    <h3>Not sure how to trade? Wizard <span class="tag warn">Step by step</span></h3>
-    <p class="cond">No need to memorize every rule — answer the questions and it'll tell you which pricing logic to use.</p>
-    <div class="step" id="wzStep1">
-      <div class="step-label">This item is —</div>
-      <div class="opts" id="wzOpts1">
-        <button data-v="brand">A BRAND item</button>
-        <button data-v="normal">A regular item</button>
-      </div>
-    </div>
-    <div class="step" id="wzStep2" hidden>
-      <div class="step-label" id="wzLabel2"></div>
-      <div class="opts" id="wzOpts2"></div>
-    </div>
-    <div class="step" id="wzStep3" hidden>
-      <div class="step-label" id="wzLabel3"></div>
-      <div class="opts" id="wzOpts3"></div>
-    </div>
-    <div class="step" id="wzStep4" hidden>
-      <div class="step-label" id="wzLabel4"></div>
-      <div class="opts" id="wzOpts4"></div>
-    </div>
-    <div class="result">
-      <p class="placeholder" id="wzPlaceholder">Pick an answer above to see the suggested pricing approach here.</p>
-      <div id="wzResult" hidden>
-        <p class="result-desc" id="wzDesc" style="margin:6px auto 0;max-width:none;text-align:left"></p>
-        <div class="pill-note" id="wzNote" hidden></div>
-      </div>
-    </div>
-    <p id="wzStat" style="font-size:11.5px;color:var(--ink-soft);margin-top:10px"></p>
   </div>
   <div class="card ctool" id="t-vipshop">
     <h3>VIP point exchange calculator <span class="tag gold">Special tab · multi-select</span></h3>
@@ -3411,77 +3379,6 @@ function show(){
     dots.appendChild(s);
   }
 }
-
-/* ---------- Not sure how to trade? Wizard ---------- */
-(function(){
-  const steps=[$("wzStep1"),$("wzStep2"),$("wzStep3"),$("wzStep4")];
-  const opts=[$("wzOpts1"),$("wzOpts2"),$("wzOpts3"),$("wzOpts4")];
-  const labels=[null,$("wzLabel2"),$("wzLabel3"),$("wzLabel4")];
-  let wzCounted=false;
-  function wzReset(from){
-    for(let i=from;i<steps.length;i++){steps[i].hidden=true;opts[i].innerHTML="";}
-    $("wzResult").hidden=true;$("wzPlaceholder").hidden=false;
-  }
-  function wzOpen(i,label,list){
-    labels[i].textContent=label;
-    opts[i].innerHTML="";
-    list.forEach(o=>{
-      const b=document.createElement("button");
-      b.textContent=o.t;b.dataset.v=o.v;
-      b.addEventListener("click",()=>{
-        opts[i].querySelectorAll("button").forEach(x=>x.classList.remove("on"));
-        b.classList.add("on");
-        wzReset(i+1);
-        o.next(o.v);
-      });
-      opts[i].appendChild(b);
-    });
-    steps[i].hidden=false;
-  }
-  function wzAnswer(desc,note){
-    $("wzPlaceholder").hidden=true;$("wzResult").hidden=false;
-    $("wzDesc").textContent=desc;
-    const n=$("wzNote");
-    if(note){n.hidden=false;n.textContent="※ "+note;}else n.hidden=true;
-    if(!wzCounted){
-      wzCounted=true;
-      fetch("https://api.counterapi.dev/v1/tourmaline8b7d78/tool-wizard/up").then(r=>r.json()).then(d=>{
-        if(d&&d.count)$("wzStat").textContent="✿ "+Number(d.count).toLocaleString()+" uses so far (community-wide)";
-      }).catch(()=>{});
-    }
-  }
-  $("wzOpts1").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
-    $("wzOpts1").querySelectorAll("button").forEach(x=>x.classList.remove("on"));
-    b.classList.add("on");
-    wzReset(1);
-    if(b.dataset.v==="normal"){
-      wzAnswer("A regular-basket item has no dye restrictions — just use the Ratio calculator with the standard PURE/PRM rules, no BRAND logic needed.");
-    }else{
-      wzOpen(1,"Is it —",[
-        {t:"Original color",v:"orig",next:()=>{
-          wzAnswer("BRAND original-color items are retired PRM items — price them with the \"BRAND original-color · by expiry time\" table in the Trade Ratios tab, based on how long it's been expired and how popular it is.");
-        }},
-        {t:"Dye version",v:"dye",next:()=>{
-          wzOpen(2,"Can it still be dyed?",[
-            {t:"Yes, still dyeable",v:"can",next:()=>{
-              wzOpen(3,"Is the basket still current?",[
-                {t:"Yes, current basket",v:"cur",next:()=>{
-                  wzAnswer("A current-basket dye item is priced the same as a regular current PRM item — use the standard ratios.");
-                }},
-                {t:"Expired, but still dyeable",v:"exp",next:()=>{
-                  wzAnswer("Use the \"Dye item\" table's \"expired · still dyeable\" rows — usually around 1:2–1:3 against a current PRM item.");
-                }}
-              ]);
-            }},
-            {t:"No, can't dye it anymore",v:"cant",next:()=>{
-              wzAnswer("A no-longer-dyeable, retired dye item should follow the \"no longer dyeable\" rows of the \"Dye item\" table, based on how long the dye window has been closed. Past 2–3 years it's hard to estimate — check around before pricing it.","Popular or high-rarity items don't follow the fixed table — they can go for more.");
-            }}
-          ]);
-        }}
-      ]);
-    }
-  }));
-})();
 
 /* ---------- PRM Star price table ---------- */
 const PRICES={

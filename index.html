@@ -365,7 +365,6 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
   <div class="seg" id="calcNav" style="margin-bottom:14px">
     <button class="on" data-c="t-ratio">比例試算</button>
-    <button data-c="t-wizard">怎麼換？精靈</button>
     <button data-c="t-conv">稀有度</button>
     <button data-c="t-fee">手續費</button>
     <button data-c="t-dye">染色成本</button>
@@ -476,37 +475,6 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     </div>
     <p class="fine">品牌「原色」與一般付費物同樣計算（看過期多久、熱門度），已獨立成「品牌原色物」選項。</p>
     <p id="ratioStat" style="font-size:11.5px;color:var(--ink-soft);margin-top:6px"></p>
-  </div>
-  <div class="card ctool" id="t-wizard">
-    <h3>不知道怎麼換？精靈 <span class="tag warn">一步一步問</span></h3>
-    <p class="cond">不用自己先搞懂所有規則，跟著問題選下去，最後直接告訴你要套哪套估價邏輯。</p>
-    <div class="step" id="wzStep1">
-      <div class="step-label">這件物品是——</div>
-      <div class="opts" id="wzOpts1">
-        <button data-v="brand">品牌池物品</button>
-        <button data-v="normal">一般池物品</button>
-      </div>
-    </div>
-    <div class="step" id="wzStep2" hidden>
-      <div class="step-label" id="wzLabel2"></div>
-      <div class="opts" id="wzOpts2"></div>
-    </div>
-    <div class="step" id="wzStep3" hidden>
-      <div class="step-label" id="wzLabel3"></div>
-      <div class="opts" id="wzOpts3"></div>
-    </div>
-    <div class="step" id="wzStep4" hidden>
-      <div class="step-label" id="wzLabel4"></div>
-      <div class="opts" id="wzOpts4"></div>
-    </div>
-    <div class="result">
-      <p class="placeholder" id="wzPlaceholder">選擇後，這裡會顯示建議估價方式。</p>
-      <div id="wzResult" hidden>
-        <p class="result-desc" id="wzDesc" style="margin:6px auto 0;max-width:none;text-align:left"></p>
-        <div class="pill-note" id="wzNote" hidden></div>
-      </div>
-    </div>
-    <p id="wzStat" style="font-size:11.5px;color:var(--ink-soft);margin-top:10px"></p>
   </div>
   <div class="card ctool" id="t-vipshop">
     <h3>VIP 點數兌換試算 <span class="tag gold">特殊區・可複選</span></h3>
@@ -3412,77 +3380,6 @@ function show(){
     dots.appendChild(s);
   }
 }
-
-/* ---------- 怎麼換？精靈 ---------- */
-(function(){
-  const steps=[$("wzStep1"),$("wzStep2"),$("wzStep3"),$("wzStep4")];
-  const opts=[$("wzOpts1"),$("wzOpts2"),$("wzOpts3"),$("wzOpts4")];
-  const labels=[null,$("wzLabel2"),$("wzLabel3"),$("wzLabel4")];
-  let wzCounted=false;
-  function wzReset(from){
-    for(let i=from;i<steps.length;i++){steps[i].hidden=true;opts[i].innerHTML="";}
-    $("wzResult").hidden=true;$("wzPlaceholder").hidden=false;
-  }
-  function wzOpen(i,label,list){
-    labels[i].textContent=label;
-    opts[i].innerHTML="";
-    list.forEach(o=>{
-      const b=document.createElement("button");
-      b.textContent=o.t;b.dataset.v=o.v;
-      b.addEventListener("click",()=>{
-        opts[i].querySelectorAll("button").forEach(x=>x.classList.remove("on"));
-        b.classList.add("on");
-        wzReset(i+1);
-        o.next(o.v);
-      });
-      opts[i].appendChild(b);
-    });
-    steps[i].hidden=false;
-  }
-  function wzAnswer(desc,note){
-    $("wzPlaceholder").hidden=true;$("wzResult").hidden=false;
-    $("wzDesc").textContent=desc;
-    const n=$("wzNote");
-    if(note){n.hidden=false;n.textContent="※ "+note;}else n.hidden=true;
-    if(!wzCounted){
-      wzCounted=true;
-      fetch("https://api.counterapi.dev/v1/tourmaline8b7d78/tool-wizard/up").then(r=>r.json()).then(d=>{
-        if(d&&d.count)$("wzStat").textContent="✿ 累計已有 "+Number(d.count).toLocaleString()+" 人次使用過這個精靈";
-      }).catch(()=>{});
-    }
-  }
-  $("wzOpts1").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
-    $("wzOpts1").querySelectorAll("button").forEach(x=>x.classList.remove("on"));
-    b.classList.add("on");
-    wzReset(1);
-    if(b.dataset.v==="normal"){
-      wzAnswer("一般池物品沒有染色限制，直接到「比例試算」用免費/付費池的規則算就好，不用管品牌那套。");
-    }else{
-      wzOpen(1,"這件是——",[
-        {t:"原色",v:"orig",next:()=>{
-          wzAnswer("品牌原色是絕版付費物，比照「交換比例」分頁的「品牌原色・依過期時間」表計算，看過期多久＋熱不熱門。");
-        }},
-        {t:"染色",v:"dye",next:()=>{
-          wzOpen(2,"還能不能染？",[
-            {t:"能染",v:"can",next:()=>{
-              wzOpen(3,"是不是現池？",[
-                {t:"是現池",v:"cur",next:()=>{
-                  wzAnswer("現池染色物，換算方式同現池付費物，走一般比例即可。");
-                }},
-                {t:"已過期但還能染",v:"exp",next:()=>{
-                  wzAnswer("比照「染色物」表「已過期・還能染」那幾列，通常對現池付費物約 1:2～1:3。");
-                }}
-              ]);
-            }},
-            {t:"不能染",v:"cant",next:()=>{
-              wzAnswer("不能染的絕版染色物，比照「染色物」表「不能染」那幾列，依染色過期時間估價；過期 2～3 年以上難以估計，建議多方詢問行情再開價。","熱門款或高稀有度不適用固定表格，價格可能更高。");
-            }}
-          ]);
-        }}
-      ]);
-    }
-  }));
-})();
 
 /* ---------- P 星價格表 ---------- */
 const PRICES={
