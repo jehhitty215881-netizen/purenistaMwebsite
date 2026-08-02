@@ -37,6 +37,12 @@ h1 .drop{display:inline-block;width:.55em;height:.55em;margin-left:.15em;backgro
 
 .site-note{background:var(--violet-soft);border:1.5px solid var(--violet);color:#4A3B7E;border-radius:var(--radius);padding:14px 16px;margin-top:14px;font-size:15.5px;font-weight:700;line-height:1.65}
 nav{display:flex;gap:8px;margin:22px -16px 18px;padding:10px 16px;position:sticky;top:0;z-index:10;background:var(--bg);overflow-x:auto;scrollbar-width:none}
+.nav-select{display:none}
+@media(max-width:680px){
+  nav{display:none}
+  .nav-select{display:block;width:100%;margin:22px -16px 18px;padding:12px 16px;position:sticky;top:0;z-index:10;background:var(--bg);border:none;border-bottom:1.5px solid var(--line);border-radius:0;font-family:inherit;font-size:14.5px;font-weight:800;color:var(--ink);-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%236B6180' stroke-width='2'><path d='M5 8l5 5 5-5'/></svg>"),linear-gradient(var(--bg),var(--bg));background-repeat:no-repeat;background-position:right 16px center;background-size:16px,100%;padding-right:40px}
+  .nav-select:focus-visible{outline:3px solid var(--violet);outline-offset:-3px}
+}
 nav::-webkit-scrollbar{display:none}
 nav button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;cursor:pointer;transition:.2s;white-space:nowrap}
 nav button.on{background:var(--ink);border-color:var(--ink);color:#fff}.navlang{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;text-decoration:none;border:1.5px solid var(--violet);background:var(--panel);color:var(--violet);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap;transition:.2s}.navlang:hover,.navlang:focus-visible{background:var(--violet);color:#fff}.navlang:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
@@ -119,6 +125,8 @@ section.show{display:block;animation:fade .25s ease}
 .conv-out .sr{color:var(--rose)}.conv-out .rr{color:var(--violet)}.conv-out .nn{color:var(--teal)}
 
 table{width:100%;border-collapse:collapse;font-size:13.5px}
+.sched-tbl{table-layout:fixed}
+.sched-tbl th,.sched-tbl td{overflow-wrap:break-word;word-break:break-word}
 th{text-align:left;font-size:11.5px;letter-spacing:.12em;color:var(--ink-soft);font-weight:700;padding:6px 4px;border-bottom:1.5px solid var(--line);text-transform:uppercase}
 td{padding:8px 4px;border-bottom:1px dashed var(--line)}
 td.num{font-family:"DM Serif Display","Noto Serif TC",serif;font-size:16px;white-space:nowrap}
@@ -342,6 +350,26 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <a class="langlink" href="index.html">🌐 中文版</a>
 </header>
 
+<select id="navJump" class="nav-select" aria-label="Quick jump to section">
+  <option value="calc">Quick Calc</option>
+  <option value="ratio">Trade Ratios</option>
+  <option value="trade">Trade Smarts</option>
+  <option value="brand">BRAND Dyeing</option>
+  <option value="branddata">Brand data</option>
+  <option value="lore">Trivia</option>
+  <option value="aes">Aesthetics</option>
+  <option value="check">Art check</option>
+  <option value="charcheck">Character check</option>
+  <option value="colorinspire">Color Inspire</option>
+  <option value="pull">Pull Costs</option>
+  <option value="vip">Top-up & VIP</option>
+  <option value="market">Rainbow Market</option>
+  <option value="sched">Schedule</option>
+  <option value="qa">Q&amp;A</option>
+  <option value="feedback">Feedback</option>
+  <option value="notes">Notes</option>
+  <option value="changelog">Changelog</option>
+</select>
 <nav aria-label="Tabs">
   <button class="on" data-tab="calc">Quick Calc</button>
   <button data-tab="ratio">Trade Ratios</button>
@@ -2893,7 +2921,8 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
   <div class="card">
     <h3>BRAND basket forecast <span class="tag hot">Late 2026–2027</span></h3>
-    <table>
+    <table class="sched-tbl">
+      <colgroup><col style="width:15%"><col style="width:23%"><col style="width:50%"><col style="width:12%"></colgroup>
       <thead><tr><th>Brand</th><th>Predicted window</th><th>Predicted theme · colors</th><th>Confidence</th></tr></thead>
       <tbody>
         <tr><td class="num">Deux #16</td><td><b>2026/08/01 – 10/04</b><br><span style="font-size:11.5px;color:var(--ink-soft)">Both open and close dates now verified</span></td><td><span style="color:var(--teal)">Confirmed</span>: grey-white lace dollhouse theme, original-color characters Solène / Altel, R eyes Radiant / Radian. <b>Not</b> the previously-predicted dark-gothic continuation — the Aug＝Fate/dark pattern didn't hold this time.</td><td class="num">Confirmed</td></tr>
@@ -3017,7 +3046,17 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>Changelog <span class="tag ok">actively maintained</span></h3>
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.0.0802 <span class="chg-build">current · added Color Inspiration Generator</span></div>
+      <div class="chg-ver">Version 5.1.0802 <span class="chg-build">current · mobile usability pass</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Fixed</b></p>
+      <ul class="tips">
+        <li>Quick Calc → Ratio calculator: item type / condition / what-the-other-side-offers are now native dropdowns instead of button groups — no more tapping through a row of pills.</li>
+        <li>Schedule → BRAND basket forecast table now has fixed column widths (via <code>colgroup</code>), so the "predicted theme · colors" column no longer gets squeezed into a one-character-wide wrap that pushed the whole table off-screen; the date column is narrower and wraps to two lines, freeing up space for the column with the most text.</li>
+        <li>On narrow screens (≤680px), the row of 17 tab buttons at the top is replaced with a single "jump to section" dropdown, removing the need to scroll sideways through it; wider screens keep the original pill row. Both share the same switching logic and stay in sync.</li>
+      </ul>
+      <p class="fine">All three came from the same feedback: swipe-based selectors felt tiring on mobile, so this pass moves them toward native dropdowns. Both language versions were updated and syntax-checked.</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.0.0802 <span class="chg-build">added Color Inspiration Generator</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>Added</b></p>
       <ul class="tips">
         <li>New tab "Color Inspiration" (right after Character Check): merges the palette generator and the random-inspiration draw into one tool with four entry points, each returning a matching style palette —
@@ -3070,13 +3109,19 @@ function hydrateShownAet(){
 
 /* ---------- tabs ---------- */
 const tabs=document.querySelectorAll("nav button");
-tabs.forEach(b=>b.addEventListener("click",()=>{
-  tabs.forEach(x=>x.classList.remove("on"));b.classList.add("on");
+const navJump=document.getElementById("navJump");
+function goTab(name){
+  tabs.forEach(x=>x.classList.remove("on"));
+  const btn=document.querySelector('nav button[data-tab="'+name+'"]');
+  if(btn)btn.classList.add("on");
   document.querySelectorAll("section").forEach(s=>s.classList.remove("show"));
-  document.getElementById(b.dataset.tab).classList.add("show");
-  if(b.dataset.tab==="aes")hydrateShownAet();
+  document.getElementById(name).classList.add("show");
+  if(navJump)navJump.value=name;
+  if(name==="aes")hydrateShownAet();
   window.scrollTo({top:0,behavior:"smooth"});
-}));
+}
+tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
+if(navJump)navJump.addEventListener("change",()=>goTab(navJump.value));
 
 /* ---------- rarity converter ---------- */
 const convNum=document.getElementById("convNum"),convRar=document.getElementById("convRar"),convOut=document.getElementById("convOut");

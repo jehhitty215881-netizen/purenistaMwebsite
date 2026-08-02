@@ -37,6 +37,12 @@ h1 .drop{display:inline-block;width:.55em;height:.55em;margin-left:.15em;backgro
 
 .site-note{background:var(--violet-soft);border:1.5px solid var(--violet);color:#4A3B7E;border-radius:var(--radius);padding:14px 16px;margin-top:14px;font-size:15.5px;font-weight:700;line-height:1.65}
 nav{display:flex;gap:8px;margin:22px -16px 18px;padding:10px 16px;position:sticky;top:0;z-index:10;background:var(--bg);overflow-x:auto;scrollbar-width:none}
+.nav-select{display:none}
+@media(max-width:680px){
+  nav{display:none}
+  .nav-select{display:block;width:100%;margin:22px -16px 18px;padding:12px 16px;position:sticky;top:0;z-index:10;background:var(--bg);border:none;border-bottom:1.5px solid var(--line);border-radius:0;font-family:inherit;font-size:14.5px;font-weight:800;color:var(--ink);-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%236B6180' stroke-width='2'><path d='M5 8l5 5 5-5'/></svg>"),linear-gradient(var(--bg),var(--bg));background-repeat:no-repeat;background-position:right 16px center;background-size:16px,100%;padding-right:40px}
+  .nav-select:focus-visible{outline:3px solid var(--violet);outline-offset:-3px}
+}
 nav::-webkit-scrollbar{display:none}
 nav button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;cursor:pointer;transition:.2s;white-space:nowrap}
 nav button.on{background:var(--ink);border-color:var(--ink);color:#fff}.navlang{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;text-decoration:none;border:1.5px solid var(--violet);background:var(--panel);color:var(--violet);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap;transition:.2s}.navlang:hover,.navlang:focus-visible{background:var(--violet);color:#fff}.navlang:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
@@ -124,6 +130,8 @@ section.show{display:block;animation:fade .25s ease}
 .conv-out .sr{color:var(--rose)}.conv-out .rr{color:var(--violet)}.conv-out .nn{color:var(--teal)}
 
 table{width:100%;border-collapse:collapse;font-size:13.5px}
+.sched-tbl{table-layout:fixed}
+.sched-tbl th,.sched-tbl td{overflow-wrap:break-word;word-break:break-word}
 th{text-align:left;font-size:11.5px;letter-spacing:.12em;color:var(--ink-soft);font-weight:700;padding:6px 4px;border-bottom:1.5px solid var(--line)}
 td{padding:8px 4px;border-bottom:1px dashed var(--line)}
 td.num{font-family:"DM Serif Display","Noto Serif TC",serif;font-size:16px;white-space:nowrap}
@@ -347,6 +355,26 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <a class="langlink" href="en.html">🌐 English version</a>
 </header>
 
+<select id="navJump" class="nav-select" aria-label="快速切換分頁">
+  <option value="calc">快速換算</option>
+  <option value="ratio">交換比例</option>
+  <option value="trade">交易心法</option>
+  <option value="brand">品牌染色</option>
+  <option value="branddata">品牌資料</option>
+  <option value="lore">科普</option>
+  <option value="aes">美學專欄</option>
+  <option value="check">作品健檢</option>
+  <option value="charcheck">角色健檢</option>
+  <option value="colorinspire">配色靈感</option>
+  <option value="pull">抽卡花費</option>
+  <option value="vip">儲值・VIP</option>
+  <option value="market">彩虹市集</option>
+  <option value="sched">排期預測</option>
+  <option value="qa">QA</option>
+  <option value="feedback">意見專欄</option>
+  <option value="notes">備註</option>
+  <option value="changelog">更新紀錄</option>
+</select>
 <nav aria-label="分頁">
   <button class="on" data-tab="calc">快速換算</button>
   <button data-tab="ratio">交換比例</button>
@@ -2896,7 +2924,8 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
   <div class="card">
     <h3>品牌池預測 <span class="tag hot">2026 下半～2027</span></h3>
-    <table>
+    <table class="sched-tbl">
+      <colgroup><col style="width:15%"><col style="width:23%"><col style="width:50%"><col style="width:12%"></colgroup>
       <thead><tr><th>品牌</th><th>預測時間</th><th>預測主題・顏色</th><th>信心</th></tr></thead>
       <tbody>
         <tr><td class="num">Deux #16</td><td><b>2026/08/01 – 10/04</b><br><span style="font-size:11.5px;color:var(--ink-soft)">開池與收池日皆已核對確認</span></td><td><span style="color:var(--teal)">已確認</span>：灰白蕾絲・人偶回憶系，原色角色索拉納／阿爾特爾，R眼雷迪恩特／雷迪恩。<b>不是</b>原先預測的深色哥德延續——8 月＝命運／深色主題的規律這次沒有成立。</td><td class="num">已確認</td></tr>
@@ -3020,7 +3049,17 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>更新紀錄 <span class="tag ok">持續維護中</span></h3>
     <p class="cond">這裡會列出每次網站更新的內容，讓大家知道網站一直有人在維護、修 bug、加新功能。</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.0.0802 <span class="chg-build">目前版本・新增配色靈感生成器</span></div>
+      <div class="chg-ver">Version 5.1.0802 <span class="chg-build">目前版本・手機操作優化</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>修正</b></p>
+      <ul class="tips">
+        <li>「快速換算」→「比例試算」的物品類型／條件／對方物品，從按鈕組改成下拉選單，不用再在一排按鈕裡點來點去。</li>
+        <li>「排期預測」→「品牌池預測」表格加上固定欄寬（<code>colgroup</code>），避免「預測主題・顏色」欄被擠成逐字換行、整張表凸出螢幕外；日期欄改為窄欄自然換兩行，讓比較多字的預測欄拿到最大空間。</li>
+        <li>手機寬度（≤680px）下，最上面那排 17 個分頁按鈕改成一個「快速切換分頁」下拉選單，不用再左右滑；平板／電腦寬度維持原本的膠囊分頁列，兩者共用同一套切換邏輯並互相同步。</li>
+      </ul>
+      <p class="fine">三項都是同一批回報：手機上「滑動選單」用起來太累，這版統一往「原生下拉選單」的方向調整。中英文版都同步修改並過語法檢查。</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.0.0802 <span class="chg-build">新增配色靈感生成器</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>新增</b></p>
       <ul class="tips">
         <li>新分頁「配色靈感」（角色健檢後面）：把配色產生器和隨機靈感合併成同一套玩法，四種入口都能得到一組風格色票——
@@ -3071,13 +3110,19 @@ function hydrateShownAet(){
 
 /* ---------- tabs ---------- */
 const tabs=document.querySelectorAll("nav button");
-tabs.forEach(b=>b.addEventListener("click",()=>{
-  tabs.forEach(x=>x.classList.remove("on"));b.classList.add("on");
+const navJump=document.getElementById("navJump");
+function goTab(name){
+  tabs.forEach(x=>x.classList.remove("on"));
+  const btn=document.querySelector('nav button[data-tab="'+name+'"]');
+  if(btn)btn.classList.add("on");
   document.querySelectorAll("section").forEach(s=>s.classList.remove("show"));
-  document.getElementById(b.dataset.tab).classList.add("show");
-  if(b.dataset.tab==="aes")hydrateShownAet();
+  document.getElementById(name).classList.add("show");
+  if(navJump)navJump.value=name;
+  if(name==="aes")hydrateShownAet();
   window.scrollTo({top:0,behavior:"smooth"});
-}));
+}
+tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
+if(navJump)navJump.addEventListener("change",()=>goTab(navJump.value));
 
 /* ---------- rarity converter ---------- */
 const convNum=document.getElementById("convNum"),convRar=document.getElementById("convRar"),convOut=document.getElementById("convOut");
