@@ -2933,16 +2933,17 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
   <div class="card">
     <h3>BRAND basket forecast <span class="tag hot">Late 2026–2027</span></h3>
+    <p class="fine" style="margin:2px 0 10px">Brand column uses codes: <b>D</b> = Deux, <b>M</b> = melem, <b>by</b> = By(e); the number is the basket count.</p>
     <div class="tbl-scroll">
     <table class="sched-tbl">
-      <colgroup><col style="width:14%"><col style="width:19%"><col style="width:47%"><col style="width:20%"></colgroup>
+      <colgroup><col style="width:9%"><col style="width:21%"><col style="width:48%"><col style="width:22%"></colgroup>
       <thead><tr><th>Brand</th><th>Predicted window</th><th>Predicted theme · colors</th><th>Confidence</th></tr></thead>
       <tbody>
-        <tr><td class="num">Deux #16</td><td><b>2026/08/01 – 10/04</b><br><span style="font-size:11.5px;color:var(--ink-soft)">Both open and close dates now verified</span></td><td><span style="color:var(--teal)">Confirmed</span>: grey-white lace dollhouse theme, original-color characters Solène / Altel, R eyes Radiant / Radian. <b>Not</b> the previously-predicted dark-gothic continuation — the Aug＝Fate/dark pattern didn't hold this time.</td><td class="num">Confirmed</td></tr>
-        <tr><td class="num">melem #5</td><td><b>2026/11/01 – 2027/01/03</b><br><span style="font-size:11.5px;color:var(--ink-soft)">#3/#4 both opened Nov 1; closes the first Sunday of Jan</span></td><td>Red-black evolution, or a new saturated color (deep purple / dark green); likely the next dark fable (mirror → crow → lost sheep → Snow White → ?)</td><td class="num">High</td></tr>
-        <tr><td class="num">Deux #17</td><td><b>2027/02/01 – 04/04</b><br><span style="font-size:11.5px;color:var(--ink-soft)">#11 and #14 both opened Feb 1</span></td><td>Half of the spring double, paired light/dark with #18 ex; the old assumption was "#16 dark → #17 light", but #16 actually ran light (lace/dollhouse), so the reference point has shifted — holding off on a color call for now</td><td class="num">Med</td></tr>
-        <tr><td class="num">Deux #18 ex</td><td><b>2027/03/01 – 05/02</b><br><span style="font-size:11.5px;color:var(--ink-soft)">#12 and #15 both opened Mar 1</span></td><td>March wafū (sakura slot); the butterfly-moon direction may continue or conclude</td><td class="num">Med-high</td></tr>
-        <tr><td class="num">By(e) #4</td><td><b>~2027/05/07 – 07/11</b><br><span style="font-size:11.5px;color:var(--ink-soft)">launch creeps earlier yearly (05/24→05/09→05/08), always a Friday; closes a mid-July Sunday</span></td><td>Rose or new floral theme; 3-line system continues, older lines may return remixed</td><td class="num">Med-high</td></tr>
+        <tr><td class="num">D16</td><td><b>2026/08/01 – 10/04</b><br><span style="font-size:11.5px;color:var(--ink-soft)">Both open and close dates now verified</span></td><td><span style="color:var(--teal)">Confirmed</span>: grey-white lace dollhouse theme, original-color characters Solène / Altel, R eyes Radiant / Radian. <b>Not</b> the previously-predicted dark-gothic continuation — the Aug＝Fate/dark pattern didn't hold this time.</td><td class="num">Confirmed</td></tr>
+        <tr><td class="num">M5</td><td><b>2026/11/01 – 2027/01/03</b><br><span style="font-size:11.5px;color:var(--ink-soft)">#3/#4 both opened Nov 1; closes the first Sunday of Jan</span></td><td>Red-black evolution, or a new saturated color (deep purple / dark green); likely the next dark fable (mirror → crow → lost sheep → Snow White → ?)</td><td class="num">High</td></tr>
+        <tr><td class="num">D17</td><td><b>2027/02/01 – 04/04</b><br><span style="font-size:11.5px;color:var(--ink-soft)">#11 and #14 both opened Feb 1</span></td><td>Half of the spring double, paired light/dark with #18 ex; the old assumption was "#16 dark → #17 light", but #16 actually ran light (lace/dollhouse), so the reference point has shifted — holding off on a color call for now</td><td class="num">Med</td></tr>
+        <tr><td class="num">D18ex</td><td><b>2027/03/01 – 05/02</b><br><span style="font-size:11.5px;color:var(--ink-soft)">#12 and #15 both opened Mar 1</span></td><td>March wafū (sakura slot); the butterfly-moon direction may continue or conclude</td><td class="num">Med-high</td></tr>
+        <tr><td class="num">by4</td><td><b>~2027/05/07 – 07/11</b><br><span style="font-size:11.5px;color:var(--ink-soft)">launch creeps earlier yearly (05/24→05/09→05/08), always a Friday; closes a mid-July Sunday</span></td><td>Rose or new floral theme; 3-line system continues, older lines may return remixed</td><td class="num">Med-high</td></tr>
       </tbody>
     </table>
     </div>
@@ -3060,6 +3061,23 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>Changelog <span class="tag ok">actively maintained</span></h3>
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
     <div class="chg-entry">
+      <div class="chg-ver">Version 5.2.1 <span class="chg-build">current · BRAND forecast table now uses short codes</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Fixed</b></p>
+      <ul class="tips">
+        <li>The brand column in the BRAND basket forecast table was still overlapping with the date column on narrow screens ("Deux #17" running into the date's "04" and reading like "07/04"). Brand labels are now short codes — <b>D</b> = Deux, <b>M</b> = melem, <b>by</b> = By(e), the number is the basket count (e.g. D17, M5, by4) — and the column width dropped from 14% to 9%, with the extra space going to the date and confidence columns. Added a one-line legend above the table.</li>
+      </ul>
+      <p class="fine">Tested at a 390px-wide mobile viewport — no more overlap.</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.2.0802 <span class="chg-build">Character check reworked into Random Character Generator</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Changed</b></p>
+      <ul class="tips">
+        <li>Removed the "AI deep review" and questionnaire-scoring logic from Character check — it required players to bring their own Anthropic API key, which almost nobody has, so the core metrics (memorability, development potential) could only ever return low-confidence local guesses. Just cut it rather than keep a dead-end feature.</li>
+        <li>Renamed the tool to Random Character Generator. The old 10-field questionnaire is now a rollable character sheet: <b>fill blanks only</b> (leaves what you wrote untouched), <b>reroll everything</b> (overwrites the whole set, new), <b>copy character sheet</b> (one-tap copy to clipboard, new). Random generation now covers all 10 fields instead of 6 — added dedicated pools for name, backstory, relationships and hook.</li>
+      </ul>
+      <p class="fine">Both language versions updated together and tested end-to-end (generate / reroll / copy) in a real browser with no errors.</p>
+    </div>
+    <div class="chg-entry">
       <div class="chg-ver">Version 5.1.0802 <span class="chg-build">mobile usability pass</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>Fixed</b></p>
       <ul class="tips">
@@ -3101,7 +3119,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       </ul>
     </div>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.1.5 <span class="chg-build">current · Random Inspiration now rolls separately</span></div>
+      <div class="chg-ver">Version 5.1.5 <span class="chg-build">Random Inspiration now rolls separately</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>Changed</b></p>
       <ul class="tips">
         <li>Random Inspiration used to bundle theme / trait / composition / palette into one draw — if you didn't like one part, you had to reroll the whole set. It's now four independent dice: keep the ones you like and only reroll what you don't, with a "Reroll all" button still available for a full redraw.</li>
