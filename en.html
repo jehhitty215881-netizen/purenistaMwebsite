@@ -90,6 +90,8 @@ section.show{display:block;animation:fade .25s ease}
 .step-label{font-size:12px;font-weight:700;letter-spacing:.16em;color:var(--ink-soft);margin-bottom:9px;display:flex;align-items:center;gap:8px;text-transform:uppercase}
 .step-label::before{content:"";width:14px;height:2px;background:var(--violet)}
 .opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts-select{width:100%;font-family:inherit;font-size:15px;font-weight:700;color:var(--ink);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%236B6180' stroke-width='2'><path d='M5 8l5 5 5-5'/></svg>");background-repeat:no-repeat;background-position:right 12px center;background-size:16px}
+.opts-select:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
 .opts button{border:1.5px solid var(--line);background:var(--panel);color:var(--ink);font-family:inherit;font-size:13.5px;font-weight:500;padding:9px 15px;border-radius:12px;cursor:pointer;transition:.15s}
 .opts button.on{border-color:var(--violet);background:var(--violet-soft);color:var(--violet);font-weight:700}
 .opts button:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
@@ -450,22 +452,23 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     </div>
     <div class="step">
       <div class="step-label" id="typeLabel">The item I&#39;m offering</div>
-      <div class="opts" id="typeOpts">
-        <button data-v="fp">PURE / PRM basket</button>
-        <button data-v="bag">LUCKYBAG item</button>
-        <button data-v="old">Regular old item</button>
-        <button data-v="orig">BRAND original-color</button>
-        <button data-v="rerun">Rerun basket item</button>
-        <button data-v="dye">Dye item</button>
-      </div>
+      <select class="opts-select" id="typeOpts">
+        <option value="" disabled selected>Select an item type…</option>
+        <option value="fp">PURE / PRM basket</option>
+        <option value="bag">LUCKYBAG item</option>
+        <option value="old">Regular old item</option>
+        <option value="orig">BRAND original-color</option>
+        <option value="rerun">Rerun basket item</option>
+        <option value="dye">Dye item</option>
+      </select>
     </div>
     <div class="step" id="step2" hidden>
       <div class="step-label" id="step2Label">Condition</div>
-      <div class="opts" id="condOpts"></div>
+      <select class="opts-select" id="condOpts"></select>
     </div>
     <div class="step" id="step3" hidden>
       <div class="step-label" id="targetLabel">What the other side offers</div>
-      <div class="opts" id="targetOpts"></div>
+      <select class="opts-select" id="targetOpts"></select>
     </div>
     <div class="result">
       <p class="placeholder" id="placeholder">Pick the conditions above to see the suggested ratio here.</p>
@@ -3432,34 +3435,28 @@ document.querySelectorAll("#perspSeg button").forEach(b=>b.addEventListener("cli
 let sel={type:null,cond:null,target:null};
 const $=id=>document.getElementById(id);
 function renderOpts(el,opts,onPick){
-  el.innerHTML="";
+  el.innerHTML='<option value="" disabled selected>Select…</option>';
   opts.forEach(o=>{
-    const b=document.createElement("button");
-    b.type="button";b.textContent=o.t;
-    b.addEventListener("click",()=>{
-      [...el.children].forEach(x=>x.classList.remove("on"));
-      b.classList.add("on");onPick(o.v);
-    });
-    el.appendChild(b);
+    const op=document.createElement("option");
+    op.value=o.v;op.textContent=o.t;
+    el.appendChild(op);
   });
+  el.onchange=()=>{ if(el.value)onPick(el.value); };
 }
-document.querySelectorAll("#typeOpts button").forEach(b=>{
-  b.addEventListener("click",()=>{
-    document.querySelectorAll("#typeOpts button").forEach(x=>x.classList.remove("on"));
-    b.classList.add("on");
-    sel={type:b.dataset.v,cond:null,target:null};
-    const d=DATA[sel.type];
-    $("step2Label").textContent=d.step2.label;
-    renderOpts($("condOpts"),d.step2.opts,v=>{
-      sel.cond=v;sel.target=null;
-      if(d.step3){
-        $("step3").hidden=false;
-        renderOpts($("targetOpts"),d.step3[v],t=>{sel.target=t;show();});
-        hideRes();
-      }else{$("step3").hidden=true;show();}
-    });
-    $("step2").hidden=false;$("step3").hidden=true;hideRes();
+$("typeOpts").addEventListener("change",()=>{
+  const b=$("typeOpts");
+  sel={type:b.value,cond:null,target:null};
+  const d=DATA[sel.type];
+  $("step2Label").textContent=d.step2.label;
+  renderOpts($("condOpts"),d.step2.opts,v=>{
+    sel.cond=v;sel.target=null;
+    if(d.step3){
+      $("step3").hidden=false;
+      renderOpts($("targetOpts"),d.step3[v],t=>{sel.target=t;show();});
+      hideRes();
+    }else{$("step3").hidden=true;show();}
   });
+  $("step2").hidden=false;$("step3").hidden=true;hideRes();
 });
 function hideRes(){$("resultBody").hidden=true;$("placeholder").hidden=false;}
 let ratioCounted=false;
