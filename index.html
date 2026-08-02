@@ -40,8 +40,21 @@ nav{display:flex;gap:8px;margin:22px -16px 18px;padding:10px 16px;position:stick
 .nav-select{display:none}
 @media(max-width:680px){
   nav{display:none}
-  .nav-select{display:block;width:100%;margin:22px -16px 18px;padding:12px 16px;position:sticky;top:0;z-index:10;background:var(--bg);border:none;border-bottom:1.5px solid var(--line);border-radius:0;font-family:inherit;font-size:14.5px;font-weight:800;color:var(--ink);-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%236B6180' stroke-width='2'><path d='M5 8l5 5 5-5'/></svg>"),linear-gradient(var(--bg),var(--bg));background-repeat:no-repeat;background-position:right 16px center;background-size:16px,100%;padding-right:40px}
-  .nav-select:focus-visible{outline:3px solid var(--violet);outline-offset:-3px}
+  .nav-select{display:block;position:sticky;top:0;z-index:20;margin:22px -16px 18px;padding:10px 16px;background:var(--bg)}
+  .nav-select-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;background:var(--panel);border:1.5px solid var(--line);border-radius:14px;font-family:inherit;font-size:14.5px;font-weight:800;color:var(--ink);cursor:pointer;text-align:left}
+  .nav-select-btn .chev{width:15px;height:15px;flex:0 0 auto;color:var(--ink-soft);transition:transform .18s ease}
+  .nav-select-btn[aria-expanded="true"]{border-color:var(--violet)}
+  .nav-select-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+  .nav-select-btn:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
+  .nav-select-backdrop{position:fixed;inset:0;background:rgba(42,33,56,.28);z-index:19;opacity:0;pointer-events:none;transition:opacity .15s ease}
+  .nav-select-backdrop.show{opacity:1;pointer-events:auto}
+  .nav-select-panel{position:absolute;left:16px;right:16px;top:calc(100% - 2px);max-height:min(58vh,420px);overflow-y:auto;background:var(--panel);border:1.5px solid var(--line);border-radius:16px;box-shadow:0 16px 40px rgba(42,33,56,.22);padding:6px;z-index:21;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .15s ease,transform .15s ease}
+  .nav-select-panel.show{opacity:1;transform:translateY(0);pointer-events:auto}
+  .nav-select-opt{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 12px;border-radius:10px;font-size:14.5px;font-weight:700;color:var(--ink);cursor:pointer}
+  .nav-select-opt:active{background:var(--violet-soft)}
+  .nav-select-opt.on{background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft));color:var(--rose)}
+  .nav-select-opt .dot{width:6px;height:6px;border-radius:50%;background:var(--rose);opacity:0;transform:scale(.4);transition:opacity .12s,transform .12s;flex:0 0 auto}
+  .nav-select-opt.on .dot{opacity:1;transform:scale(1)}
 }
 nav::-webkit-scrollbar{display:none}
 nav button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;cursor:pointer;transition:.2s;white-space:nowrap}
@@ -357,26 +370,14 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <a class="langlink" href="en.html">🌐 English version</a>
 </header>
 
-<select id="navJump" class="nav-select" aria-label="快速切換分頁">
-  <option value="calc">快速換算</option>
-  <option value="ratio">交換比例</option>
-  <option value="trade">交易心法</option>
-  <option value="brand">品牌染色</option>
-  <option value="branddata">品牌資料</option>
-  <option value="lore">科普</option>
-  <option value="aes">美學專欄</option>
-  <option value="check">作品健檢</option>
-  <option value="charcheck">角色健檢</option>
-  <option value="colorinspire">配色靈感</option>
-  <option value="pull">抽卡花費</option>
-  <option value="vip">儲值・VIP</option>
-  <option value="market">彩虹市集</option>
-  <option value="sched">排期預測</option>
-  <option value="qa">QA</option>
-  <option value="feedback">意見專欄</option>
-  <option value="notes">備註</option>
-  <option value="changelog">更新紀錄</option>
-</select>
+<div class="nav-select" id="navSelectWrap">
+  <button type="button" id="navSelectBtn" class="nav-select-btn" aria-haspopup="listbox" aria-expanded="false">
+    <span id="navSelectLabel">快速換算</span>
+    <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8l5 5 5-5"/></svg>
+  </button>
+  <div class="nav-select-backdrop" id="navSelectBackdrop"></div>
+  <div class="nav-select-panel" id="navSelectPanel" role="listbox" aria-label="快速切換分頁"></div>
+</div>
 <nav aria-label="分頁">
   <button class="on" data-tab="calc">快速換算</button>
   <button data-tab="ratio">交換比例</button>
@@ -3129,20 +3130,54 @@ function hydrateShownAet(){
 }
 
 /* ---------- tabs ---------- */
-const tabs=document.querySelectorAll("nav button");
-const navJump=document.getElementById("navJump");
+const tabs=document.querySelectorAll("nav button[data-tab]");
 function goTab(name){
   tabs.forEach(x=>x.classList.remove("on"));
   const btn=document.querySelector('nav button[data-tab="'+name+'"]');
   if(btn)btn.classList.add("on");
   document.querySelectorAll("section").forEach(s=>s.classList.remove("show"));
   document.getElementById(name).classList.add("show");
-  if(navJump)navJump.value=name;
+  if(window.__navSelectSync)window.__navSelectSync(name);
   if(name==="aes")hydrateShownAet();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
-if(navJump)navJump.addEventListener("change",()=>goTab(navJump.value));
+
+/* ---------- custom mobile nav dropdown (replaces native <select>) ---------- */
+(function(){
+  const nav=document.querySelector("nav[aria-label]")||document.querySelector("nav");
+  const btn=document.getElementById("navSelectBtn");
+  const label=document.getElementById("navSelectLabel");
+  const panel=document.getElementById("navSelectPanel");
+  const backdrop=document.getElementById("navSelectBackdrop");
+  if(!nav||!btn||!label||!panel||!backdrop)return;
+  const navBtns=Array.from(nav.querySelectorAll("button[data-tab]"));
+  navBtns.forEach(nb=>{
+    const opt=document.createElement("div");
+    opt.className="nav-select-opt"+(nb.classList.contains("on")?" on":"");
+    opt.setAttribute("role","option");
+    opt.dataset.tab=nb.dataset.tab;
+    const span=document.createElement("span");
+    span.textContent=nb.textContent;
+    const dot=document.createElement("span");
+    dot.className="dot";
+    opt.appendChild(span);opt.appendChild(dot);
+    opt.addEventListener("click",()=>{goTab(nb.dataset.tab);closePanel();});
+    panel.appendChild(opt);
+  });
+  function openPanel(){panel.classList.add("show");backdrop.classList.add("show");btn.setAttribute("aria-expanded","true");}
+  function closePanel(){panel.classList.remove("show");backdrop.classList.remove("show");btn.setAttribute("aria-expanded","false");}
+  btn.addEventListener("click",()=>{panel.classList.contains("show")?closePanel():openPanel();});
+  backdrop.addEventListener("click",closePanel);
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel();});
+  window.__navSelectSync=function(name){
+    const nb=nav.querySelector('button[data-tab="'+name+'"]');
+    if(nb)label.textContent=nb.textContent;
+    panel.querySelectorAll(".nav-select-opt").forEach(o=>o.classList.toggle("on",o.dataset.tab===name));
+  };
+  const initial=nav.querySelector("button.on")||navBtns[0];
+  if(initial)window.__navSelectSync(initial.dataset.tab);
+})();
 
 /* ---------- rarity converter ---------- */
 const convNum=document.getElementById("convNum"),convRar=document.getElementById("convRar"),convOut=document.getElementById("convOut");
