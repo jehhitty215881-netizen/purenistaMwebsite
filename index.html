@@ -1308,12 +1308,21 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>更新紀錄 <span class="tag ok">持續維護中</span></h3>
     <p class="cond">這裡會列出每次網站更新的內容，讓大家知道網站一直有人在維護、修 bug、加新功能。</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.2.2 <span class="chg-build">目前版本・品牌池預測表格改回品牌全名＋可左右滑動</span></div>
+      <div class="chg-ver">Version 5.2.2 <span class="chg-build">品牌池預測表格改回品牌全名＋可左右滑動</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>修正</b></p>
       <ul class="tips">
         <li>「排期預測」→「品牌池預測」表格的品牌欄改回<b>完整品牌名</b>（Deux #16、melem #5…），不再用代碼。上一版把欄位硬擠進固定百分比寬度，才會逼得用短代碼；這版改成表格有自己的最小寬度（760px），窄螢幕放不下時<b>整張表格可以左右滑動</b>看完整內容，不用再犧牲品牌名的可讀性。表格上方也把代碼圖例換成滑動提示。</li>
       </ul>
       <p class="fine">在 390px 寬的手機視窗測過，品牌全名不再疊字，左右滑動可看到完整表格。</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.2.3 <span class="chg-build">目前版本・科普「共通」分頁點不開、誤觸複製</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>修正</b></p>
+      <ul class="tips">
+        <li>找到「科普」頁「共通」分頁（命名與語言／典故與含義／故事與深掘）點不開、還會跳出「已複製」的原因：這幾個按鈕用的屬性名稱是 <code>data-c</code>，跟「命名與標籤」工具裡「點一下複製」用的屬性名稱撞名——一個網頁層級的複製監聽器不分青紅皂白地把它們也當成「要複製的文字」處理。「快速換算」的分頁按鈕也用了同一個屬性名稱，同樣會被誤觸。</li>
+        <li>兩處修法：①複製監聽器改成只在「命名與標籤」自己的框內生效，不會再管到別的功能；②把科普「共通」分頁的屬性名稱改成跟其他同類分頁一致的 <code>data-v</code>，從根本避免撞名。</li>
+      </ul>
+      <p class="fine">中英文版（含 content-zh.js／content-en.js）都同步修好並過語法檢查。</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.2.1 <span class="chg-build">品牌池預測表格改代碼</span></div>
@@ -1653,7 +1662,7 @@ var NT = {"motif": {"月": {"cn": ["月", "月光", "月色"], "jp": ["月", "�
       if(kwEl){ kwEl.value=el.dataset.seed; run(); }
       return;
     }
-    if(el.dataset&&el.dataset.c!==undefined){
+    if(el.dataset&&el.dataset.c!==undefined&&el.closest('#ntOut,#ntTags,#ntSeason')){
       var v=el.dataset.c;
       __zjkCopy(v, function(){ __zjkFlash(el, "已複製", 900); },
                 function(){ __zjkFlash(el, "複製失敗，請長按選取", 1800); });
@@ -2500,7 +2509,7 @@ document.querySelectorAll("#loreCommonSeg button").forEach(b=>b.addEventListener
   document.querySelectorAll("#loreCommonSeg button").forEach(x=>x.classList.remove("on"));
   b.classList.add("on");
   document.querySelectorAll(".lct").forEach(c=>c.classList.remove("show"));
-  document.getElementById(b.dataset.c).classList.add("show");
+  document.getElementById(b.dataset.v).classList.add("show");
 }));
 
 

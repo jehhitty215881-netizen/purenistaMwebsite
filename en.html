@@ -1303,12 +1303,21 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>Changelog <span class="tag ok">actively maintained</span></h3>
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.2.2 <span class="chg-build">current · BRAND forecast table back to full names + real horizontal scroll</span></div>
+      <div class="chg-ver">Version 5.2.2 <span class="chg-build">BRAND forecast table back to full names + real horizontal scroll</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>Fixed</b></p>
       <ul class="tips">
         <li>The brand column in the BRAND basket forecast table is back to <b>full brand names</b> (Deux #16, melem #5…) instead of short codes. The previous fix squeezed columns into fixed percentage widths, which is what forced the short codes in the first place; this version gives the table its own minimum width (800px) so on narrow screens the <b>whole table scrolls left/right</b> instead of sacrificing readability. The code legend above the table is now a swipe hint instead.</li>
       </ul>
       <p class="fine">Tested at a 390px-wide mobile viewport — full brand names no longer overlap, and the table scrolls to show everything.</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.2.3 <span class="chg-build">current · Trivia "Common" tab not opening, accidental copy</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Fixed</b></p>
+      <ul class="tips">
+        <li>Found why the Trivia page's "Common" sub-tab (Naming & language / Allusions / Stories) wouldn't open and popped up "Copied" instead: those buttons used the attribute name <code>data-c</code>, which collided with the same attribute name used by the "tap to copy" feature in the Naming & Tags tool — a page-wide copy listener was grabbing them too, regardless of context. Quick Calc's tab buttons use the same attribute name and were being caught the same way.</li>
+        <li>Two-part fix: ① the copy listener now only fires inside the Naming & Tags tool's own container, not anywhere else on the page; ② the Trivia "Common" sub-tab was renamed to <code>data-v</code>, matching its sibling tabs, removing the name collision at the source.</li>
+      </ul>
+      <p class="fine">Both language versions (including content-zh.js / content-en.js) were updated and syntax-checked.</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.2.1 <span class="chg-build">BRAND forecast table used short codes</span></div>
@@ -2498,7 +2507,7 @@ document.querySelectorAll("#loreCommonSeg button").forEach(b=>b.addEventListener
   document.querySelectorAll("#loreCommonSeg button").forEach(x=>x.classList.remove("on"));
   b.classList.add("on");
   document.querySelectorAll(".lct").forEach(c=>c.classList.remove("show"));
-  document.getElementById(b.dataset.c).classList.add("show");
+  document.getElementById(b.dataset.v).classList.add("show");
 }));
 
 
