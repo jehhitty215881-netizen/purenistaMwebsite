@@ -4903,7 +4903,7 @@ function compositionScore(opts) {
       if(mask[i2]){
         maskN++;subLum.push(l);
         var lab=rgb2lab(r,g,b),hsv=rgb2hsv(r,g,b),dist=Math.hypot(x2/w-sal.x,y2/h-sal.y),wt=1+Math.max(0,1-dist*2.2);
-        if(lab[0]>=5&&lab[0]<=95&&d[p+3]>10){sub.push([r,g,b,lab[0],lab[1],lab[2],illustrationMode?1:wt]);labMin[1]=Math.min(labMin[1],lab[1]);labMin[2]=Math.min(labMin[2],lab[2]);labMax[1]=Math.max(labMax[1],lab[1]);labMax[2]=Math.max(labMax[2],lab[2]);satSum+=hsv[1];abSum+=Math.hypot(lab[1],lab[2]);if(hsv[1]>.12){validSat++;hues[Math.floor(hsv[0]/30)%12]++;if(hsv[0]<75||hsv[0]>=330)warm++;else if(hsv[0]>=150&&hsv[0]<285)cool++;}}
+        if(lab[0]>=5&&lab[0]<=95&&d[p+3]>10){sub.push([r,g,b,lab[0],lab[1],lab[2],illustrationMode?1:wt]);labMin[1]=Math.min(labMin[1],lab[1]);labMin[2]=Math.min(labMin[2],lab[2]);labMax[1]=Math.max(labMax[1],lab[1]);labMax[2]=Math.max(labMax[2],lab[2]);satSum+=hsv[1];abSum+=Math.hypot(lab[1],lab[2]);if(hsv[1]>.08){if(hsv[1]>.12){validSat++;hues[Math.floor(hsv[0]/30)%12]++;}var _vw=hsv[1];if(hsv[0]<75||hsv[0]>=330)warm+=_vw;else if(hsv[0]>=150&&hsv[0]<285)cool+=_vw;else if(lab[2]>5)warm+=_vw*.4;else if(lab[2]<-5)cool+=_vw*.4;}else{if(lab[2]>4)warm+=.06;else if(lab[2]<-4)cool+=.06;}}
         var local=[d[p-4],d[p+4],d[p-w*4],d[p+w*4]],range=Math.max.apply(null,local)-Math.min.apply(null,local);
         if(l>245){hiN++;if(l>248&&range<5&&hsv[1]<.18)clip++;}
         // subject 3x3 EV cell
@@ -4982,7 +4982,20 @@ function compositionScore(opts) {
     var warmSum=warm,coolSum=cool,wcTot=warm+cool;
     var warmRatio=wcTot?warm/wcTot:0.5;
     var wb=tt('wb_neutral');
-    if(!isGray){var meanA=sub.length?sub.reduce(function(a,v){return a+v[4];},0)/sub.length:0,meanB=sub.length?sub.reduce(function(a,v){return a+v[5];},0)/sub.length:0;if(meanB>12&&meanA>6)wb=tt('wb_warm');else if(meanB<-10)wb=tt('wb_cool');else wb=tt('wb_neutral');}
+    var meanA=sub.length?sub.reduce(function(a,v){return a+v[4];},0)/sub.length:0,meanB=sub.length?sub.reduce(function(a,v){return a+v[5];},0)/sub.length:0;
+    /* Low-chroma images: hue votes are sparse and a few warm accents dominate. Blend toward
+       Lab b* (yellow+/blue-) so cool-gray fashion plates are not labelled warm. */
+    if(avgSat<.28&&sub.length){
+      var labWR=.5+clamp(meanB/36,-.42,.42);
+      var mix=clamp((.28-avgSat)/.28,0,1);
+      warmRatio=warmRatio*(1-mix*.8)+labWR*(mix*.8);
+    }
+    if(isGray){warmRatio=.5;wb=tt('wb_neutral');}
+    else if(meanB>12&&meanA>6)wb=tt('wb_warm');
+    else if(meanB<-8)wb=tt('wb_cool');
+    else if(warmRatio>.62&&meanB>4)wb=tt('wb_warm');
+    else if(warmRatio<.38&&meanB<-4)wb=tt('wb_cool');
+    else wb=tt('wb_neutral');
 
     /* ---- composition ---- */
     var thirds=[[1/3,1/3,tt('t_tl')],[2/3,1/3,tt('t_tr')],[1/3,2/3,tt('t_bl')],[2/3,2/3,tt('t_br')]];
@@ -5446,7 +5459,7 @@ function compositionScore(opts) {
     map[tt('st_natural')]={label:'自然系',trait:'恰到好處的彩度',mood:'舒適自然'};
     map[tt('st_vivid')]={label:'鮮豔活潑',trait:'高飽和的強烈色彩',mood:'搶眼而有活力'};
     var d=map[a.style]||map[tt('st_natural')];
-    var warmDesc=a.warmRatio>.6?'色調偏暖、親近溫潤':(a.warmRatio<.4?'色調偏冷、沉靜內斂':'冷暖均衡、情緒中性');
+    var warmDesc=(a.warmRatio>.65&&a.wb===tt('wb_warm'))?'色調偏暖、親近溫潤':(a.warmRatio<.38||a.wb===tt('wb_cool'))?'色調偏冷、沉靜內斂':'冷暖均衡、情緒中性';
     return '你的作品偏向<b>'+d.label+'</b>，擅長用'+d.trait+'營造'+d.mood+'的氛圍；'+warmDesc+'。';
   }
   function dnaCard(a){
@@ -5502,7 +5515,7 @@ function compositionScore(opts) {
     if(a.focusConc<.16&&Math.abs((a.bbox?a.bbox.cx:.5)-.5)<.14&&a.negQual!==tt('ns_crowd'))links.push(tt('lk_centernofocus'));
     if((a.dof===tt('dof_shallow'))&&a.portrait&&a.portrait.eyeSharp===tt('es_sharp'))links.push(tt('lk_bokeheye'));
     if(a.isGray)links.push(tt('lk_bw'));
-    else if(a.richness<.34&&a.warmRatio>.6)links.push(tt('lk_warmlow'));
+    else if(a.richness<.34&&a.warmRatio>.65&&a.wb===tt('wb_warm')&&!a.isGray)links.push(tt('lk_warmlow'));
     if(a.hasFrame)links.push(tt('lk_frame'));
     links=links.slice(0,3);
 
@@ -5556,9 +5569,24 @@ function compositionScore(opts) {
     var rf=reason('frag');
     if(rf) issues.push({w:90,kind:'frag',sec:'ae-comp',t:tt('v3_frag').replace('{N}',rf.n)});
     var ru=reason('uneven');
-    if(ru) issues.push({w:85,kind:'uneven',sec:'ae-comp',t:tt('v3_uneven').replace('{D}',
-        ru.d==='top'?tt('v3_ptop'):ru.d==='bottom'?tt('v3_pbottom'):ru.d==='left'?tt('v3_pleft'):tt('v3_pright'))
-        .replace('{R}',fx(ru.r,1))});
+    if(ru){
+      var _uw=85;
+      /* Design / layout: vertical gaps are page structure (title bar, footer). */
+      if((currentView==='design'||currentModes.indexOf('layout')>=0)&&a.textDetected&&(ru.d==='top'||ru.d==='bottom'))
+        _uw=28;
+      /* Illustration with a strong centre/radial read: asymmetric empty side is often
+         deliberate framing (branches, fog, dark mass) balancing a glowing figure — not a crop error. */
+      var _patOk=a.v3pat&&a.v3pat.list&&a.v3pat.list.some(function(o){
+        return (o.k==='center'||o.k==='radial'||o.k==='phi'||o.k==='frame')&&o.s>=0.50;});
+      var _illust=!a.judgeAsPhoto||currentView==='illust';
+      if(_illust&&_patOk) _uw=Math.min(_uw,32);
+      else if(_illust&&ru.r<4.5) _uw=Math.min(_uw,48);
+      /* Horizontal imbalance alone is weak evidence in atmospheric art; keep only if severe. */
+      if(_illust&&(ru.d==='left'||ru.d==='right')&&ru.r<5.0) _uw=Math.min(_uw,40);
+      if(_uw>=50)issues.push({w:_uw,kind:'uneven',sec:'ae-comp',t:tt('v3_uneven').replace('{D}',
+          ru.d==='top'?tt('v3_ptop'):ru.d==='bottom'?tt('v3_pbottom'):ru.d==='left'?tt('v3_pleft'):tt('v3_pright'))
+          .replace('{R}',fx(ru.r,1))});
+    }
     if(reason('crowd')) issues.push({w:88,kind:'crowd',sec:'ae-comp',t:tt('v3_crowd')});
     if(reason('align')) issues.push({w:80,kind:'align',sec:'ae-type',t:tt('v3_align')});
     /* "Leave room below the feet" requires feet. The shot type behind this reason comes from
@@ -5671,7 +5699,13 @@ function compositionScore(opts) {
       if((a.elemCount||0)>=3)LOW.push(['rhythm',0.12,'fx_rhythm_lo',74,'ae-prin']);
       LOW=LOW.concat([
                ['prop',0.22,'fx_prop_lo',76,'ae-comp'],['contr',0.60,'fx_contr_lo',80,'ae-light'],
-               ['simp',0.40,'fx_simp_lo',77,'ae-prin'],['uv',0.58,'fx_uv_lo',68,'ae-prin']]);
+               ['simp',0.40,'fx_simp_lo',77,'ae-prin']]);
+      /* Unity-variety: low score on a high-harmony, low-chroma plate means intentional
+         mono, not a defect. Only flag when the picture claims variety (higher richness)
+         yet still fails to hold either unity or variety. */
+      var _restrained=a.isGray||a.richness<.34||a.style===tt('st_cine')||a.style===tt('st_morandi')||a.style===tt('st_bw');
+      var _harmHi=FS.harm!==undefined&&FS.harm>=0.80;
+      if(!_restrained&&!_harmHi) LOW.push(['uv',0.58,'fx_uv_lo',68,'ae-prin']);
       for(var li=0;li<LOW.length;li++){
         var Lw=LOW[li];
         if(FS[Lw[0]]!==undefined&&FS[Lw[0]]<Lw[1])
@@ -5709,8 +5743,20 @@ function compositionScore(opts) {
         praise.push(tt('kp_span'));
       }
       if(a.focusArea!=null){
-        if(a.focusArea>0.30)issues.push({w:82,kind:'focus',sec:'ae-comp',t:tt('fx_focus_hi')});
-        else if(a.focusArea<0.20)praise.push(tt('kp_focus'));
+        /* Soft atmospheric illustrations deliberately diffuse light across hair, fog,
+           petals and face. area50 then looks "spread" even though the eye lands on the
+           face. A detected face (or clear centre/radial read) is the landing point. */
+        var _hasFace=!!(a.faceROI||a.afMain||(a.v3port&&a.v3port.face));
+        var _centreOn=(a.v3pat&&a.v3pat.list&&a.v3pat.list.some(function(o){return (o.k==='center'||o.k==='radial'||o.k==='phi')&&o.s>=0.40;}))
+                     ||(a.bbox&&Math.abs(a.bbox.cx-.5)<0.16&&Math.abs(a.bbox.cy-.5)<0.22);
+        if(_hasFace||_centreOn){
+          if(a.focusArea<0.22)praise.push(tt('kp_focus'));
+          /* soft note only when extremely diffuse AND no face */
+        }else if(a.focusArea>0.32){
+          issues.push({w:82,kind:'focus',sec:'ae-comp',t:tt('fx_focus_hi')});
+        }else if(a.focusArea<0.20){
+          praise.push(tt('kp_focus'));
+        }
       }
       if(a.v3pat&&a.v3pat.list){
         if(!a.v3pat.list.length)issues.push({w:70,kind:'nopat',sec:'ae-comp',t:tt('fx_nopattern')});
