@@ -58,7 +58,7 @@ nav{display:flex;gap:8px;margin:22px -16px 18px;padding:10px 16px;position:stick
 }
 nav::-webkit-scrollbar{display:none}
 nav button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;cursor:pointer;transition:.2s;white-space:nowrap}
-nav button.on{background:var(--ink);border-color:var(--ink);color:#fff}.navlang{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;text-decoration:none;border:1.5px solid var(--violet);background:var(--panel);color:var(--violet);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap;transition:.2s}.navlang:hover,.navlang:focus-visible{background:var(--violet);color:#fff}.navlang:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
+nav .navgrp{flex:0 0 auto;display:flex;align-items:center;padding:0 4px 0 10px;font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;white-space:nowrap;opacity:.75}nav .navgrp:first-child{padding-left:0}nav .navgrp::after{content:'';display:block;width:1px;height:15px;margin-left:10px;background:var(--line)}.nav-select-head{padding:11px 16px 5px;font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--violet);text-transform:uppercase;pointer-events:none}.nav-select-head:first-child{padding-top:6px}nav button.on{background:var(--ink);border-color:var(--ink);color:#fff}.navlang{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;text-decoration:none;border:1.5px solid var(--violet);background:var(--panel);color:var(--violet);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap;transition:.2s}.navlang:hover,.navlang:focus-visible{background:var(--violet);color:#fff}.navlang:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
 nav button:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
 section{display:none}
 section.show{display:block;animation:fade .25s ease}
@@ -332,7 +332,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .chk-gauge-good{position:absolute;top:0;height:100%;background:rgba(61,142,138,.32);border-radius:4px}
 .chk-gauge-pt{position:absolute;top:-3px;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.18);transform:translateX(-50%)}
 .v-ok .chk-gauge-pt{background:var(--teal)} .v-warn .chk-gauge-pt{background:var(--gold)} .v-bad .chk-gauge-pt{background:#C0554E} .v-info .chk-gauge-pt{background:var(--violet)}
-.chk-v2-section{margin-top:18px;padding-top:4px}.dc-wrap{padding:14px 15px;border-radius:14px;margin:0 0 15px;background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft))}.dc-wrap>b{display:block;font-size:13.5px;color:var(--ink);font-weight:800;margin:0 0 4px}.dc-wrap>.sub{font-size:11.5px;color:var(--ink-soft);line-height:1.7;margin:0 0 11px}.dc-q{margin:0 0 9px}.dc-q>span{display:block;font-size:12.5px;font-weight:700;color:var(--ink);margin:0 0 5px}.dc-q .row{display:flex;gap:7px}.dc-a{flex:1;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:8px 6px;border-radius:10px;cursor:pointer;transition:.13s}.dc-a:hover{border-color:var(--violet)}.dc-a.on{background:var(--violet);border-color:var(--violet);color:#fff}.dc-out{margin:11px 0 0;padding:12px 14px;border-radius:12px;background:var(--panel);display:none}.dc-out.show{display:block}.dc-out h5{margin:0 0 6px;font-size:15px;color:var(--violet);font-weight:800}.dc-out p{margin:0 0 9px;font-size:12.5px;color:var(--ink-soft);line-height:1.75}.dc-apply{border:none;background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;font-family:inherit;font-weight:800;font-size:12.5px;padding:8px 18px;border-radius:999px;cursor:pointer}.ws-step{border:1.5px solid var(--line);border-radius:13px;margin:0 0 9px;overflow:hidden;background:var(--panel);transition:.15s}.ws-step.active{border-color:var(--violet);box-shadow:0 2px 10px rgba(138,95,192,.13)}.ws-step.filled{border-color:var(--violet)}.ws-head{display:flex;align-items:center;gap:9px;padding:11px 13px;cursor:pointer;user-select:none}.ws-num{flex:0 0 auto;width:23px;height:23px;border-radius:50%;background:var(--line);color:var(--ink-soft);font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center}.ws-step.filled .ws-num{background:var(--violet);color:#fff}.ws-head .lbl{flex:1;font-weight:800;font-size:13.5px;color:var(--ink);min-width:0}.ws-head .val{font-size:12.5px;color:var(--violet);font-weight:700;text-align:right;max-width:52%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ws-body{display:none;padding:0 13px 13px;border-top:1px solid var(--line)}.ws-step.active .ws-body{display:block}.ws-hint{font-size:11.5px;color:var(--ink-soft);line-height:1.7;margin:9px 0 9px}.ws-opts{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 9px}.ws-opt{border:1.5px solid var(--line);background:var(--bg);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12px;padding:6px 12px;border-radius:999px;cursor:pointer;transition:.12s}.ws-opt:hover{border-color:var(--violet);color:var(--violet)}.ws-opt.on{background:var(--violet);border-color:var(--violet);color:#fff}.ws-in{width:100%;padding:8px 11px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:13px;color:var(--ink);background:var(--bg)}.ws-roll{border:1.5px solid var(--violet);background:transparent;color:var(--violet);font-family:inherit;font-weight:700;font-size:11.5px;padding:5px 12px;border-radius:999px;cursor:pointer;margin:0 0 9px}.ws-card{margin:16px 0 0;padding:16px 17px;border-radius:15px;background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));display:none}.ws-card.show{display:block}.ws-card h4{margin:0 0 11px;font-size:15px;color:var(--ink);font-weight:800}.ws-card dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:7px 12px}.ws-card dt{font-size:11.5px;font-weight:800;color:var(--violet);white-space:nowrap;padding-top:2px}.ws-card dd{margin:0;font-size:13px;line-height:1.6;color:var(--ink);min-width:0;overflow-wrap:anywhere}.ws-bar{display:flex;gap:9px;align-items:center;margin:0 0 13px}.ws-bar .tk{flex:1;height:7px;border-radius:999px;background:var(--line);overflow:hidden}.ws-bar .tk i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--violet),var(--rose));transition:width .25s}.ws-bar b{font-size:12px;font-weight:800;color:var(--ink);white-space:nowrap}.ws-acts{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0 0}.ws-btn{border:none;background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;font-family:inherit;font-weight:800;font-size:13px;padding:9px 20px;border-radius:999px;cursor:pointer}.ws-btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink-soft);font-weight:700}.ws-btn.ghost:hover{border-color:var(--violet);color:var(--violet)}.nt-row{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 12px}.nt-chip{border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:6px 13px;border-radius:999px;cursor:pointer;transition:.15s}.nt-chip.on{background:var(--violet);border-color:var(--violet);color:#fff}.nt-chip:hover{border-color:var(--violet)}.nt-go{border:none;background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;font-family:inherit;font-weight:800;font-size:14px;padding:11px 26px;border-radius:999px;cursor:pointer;box-shadow:0 3px 10px rgba(138,95,192,.28)}.nt-go:active{transform:translateY(1px)}.nt-out{margin:14px 0 0}.nt-title{display:flex;align-items:center;gap:9px;padding:10px 13px;margin:0 0 7px;border:1.5px solid var(--line);border-radius:11px;background:var(--panel);transition:.15s}.nt-title:hover{border-color:var(--violet)}.nt-title b{flex:1;font-size:15px;color:var(--ink);font-weight:800;min-width:0;word-break:break-word}.nt-title small{color:var(--ink-soft);font-size:11px;white-space:nowrap}.nt-copy{border:1.5px solid var(--line);background:transparent;color:var(--ink-soft);font-family:inherit;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;cursor:pointer;flex:0 0 auto}.nt-copy:hover{border-color:var(--violet);color:var(--violet)}.nt-tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}.nt-tag{font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;background:var(--violet-soft);color:var(--violet);cursor:pointer;border:1.5px solid transparent}.nt-tag:hover{border-color:var(--violet)}.nt-season{padding:12px 14px;border-radius:12px;margin:0 0 14px;background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft))}.nt-season b{display:block;font-size:13.5px;color:var(--ink);margin:0 0 5px}.nt-note{font-size:11.5px;color:var(--ink-soft);margin:9px 0 0;line-height:1.7}.lazy-wait{padding:40px 16px;text-align:center;color:var(--ink-soft);font-size:13px}.lazy-wait .dot{display:inline-block;width:7px;height:7px;margin:0 3px;border-radius:50%;background:var(--violet);opacity:.35;animation:lzb 1.1s infinite}.lazy-wait .dot:nth-child(2){animation-delay:.15s}.lazy-wait .dot:nth-child(3){animation-delay:.3s}@keyframes lzb{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}.lazy-fail{padding:26px 18px;text-align:center;color:var(--ink);font-size:13px;line-height:1.9}.lazy-fail code{background:var(--violet-soft);padding:2px 6px;border-radius:5px;font-size:12px}.fl-phase{margin:0 0 14px}.fl-phase>b{display:block;font-size:11px;letter-spacing:.12em;color:var(--violet);font-weight:800;margin:0 0 8px}.fl-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;margin:0 0 7px;border:1.5px solid var(--line);border-radius:12px;background:var(--panel);transition:.15s}.fl-item.done{border-color:var(--violet);background:var(--violet-soft)}.fl-item input{margin:3px 0 0;flex:0 0 auto;width:17px;height:17px;accent-color:var(--violet);cursor:pointer}.fl-item .fl-body{min-width:0;flex:1}.fl-item .fl-t{font-weight:800;font-size:13.5px;color:var(--ink);line-height:1.5}.fl-item.done .fl-t{text-decoration:line-through;text-decoration-color:var(--violet);opacity:.72}.fl-item .fl-d{font-size:12px;color:var(--ink-soft);line-height:1.7;margin:3px 0 0}.fl-item .fl-chk{font-size:11.5px;color:var(--violet);line-height:1.65;margin:4px 0 0;font-weight:700}.fl-item a{color:var(--violet);font-weight:700;text-decoration:none;border-bottom:1px solid var(--line)}.fl-bar{display:flex;align-items:center;gap:10px;margin:0 0 14px}.fl-bar .track{flex:1;height:8px;border-radius:999px;background:var(--line);overflow:hidden}.fl-bar .track i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--violet),var(--rose));transition:width .25s}.fl-bar b{font-size:12.5px;color:var(--ink);font-weight:800;white-space:nowrap}.fl-reset{border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12px;padding:6px 13px;border-radius:999px;cursor:pointer}.fl-reset:hover{border-color:var(--violet);color:var(--violet)}.fl-done-note{margin:12px 0 0;padding:12px 14px;border-radius:12px;background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));font-size:13px;line-height:1.75;color:var(--ink);display:none}.fl-done-note.show{display:block}.buildtag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--violet-soft);color:var(--violet);font-size:10.5px;font-weight:800;letter-spacing:.06em;vertical-align:middle;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.cpall{margin:10px 0 2px}.cpall h4{margin:0 0 6px;font-size:12px;font-weight:800;color:var(--ink);letter-spacing:.04em}.cpall .note{margin:0 0 10px;font-size:11.5px;color:var(--ink-soft);line-height:1.65}.cpall .grp{margin:0 0 9px}.cpall .grp>b{display:block;font-size:10.5px;color:var(--ink-soft);font-weight:800;letter-spacing:.1em;margin:0 0 5px}.cpall .row{display:flex;flex-wrap:wrap;gap:5px}.cpall a{display:inline-flex;align-items:baseline;gap:4px;text-decoration:none;font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);transition:.15s}.cpall a.hit{border-color:var(--violet);background:var(--violet-soft);color:var(--ink)}.cpall a.hit i{font-style:normal;font-weight:800;color:var(--violet);font-size:10.5px}.cpall a:focus-visible{outline:3px solid var(--violet);outline-offset:2px}.cm-fix{margin:6px 0 0;padding-left:1.75em}.cm-fix>li{margin:7px 0;line-height:1.7;padding-left:2px}.cm-fix>li::marker{color:var(--rose);font-weight:800}.cm-keep,.cm-body ul{padding-left:1.35em}.chk-brief{background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin:0 0 14px}.chk-dna{background:linear-gradient(135deg,var(--violet-soft),#EAF3FF)}.chg-entry{border-top:1px dashed var(--line);padding-top:12px;margin-top:12px}.chg-ver{font-weight:800;font-size:14px;color:var(--ink)}.chg-build{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--violet);background:var(--violet-soft);padding:2px 8px;border-radius:999px;margin-left:6px}.chk-brief h4{margin:0 0 8px;font-size:13px;letter-spacing:.08em;color:var(--ink-soft);font-weight:800}.chk-brief .band{font-size:16px;font-weight:800;color:var(--ink);line-height:1.55;margin:0 0 10px;word-break:break-word}.chk-brief dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:start}.chk-brief dt{font-size:11.5px;font-weight:800;color:var(--rose);white-space:nowrap;padding-top:2px}.chk-brief dd{margin:0;font-size:13.5px;line-height:1.65;color:var(--ink);min-width:0;overflow-wrap:anywhere}.chk-brief .hint{margin:10px 0 0;font-size:11.5px;color:var(--ink-soft)}.rep-seg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 12px;padding-bottom:2px}.rep-seg::-webkit-scrollbar{display:none}.rep-seg button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:999px;cursor:pointer}.rep-seg button.on{background:var(--ink);border-color:var(--ink);color:#fff}.rept{display:none}.rept.show{display:block}.gname{display:block;font-size:.55em;letter-spacing:.16em;font-weight:800;color:var(--ink-soft);margin:0 0 2px;text-transform:uppercase}.chk-v2-section>h3{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.chk-v2-section .tag{font-size:11px}
+.chk-v2-section{margin-top:18px;padding-top:4px}.pk-sec{margin:20px 0 0;padding-top:16px;border-top:1.5px dashed var(--line)}.pk-sec>h4{margin:0 0 4px;font-size:14px;font-weight:800;color:var(--ink)}.pk-sec>.sub{margin:0 0 11px;font-size:11.5px;color:var(--ink-soft);line-height:1.7}.pk-grp{margin:0 0 10px}.pk-grp>b{display:block;font-size:11px;font-weight:800;color:var(--violet);letter-spacing:.08em;margin:0 0 5px}.pk-row{display:flex;flex-wrap:wrap;gap:5px}.pk-i{border:1.5px solid var(--line);background:var(--panel);color:var(--ink);font-family:inherit;font-size:14px;line-height:1.5;padding:5px 10px;border-radius:9px;cursor:pointer;transition:.12s;min-width:34px;text-align:center}.pk-i:hover{border-color:var(--violet);background:var(--violet-soft)}.pk-i.kao{font-size:12.5px;min-width:auto}.pk-fl{display:flex;flex-wrap:wrap;gap:6px}.pk-f{display:flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--panel);border-radius:11px;padding:7px 11px;cursor:pointer;transition:.12s}.pk-f:hover{border-color:var(--violet)}.pk-f .sw{width:15px;height:15px;border-radius:50%;flex:0 0 auto;border:1px solid rgba(0,0,0,.08)}.pk-f .nm{font-size:12.5px;font-weight:700;color:var(--ink)}.pk-f .mn{font-size:11px;color:var(--ink-soft)}.pk-note{margin:9px 0 0;font-size:11px;color:var(--ink-soft);line-height:1.7}.dc-wrap{padding:14px 15px;border-radius:14px;margin:0 0 15px;background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft))}.dc-wrap>b{display:block;font-size:13.5px;color:var(--ink);font-weight:800;margin:0 0 4px}.dc-wrap>.sub{font-size:11.5px;color:var(--ink-soft);line-height:1.7;margin:0 0 11px}.dc-q{margin:0 0 9px}.dc-q>span{display:block;font-size:12.5px;font-weight:700;color:var(--ink);margin:0 0 5px}.dc-q .row{display:flex;gap:7px}.dc-a{flex:1;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:8px 6px;border-radius:10px;cursor:pointer;transition:.13s}.dc-a:hover{border-color:var(--violet)}.dc-a.on{background:var(--violet);border-color:var(--violet);color:#fff}.dc-out{margin:11px 0 0;padding:12px 14px;border-radius:12px;background:var(--panel);display:none}.dc-out.show{display:block}.dc-out h5{margin:0 0 6px;font-size:15px;color:var(--violet);font-weight:800}.dc-out p{margin:0 0 9px;font-size:12.5px;color:var(--ink-soft);line-height:1.75}.dc-apply{border:none;background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;font-family:inherit;font-weight:800;font-size:12.5px;padding:8px 18px;border-radius:999px;cursor:pointer}.ws-step{border:1.5px solid var(--line);border-radius:13px;margin:0 0 9px;overflow:hidden;background:var(--panel);transition:.15s}.ws-step.active{border-color:var(--violet);box-shadow:0 2px 10px rgba(138,95,192,.13)}.ws-step.filled{border-color:var(--violet)}.ws-head{display:flex;align-items:center;gap:9px;padding:11px 13px;cursor:pointer;user-select:none}.ws-num{flex:0 0 auto;width:23px;height:23px;border-radius:50%;background:var(--line);color:var(--ink-soft);font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center}.ws-step.filled .ws-num{background:var(--violet);color:#fff}.ws-head .lbl{flex:1;font-weight:800;font-size:13.5px;color:var(--ink);min-width:0}.ws-head .val{font-size:12.5px;color:var(--violet);font-weight:700;text-align:right;max-width:52%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ws-body{display:none;padding:0 13px 13px;border-top:1px solid var(--line)}.ws-step.active .ws-body{display:block}.ws-hint{font-size:11.5px;color:var(--ink-soft);line-height:1.7;margin:9px 0 9px}.ws-opts{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 9px}.ws-opt{border:1.5px solid var(--line);background:var(--bg);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12px;padding:6px 12px;border-radius:999px;cursor:pointer;transition:.12s}.ws-opt:hover{border-color:var(--violet);color:var(--violet)}.ws-opt.on{background:var(--violet);border-color:var(--violet);color:#fff}.ws-in{width:100%;padding:8px 11px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:13px;color:var(--ink);background:var(--bg)}.ws-roll{border:1.5px solid var(--violet);background:transparent;color:var(--violet);font-family:inherit;font-weight:700;font-size:11.5px;padding:5px 12px;border-radius:999px;cursor:pointer;margin:0 0 9px}.ws-card{margin:16px 0 0;padding:16px 17px;border-radius:15px;background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));display:none}.ws-card.show{display:block}.ws-card h4{margin:0 0 11px;font-size:15px;color:var(--ink);font-weight:800}.ws-card dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:7px 12px}.ws-card dt{font-size:11.5px;font-weight:800;color:var(--violet);white-space:nowrap;padding-top:2px}.ws-card dd{margin:0;font-size:13px;line-height:1.6;color:var(--ink);min-width:0;overflow-wrap:anywhere}.ws-bar{display:flex;gap:9px;align-items:center;margin:0 0 13px}.ws-bar .tk{flex:1;height:7px;border-radius:999px;background:var(--line);overflow:hidden}.ws-bar .tk i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--violet),var(--rose));transition:width .25s}.ws-bar b{font-size:12px;font-weight:800;color:var(--ink);white-space:nowrap}.ws-acts{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0 0}.ws-btn{border:none;background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;font-family:inherit;font-weight:800;font-size:13px;padding:9px 20px;border-radius:999px;cursor:pointer}.ws-btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink-soft);font-weight:700}.ws-btn.ghost:hover{border-color:var(--violet);color:var(--violet)}.nt-row{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 12px}.nt-chip{border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:6px 13px;border-radius:999px;cursor:pointer;transition:.15s}.nt-chip.on{background:var(--violet);border-color:var(--violet);color:#fff}.nt-chip:hover{border-color:var(--violet)}.nt-go{border:none;background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;font-family:inherit;font-weight:800;font-size:14px;padding:11px 26px;border-radius:999px;cursor:pointer;box-shadow:0 3px 10px rgba(138,95,192,.28)}.nt-go:active{transform:translateY(1px)}.nt-out{margin:14px 0 0}.nt-title{display:flex;align-items:center;gap:9px;padding:10px 13px;margin:0 0 7px;border:1.5px solid var(--line);border-radius:11px;background:var(--panel);transition:.15s}.nt-title:hover{border-color:var(--violet)}.nt-title b{flex:1;font-size:15px;color:var(--ink);font-weight:800;min-width:0;word-break:break-word}.nt-title small{color:var(--ink-soft);font-size:11px;white-space:nowrap}.nt-copy{border:1.5px solid var(--line);background:transparent;color:var(--ink-soft);font-family:inherit;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;cursor:pointer;flex:0 0 auto}.nt-copy:hover{border-color:var(--violet);color:var(--violet)}.nt-tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}.nt-tag{font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;background:var(--violet-soft);color:var(--violet);cursor:pointer;border:1.5px solid transparent}.nt-tag:hover{border-color:var(--violet)}.nt-season{padding:12px 14px;border-radius:12px;margin:0 0 14px;background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft))}.nt-season b{display:block;font-size:13.5px;color:var(--ink);margin:0 0 5px}.nt-note{font-size:11.5px;color:var(--ink-soft);margin:9px 0 0;line-height:1.7}.lazy-wait{padding:40px 16px;text-align:center;color:var(--ink-soft);font-size:13px}.lazy-wait .dot{display:inline-block;width:7px;height:7px;margin:0 3px;border-radius:50%;background:var(--violet);opacity:.35;animation:lzb 1.1s infinite}.lazy-wait .dot:nth-child(2){animation-delay:.15s}.lazy-wait .dot:nth-child(3){animation-delay:.3s}@keyframes lzb{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}.lazy-fail{padding:26px 18px;text-align:center;color:var(--ink);font-size:13px;line-height:1.9}.lazy-fail code{background:var(--violet-soft);padding:2px 6px;border-radius:5px;font-size:12px}.fl-phase{margin:0 0 14px}.fl-phase>b{display:block;font-size:11px;letter-spacing:.12em;color:var(--violet);font-weight:800;margin:0 0 8px}.fl-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;margin:0 0 7px;border:1.5px solid var(--line);border-radius:12px;background:var(--panel);transition:.15s}.fl-item.done{border-color:var(--violet);background:var(--violet-soft)}.fl-item input{margin:3px 0 0;flex:0 0 auto;width:17px;height:17px;accent-color:var(--violet);cursor:pointer}.fl-item .fl-body{min-width:0;flex:1}.fl-item .fl-t{font-weight:800;font-size:13.5px;color:var(--ink);line-height:1.5}.fl-item.done .fl-t{text-decoration:line-through;text-decoration-color:var(--violet);opacity:.72}.fl-item .fl-d{font-size:12px;color:var(--ink-soft);line-height:1.7;margin:3px 0 0}.fl-item .fl-chk{font-size:11.5px;color:var(--violet);line-height:1.65;margin:4px 0 0;font-weight:700}.fl-item a{color:var(--violet);font-weight:700;text-decoration:none;border-bottom:1px solid var(--line)}.fl-bar{display:flex;align-items:center;gap:10px;margin:0 0 14px}.fl-bar .track{flex:1;height:8px;border-radius:999px;background:var(--line);overflow:hidden}.fl-bar .track i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--violet),var(--rose));transition:width .25s}.fl-bar b{font-size:12.5px;color:var(--ink);font-weight:800;white-space:nowrap}.fl-reset{border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12px;padding:6px 13px;border-radius:999px;cursor:pointer}.fl-reset:hover{border-color:var(--violet);color:var(--violet)}.fl-done-note{margin:12px 0 0;padding:12px 14px;border-radius:12px;background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));font-size:13px;line-height:1.75;color:var(--ink);display:none}.fl-done-note.show{display:block}.buildtag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--violet-soft);color:var(--violet);font-size:10.5px;font-weight:800;letter-spacing:.06em;vertical-align:middle;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.cpall{margin:10px 0 2px}.cpall h4{margin:0 0 6px;font-size:12px;font-weight:800;color:var(--ink);letter-spacing:.04em}.cpall .note{margin:0 0 10px;font-size:11.5px;color:var(--ink-soft);line-height:1.65}.cpall .grp{margin:0 0 9px}.cpall .grp>b{display:block;font-size:10.5px;color:var(--ink-soft);font-weight:800;letter-spacing:.1em;margin:0 0 5px}.cpall .row{display:flex;flex-wrap:wrap;gap:5px}.cpall a{display:inline-flex;align-items:baseline;gap:4px;text-decoration:none;font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);transition:.15s}.cpall a.hit{border-color:var(--violet);background:var(--violet-soft);color:var(--ink)}.cpall a.hit i{font-style:normal;font-weight:800;color:var(--violet);font-size:10.5px}.cpall a:focus-visible{outline:3px solid var(--violet);outline-offset:2px}.cm-fix{margin:6px 0 0;padding-left:1.75em}.cm-fix>li{margin:7px 0;line-height:1.7;padding-left:2px}.cm-fix>li::marker{color:var(--rose);font-weight:800}.cm-keep,.cm-body ul{padding-left:1.35em}.chk-brief{background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin:0 0 14px}.chk-dna{background:linear-gradient(135deg,var(--violet-soft),#EAF3FF)}.chg-entry{border-top:1px dashed var(--line);padding-top:12px;margin-top:12px}.chg-ver{font-weight:800;font-size:14px;color:var(--ink)}.chg-build{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--violet);background:var(--violet-soft);padding:2px 8px;border-radius:999px;margin-left:6px}.chk-brief h4{margin:0 0 8px;font-size:13px;letter-spacing:.08em;color:var(--ink-soft);font-weight:800}.chk-brief .band{font-size:16px;font-weight:800;color:var(--ink);line-height:1.55;margin:0 0 10px;word-break:break-word}.chk-brief dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:start}.chk-brief dt{font-size:11.5px;font-weight:800;color:var(--rose);white-space:nowrap;padding-top:2px}.chk-brief dd{margin:0;font-size:13.5px;line-height:1.65;color:var(--ink);min-width:0;overflow-wrap:anywhere}.chk-brief .hint{margin:10px 0 0;font-size:11.5px;color:var(--ink-soft)}.rep-seg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 12px;padding-bottom:2px}.rep-seg::-webkit-scrollbar{display:none}.rep-seg button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:999px;cursor:pointer}.rep-seg button.on{background:var(--ink);border-color:var(--ink);color:#fff}.rept{display:none}.rept.show{display:block}.gname{display:block;font-size:.55em;letter-spacing:.16em;font-weight:800;color:var(--ink-soft);margin:0 0 2px;text-transform:uppercase}.chk-v2-section>h3{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.chk-v2-section .tag{font-size:11px}
 
 /* ---------- 作品健檢 V2 additions ---------- */
 .chk-types{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 12px}
@@ -395,24 +395,30 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <div class="nav-select-panel" id="navSelectPanel" role="listbox" aria-label="快速切換分頁"></div>
 </div>
 <nav aria-label="分頁">
+  <span class="navgrp">交易</span>
   <button class="on" data-tab="calc">快速換算</button>
   <button data-tab="ratio">交換比例</button>
-  <button data-tab="trade">交易心法</button>
-  <button data-tab="brand">品牌染色</button>
-  <button data-tab="branddata">品牌資料</button>
-  <button data-tab="lore">科普</button>
-  <button data-tab="aes">美學專欄</button>
-  <button data-tab="check">作品健檢</button>
-  <button data-tab="workspace">創作工作台</button>
-  <button data-tab="flow">創作動線</button>
-  <button data-tab="naming">命名與標籤</button>
-  <button data-tab="charcheck">角色隨機生成</button>
-  <button data-tab="colorinspire">配色靈感</button>
+  <button data-tab="market">彩虹市集</button>
+  <span class="navgrp">課金</span>
   <button data-tab="pull">抽卡花費</button>
   <button data-tab="vip">儲值・VIP</button>
-  <button data-tab="market">彩虹市集</button>
+  <span class="navgrp">資料</span>
+  <button data-tab="brand">品牌染色</button>
+  <button data-tab="branddata">品牌資料</button>
+  <button data-tab="trade">交易心法</button>
   <button data-tab="sched">排期預測</button>
+  <span class="navgrp">創作</span>
+  <button data-tab="check">作品健檢</button>
+  <button data-tab="workspace">創作工作台</button>
+  <button data-tab="colorinspire">配色靈感</button>
+  <button data-tab="naming">命名與標籤</button>
+  <button data-tab="charcheck">角色隨機生成</button>
+  <button data-tab="flow">創作動線</button>
+  <span class="navgrp">學習</span>
+  <button data-tab="aes">美學專欄</button>
+  <button data-tab="lore">科普</button>
   <button data-tab="qa">QA</button>
+  <span class="navgrp">關於</span>
   <button data-tab="feedback">意見專欄</button>
   <button data-tab="notes">備註</button>
   <button data-tab="changelog">更新紀錄</button>
@@ -867,6 +873,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 <section id="naming">
   <div class="card">
     <h3>命名與標籤 <span class="tag ok">作品做完了，然後呢</span></h3><p class="cond" style="margin:2px 0 12px">取名字和想標籤常常比做圖還久。這裡的詞彙和節氣都是固定的，所以永遠不會過期、也不用有人維護——但也因此<b>不會有「即時熱門標籤」</b>，那需要伺服器一直蒐集所有人的貼文。</p><div class="nt-season" id="ntSeason"></div><p class="chk-opts-head">① 這張作品的關鍵字（可留空，留空就隨機）：</p><input type="text" id="ntKw" placeholder="例如：月光、孤獨、藍色、rose⋯⋯" style="width:100%;margin:0 0 12px;padding:9px 12px;border:1.5px solid var(--line);border-radius:11px;font-family:inherit;font-size:13.5px;color:var(--ink);background:var(--panel)"><p class="chk-opts-head">② 想要什麼風格：</p><div class="nt-row" id="ntStyle"><button class="nt-chip on" type="button" data-s="poetic">詩意中文</button><button class="nt-chip" type="button" data-s="jp">日系</button><button class="nt-chip" type="button" data-s="en">英文</button><button class="nt-chip" type="button" data-s="cute">可愛</button><button class="nt-chip" type="button" data-s="dark">暗黑</button></div><button class="nt-go" id="ntGo" type="button">🎲 產生標題</button><div class="nt-out" id="ntOut"></div><p class="chk-opts-head" style="margin-top:18px">③ 標籤建議（點一下複製）：</p><div id="ntTags"></div>
+    <div id="pkBox"></div>
   </div>
 </section>
 
@@ -1308,21 +1315,72 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>更新紀錄 <span class="tag ok">持續維護中</span></h3>
     <p class="cond">這裡會列出每次網站更新的內容，讓大家知道網站一直有人在維護、修 bug、加新功能。</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.2.2 <span class="chg-build">品牌池預測表格改回品牌全名＋可左右滑動</span></div>
-      <p class="cond" style="margin:8px 0 4px"><b>修正</b></p>
+      <div class="chg-ver">Version 5.3.0 <span class="chg-build">目前版本・複製功能會謊稱成功＋詞庫大幅擴充</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>修正：複製失敗時卻顯示「已複製」</b></p>
       <ul class="tips">
-        <li>「排期預測」→「品牌池預測」表格的品牌欄改回<b>完整品牌名</b>（Deux #16、melem #5…），不再用代碼。上一版把欄位硬擠進固定百分比寬度，才會逼得用短代碼；這版改成表格有自己的最小寬度（760px），窄螢幕放不下時<b>整張表格可以左右滑動</b>看完整內容，不用再犧牲品牌名的可讀性。表格上方也把代碼圖例換成滑動提示。</li>
+        <li>接續上一版的 <code>data-c</code> 撞名問題，把三個複製功能整個查了一遍。「角色隨機生成」是對的，但<b>標題產生器</b>和<b>創作工作台的企劃卡</b>都有問題：錯誤被空的 <code>catch</code> 吞掉、確認訊息寫在 <code>then()</code> <b>外面</b>所以不管成不成功都顯示「已複製」、而且沒有備援。三個加起來就是<b>複製失敗、按鈕說成功、去貼上發現是空的</b>。</li>
+        <li>更關鍵的是 <code>navigator.clipboard</code> <b>需要安全連線才存在</b>——只要有人把檔案下載下來用瀏覽器直接開，複製全部失效而畫面一直說成功。現在三處統一走同一個函式：有 API 就用，失敗或不存在時自動退回 <code>execCommand</code>（含 iOS 需要的 <code>setSelectionRange</code>），兩種都失敗才顯示「複製失敗，請長按選取」，<b>確認訊息只在寫入真的完成後才出現</b>。</li>
+        <li>順帶修掉第四個：連點兩次複製鈕時，第二次會把「已複製」當成按鈕原本的文字記下來，於是文字永遠回不去。</li>
       </ul>
-      <p class="fine">在 390px 寬的手機視窗測過，品牌全名不再疊字，左右滑動可看到完整表格。</p>
+      <p class="cond" style="margin:12px 0 4px"><b>擴充：所有隨機生成的詞庫</b></p>
+      <ul class="tips">
+        <li>配色 17→<b>45</b> 組、主題 30→<b>58</b>、角色特質 30→<b>70</b>、意象 20→<b>80</b>、情緒 8→<b>28</b>、標題模板 47→<b>519</b>、背景 10→32、配件類型 10→30、主體構圖 7→19。</li>
+        <li>有人回報「配色一直跳高飽和，但遊戲裡高飽和道具比較少」。量下來確實如此——17 組裡只有 1 組平均飽和度低於 30%，而且每組機率完全相同。補了低飽和配色並依飽和度加權後，<b>骰到低飽和的機率從 6% 變成 50%</b>，高飽和從 18% 降到 2%。糖果甜心、賽博霓虹還在，只是不會一直跳出來。</li>
+        <li>後來再加 20 組時<b>把權重表整個重算</b>——一次加這麼多最容易犯的錯，就是讓低飽和的比例悄悄回到原點。</li>
+        <li>新增的 40 個角色特質走「具體行為」而不是「性格標籤」（例：口袋裡永遠有糖、說謊時會摸耳朵、從不主動聯絡但會一直等），寫 OC 時比形容詞好用。</li>
+      </ul>
+      <p class="fine">加了建置驗證：58 個主題全部指向存在的配色——指錯的話畫面不會壞掉，只會靜靜地顯示不出色票，那種錯最難發現。剪貼簿有 11 項測試，涵蓋非 HTTPS、使用者拒絕權限、兩種備援都失敗、連點兩次等情境。</p>
     </div>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.2.3 <span class="chg-build">目前版本・科普「共通」分頁點不開、誤觸複製</span></div>
+      <div class="chg-ver">Version 5.2.9 <span class="chg-build">標題產生器：關鍵字辨識與重複</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>修正</b></p>
+      <ul class="tips">
+        <li>有人回報「打沙灘卻跳出砂糖」。查下來不是誤讀——是<b>根本沒辨識到「沙灘」，然後默默改用亂數</b>。拿 20 個常見詞測，18 個辨識不到（咖啡、蛋糕、天空、城堡、向日葵、和服、洋裝、聖誕…）。真正的問題不是詞庫不夠大（那永遠補不完），而是辨識不到時偷偷換掉使用者打的字。<b>現在辨識不到就直接用你打的字</b>，所以打什麼都能用。</li>
+        <li>「各風格跳出來的內容有點重複」也修了，原因有兩個：六個標題原本<b>共用同一個意象</b>（所以像同一個詞的變奏），而且沒有記錄用過哪些句型。現在每一行的意象都不同，並記住最近 30 個模板跳過。實測同一關鍵字連骰 8 次共 48 個標題，<b>47 種不同句型</b>。</li>
+        <li>標籤原本會亂補——搜「沙灘」卻出現 <code>#琴 #Piano</code>。現在關鍵字沒辨識到時，標籤只跟著你打的字走。</li>
+        <li>另外修正意象從 20 擴到 80 之後才出現的問題：比對是逐一掃過意象表、先命中誰就用誰，所以「光」這個單字會搶先攔截「月光」。改成<b>最長匹配優先</b>後，月光→月、極光→極光、彼岸花→曼珠沙華。這個 bug 是間歇性的（連跑五次才失敗兩次）。</li>
+      </ul>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.2.8 <span class="chg-build">新增：創作決策器、創作工作台、命名與標籤、創作動線</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>新增</b></p>
+      <ul class="tips">
+        <li><b>創作決策器</b>（在創作工作台最上面）：四個是非題約十秒——人物／場景、明亮／幽暗、可愛／成熟、暖／冷——直接把工作台七個欄位填好。16 種組合各自對應一份<b>手寫的完整方向</b>，不是四顆骰子疊加，所以不會出現「可愛 × 廢墟 × 冷色」這種打架的組合。每種都附一句針對該組合的技術提醒（例：紅黑最容易俗，救法是把紅限制在小面積）。</li>
+        <li><b>創作工作台</b>：主題→情緒→色系→背景→主體→配件→標題，不用照順序填，滿四項就產生可複製的企劃卡。選項刻意給「類型」而不是遊戲道具名——道具會隨改版過期，類型不會。</li>
+        <li><b>命名與標籤</b>：五種風格（詩意中文／日系／英文／可愛／暗黑），標籤依關鍵字與本月節氣產生。<b>沒有做「即時熱門標籤」</b>，那需要伺服器持續蒐集所有人的貼文；沒人維護的「熱門」比沒有更糟。</li>
+        <li><b>創作動線</b>：十項檢查表，分動筆前／排版時／發布前。每一項都對應作品健檢實際會量的東西，所以事前建議和事後判讀是<b>同一套標準講兩次</b>，不是兩種說法。</li>
+      </ul>
+      <p class="fine">加了建置驗證機制：每個功能同時宣告「介面元素」和「驅動它的程式」，缺一邊就報錯。之前發生過兩次介面還在、JavaScript 被整段刪掉的情況——畫面完全正常，按鈕就是沒反應。</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.2.7 <span class="chg-build">首次載入減半、修掉兩個看不見的問題</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>效能</b></p>
+      <ul class="tips">
+        <li>美學專欄的樣板（246 KB）加上科普、品牌資料、意見專欄（129 KB）搬到外部檔，<b>第一次點開那些分頁時才載入</b>。首次載入 783 KB → 414 KB，實際傳輸（gzip）250 KB → 143 KB，DOM 元素 2,823 → 1,460。專欄之前就已經是「點開才渲染」，但檔案還是整份下載——這次連下載也省了。</li>
+        <li>用 <code>&lt;script&gt;</code> 而不是 <code>fetch</code> 載入，因為 <code>fetch</code> 在 <code>file://</code> 下會被 CORS 擋——本機直接雙擊 index.html 就會看到專欄壞掉。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>修正</b></p>
+      <ul class="tips">
+        <li>美學專欄裡三張圖解的箭頭顏色是錯的：三個 SVG 各自定義 <code>&lt;marker id="a2"&gt;</code>，但 <code>url(#a2)</code> 在整份文件裡<b>只會指到第一個</b>，所以第二、三張圖的箭頭畫成了第一張的紫色。全站 275 個 SVG 的內部參照現在都自洽。</li>
+        <li>清掉 13.5 KB 死碼：AI 視覺輔助的介面早就拿掉了，程式碼還留著，裡面還有 <code>api.anthropic.com</code>——會讓人合理懷疑網站把作品傳給第三方。它沒有，現在看起來也不像了。</li>
+      </ul>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.2.3 <span class="chg-build">科普「共通」分頁點不開、誤觸複製</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>修正</b></p>
       <ul class="tips">
         <li>找到「科普」頁「共通」分頁（命名與語言／典故與含義／故事與深掘）點不開、還會跳出「已複製」的原因：這幾個按鈕用的屬性名稱是 <code>data-c</code>，跟「命名與標籤」工具裡「點一下複製」用的屬性名稱撞名——一個網頁層級的複製監聽器不分青紅皂白地把它們也當成「要複製的文字」處理。「快速換算」的分頁按鈕也用了同一個屬性名稱，同樣會被誤觸。</li>
         <li>兩處修法：①複製監聽器改成只在「命名與標籤」自己的框內生效，不會再管到別的功能；②把科普「共通」分頁的屬性名稱改成跟其他同類分頁一致的 <code>data-v</code>，從根本避免撞名。</li>
       </ul>
       <p class="fine">中英文版（含 content-zh.js／content-en.js）都同步修好並過語法檢查。</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.2.2 <span class="chg-build">品牌池預測表格改回品牌全名＋可左右滑動</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>修正</b></p>
+      <ul class="tips">
+        <li>「排期預測」→「品牌池預測」表格的品牌欄改回<b>完整品牌名</b>（Deux #16、melem #5…），不再用代碼。上一版把欄位硬擠進固定百分比寬度，才會逼得用短代碼；這版改成表格有自己的最小寬度（760px），窄螢幕放不下時<b>整張表格可以左右滑動</b>看完整內容，不用再犧牲品牌名的可讀性。表格上方也把代碼圖例換成滑動提示。</li>
+      </ul>
+      <p class="fine">在 390px 寬的手機視窗測過，品牌全名不再疊字，左右滑動可看到完整表格。</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.2.1 <span class="chg-build">品牌池預測表格改代碼</span></div>
@@ -1342,29 +1400,18 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <p class="fine">中英文版都同步修改，並在真實瀏覽器測過完整流程（生成／重骰／複製）沒有錯誤。</p>
     </div>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.1.0802 <span class="chg-build">手機操作優化</span></div>
-      <p class="cond" style="margin:8px 0 4px"><b>修正</b></p>
+      <div class="chg-ver">Version 5.1.5 <span class="chg-build">隨機靈感改成分開抽</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>調整</b></p>
       <ul class="tips">
-        <li>「快速換算」→「比例試算」的物品類型／條件／對方物品，從按鈕組改成下拉選單，不用再在一排按鈕裡點來點去。</li>
-        <li>「排期預測」→「品牌池預測」表格加上固定欄寬（<code>colgroup</code>），避免「預測主題・顏色」欄被擠成逐字換行、整張表凸出螢幕外；日期欄改為窄欄自然換兩行，讓比較多字的預測欄拿到最大空間。</li>
-        <li>手機寬度（≤680px）下，最上面那排 17 個分頁按鈕改成一個「快速切換分頁」下拉選單，不用再左右滑；平板／電腦寬度維持原本的膠囊分頁列，兩者共用同一套切換邏輯並互相同步。</li>
+        <li>「隨機靈感」原本主題／角色設定／構圖／配色綁在一起抽，抽到不滿意的一項就得整組重來；這版改成四項各自獨立的骰子，喜歡哪個就留著，只重骰不滿意的那項，上面也保留「全部重骰」一次抽四項。</li>
+        <li>配色不再跟著主題連動，改成獨立隨機抽；主題與角色設定的資料庫各擴充 10 組，整體組合更多元、更不容易抽到重複的感覺。</li>
       </ul>
-      <p class="fine">三項都是同一批回報：手機上「滑動選單」用起來太累，這版統一往「原生下拉選單」的方向調整。中英文版都同步修改並過語法檢查。</p>
     </div>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.1.1 <span class="chg-build">排期預測表格再修正</span></div>
+      <div class="chg-ver">Version 5.1.4 <span class="chg-build">配色靈感改比例呈現</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>修正</b></p>
       <ul class="tips">
-        <li>「品牌池預測」表格外面加一層橫向捲動容器：就算欄寬計算在某些情況下還是不夠，表格最多也只會在<b>自己的框內</b>左右捲動，不會再把整個頁面撐寬、把「已確認」欄推出螢幕外。</li>
-      </ul>
-      <p class="fine">如果更新後畫面看起來還是舊的，請確認 GitHub Pages 上的檔案已經是這版、並且手機瀏覽器有清快取／強制重新整理（GitHub Pages 更新後有時需要幾分鐘才會生效）。</p>
-    </div>
-    <div class="chg-entry">
-      <div class="chg-ver">Version 5.1.2 <span class="chg-build">信心欄換行修正</span></div>
-      <p class="cond" style="margin:8px 0 4px"><b>修正</b></p>
-      <ul class="tips">
-        <li>「品牌池預測」表格的「信心」欄之前太窄，「已確認」這種 3 個字的內容會被擠成一字一行的直式排列；這版把該欄加寬（12%→16%），並設定資料格不換行，短短的信心值會維持橫式一行顯示。</li>
-        <li>其餘三欄（品牌／預測時間／預測主題）配合微調寬度，預測欄仍維持拿到最大空間。</li>
+        <li>「配色靈感」生成器原本把 5 個顏色用同樣大小的色塊並列顯示，看起來像 5 色平均混用，不符合「主色多、點綴少」的基本配色原則；這版改成一條依比例分配寬度的色條（46/26/14/9/5%），並在下面標出每個顏色的角色（主色／輔色／中間色／點綴×2），呈現方式更貼近實際配色邏輯，也更好看。</li>
       </ul>
     </div>
     <div class="chg-entry">
@@ -1376,19 +1423,30 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       </ul>
     </div>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.1.4 <span class="chg-build">配色靈感改比例呈現</span></div>
+      <div class="chg-ver">Version 5.1.2 <span class="chg-build">信心欄換行修正</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>修正</b></p>
       <ul class="tips">
-        <li>「配色靈感」生成器原本把 5 個顏色用同樣大小的色塊並列顯示，看起來像 5 色平均混用，不符合「主色多、點綴少」的基本配色原則；這版改成一條依比例分配寬度的色條（46/26/14/9/5%），並在下面標出每個顏色的角色（主色／輔色／中間色／點綴×2），呈現方式更貼近實際配色邏輯，也更好看。</li>
+        <li>「品牌池預測」表格的「信心」欄之前太窄，「已確認」這種 3 個字的內容會被擠成一字一行的直式排列；這版把該欄加寬（12%→16%），並設定資料格不換行，短短的信心值會維持橫式一行顯示。</li>
+        <li>其餘三欄（品牌／預測時間／預測主題）配合微調寬度，預測欄仍維持拿到最大空間。</li>
       </ul>
     </div>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.1.5 <span class="chg-build">隨機靈感改成分開抽</span></div>
-      <p class="cond" style="margin:8px 0 4px"><b>調整</b></p>
+      <div class="chg-ver">Version 5.1.1 <span class="chg-build">排期預測表格再修正</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>修正</b></p>
       <ul class="tips">
-        <li>「隨機靈感」原本主題／角色設定／構圖／配色綁在一起抽，抽到不滿意的一項就得整組重來；這版改成四項各自獨立的骰子，喜歡哪個就留著，只重骰不滿意的那項，上面也保留「全部重骰」一次抽四項。</li>
-        <li>配色不再跟著主題連動，改成獨立隨機抽；主題與角色設定的資料庫各擴充 10 組，整體組合更多元、更不容易抽到重複的感覺。</li>
+        <li>「品牌池預測」表格外面加一層橫向捲動容器：就算欄寬計算在某些情況下還是不夠，表格最多也只會在<b>自己的框內</b>左右捲動，不會再把整個頁面撐寬、把「已確認」欄推出螢幕外。</li>
       </ul>
+      <p class="fine">如果更新後畫面看起來還是舊的，請確認 GitHub Pages 上的檔案已經是這版、並且手機瀏覽器有清快取／強制重新整理（GitHub Pages 更新後有時需要幾分鐘才會生效）。</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.1.0802 <span class="chg-build">手機操作優化</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>修正</b></p>
+      <ul class="tips">
+        <li>「快速換算」→「比例試算」的物品類型／條件／對方物品，從按鈕組改成下拉選單，不用再在一排按鈕裡點來點去。</li>
+        <li>「排期預測」→「品牌池預測」表格加上固定欄寬（<code>colgroup</code>），避免「預測主題・顏色」欄被擠成逐字換行、整張表凸出螢幕外；日期欄改為窄欄自然換兩行，讓比較多字的預測欄拿到最大空間。</li>
+        <li>手機寬度（≤680px）下，最上面那排 17 個分頁按鈕改成一個「快速切換分頁」下拉選單，不用再左右滑；平板／電腦寬度維持原本的膠囊分頁列，兩者共用同一套切換邏輯並互相同步。</li>
+      </ul>
+      <p class="fine">三項都是同一批回報：手機上「滑動選單」用起來太累，這版統一往「原生下拉選單」的方向調整。中英文版都同步修改並過語法檢查。</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.0.0802 <span class="chg-build">新增配色靈感生成器</span></div>
@@ -1680,6 +1738,52 @@ var NT = {"motif": {"月": {"cn": ["月", "月光", "月色"], "jp": ["月", "�
   season(); run();
 })();
 
+/* ---------- symbols, kaomoji, flower meanings ---------- */
+/* All three belong to the moment you are writing the caption, which is when this tab is already
+   open - so they live here rather than in a tab of their own. All three are fixed vocabulary and
+   need no upkeep, which is the test every suggestion has to pass to end up on a static site.
+   Flower meanings follow the conventional Victorian and Japanese hanakotoba readings; where the
+   two disagree, both are shown rather than one being silently picked. */
+(function(){
+  var box=document.getElementById('pkBox');
+  if(!box) return;
+  var SYM=[["花草", "❀ ✿ ❁ ✾ ❃ ✽ ⚘ ☘ ✤ ❊ ❋ ✻ ❆ ⚛ ✼"], ["星光", "✦ ✧ ★ ☆ ✩ ✪ ✫ ✬ ✭ ✮ ✯ ⋆ ✢ ✣ ⭒ ⭑ ✷ ✸ ✹ ✵"], ["月・天氣", "☾ ☽ ☼ ☀ ☁ ☂ ☃ ❄ ❅ ⛅ ☔ ☄ ⛆"], ["心・愛", "♡ ♥ ❤ ❥ ❦ ❧ ღ ᰔ ♪ ♫ ♬"], ["邊框・裝飾", "𓂃 𓈒 𓏸 ༄ ༅ ˚ ｡ ⋅ ˖ ࣪ ⊹ ᯓ ⌗ ⌇ ୨ ୧ ꒰ ꒱ ⟡ ◌"], ["線條", "── ─ ━ ┄ ┈ ⋯ ⋮ ╰ ╯ ╭ ╮ ▸ ▹ ‣ ⇢ ⇾ →"], ["括號", "「」 『』 〈〉 《》 【】 〔〕 ⦅⦆ ﹙﹚ ⌜⌟ ⌈⌉"], ["其他", "✉ ✂ ☕ ♛ ♕ ✝ ✚ ⚜ ❖ ◈ ◇ ◆ ▫ ▪ ⬩ ♣"]], KAO=[["開心", "(◍•ᴗ•◍)  (｡･ω･｡)  ( ˶ˆ ᵕ ˆ˶ )  ٩(ˊᗜˋ)و  (๑˃ᴗ˂)ﻭ  ヽ(・∀・)ﾉ  (๑>◡<๑)"], ["害羞", "(⁄ ⁄•⁄ω⁄•⁄ ⁄)  (*ﾉωﾉ)  ( ⸝⸝•ᴗ•⸝⸝ )  ///▽///  (๑´ㅁ`๑)"], ["疲累", "(－ω－) zzZ  (´-ω-`)  ( ˘ω˘ )  (ㅅ´ ˘ `)  ⊂(・﹏・⊂)"], ["驚訝", "( ﾟдﾟ)  Σ(°ロ°)  (⊙_⊙)  ( ˙꒳˙ )  (・o・)"], ["哭", "( ; ᴗ ; )  (｡•́︿•̀｡)  ( ˃̣̣̥᷄⌓˂̣̣̥᷅ )  ｡ﾟ(ﾟ´ω`ﾟ)ﾟ｡  (இ﹏இ)"], ["動物", "ʕ•ᴥ•ʔ  =^･ω･^=  (=｀ω´=)  ʕ￫ᴥ￩ʔ  ᓚᘏᗢ  ฅ^•ﻌ•^ฅ  ʕ·ᴥ·ʔ"], ["其他", "(๑•̀ㅂ•́)و✧  ( ･ω･)b  (｡•̀ᴗ-)✧  ( ˙▿˙ )  ٩( ᐛ )و  ∠( ᐛ 」∠)＿"]], FL=[["玫瑰・紅", "#C0392B", "熱烈的愛、尊敬", "愛情、情熱"], ["玫瑰・白", "#F5F1EC", "純潔、我配得上你", "尊敬、我適合你"], ["玫瑰・黃", "#E8C15A", "友情；也有嫉妒的舊義", "嫉妒、減退的愛"], ["玫瑰・藍", "#5B7DB1", "奇蹟、不可能實現的事", "夢想成真"], ["薔薇・粉", "#E3A6B5", "優雅、感謝", "上品、可愛的人"], ["百合", "#F2EDE4", "純潔、莊嚴", "威嚴、純潔"], ["鈴蘭", "#EDF2EA", "幸福再臨", "純潔、幸福再來"], ["櫻花", "#F2D3DA", "短暫之美、生命", "精神美、優美的女性"], ["彼岸花", "#C0392B", "不祥、別離", "悲傷的回憶、再會之日"], ["紫藤", "#9C8AC0", "歡迎、沉醉", "溫柔、決不離去"], ["繡球花", "#8CA8C4", "善變、無情", "家族團聚、耐心"], ["向日葵", "#E8B23A", "崇拜、忠誠", "憧憬、我只看著你"], ["薰衣草", "#B7A8CE", "沉默、鎮靜", "期待、疑心"], ["鈴鐺水仙", "#F0EAD8", "自戀、新的開始", "尊敬、神秘"], ["鬱金香・紅", "#C0392B", "愛的告白", "熱烈的愛"], ["鬱金香・白", "#F4F0E9", "失戀、逝去的愛", "失去的愛"], ["勿忘我", "#7B9BC4", "勿忘我、真實的愛", "真實的愛、回憶"], ["三色堇", "#8B6BA8", "思念、體貼", "我思念你"], ["洋甘菊", "#F0E6CF", "逆境中的力量", "苦難中的力量"], ["山茶花", "#D46A7E", "堅貞、謙遜", "謙遜的美德、了不起的魅力"], ["梅花", "#E0A9B8", "堅忍、高潔", "高潔、忠實"], ["菊花", "#E8D48A", "高貴、真實", "高貴、真愛"], ["桔梗", "#7C6BA8", "永恆的愛、順從", "永遠的愛、清楚"], ["蓮花", "#F0D8DE", "純淨、重生", "清淨、遠離的愛"], ["罌粟", "#D8524C", "安眠、慰藉", "慰藉、想像"], ["鈴蘭水仙", "#EFEFE6", "希望、重生", "希望"], ["滿天星", "#F5F5F0", "純潔的心、感謝", "清淨的心、無邪"], ["紫羅蘭", "#7E6BAF", "永恆的美、謙遜", "誠實、小小的幸福"], ["風信子", "#A08AC4", "運動、遊戲；紫色為悔恨", "悲傷、原諒我"], ["大理花", "#C87B9C", "華麗、不安定", "華麗、移情"], ["木蘭", "#F0E4DC", "高潔、尊嚴", "自然之愛、持續的友情"], ["金魚草", "#E8A15A", "推測、多話", "欺瞞、推測"]];
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function chips(pairs, cls){
+    return pairs.map(function(g){
+      return '<div class="pk-grp"><b>'+esc(g[0])+'</b><div class="pk-row">'
+        + g[1].split(/\s{2,}| /).filter(Boolean).map(function(x){
+            return '<button class="pk-i'+(cls?' '+cls:'')+'" data-p="'+esc(x)+'">'+esc(x)+'</button>';
+          }).join('')
+        + '</div></div>';
+    }).join('');
+  }
+  box.innerHTML =
+    '<div class="pk-sec"><h4>'+"特殊符號"+'</h4><p class="sub">'+"點一下複製。貼在作品說明的開頭或段落之間，畫面會清爽很多。"+'</p>'
+      + chips(SYM) + '</div>'
+    + '<div class="pk-sec"><h4>'+"顏文字"+'</h4><p class="sub">'+"點一下複製。"+'</p>'
+      + chips(KAO, 'kao') + '</div>'
+    + '<div class="pk-sec"><h4>'+"花語"+'</h4><p class="sub">'+"寫作品說明時，一句花語常常比一段解釋更有力。點一下複製「花名：花語」。"+'</p>'
+      + '<div class="pk-fl">'
+      + FL.map(function(f){
+          var both = f[3] && f[3]!==f[2];
+          return '<button class="pk-f" data-p="'+esc(f[0]+'：'+f[2]+(both?'／'+f[3]:''))+'">'
+               + '<span class="sw" style="background:'+esc(f[1])+'"></span>'
+               + '<span><span class="nm">'+esc(f[0])+'</span><br>'
+               + '<span class="mn">'+esc(f[2])+(both?'<br>【和】'+esc(f[3]):'')+'</span></span></button>';
+        }).join('')
+      + '</div><p class="pk-note">'+"西方花語源自維多利亞時代的傳統，日本花言葉（【和】）有些讀法不同——兩者不一致時都列出來，不擅自挑一個。"+'</p></div>';
+
+  box.addEventListener('click', function(e){
+    var t=e.target.closest ? e.target.closest('[data-p]') : null;
+    if(!t) return;
+    __zjkCopy(t.dataset.p,
+      function(){ __zjkFlash(t, "✓", 700); },
+      function(){ __zjkFlash(t, "複製失敗", 1600); });
+  });
+})();
+
 /* ---------- creative workspace ---------- */
 /* The checklist verifies quality after the fact; this records decisions before it. Options are
    given by TYPE, never by in-game item name - "hair piece" is right forever, a list of specific
@@ -1905,8 +2009,18 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
   const panel=document.getElementById("navSelectPanel");
   const backdrop=document.getElementById("navSelectBackdrop");
   if(!nav||!btn||!label||!panel||!backdrop)return;
-  const navBtns=Array.from(nav.querySelectorAll("button[data-tab]"));
-  navBtns.forEach(nb=>{
+  const navBtns=Array.from(nav.children)
+    .filter(node=>node.tagName==="BUTTON" && node.dataset.tab);
+  Array.from(nav.children).forEach(node=>{
+    if(node.classList && node.classList.contains("navgrp")){
+      const h=document.createElement("div");
+      h.className="nav-select-head";
+      h.textContent=node.textContent;
+      panel.appendChild(h);
+      return;
+    }
+    if(node.tagName!=="BUTTON" || !node.dataset.tab) return;
+    const nb=node;
     const opt=document.createElement("div");
     opt.className="nav-select-opt"+(nb.classList.contains("on")?" on":"");
     opt.setAttribute("role","option");

@@ -58,7 +58,7 @@ nav{display:flex;gap:8px;margin:22px -16px 18px;padding:10px 16px;position:stick
 }
 nav::-webkit-scrollbar{display:none}
 nav button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;cursor:pointer;transition:.2s;white-space:nowrap}
-nav button.on{background:var(--ink);border-color:var(--ink);color:#fff}.navlang{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;text-decoration:none;border:1.5px solid var(--violet);background:var(--panel);color:var(--violet);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap;transition:.2s}.navlang:hover,.navlang:focus-visible{background:var(--violet);color:#fff}.navlang:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
+nav .navgrp{flex:0 0 auto;display:flex;align-items:center;padding:0 4px 0 10px;font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;white-space:nowrap;opacity:.75}nav .navgrp:first-child{padding-left:0}nav .navgrp::after{content:'';display:block;width:1px;height:15px;margin-left:10px;background:var(--line)}.nav-select-head{padding:11px 16px 5px;font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--violet);text-transform:uppercase;pointer-events:none}.nav-select-head:first-child{padding-top:6px}nav button.on{background:var(--ink);border-color:var(--ink);color:#fff}.navlang{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;text-decoration:none;border:1.5px solid var(--violet);background:var(--panel);color:var(--violet);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap;transition:.2s}.navlang:hover,.navlang:focus-visible{background:var(--violet);color:#fff}.navlang:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
 nav button:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
 section{display:none}
 section.show{display:block;animation:fade .25s ease}
@@ -327,7 +327,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .chk-gauge-good{position:absolute;top:0;height:100%;background:rgba(61,142,138,.32);border-radius:4px}
 .chk-gauge-pt{position:absolute;top:-3px;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.18);transform:translateX(-50%)}
 .v-ok .chk-gauge-pt{background:var(--teal)} .v-warn .chk-gauge-pt{background:var(--gold)} .v-bad .chk-gauge-pt{background:#C0554E} .v-info .chk-gauge-pt{background:var(--violet)}
-.chk-v2-section{margin-top:18px;padding-top:4px}.dc-wrap{padding:14px 15px;border-radius:14px;margin:0 0 15px;background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft))}.dc-wrap>b{display:block;font-size:13.5px;color:var(--ink);font-weight:800;margin:0 0 4px}.dc-wrap>.sub{font-size:11.5px;color:var(--ink-soft);line-height:1.7;margin:0 0 11px}.dc-q{margin:0 0 9px}.dc-q>span{display:block;font-size:12.5px;font-weight:700;color:var(--ink);margin:0 0 5px}.dc-q .row{display:flex;gap:7px}.dc-a{flex:1;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:8px 6px;border-radius:10px;cursor:pointer;transition:.13s}.dc-a:hover{border-color:var(--violet)}.dc-a.on{background:var(--violet);border-color:var(--violet);color:#fff}.dc-out{margin:11px 0 0;padding:12px 14px;border-radius:12px;background:var(--panel);display:none}.dc-out.show{display:block}.dc-out h5{margin:0 0 6px;font-size:15px;color:var(--violet);font-weight:800}.dc-out p{margin:0 0 9px;font-size:12.5px;color:var(--ink-soft);line-height:1.75}.dc-apply{border:none;background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;font-family:inherit;font-weight:800;font-size:12.5px;padding:8px 18px;border-radius:999px;cursor:pointer}.ws-step{border:1.5px solid var(--line);border-radius:13px;margin:0 0 9px;overflow:hidden;background:var(--panel);transition:.15s}.ws-step.active{border-color:var(--violet);box-shadow:0 2px 10px rgba(138,95,192,.13)}.ws-step.filled{border-color:var(--violet)}.ws-head{display:flex;align-items:center;gap:9px;padding:11px 13px;cursor:pointer;user-select:none}.ws-num{flex:0 0 auto;width:23px;height:23px;border-radius:50%;background:var(--line);color:var(--ink-soft);font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center}.ws-step.filled .ws-num{background:var(--violet);color:#fff}.ws-head .lbl{flex:1;font-weight:800;font-size:13.5px;color:var(--ink);min-width:0}.ws-head .val{font-size:12.5px;color:var(--violet);font-weight:700;text-align:right;max-width:52%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ws-body{display:none;padding:0 13px 13px;border-top:1px solid var(--line)}.ws-step.active .ws-body{display:block}.ws-hint{font-size:11.5px;color:var(--ink-soft);line-height:1.7;margin:9px 0 9px}.ws-opts{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 9px}.ws-opt{border:1.5px solid var(--line);background:var(--bg);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12px;padding:6px 12px;border-radius:999px;cursor:pointer;transition:.12s}.ws-opt:hover{border-color:var(--violet);color:var(--violet)}.ws-opt.on{background:var(--violet);border-color:var(--violet);color:#fff}.ws-in{width:100%;padding:8px 11px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:13px;color:var(--ink);background:var(--bg)}.ws-roll{border:1.5px solid var(--violet);background:transparent;color:var(--violet);font-family:inherit;font-weight:700;font-size:11.5px;padding:5px 12px;border-radius:999px;cursor:pointer;margin:0 0 9px}.ws-card{margin:16px 0 0;padding:16px 17px;border-radius:15px;background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));display:none}.ws-card.show{display:block}.ws-card h4{margin:0 0 11px;font-size:15px;color:var(--ink);font-weight:800}.ws-card dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:7px 12px}.ws-card dt{font-size:11.5px;font-weight:800;color:var(--violet);white-space:nowrap;padding-top:2px}.ws-card dd{margin:0;font-size:13px;line-height:1.6;color:var(--ink);min-width:0;overflow-wrap:anywhere}.ws-bar{display:flex;gap:9px;align-items:center;margin:0 0 13px}.ws-bar .tk{flex:1;height:7px;border-radius:999px;background:var(--line);overflow:hidden}.ws-bar .tk i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--violet),var(--rose));transition:width .25s}.ws-bar b{font-size:12px;font-weight:800;color:var(--ink);white-space:nowrap}.ws-acts{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0 0}.ws-btn{border:none;background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;font-family:inherit;font-weight:800;font-size:13px;padding:9px 20px;border-radius:999px;cursor:pointer}.ws-btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink-soft);font-weight:700}.ws-btn.ghost:hover{border-color:var(--violet);color:var(--violet)}.nt-row{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 12px}.nt-chip{border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:6px 13px;border-radius:999px;cursor:pointer;transition:.15s}.nt-chip.on{background:var(--violet);border-color:var(--violet);color:#fff}.nt-chip:hover{border-color:var(--violet)}.nt-go{border:none;background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;font-family:inherit;font-weight:800;font-size:14px;padding:11px 26px;border-radius:999px;cursor:pointer;box-shadow:0 3px 10px rgba(138,95,192,.28)}.nt-go:active{transform:translateY(1px)}.nt-out{margin:14px 0 0}.nt-title{display:flex;align-items:center;gap:9px;padding:10px 13px;margin:0 0 7px;border:1.5px solid var(--line);border-radius:11px;background:var(--panel);transition:.15s}.nt-title:hover{border-color:var(--violet)}.nt-title b{flex:1;font-size:15px;color:var(--ink);font-weight:800;min-width:0;word-break:break-word}.nt-title small{color:var(--ink-soft);font-size:11px;white-space:nowrap}.nt-copy{border:1.5px solid var(--line);background:transparent;color:var(--ink-soft);font-family:inherit;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;cursor:pointer;flex:0 0 auto}.nt-copy:hover{border-color:var(--violet);color:var(--violet)}.nt-tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}.nt-tag{font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;background:var(--violet-soft);color:var(--violet);cursor:pointer;border:1.5px solid transparent}.nt-tag:hover{border-color:var(--violet)}.nt-season{padding:12px 14px;border-radius:12px;margin:0 0 14px;background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft))}.nt-season b{display:block;font-size:13.5px;color:var(--ink);margin:0 0 5px}.nt-note{font-size:11.5px;color:var(--ink-soft);margin:9px 0 0;line-height:1.7}.lazy-wait{padding:40px 16px;text-align:center;color:var(--ink-soft);font-size:13px}.lazy-wait .dot{display:inline-block;width:7px;height:7px;margin:0 3px;border-radius:50%;background:var(--violet);opacity:.35;animation:lzb 1.1s infinite}.lazy-wait .dot:nth-child(2){animation-delay:.15s}.lazy-wait .dot:nth-child(3){animation-delay:.3s}@keyframes lzb{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}.lazy-fail{padding:26px 18px;text-align:center;color:var(--ink);font-size:13px;line-height:1.9}.lazy-fail code{background:var(--violet-soft);padding:2px 6px;border-radius:5px;font-size:12px}.fl-phase{margin:0 0 14px}.fl-phase>b{display:block;font-size:11px;letter-spacing:.12em;color:var(--violet);font-weight:800;margin:0 0 8px}.fl-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;margin:0 0 7px;border:1.5px solid var(--line);border-radius:12px;background:var(--panel);transition:.15s}.fl-item.done{border-color:var(--violet);background:var(--violet-soft)}.fl-item input{margin:3px 0 0;flex:0 0 auto;width:17px;height:17px;accent-color:var(--violet);cursor:pointer}.fl-item .fl-body{min-width:0;flex:1}.fl-item .fl-t{font-weight:800;font-size:13.5px;color:var(--ink);line-height:1.5}.fl-item.done .fl-t{text-decoration:line-through;text-decoration-color:var(--violet);opacity:.72}.fl-item .fl-d{font-size:12px;color:var(--ink-soft);line-height:1.7;margin:3px 0 0}.fl-item .fl-chk{font-size:11.5px;color:var(--violet);line-height:1.65;margin:4px 0 0;font-weight:700}.fl-item a{color:var(--violet);font-weight:700;text-decoration:none;border-bottom:1px solid var(--line)}.fl-bar{display:flex;align-items:center;gap:10px;margin:0 0 14px}.fl-bar .track{flex:1;height:8px;border-radius:999px;background:var(--line);overflow:hidden}.fl-bar .track i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--violet),var(--rose));transition:width .25s}.fl-bar b{font-size:12.5px;color:var(--ink);font-weight:800;white-space:nowrap}.fl-reset{border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12px;padding:6px 13px;border-radius:999px;cursor:pointer}.fl-reset:hover{border-color:var(--violet);color:var(--violet)}.fl-done-note{margin:12px 0 0;padding:12px 14px;border-radius:12px;background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));font-size:13px;line-height:1.75;color:var(--ink);display:none}.fl-done-note.show{display:block}.buildtag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--violet-soft);color:var(--violet);font-size:10.5px;font-weight:800;letter-spacing:.06em;vertical-align:middle;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.cpall{margin:10px 0 2px}.cpall h4{margin:0 0 6px;font-size:12px;font-weight:800;color:var(--ink);letter-spacing:.04em}.cpall .note{margin:0 0 10px;font-size:11.5px;color:var(--ink-soft);line-height:1.65}.cpall .grp{margin:0 0 9px}.cpall .grp>b{display:block;font-size:10.5px;color:var(--ink-soft);font-weight:800;letter-spacing:.1em;margin:0 0 5px}.cpall .row{display:flex;flex-wrap:wrap;gap:5px}.cpall a{display:inline-flex;align-items:baseline;gap:4px;text-decoration:none;font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);transition:.15s}.cpall a.hit{border-color:var(--violet);background:var(--violet-soft);color:var(--ink)}.cpall a.hit i{font-style:normal;font-weight:800;color:var(--violet);font-size:10.5px}.cpall a:focus-visible{outline:3px solid var(--violet);outline-offset:2px}.cm-fix{margin:6px 0 0;padding-left:1.75em}.cm-fix>li{margin:7px 0;line-height:1.7;padding-left:2px}.cm-fix>li::marker{color:var(--rose);font-weight:800}.cm-keep,.cm-body ul{padding-left:1.35em}.chk-brief{background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin:0 0 14px}.chk-dna{background:linear-gradient(135deg,var(--violet-soft),#EAF3FF)}.chg-entry{border-top:1px dashed var(--line);padding-top:12px;margin-top:12px}.chg-ver{font-weight:800;font-size:14px;color:var(--ink)}.chg-build{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--violet);background:var(--violet-soft);padding:2px 8px;border-radius:999px;margin-left:6px}.chk-brief h4{margin:0 0 8px;font-size:13px;letter-spacing:.08em;color:var(--ink-soft);font-weight:800}.chk-brief .band{font-size:16px;font-weight:800;color:var(--ink);line-height:1.55;margin:0 0 10px;word-break:break-word}.chk-brief dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:start}.chk-brief dt{font-size:11.5px;font-weight:800;color:var(--rose);white-space:nowrap;padding-top:2px}.chk-brief dd{margin:0;font-size:13.5px;line-height:1.65;color:var(--ink);min-width:0;overflow-wrap:anywhere}.chk-brief .hint{margin:10px 0 0;font-size:11.5px;color:var(--ink-soft)}.rep-seg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 12px;padding-bottom:2px}.rep-seg::-webkit-scrollbar{display:none}.rep-seg button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:999px;cursor:pointer}.rep-seg button.on{background:var(--ink);border-color:var(--ink);color:#fff}.rept{display:none}.rept.show{display:block}.gname{display:block;font-size:.55em;letter-spacing:.16em;font-weight:800;color:var(--ink-soft);margin:0 0 2px;text-transform:uppercase}.chk-v2-section>h3{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.chk-v2-section .tag{font-size:11px}
+.chk-v2-section{margin-top:18px;padding-top:4px}.pk-sec{margin:20px 0 0;padding-top:16px;border-top:1.5px dashed var(--line)}.pk-sec>h4{margin:0 0 4px;font-size:14px;font-weight:800;color:var(--ink)}.pk-sec>.sub{margin:0 0 11px;font-size:11.5px;color:var(--ink-soft);line-height:1.7}.pk-grp{margin:0 0 10px}.pk-grp>b{display:block;font-size:11px;font-weight:800;color:var(--violet);letter-spacing:.08em;margin:0 0 5px}.pk-row{display:flex;flex-wrap:wrap;gap:5px}.pk-i{border:1.5px solid var(--line);background:var(--panel);color:var(--ink);font-family:inherit;font-size:14px;line-height:1.5;padding:5px 10px;border-radius:9px;cursor:pointer;transition:.12s;min-width:34px;text-align:center}.pk-i:hover{border-color:var(--violet);background:var(--violet-soft)}.pk-i.kao{font-size:12.5px;min-width:auto}.pk-fl{display:flex;flex-wrap:wrap;gap:6px}.pk-f{display:flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--panel);border-radius:11px;padding:7px 11px;cursor:pointer;transition:.12s}.pk-f:hover{border-color:var(--violet)}.pk-f .sw{width:15px;height:15px;border-radius:50%;flex:0 0 auto;border:1px solid rgba(0,0,0,.08)}.pk-f .nm{font-size:12.5px;font-weight:700;color:var(--ink)}.pk-f .mn{font-size:11px;color:var(--ink-soft)}.pk-note{margin:9px 0 0;font-size:11px;color:var(--ink-soft);line-height:1.7}.dc-wrap{padding:14px 15px;border-radius:14px;margin:0 0 15px;background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft))}.dc-wrap>b{display:block;font-size:13.5px;color:var(--ink);font-weight:800;margin:0 0 4px}.dc-wrap>.sub{font-size:11.5px;color:var(--ink-soft);line-height:1.7;margin:0 0 11px}.dc-q{margin:0 0 9px}.dc-q>span{display:block;font-size:12.5px;font-weight:700;color:var(--ink);margin:0 0 5px}.dc-q .row{display:flex;gap:7px}.dc-a{flex:1;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:8px 6px;border-radius:10px;cursor:pointer;transition:.13s}.dc-a:hover{border-color:var(--violet)}.dc-a.on{background:var(--violet);border-color:var(--violet);color:#fff}.dc-out{margin:11px 0 0;padding:12px 14px;border-radius:12px;background:var(--panel);display:none}.dc-out.show{display:block}.dc-out h5{margin:0 0 6px;font-size:15px;color:var(--violet);font-weight:800}.dc-out p{margin:0 0 9px;font-size:12.5px;color:var(--ink-soft);line-height:1.75}.dc-apply{border:none;background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;font-family:inherit;font-weight:800;font-size:12.5px;padding:8px 18px;border-radius:999px;cursor:pointer}.ws-step{border:1.5px solid var(--line);border-radius:13px;margin:0 0 9px;overflow:hidden;background:var(--panel);transition:.15s}.ws-step.active{border-color:var(--violet);box-shadow:0 2px 10px rgba(138,95,192,.13)}.ws-step.filled{border-color:var(--violet)}.ws-head{display:flex;align-items:center;gap:9px;padding:11px 13px;cursor:pointer;user-select:none}.ws-num{flex:0 0 auto;width:23px;height:23px;border-radius:50%;background:var(--line);color:var(--ink-soft);font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center}.ws-step.filled .ws-num{background:var(--violet);color:#fff}.ws-head .lbl{flex:1;font-weight:800;font-size:13.5px;color:var(--ink);min-width:0}.ws-head .val{font-size:12.5px;color:var(--violet);font-weight:700;text-align:right;max-width:52%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ws-body{display:none;padding:0 13px 13px;border-top:1px solid var(--line)}.ws-step.active .ws-body{display:block}.ws-hint{font-size:11.5px;color:var(--ink-soft);line-height:1.7;margin:9px 0 9px}.ws-opts{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 9px}.ws-opt{border:1.5px solid var(--line);background:var(--bg);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12px;padding:6px 12px;border-radius:999px;cursor:pointer;transition:.12s}.ws-opt:hover{border-color:var(--violet);color:var(--violet)}.ws-opt.on{background:var(--violet);border-color:var(--violet);color:#fff}.ws-in{width:100%;padding:8px 11px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:13px;color:var(--ink);background:var(--bg)}.ws-roll{border:1.5px solid var(--violet);background:transparent;color:var(--violet);font-family:inherit;font-weight:700;font-size:11.5px;padding:5px 12px;border-radius:999px;cursor:pointer;margin:0 0 9px}.ws-card{margin:16px 0 0;padding:16px 17px;border-radius:15px;background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));display:none}.ws-card.show{display:block}.ws-card h4{margin:0 0 11px;font-size:15px;color:var(--ink);font-weight:800}.ws-card dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:7px 12px}.ws-card dt{font-size:11.5px;font-weight:800;color:var(--violet);white-space:nowrap;padding-top:2px}.ws-card dd{margin:0;font-size:13px;line-height:1.6;color:var(--ink);min-width:0;overflow-wrap:anywhere}.ws-bar{display:flex;gap:9px;align-items:center;margin:0 0 13px}.ws-bar .tk{flex:1;height:7px;border-radius:999px;background:var(--line);overflow:hidden}.ws-bar .tk i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--violet),var(--rose));transition:width .25s}.ws-bar b{font-size:12px;font-weight:800;color:var(--ink);white-space:nowrap}.ws-acts{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0 0}.ws-btn{border:none;background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;font-family:inherit;font-weight:800;font-size:13px;padding:9px 20px;border-radius:999px;cursor:pointer}.ws-btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink-soft);font-weight:700}.ws-btn.ghost:hover{border-color:var(--violet);color:var(--violet)}.nt-row{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 12px}.nt-chip{border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:6px 13px;border-radius:999px;cursor:pointer;transition:.15s}.nt-chip.on{background:var(--violet);border-color:var(--violet);color:#fff}.nt-chip:hover{border-color:var(--violet)}.nt-go{border:none;background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;font-family:inherit;font-weight:800;font-size:14px;padding:11px 26px;border-radius:999px;cursor:pointer;box-shadow:0 3px 10px rgba(138,95,192,.28)}.nt-go:active{transform:translateY(1px)}.nt-out{margin:14px 0 0}.nt-title{display:flex;align-items:center;gap:9px;padding:10px 13px;margin:0 0 7px;border:1.5px solid var(--line);border-radius:11px;background:var(--panel);transition:.15s}.nt-title:hover{border-color:var(--violet)}.nt-title b{flex:1;font-size:15px;color:var(--ink);font-weight:800;min-width:0;word-break:break-word}.nt-title small{color:var(--ink-soft);font-size:11px;white-space:nowrap}.nt-copy{border:1.5px solid var(--line);background:transparent;color:var(--ink-soft);font-family:inherit;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;cursor:pointer;flex:0 0 auto}.nt-copy:hover{border-color:var(--violet);color:var(--violet)}.nt-tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}.nt-tag{font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;background:var(--violet-soft);color:var(--violet);cursor:pointer;border:1.5px solid transparent}.nt-tag:hover{border-color:var(--violet)}.nt-season{padding:12px 14px;border-radius:12px;margin:0 0 14px;background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft))}.nt-season b{display:block;font-size:13.5px;color:var(--ink);margin:0 0 5px}.nt-note{font-size:11.5px;color:var(--ink-soft);margin:9px 0 0;line-height:1.7}.lazy-wait{padding:40px 16px;text-align:center;color:var(--ink-soft);font-size:13px}.lazy-wait .dot{display:inline-block;width:7px;height:7px;margin:0 3px;border-radius:50%;background:var(--violet);opacity:.35;animation:lzb 1.1s infinite}.lazy-wait .dot:nth-child(2){animation-delay:.15s}.lazy-wait .dot:nth-child(3){animation-delay:.3s}@keyframes lzb{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}.lazy-fail{padding:26px 18px;text-align:center;color:var(--ink);font-size:13px;line-height:1.9}.lazy-fail code{background:var(--violet-soft);padding:2px 6px;border-radius:5px;font-size:12px}.fl-phase{margin:0 0 14px}.fl-phase>b{display:block;font-size:11px;letter-spacing:.12em;color:var(--violet);font-weight:800;margin:0 0 8px}.fl-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;margin:0 0 7px;border:1.5px solid var(--line);border-radius:12px;background:var(--panel);transition:.15s}.fl-item.done{border-color:var(--violet);background:var(--violet-soft)}.fl-item input{margin:3px 0 0;flex:0 0 auto;width:17px;height:17px;accent-color:var(--violet);cursor:pointer}.fl-item .fl-body{min-width:0;flex:1}.fl-item .fl-t{font-weight:800;font-size:13.5px;color:var(--ink);line-height:1.5}.fl-item.done .fl-t{text-decoration:line-through;text-decoration-color:var(--violet);opacity:.72}.fl-item .fl-d{font-size:12px;color:var(--ink-soft);line-height:1.7;margin:3px 0 0}.fl-item .fl-chk{font-size:11.5px;color:var(--violet);line-height:1.65;margin:4px 0 0;font-weight:700}.fl-item a{color:var(--violet);font-weight:700;text-decoration:none;border-bottom:1px solid var(--line)}.fl-bar{display:flex;align-items:center;gap:10px;margin:0 0 14px}.fl-bar .track{flex:1;height:8px;border-radius:999px;background:var(--line);overflow:hidden}.fl-bar .track i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--violet),var(--rose));transition:width .25s}.fl-bar b{font-size:12.5px;color:var(--ink);font-weight:800;white-space:nowrap}.fl-reset{border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12px;padding:6px 13px;border-radius:999px;cursor:pointer}.fl-reset:hover{border-color:var(--violet);color:var(--violet)}.fl-done-note{margin:12px 0 0;padding:12px 14px;border-radius:12px;background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));font-size:13px;line-height:1.75;color:var(--ink);display:none}.fl-done-note.show{display:block}.buildtag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--violet-soft);color:var(--violet);font-size:10.5px;font-weight:800;letter-spacing:.06em;vertical-align:middle;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.cpall{margin:10px 0 2px}.cpall h4{margin:0 0 6px;font-size:12px;font-weight:800;color:var(--ink);letter-spacing:.04em}.cpall .note{margin:0 0 10px;font-size:11.5px;color:var(--ink-soft);line-height:1.65}.cpall .grp{margin:0 0 9px}.cpall .grp>b{display:block;font-size:10.5px;color:var(--ink-soft);font-weight:800;letter-spacing:.1em;margin:0 0 5px}.cpall .row{display:flex;flex-wrap:wrap;gap:5px}.cpall a{display:inline-flex;align-items:baseline;gap:4px;text-decoration:none;font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);transition:.15s}.cpall a.hit{border-color:var(--violet);background:var(--violet-soft);color:var(--ink)}.cpall a.hit i{font-style:normal;font-weight:800;color:var(--violet);font-size:10.5px}.cpall a:focus-visible{outline:3px solid var(--violet);outline-offset:2px}.cm-fix{margin:6px 0 0;padding-left:1.75em}.cm-fix>li{margin:7px 0;line-height:1.7;padding-left:2px}.cm-fix>li::marker{color:var(--rose);font-weight:800}.cm-keep,.cm-body ul{padding-left:1.35em}.chk-brief{background:linear-gradient(135deg,var(--rose-soft),var(--violet-soft));border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin:0 0 14px}.chk-dna{background:linear-gradient(135deg,var(--violet-soft),#EAF3FF)}.chg-entry{border-top:1px dashed var(--line);padding-top:12px;margin-top:12px}.chg-ver{font-weight:800;font-size:14px;color:var(--ink)}.chg-build{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--violet);background:var(--violet-soft);padding:2px 8px;border-radius:999px;margin-left:6px}.chk-brief h4{margin:0 0 8px;font-size:13px;letter-spacing:.08em;color:var(--ink-soft);font-weight:800}.chk-brief .band{font-size:16px;font-weight:800;color:var(--ink);line-height:1.55;margin:0 0 10px;word-break:break-word}.chk-brief dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:start}.chk-brief dt{font-size:11.5px;font-weight:800;color:var(--rose);white-space:nowrap;padding-top:2px}.chk-brief dd{margin:0;font-size:13.5px;line-height:1.65;color:var(--ink);min-width:0;overflow-wrap:anywhere}.chk-brief .hint{margin:10px 0 0;font-size:11.5px;color:var(--ink-soft)}.rep-seg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 12px;padding-bottom:2px}.rep-seg::-webkit-scrollbar{display:none}.rep-seg button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:999px;cursor:pointer}.rep-seg button.on{background:var(--ink);border-color:var(--ink);color:#fff}.rept{display:none}.rept.show{display:block}.gname{display:block;font-size:.55em;letter-spacing:.16em;font-weight:800;color:var(--ink-soft);margin:0 0 2px;text-transform:uppercase}.chk-v2-section>h3{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.chk-v2-section .tag{font-size:11px}
 
 /* ---------- 作品健檢 V2 additions ---------- */
 .chk-types{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 12px}
@@ -390,24 +390,30 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <div class="nav-select-panel" id="navSelectPanel" role="listbox" aria-label="Quick jump to section"></div>
 </div>
 <nav aria-label="Tabs">
+  <span class="navgrp">Trading</span>
   <button class="on" data-tab="calc">Quick Calc</button>
   <button data-tab="ratio">Trade Ratios</button>
-  <button data-tab="trade">Trade Smarts</button>
-  <button data-tab="brand">BRAND Dyeing</button>
-  <button data-tab="branddata">Brand data</button>
-  <button data-tab="lore">Trivia</button>
-  <button data-tab="aes">Aesthetics</button>
-  <button data-tab="check">Art check</button>
-  <button data-tab="workspace">Workspace</button>
-  <button data-tab="flow">Workflow</button>
-  <button data-tab="naming">Naming</button>
-  <button data-tab="charcheck">Character generator</button>
-  <button data-tab="colorinspire">Color Inspire</button>
+  <button data-tab="market">Rainbow Market</button>
+  <span class="navgrp">Spending</span>
   <button data-tab="pull">Pull Costs</button>
   <button data-tab="vip">Top-up & VIP</button>
-  <button data-tab="market">Rainbow Market</button>
+  <span class="navgrp">Reference</span>
+  <button data-tab="brand">BRAND Dyeing</button>
+  <button data-tab="branddata">Brand data</button>
+  <button data-tab="trade">Trade Smarts</button>
   <button data-tab="sched">Schedule</button>
+  <span class="navgrp">Create</span>
+  <button data-tab="check">Art check</button>
+  <button data-tab="workspace">Workspace</button>
+  <button data-tab="colorinspire">Color Inspire</button>
+  <button data-tab="naming">Naming</button>
+  <button data-tab="charcheck">Character generator</button>
+  <button data-tab="flow">Workflow</button>
+  <span class="navgrp">Learn</span>
+  <button data-tab="aes">Aesthetics</button>
+  <button data-tab="lore">Trivia</button>
   <button data-tab="qa">Q&amp;A</button>
+  <span class="navgrp">About</span>
   <button data-tab="feedback">Feedback</button>
   <button data-tab="notes">Notes</button>
   <button data-tab="changelog">Changelog</button>
@@ -863,6 +869,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 <section id="naming">
   <div class="card">
     <h3>Naming and tags <span class="tag ok">the piece is done - now what</span></h3><p class="cond" style="margin:2px 0 12px">Naming a piece and picking tags often takes longer than making it. The vocabulary and the seasonal calendar here are fixed, so nothing goes stale and nobody has to maintain it — which is also why there is <b>no "trending tags"</b>: that would need a server watching everyone's posts.</p><div class="nt-season" id="ntSeason"></div><p class="chk-opts-head">1. Keywords for this piece (leave blank for random):</p><input type="text" id="ntKw" placeholder="e.g. moonlight, alone, blue, rose..." style="width:100%;margin:0 0 12px;padding:9px 12px;border:1.5px solid var(--line);border-radius:11px;font-family:inherit;font-size:13.5px;color:var(--ink);background:var(--panel)"><p class="chk-opts-head">2. Which register:</p><div class="nt-row" id="ntStyle"><button class="nt-chip on" type="button" data-s="poetic">Poetic</button><button class="nt-chip" type="button" data-s="jp">JP style</button><button class="nt-chip" type="button" data-s="en">English</button><button class="nt-chip" type="button" data-s="cute">Cute</button><button class="nt-chip" type="button" data-s="dark">Dark</button></div><button class="nt-go" id="ntGo" type="button">🎲 Generate titles</button><div class="nt-out" id="ntOut"></div><p class="chk-opts-head" style="margin-top:18px">3. Suggested tags (tap to copy):</p><div id="ntTags"></div>
+    <div id="pkBox"></div>
   </div>
 </section>
 
@@ -1303,21 +1310,72 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>Changelog <span class="tag ok">actively maintained</span></h3>
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.2.2 <span class="chg-build">BRAND forecast table back to full names + real horizontal scroll</span></div>
-      <p class="cond" style="margin:8px 0 4px"><b>Fixed</b></p>
+      <div class="chg-ver">Version 5.3.0 <span class="chg-build">current - copy buttons claimed false success; much larger word pools</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Fixed: "Copied" appeared even when the copy had failed</b></p>
       <ul class="tips">
-        <li>The brand column in the BRAND basket forecast table is back to <b>full brand names</b> (Deux #16, melem #5…) instead of short codes. The previous fix squeezed columns into fixed percentage widths, which is what forced the short codes in the first place; this version gives the table its own minimum width (800px) so on narrow screens the <b>whole table scrolls left/right</b> instead of sacrificing readability. The code legend above the table is now a swipe hint instead.</li>
+        <li>Following the <code>data-c</code> collision fixed last version, all three copy features were audited. The character generator was correct; the <b>title generator</b> and the <b>workspace plan card</b> were not - errors swallowed by an empty <code>catch</code>, the confirmation sitting <b>outside</b> <code>then()</code> so it showed regardless of the result, and no fallback at all.</li>
+        <li><code>navigator.clipboard</code> only exists in a secure context, so anyone opening the file straight off disk lost copying entirely while the page kept reporting success. All three now share one helper: use the API where present, fall back to <code>execCommand</code> otherwise (including the <code>setSelectionRange</code> iOS needs), and say "copy failed" plainly when both routes fail. <b>The confirmation only appears once the write has resolved.</b></li>
+        <li>Also fixed: clicking a copy button twice quickly recorded "Copied" as the button's original label, so the text never went back.</li>
       </ul>
-      <p class="fine">Tested at a 390px-wide mobile viewport — full brand names no longer overlap, and the table scrolls to show everything.</p>
+      <p class="cond" style="margin:12px 0 4px"><b>Expanded: every random pool</b></p>
+      <ul class="tips">
+        <li>Palettes 17→<b>45</b>, themes 30→<b>58</b>, character traits 30→<b>70</b>, motifs 20→<b>80</b>, moods 8→<b>28</b>, title templates 47→<b>519</b>, backgrounds 10→32, accessory types 10→30, framings 7→19.</li>
+        <li>A player reported the palette dice always landing on vivid schemes while the game's wardrobe is mostly muted. Measured: only one of seventeen palettes averaged under 30% saturation, and every palette was equally likely. After adding muted palettes and weighting the draw, <b>muted rose from 6% of rolls to 50%</b> and vivid fell from 18% to 2%.</li>
+        <li>When twenty more were added later the weight table was <b>recomputed in full</b> - the easy mistake at that scale is letting the muted proportion quietly drift back.</li>
+        <li>The forty new traits describe behaviour rather than personality labels, which is more use when writing an OC.</li>
+      </ul>
+      <p class="fine">Build verification added: all 58 themes point at palettes that exist - a wrong reference would not break the page, it would silently show no swatches. Eleven clipboard tests cover insecure contexts, denied permission, both fallbacks failing, and double clicks.</p>
     </div>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.2.3 <span class="chg-build">current · Trivia "Common" tab not opening, accidental copy</span></div>
+      <div class="chg-ver">Version 5.2.9 <span class="chg-build">Title generator: keyword matching and repetition</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Fixed</b></p>
+      <ul class="tips">
+        <li>Typing "beach" returned "sugar". Not a mis-read - the word was not in the table, and an unrecognised keyword fell through to a random pick. Of twenty ordinary words tested, eighteen were unrecognised. The real problem was not pool size but silently substituting something else, so <b>an unknown keyword is now used literally</b>.</li>
+        <li>Results felt repetitive for two reasons: all six titles shared one motif, and no record was kept of templates already used. Now the motif varies line by line and the last thirty templates are skipped - eight consecutive rolls produced 48 titles in <b>47 distinct shapes</b>.</li>
+        <li>Tags padded themselves with an unrelated motif; searching "beach" produced <code>#Piano</code>. They now follow the keyword.</li>
+        <li>Also fixed a problem that only appeared once motifs grew from 20 to 80: matching scanned the table in order and took the first hit, so the single character 光 intercepted 月光. Longest match wins now. The bug was intermittent - two failures in five runs.</li>
+      </ul>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.2.8 <span class="chg-build">New: decision helper, workspace, naming, workflow checklist</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Added</b></p>
+      <ul class="tips">
+        <li><b>Decision helper</b> (at the top of the workspace): four either/or questions - figure or scene, light or dark, cute or grown-up, warm or cool - fill the seven workspace fields in about ten seconds. Each of the sixteen combinations maps to a <b>hand-written direction</b> rather than four independent dice, so results never collide the way "cute x ruins x cool" would. Every one carries a note specific to that combination.</li>
+        <li><b>Workspace</b>: subject, mood, palette, background, framing, accessories, title. No fixed order; four filled fields produce a copyable plan card. Options are given by type, never by in-game item name - items go stale with each update, categories do not.</li>
+        <li><b>Naming and tags</b>: five registers, with tags drawn from the keyword and the current month. <b>No "trending tags"</b> - that needs a server watching everyone's posts, and an unmaintained "trending" list is worse than none.</li>
+        <li><b>Workflow checklist</b>: ten items across before / during / before posting. Each maps to something the artwork check actually measures, so the advice and the later verdict are <b>one standard stated twice</b>.</li>
+      </ul>
+      <p class="fine">Build verification added: every feature declares both its markup and the code that drives it, and the build fails if either is missing. Twice a feature's JavaScript had been deleted while its interface remained - the page looked fine and the buttons simply did nothing.</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.2.7 <span class="chg-build">First load halved; two invisible bugs</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Performance</b></p>
+      <ul class="tips">
+        <li>The aesthetics column templates (246 KB) plus the trivia, brand-data and feedback tabs (129 KB) moved to an external file, <b>loaded the first time one of those tabs is opened</b>. First load 783 KB to 414 KB, transferred (gzip) 250 KB to 143 KB, DOM elements 2,823 to 1,460.</li>
+        <li>Loaded with a <code>&lt;script&gt;</code> tag rather than <code>fetch</code>, because <code>fetch</code> is blocked under <code>file://</code> - opening index.html straight off disk would otherwise show a broken column.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Fixed</b></p>
+      <ul class="tips">
+        <li>Three diagrams in the aesthetics column drew their arrowheads in the wrong colour: each defined <code>&lt;marker id="a2"&gt;</code>, but <code>url(#a2)</code> resolves document-wide to the <b>first</b> one. All 275 SVGs now reference only their own definitions.</li>
+        <li>Removed 13.5 KB of dead code: the AI vision assist interface had been taken out but its implementation remained, including <code>api.anthropic.com</code> - which reasonably suggested the site sends artwork to a third party. It does not, and now it does not look like it might.</li>
+      </ul>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.2.3 <span class="chg-build">Trivia "Common" tab not opening, accidental copy</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>Fixed</b></p>
       <ul class="tips">
         <li>Found why the Trivia page's "Common" sub-tab (Naming & language / Allusions / Stories) wouldn't open and popped up "Copied" instead: those buttons used the attribute name <code>data-c</code>, which collided with the same attribute name used by the "tap to copy" feature in the Naming & Tags tool — a page-wide copy listener was grabbing them too, regardless of context. Quick Calc's tab buttons use the same attribute name and were being caught the same way.</li>
         <li>Two-part fix: ① the copy listener now only fires inside the Naming & Tags tool's own container, not anywhere else on the page; ② the Trivia "Common" sub-tab was renamed to <code>data-v</code>, matching its sibling tabs, removing the name collision at the source.</li>
       </ul>
       <p class="fine">Both language versions (including content-zh.js / content-en.js) were updated and syntax-checked.</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.2.2 <span class="chg-build">BRAND forecast table back to full names + real horizontal scroll</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Fixed</b></p>
+      <ul class="tips">
+        <li>The brand column in the BRAND basket forecast table is back to <b>full brand names</b> (Deux #16, melem #5…) instead of short codes. The previous fix squeezed columns into fixed percentage widths, which is what forced the short codes in the first place; this version gives the table its own minimum width (800px) so on narrow screens the <b>whole table scrolls left/right</b> instead of sacrificing readability. The code legend above the table is now a swipe hint instead.</li>
+      </ul>
+      <p class="fine">Tested at a 390px-wide mobile viewport — full brand names no longer overlap, and the table scrolls to show everything.</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.2.1 <span class="chg-build">BRAND forecast table used short codes</span></div>
@@ -1337,29 +1395,18 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <p class="fine">Both language versions updated together and tested end-to-end (generate / reroll / copy) in a real browser with no errors.</p>
     </div>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.1.0802 <span class="chg-build">mobile usability pass</span></div>
-      <p class="cond" style="margin:8px 0 4px"><b>Fixed</b></p>
+      <div class="chg-ver">Version 5.1.5 <span class="chg-build">Random Inspiration now rolls separately</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Changed</b></p>
       <ul class="tips">
-        <li>Quick Calc → Ratio calculator: item type / condition / what-the-other-side-offers are now native dropdowns instead of button groups — no more tapping through a row of pills.</li>
-        <li>Schedule → BRAND basket forecast table now has fixed column widths (via <code>colgroup</code>), so the "predicted theme · colors" column no longer gets squeezed into a one-character-wide wrap that pushed the whole table off-screen; the date column is narrower and wraps to two lines, freeing up space for the column with the most text.</li>
-        <li>On narrow screens (≤680px), the row of 17 tab buttons at the top is replaced with a single "jump to section" dropdown, removing the need to scroll sideways through it; wider screens keep the original pill row. Both share the same switching logic and stay in sync.</li>
+        <li>Random Inspiration used to bundle theme / trait / composition / palette into one draw — if you didn't like one part, you had to reroll the whole set. It's now four independent dice: keep the ones you like and only reroll what you don't, with a "Reroll all" button still available for a full redraw.</li>
+        <li>Palette is no longer tied to the theme — it rolls independently now. Also added 10 more entries each to the theme and trait pools, so combinations feel less repetitive overall.</li>
       </ul>
-      <p class="fine">All three came from the same feedback: swipe-based selectors felt tiring on mobile, so this pass moves them toward native dropdowns. Both language versions were updated and syntax-checked.</p>
     </div>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.1.1 <span class="chg-build">schedule table follow-up fix</span></div>
+      <div class="chg-ver">Version 5.1.4 <span class="chg-build">Color Inspiration now shows proportions</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>Fixed</b></p>
       <ul class="tips">
-        <li>Wrapped the "BRAND basket forecast" table in a horizontal-scroll container: even if the column-width math falls short in some edge case, the table now scrolls sideways <b>within its own box</b> at most, instead of stretching the whole page and pushing the "Confidence" column off-screen.</li>
-      </ul>
-      <p class="fine">If the page still looks like the old layout after this update, double-check that the file live on GitHub Pages is this version, and hard-refresh / clear cache on your phone's browser — GitHub Pages can take a few minutes to roll out changes.</p>
-    </div>
-    <div class="chg-entry">
-      <div class="chg-ver">Version 5.1.2 <span class="chg-build">Confidence column wrap fix</span></div>
-      <p class="cond" style="margin:8px 0 4px"><b>Fixed</b></p>
-      <ul class="tips">
-        <li>The "Confidence" column in the BRAND basket forecast table was too narrow — short values like "Confirmed" could get squeezed into a single-character-per-line stack. Widened the column (12%→20%) and set data cells to not wrap, so short confidence values now stay on one line.</li>
-        <li>The other three columns (brand / window / theme) were adjusted slightly to compensate; the theme column still gets the most space.</li>
+        <li>The Color Inspiration generator used to show its 5 colors as equal-size swatches, which read like a flat 5-color mix and didn't reflect the basic "more dominant, less accent" color principle. It's now a single bar split by proportion (46/26/14/9/5%), with each color's role labeled below (Dominant / Secondary / Tertiary / Accent × 2) — closer to how a real palette is actually used, and better-looking too.</li>
       </ul>
     </div>
     <div class="chg-entry">
@@ -1371,19 +1418,30 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       </ul>
     </div>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.1.4 <span class="chg-build">Color Inspiration now shows proportions</span></div>
+      <div class="chg-ver">Version 5.1.2 <span class="chg-build">Confidence column wrap fix</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>Fixed</b></p>
       <ul class="tips">
-        <li>The Color Inspiration generator used to show its 5 colors as equal-size swatches, which read like a flat 5-color mix and didn't reflect the basic "more dominant, less accent" color principle. It's now a single bar split by proportion (46/26/14/9/5%), with each color's role labeled below (Dominant / Secondary / Tertiary / Accent × 2) — closer to how a real palette is actually used, and better-looking too.</li>
+        <li>The "Confidence" column in the BRAND basket forecast table was too narrow — short values like "Confirmed" could get squeezed into a single-character-per-line stack. Widened the column (12%→20%) and set data cells to not wrap, so short confidence values now stay on one line.</li>
+        <li>The other three columns (brand / window / theme) were adjusted slightly to compensate; the theme column still gets the most space.</li>
       </ul>
     </div>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.1.5 <span class="chg-build">Random Inspiration now rolls separately</span></div>
-      <p class="cond" style="margin:8px 0 4px"><b>Changed</b></p>
+      <div class="chg-ver">Version 5.1.1 <span class="chg-build">schedule table follow-up fix</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Fixed</b></p>
       <ul class="tips">
-        <li>Random Inspiration used to bundle theme / trait / composition / palette into one draw — if you didn't like one part, you had to reroll the whole set. It's now four independent dice: keep the ones you like and only reroll what you don't, with a "Reroll all" button still available for a full redraw.</li>
-        <li>Palette is no longer tied to the theme — it rolls independently now. Also added 10 more entries each to the theme and trait pools, so combinations feel less repetitive overall.</li>
+        <li>Wrapped the "BRAND basket forecast" table in a horizontal-scroll container: even if the column-width math falls short in some edge case, the table now scrolls sideways <b>within its own box</b> at most, instead of stretching the whole page and pushing the "Confidence" column off-screen.</li>
       </ul>
+      <p class="fine">If the page still looks like the old layout after this update, double-check that the file live on GitHub Pages is this version, and hard-refresh / clear cache on your phone's browser — GitHub Pages can take a few minutes to roll out changes.</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.1.0802 <span class="chg-build">mobile usability pass</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Fixed</b></p>
+      <ul class="tips">
+        <li>Quick Calc → Ratio calculator: item type / condition / what-the-other-side-offers are now native dropdowns instead of button groups — no more tapping through a row of pills.</li>
+        <li>Schedule → BRAND basket forecast table now has fixed column widths (via <code>colgroup</code>), so the "predicted theme · colors" column no longer gets squeezed into a one-character-wide wrap that pushed the whole table off-screen; the date column is narrower and wraps to two lines, freeing up space for the column with the most text.</li>
+        <li>On narrow screens (≤680px), the row of 17 tab buttons at the top is replaced with a single "jump to section" dropdown, removing the need to scroll sideways through it; wider screens keep the original pill row. Both share the same switching logic and stay in sync.</li>
+      </ul>
+      <p class="fine">All three came from the same feedback: swipe-based selectors felt tiring on mobile, so this pass moves them toward native dropdowns. Both language versions were updated and syntax-checked.</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.0.0802 <span class="chg-build">added Color Inspiration Generator</span></div>
@@ -1677,6 +1735,52 @@ var NT = {"motif": {"月": {"cn": ["月", "月光", "月色"], "jp": ["月", "�
   season(); run();
 })();
 
+/* ---------- symbols, kaomoji, flower meanings ---------- */
+/* All three belong to the moment you are writing the caption, which is when this tab is already
+   open - so they live here rather than in a tab of their own. All three are fixed vocabulary and
+   need no upkeep, which is the test every suggestion has to pass to end up on a static site.
+   Flower meanings follow the conventional Victorian and Japanese hanakotoba readings; where the
+   two disagree, both are shown rather than one being silently picked. */
+(function(){
+  var box=document.getElementById('pkBox');
+  if(!box) return;
+  var SYM=[["花草", "❀ ✿ ❁ ✾ ❃ ✽ ⚘ ☘ ✤ ❊ ❋ ✻ ❆ ⚛ ✼"], ["星光", "✦ ✧ ★ ☆ ✩ ✪ ✫ ✬ ✭ ✮ ✯ ⋆ ✢ ✣ ⭒ ⭑ ✷ ✸ ✹ ✵"], ["月・天氣", "☾ ☽ ☼ ☀ ☁ ☂ ☃ ❄ ❅ ⛅ ☔ ☄ ⛆"], ["心・愛", "♡ ♥ ❤ ❥ ❦ ❧ ღ ᰔ ♪ ♫ ♬"], ["邊框・裝飾", "𓂃 𓈒 𓏸 ༄ ༅ ˚ ｡ ⋅ ˖ ࣪ ⊹ ᯓ ⌗ ⌇ ୨ ୧ ꒰ ꒱ ⟡ ◌"], ["線條", "── ─ ━ ┄ ┈ ⋯ ⋮ ╰ ╯ ╭ ╮ ▸ ▹ ‣ ⇢ ⇾ →"], ["括號", "「」 『』 〈〉 《》 【】 〔〕 ⦅⦆ ﹙﹚ ⌜⌟ ⌈⌉"], ["其他", "✉ ✂ ☕ ♛ ♕ ✝ ✚ ⚜ ❖ ◈ ◇ ◆ ▫ ▪ ⬩ ♣"]], KAO=[["開心", "(◍•ᴗ•◍)  (｡･ω･｡)  ( ˶ˆ ᵕ ˆ˶ )  ٩(ˊᗜˋ)و  (๑˃ᴗ˂)ﻭ  ヽ(・∀・)ﾉ  (๑>◡<๑)"], ["害羞", "(⁄ ⁄•⁄ω⁄•⁄ ⁄)  (*ﾉωﾉ)  ( ⸝⸝•ᴗ•⸝⸝ )  ///▽///  (๑´ㅁ`๑)"], ["疲累", "(－ω－) zzZ  (´-ω-`)  ( ˘ω˘ )  (ㅅ´ ˘ `)  ⊂(・﹏・⊂)"], ["驚訝", "( ﾟдﾟ)  Σ(°ロ°)  (⊙_⊙)  ( ˙꒳˙ )  (・o・)"], ["哭", "( ; ᴗ ; )  (｡•́︿•̀｡)  ( ˃̣̣̥᷄⌓˂̣̣̥᷅ )  ｡ﾟ(ﾟ´ω`ﾟ)ﾟ｡  (இ﹏இ)"], ["動物", "ʕ•ᴥ•ʔ  =^･ω･^=  (=｀ω´=)  ʕ￫ᴥ￩ʔ  ᓚᘏᗢ  ฅ^•ﻌ•^ฅ  ʕ·ᴥ·ʔ"], ["其他", "(๑•̀ㅂ•́)و✧  ( ･ω･)b  (｡•̀ᴗ-)✧  ( ˙▿˙ )  ٩( ᐛ )و  ∠( ᐛ 」∠)＿"]], FL=[["玫瑰・紅", "#C0392B", "熱烈的愛、尊敬", "愛情、情熱"], ["玫瑰・白", "#F5F1EC", "純潔、我配得上你", "尊敬、我適合你"], ["玫瑰・黃", "#E8C15A", "友情；也有嫉妒的舊義", "嫉妒、減退的愛"], ["玫瑰・藍", "#5B7DB1", "奇蹟、不可能實現的事", "夢想成真"], ["薔薇・粉", "#E3A6B5", "優雅、感謝", "上品、可愛的人"], ["百合", "#F2EDE4", "純潔、莊嚴", "威嚴、純潔"], ["鈴蘭", "#EDF2EA", "幸福再臨", "純潔、幸福再來"], ["櫻花", "#F2D3DA", "短暫之美、生命", "精神美、優美的女性"], ["彼岸花", "#C0392B", "不祥、別離", "悲傷的回憶、再會之日"], ["紫藤", "#9C8AC0", "歡迎、沉醉", "溫柔、決不離去"], ["繡球花", "#8CA8C4", "善變、無情", "家族團聚、耐心"], ["向日葵", "#E8B23A", "崇拜、忠誠", "憧憬、我只看著你"], ["薰衣草", "#B7A8CE", "沉默、鎮靜", "期待、疑心"], ["鈴鐺水仙", "#F0EAD8", "自戀、新的開始", "尊敬、神秘"], ["鬱金香・紅", "#C0392B", "愛的告白", "熱烈的愛"], ["鬱金香・白", "#F4F0E9", "失戀、逝去的愛", "失去的愛"], ["勿忘我", "#7B9BC4", "勿忘我、真實的愛", "真實的愛、回憶"], ["三色堇", "#8B6BA8", "思念、體貼", "我思念你"], ["洋甘菊", "#F0E6CF", "逆境中的力量", "苦難中的力量"], ["山茶花", "#D46A7E", "堅貞、謙遜", "謙遜的美德、了不起的魅力"], ["梅花", "#E0A9B8", "堅忍、高潔", "高潔、忠實"], ["菊花", "#E8D48A", "高貴、真實", "高貴、真愛"], ["桔梗", "#7C6BA8", "永恆的愛、順從", "永遠的愛、清楚"], ["蓮花", "#F0D8DE", "純淨、重生", "清淨、遠離的愛"], ["罌粟", "#D8524C", "安眠、慰藉", "慰藉、想像"], ["鈴蘭水仙", "#EFEFE6", "希望、重生", "希望"], ["滿天星", "#F5F5F0", "純潔的心、感謝", "清淨的心、無邪"], ["紫羅蘭", "#7E6BAF", "永恆的美、謙遜", "誠實、小小的幸福"], ["風信子", "#A08AC4", "運動、遊戲；紫色為悔恨", "悲傷、原諒我"], ["大理花", "#C87B9C", "華麗、不安定", "華麗、移情"], ["木蘭", "#F0E4DC", "高潔、尊嚴", "自然之愛、持續的友情"], ["金魚草", "#E8A15A", "推測、多話", "欺瞞、推測"]];
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function chips(pairs, cls){
+    return pairs.map(function(g){
+      return '<div class="pk-grp"><b>'+esc(g[0])+'</b><div class="pk-row">'
+        + g[1].split(/\s{2,}| /).filter(Boolean).map(function(x){
+            return '<button class="pk-i'+(cls?' '+cls:'')+'" data-p="'+esc(x)+'">'+esc(x)+'</button>';
+          }).join('')
+        + '</div></div>';
+    }).join('');
+  }
+  box.innerHTML =
+    '<div class="pk-sec"><h4>'+"Symbols"+'</h4><p class="sub">'+"Tap to copy. A divider at the top of a caption or between paragraphs does a lot of work."+'</p>'
+      + chips(SYM) + '</div>'
+    + '<div class="pk-sec"><h4>'+"Kaomoji"+'</h4><p class="sub">'+"Tap to copy."+'</p>'
+      + chips(KAO, 'kao') + '</div>'
+    + '<div class="pk-sec"><h4>'+"Flower meanings"+'</h4><p class="sub">'+"One line of flower language often says more than a paragraph of explanation. Tap to copy \"name: meaning\"."+'</p>'
+      + '<div class="pk-fl">'
+      + FL.map(function(f){
+          var both = f[3] && f[3]!==f[2];
+          return '<button class="pk-f" data-p="'+esc(f[0]+'：'+f[2]+(both?'／'+f[3]:''))+'">'
+               + '<span class="sw" style="background:'+esc(f[1])+'"></span>'
+               + '<span><span class="nm">'+esc(f[0])+'</span><br>'
+               + '<span class="mn">'+esc(f[2])+(both?'<br>【和】'+esc(f[3]):'')+'</span></span></button>';
+        }).join('')
+      + '</div><p class="pk-note">'+"Western readings come from the Victorian tradition; Japanese hanakotoba (marked 【和】) sometimes differs. Where they disagree both are given rather than one being picked silently."+'</p></div>';
+
+  box.addEventListener('click', function(e){
+    var t=e.target.closest ? e.target.closest('[data-p]') : null;
+    if(!t) return;
+    __zjkCopy(t.dataset.p,
+      function(){ __zjkFlash(t, "✓", 700); },
+      function(){ __zjkFlash(t, "Copy failed", 1600); });
+  });
+})();
+
 /* ---------- creative workspace ---------- */
 /* The checklist verifies quality after the fact; this records decisions before it. Options are
    given by TYPE, never by in-game item name - "hair piece" is right forever, a list of specific
@@ -1902,8 +2006,18 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
   const panel=document.getElementById("navSelectPanel");
   const backdrop=document.getElementById("navSelectBackdrop");
   if(!nav||!btn||!label||!panel||!backdrop)return;
-  const navBtns=Array.from(nav.querySelectorAll("button[data-tab]"));
-  navBtns.forEach(nb=>{
+  const navBtns=Array.from(nav.children)
+    .filter(node=>node.tagName==="BUTTON" && node.dataset.tab);
+  Array.from(nav.children).forEach(node=>{
+    if(node.classList && node.classList.contains("navgrp")){
+      const h=document.createElement("div");
+      h.className="nav-select-head";
+      h.textContent=node.textContent;
+      panel.appendChild(h);
+      return;
+    }
+    if(node.tagName!=="BUTTON" || !node.dataset.tab) return;
+    const nb=node;
     const opt=document.createElement("div");
     opt.className="nav-select-opt"+(nb.classList.contains("on")?" on":"");
     opt.setAttribute("role","option");
