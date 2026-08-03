@@ -5325,6 +5325,7 @@ function compositionScore(opts) {
     // rest of the analysis does not depend on it.
     if(!mainKp&&afEnabled()){try{await step(tt('pr_anime'));animeFaces=await detectAnimeFaces(wc);}catch(e){console.warn(e);}}
     var vision=null;
+    var visionState='off'; // AI vision assist removed; keep field so report code never hits ReferenceError
     await step(tt('pr_comp'),.62);
     var _r=await analyzePixels(wc,mask,people,mainKp,segConf,border,framed,animeFaces,vision&&vision.textAreas);
     _r.vision=vision;_r.visionState=visionState;_r.preview=previewCanvas;
