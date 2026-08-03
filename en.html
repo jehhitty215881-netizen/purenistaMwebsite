@@ -2587,13 +2587,33 @@ document.querySelectorAll("#calcNav button").forEach(b=>b.addEventListener("clic
 }));
 
 
-/* ---------- Brand data sub-tabs ---------- */
-document.querySelectorAll("#bdSeg button").forEach(b=>b.addEventListener("click",()=>{
-  document.querySelectorAll("#bdSeg button").forEach(x=>x.classList.remove("on"));
-  b.classList.add("on");
-  document.querySelectorAll(".bdt").forEach(c=>c.classList.remove("show"));
-  document.getElementById(b.dataset.v).classList.add("show");
-}));
+/* ---------- Brand data / Trivia sub-tabs (lazy-loaded DOM — must use event delegation) ---------- */
+document.addEventListener("click",function(e){
+  var b=e.target.closest && e.target.closest("#bdSeg button");
+  if(b){
+    document.querySelectorAll("#bdSeg button").forEach(function(x){x.classList.remove("on");});
+    b.classList.add("on");
+    document.querySelectorAll(".bdt").forEach(function(c){c.classList.remove("show");});
+    var t=document.getElementById(b.dataset.v); if(t) t.classList.add("show");
+    return;
+  }
+  b=e.target.closest && e.target.closest("#loreSeg button");
+  if(b){
+    document.querySelectorAll("#loreSeg button").forEach(function(x){x.classList.remove("on");});
+    b.classList.add("on");
+    document.querySelectorAll(".lort").forEach(function(c){c.classList.remove("show");});
+    var t2=document.getElementById(b.dataset.v); if(t2) t2.classList.add("show");
+    return;
+  }
+  b=e.target.closest && e.target.closest("#loreCommonSeg button");
+  if(b){
+    document.querySelectorAll("#loreCommonSeg button").forEach(function(x){x.classList.remove("on");});
+    b.classList.add("on");
+    document.querySelectorAll(".lct").forEach(function(c){c.classList.remove("show");});
+    var t3=document.getElementById(b.dataset.v); if(t3) t3.classList.add("show");
+    return;
+  }
+});
 
 /* ---------- Trade Smarts sub-tabs ---------- */
 document.querySelectorAll("#tradeSeg button").forEach(b=>b.addEventListener("click",()=>{
@@ -2608,20 +2628,6 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
   b.classList.add("on");
   document.querySelectorAll(".aet").forEach(c=>c.classList.remove("show"));
   var t=document.getElementById(b.dataset.a);hydrateAet(t);t.classList.add("show");
-}));
-/* ---------- lore sub-tabs ---------- */
-document.querySelectorAll("#loreSeg button").forEach(b=>b.addEventListener("click",()=>{
-  document.querySelectorAll("#loreSeg button").forEach(x=>x.classList.remove("on"));
-  b.classList.add("on");
-  document.querySelectorAll(".lort").forEach(c=>c.classList.remove("show"));
-  document.getElementById(b.dataset.v).classList.add("show");
-}));
-
-document.querySelectorAll("#loreCommonSeg button").forEach(b=>b.addEventListener("click",()=>{
-  document.querySelectorAll("#loreCommonSeg button").forEach(x=>x.classList.remove("on"));
-  b.classList.add("on");
-  document.querySelectorAll(".lct").forEach(c=>c.classList.remove("show"));
-  document.getElementById(b.dataset.v).classList.add("show");
 }));
 
 
@@ -5328,18 +5334,29 @@ function compositionScore(opts) {
   function downscaleCanvas(src,maxSide){var s=Math.min(1,maxSide/Math.max(src.width,src.height));if(s>=1)return src;var w=Math.max(1,Math.round(src.width*s)),h=Math.max(1,Math.round(src.height*s)),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(src,0,0,w,h);return c;}
 
   /* ===================== overlay drawing ===================== */
-  function draw(a){var srcC=a.preview||a.canvas;var maxW=Math.min(1600,Math.max(640,srcC.width));var s=maxW/a.canvas.width;cv.width=Math.round(a.canvas.width*s);cv.height=Math.round(a.canvas.height*s);var g=cv.getContext('2d');g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(srcC,0,0,cv.width,cv.height);
+  function draw(a){
+    var srcC=(a&&(a.preview||a.canvas))||null;
+    var base=(a&&a.canvas)||srcC;
+    if(!srcC||!base||!base.width||!base.height){
+      cv.width=640;cv.height=360;
+      var gx=cv.getContext('2d');
+      gx.fillStyle='#2A2138';gx.fillRect(0,0,cv.width,cv.height);
+      gx.fillStyle='#fff';gx.font='16px sans-serif';gx.textAlign='center';
+      gx.fillText('Preview unavailable',cv.width/2,cv.height/2);
+      return;
+    }
+    var maxW=Math.min(1600,Math.max(640,srcC.width));var s=maxW/base.width;cv.width=Math.round(base.width*s);cv.height=Math.round(base.height*s);var g=cv.getContext('2d');g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(srcC,0,0,cv.width,cv.height);
     g.strokeStyle='rgba(255,255,255,.7)';g.lineWidth=1;[1,2].forEach(function(i){g.beginPath();g.moveTo(cv.width*i/3,0);g.lineTo(cv.width*i/3,cv.height);g.stroke();g.beginPath();g.moveTo(0,cv.height*i/3);g.lineTo(cv.width,cv.height*i/3);g.stroke();});
     if(a.bbox){g.strokeStyle='rgba(61,142,138,.95)';g.lineWidth=2.4;g.strokeRect(a.bbox.x*cv.width,a.bbox.y*cv.height,a.bbox.w*cv.width,a.bbox.h*cv.height);g.fillStyle='rgba(61,142,138,.14)';g.fillRect(a.bbox.x*cv.width,a.bbox.y*cv.height,a.bbox.w*cv.width,a.bbox.h*cv.height);}
     // the structural lines the pattern reading is based on, so the call can be checked by eye
     if(a.v3pat&&a.v3pat.detail&&a.v3pat.detail.lines){
-      var _sc=cv.width/a.canvas.width;
+      var _sc=cv.width/base.width;
       g.save();g.strokeStyle='rgba(224,138,60,.55)';g.lineWidth=1.5;g.setLineDash([7,5]);
       a.v3pat.detail.lines.filter(function(l){return l.span>=0.30;}).slice(0,4).forEach(function(l){
         var ct=Math.cos(l.th),st=Math.sin(l.th),P=[];
-        [[0,null],[a.canvas.width,null],[null,0],[null,a.canvas.height]].forEach(function(e){
-          if(e[0]!==null){if(Math.abs(st)<1e-6)return;var yy=(l.rho-e[0]*ct)/st;if(yy>=0&&yy<=a.canvas.height)P.push([e[0],yy]);}
-          else{if(Math.abs(ct)<1e-6)return;var xx=(l.rho-e[1]*st)/ct;if(xx>=0&&xx<=a.canvas.width)P.push([xx,e[1]]);}
+        [[0,null],[base.width,null],[null,0],[null,base.height]].forEach(function(e){
+          if(e[0]!==null){if(Math.abs(st)<1e-6)return;var yy=(l.rho-e[0]*ct)/st;if(yy>=0&&yy<=base.height)P.push([e[0],yy]);}
+          else{if(Math.abs(ct)<1e-6)return;var xx=(l.rho-e[1]*st)/ct;if(xx>=0&&xx<=base.width)P.push([xx,e[1]]);}
         });
         if(P.length>=2){g.beginPath();g.moveTo(P[0][0]*_sc,P[0][1]*_sc);g.lineTo(P[1][0]*_sc,P[1][1]*_sc);g.stroke();}
       });
@@ -5887,7 +5904,20 @@ function compositionScore(opts) {
       repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v4.9.0730</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
       hideProg();
       result.style.display='block';result.scrollIntoView({behavior:'smooth',block:'start'});
-    }catch(err){console.error(err);repEl.innerHTML='<p class="cond">'+tt('err')+'</p>';result.style.display='block';}
+    }catch(err){
+      console.error(err);
+      try{
+        cv.width=640;cv.height=200;
+        var gx=cv.getContext('2d');
+        gx.fillStyle='#2A2138';gx.fillRect(0,0,cv.width,cv.height);
+        gx.fillStyle='#fff';gx.font='15px sans-serif';gx.textAlign='center';
+        gx.fillText(tt('err')||'Analysis failed — try another image',cv.width/2,cv.height/2);
+      }catch(_e){}
+      if(palEl) palEl.innerHTML='';
+      if(scoreEl) scoreEl.textContent='–';
+      repEl.innerHTML='<p class="cond">'+(tt('err')||'Analysis failed')+'</p><p class="fine">'+(err&&err.message?String(err.message).slice(0,200):'')+'</p>';
+      result.style.display='block';
+    }
     finally{hideProg();runBtn.disabled=false;runBtn.textContent=tt('analyze');}
   }
   function load(file){if(!file||!/^image\//.test(file.type))return;var url=URL.createObjectURL(file),img=new Image();img.onload=function(){currentImg=img;opts.style.display='block';opts.scrollIntoView({behavior:'smooth',block:'start'});URL.revokeObjectURL(url);};img.src=url;}
@@ -6028,7 +6058,8 @@ function compositionScore(opts) {
   var statEl=document.getElementById('ciStat');
   if(!resEl) return;
 
-  var MOODS=T.ci_moods, THEMES=T.ci_themes, TRAITS=T.ci_traits;
+  var _T=window.T||{};
+  var MOODS=_T.ci_moods||{}, THEMES=_T.ci_themes||[], TRAITS=_T.ci_traits||[];
   var COMPS=['cp_lead','cp_radial','cp_diagonal','cp_horiz','cp_vert','cp_cross','cp_triUp','cp_triDown','cp_triGroup','cp_center','cp_fill','cp_edgeTension','cp_phi','cp_pattern','cp_patternBreak','cp_sCurve','cp_cCurve','cp_dutch'];
   var MOODIDS=Object.keys(MOODS);
   /* Every palette used to be equally likely, so with four vivid schemes in the set about a
