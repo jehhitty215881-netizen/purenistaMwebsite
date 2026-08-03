@@ -357,6 +357,34 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .cc-dim p{margin:4px 0 0;font-size:13px;color:var(--ink-soft);line-height:1.55}
 .cc-dim .lowconf-tag{font-size:11px;font-weight:700;color:var(--rose);border:1px solid var(--rose);border-radius:999px;padding:1px 8px;white-space:nowrap}
 @media(min-width:640px){.cc-grid{grid-template-columns:1fr 1fr}}
+
+/* ---- smart guide + feature rank (client-only) ---- */
+.sg-roles{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+.sg-roles button{border:1.5px solid var(--line);background:var(--panel);color:var(--ink);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 14px;border-radius:999px;cursor:pointer;transition:.13s}
+.sg-roles button:hover{border-color:var(--violet);background:var(--violet-soft)}
+.sg-roles button.on{background:linear-gradient(135deg,var(--violet),var(--rose));border-color:transparent;color:#fff}
+.sg-path{margin-top:12px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft));border:1.5px solid var(--line)}
+.sg-path h4{margin:0 0 6px;font-size:14.5px;font-weight:800;color:var(--ink)}
+.sg-path p{margin:0 0 10px;font-size:12.5px;color:var(--ink-soft);line-height:1.7}
+.sg-steps{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.sg-steps button{border:1.5px solid var(--line);background:var(--panel);color:var(--ink);font-family:inherit;font-weight:700;font-size:12.5px;padding:7px 12px;border-radius:999px;cursor:pointer}
+.sg-steps button:hover{border-color:var(--violet);background:#fff}
+.sg-steps .arrow{color:var(--ink-soft);font-size:12px;user-select:none}
+.sg-note{margin:10px 0 0;font-size:11.5px;color:var(--ink-soft);line-height:1.65}
+.fr-list{display:flex;flex-direction:column;gap:8px;margin:10px 0 0}
+.fr-row{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center}
+.fr-rank{font-weight:800;font-size:13px;color:var(--violet);text-align:center}
+.fr-meta{min-width:0}
+.fr-name{font-size:13.5px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fr-bar{height:7px;border-radius:999px;background:var(--line);margin-top:4px;overflow:hidden}
+.fr-bar>i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--violet),var(--rose));width:0;transition:width .35s ease}
+.fr-cnt{font-size:12px;font-weight:700;color:var(--ink-soft);white-space:nowrap}
+.fr-empty{font-size:13px;color:var(--ink-soft);line-height:1.7;margin:8px 0 0}
+.fr-actions{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.fr-actions button{border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12px;padding:6px 12px;border-radius:999px;cursor:pointer}
+.fr-actions button:hover{border-color:var(--violet);color:var(--ink)}
+.fr-actions .fine{margin:0;font-size:11.5px}
+
 </style>
 </head>
 <body>
@@ -422,6 +450,30 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
 <!-- ================= Quick Calc ================= -->
 <section id="calc" class="show">
+
+  <div class="card" id="smartGuide">
+    <h3>Smart guide <span class="tag ok">client-only · no login</span></h3>
+    <p class="cond">Pick who you are right now for a suggested path. Everything runs in the browser — <b>no backend, no account</b>.</p>
+    <div class="sg-roles" id="sgRoles">
+      <button type="button" data-role="newbie">🌱 Newbie</button>
+      <button type="button" data-role="gacha">✨ Gacha</button>
+      <button type="button" data-role="trade">🔄 Trading</button>
+      <button type="button" data-role="brand">🏷 Brands</button>
+      <button type="button" data-role="create">🎨 Creating</button>
+    </div>
+    <div class="sg-path" id="sgPath" hidden></div>
+  </div>
+
+  <div class="card" id="featRank">
+    <h3>Feature popularity (this device) <span class="tag">local only</span></h3>
+    <p class="cond">Ranked by how often you open each tab on this device. Stored in localStorage — <b>never uploaded, no server</b>.</p>
+    <div id="featRankList"></div>
+    <div class="fr-actions">
+      <button type="button" id="featRankReset">Clear local stats</button>
+      <span class="fine" id="featRankHint">Open a few tabs and the ranking will appear</span>
+    </div>
+  </div>
+
 
   <div class="banner">
     <div class="big">SR ＝ 2R ＝ 4N　<em>・</em>　2 current ＝ 1 expired</div>
@@ -1159,7 +1211,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <p class="cd-meta" id="cdMeta"></p>
     <div class="cd-next" id="cdNext"></div>
   </div>
-  <p class="fine" style="margin:12px 2px 0">📅 Last updated: 2026-08-02</p>
+  <p class="fine" style="margin:12px 2px 0">📅 Last updated: 2026-08-04</p>
   <div class="card">
     <h3>Schedule predictions <span class="tag warn">Reference only</span></h3>
     <ul class="tips">
@@ -1204,7 +1256,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     </table>
     </div>
     <p class="fine">Basis: brand baskets always close <b>Sunday 22:59</b> after ~2 months on sale; the Deux spring slot opens Feb 1 (#11/#14), extras Mar 1 (#12/#15); melem opens Nov 1 (#3/#4); By(e) opens on Fridays, creeping earlier each year. <span style="color:var(--rose)">The Deux Aug 1 slot (#10/#13) was assumed to always run a Fate/dark theme, but #16 came out as a grey-white lace dollhouse theme instead — that pattern broke this time, so later theme forecasts are marked down in confidence accordingly.</span> Re-verified <b>2026/08/02</b>; next check ahead of melem #5&#39;s launch (around 2026/11). Reference only — official announcements prevail.</p>
-    <p class="fine">📅 Last updated: 2026-08-02</p>
+    <p class="fine">📅 Last updated: 2026-08-04</p>
   </div>
 </section>
 
@@ -1310,7 +1362,30 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>Changelog <span class="tag ok">actively maintained</span></h3>
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.3.0 <span class="chg-build">current - copy buttons claimed false success; much larger word pools</span></div>
+      <div class="chg-ver">Version 5.3.2 <span class="chg-build">current・smart guide + local popularity</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>New: smart guide and on-device feature ranking (client-only)</b></p>
+      <ul class="tips">
+        <li><b>Smart guide</b>: at the top of Quick calc, pick a role (newbie / gacha / trade / brand / create) for a suggested tab path with one-tap jumps. Runs entirely in the browser — <b>no backend, no login</b>. Last role is remembered locally.</li>
+        <li><b>Feature popularity (this device)</b>: top tabs by how often you open them, stored in localStorage only — <b>never uploaded</b>. Stats can be cleared in one tap.</li>
+        <li>Both features are deliberately server-free: the guide is a static path table; the ranking is a local counter. No account, no tracking.</li>
+      </ul>
+      <p class="fine">Build tag v5.3.2. ZH and EN in sync.</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.3.1 <span class="chg-build">art-check judgement fixes</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Fixed: art-check false positives (cross-checked on real plates)</b></p>
+      <ul class="tips">
+        <li><b>Warm / cool label</b>: low-chroma grey and silver illustrations were often tagged "warm" because only high-saturation hues voted, so a few skin or accent pixels pushed the ratio over the line while cool greys abstained. Near-neutral pixels now vote via the Lab blue–yellow axis, low-chroma frames lean on measured Lab, and the "warm" DNA line requires both ratio and Lab to agree.</li>
+        <li><b>Unity and variety</b>: restrained mono, cinematic and Morandi plates score low on variety by design; the geometric mean then looked like a fault. Low-chroma / high-harmony work no longer lists "unity and variety not differentiated" as a defect — that is the style, not an error.</li>
+        <li><b>Scattered focus</b>: soft light, full moons and halos spread brightness so area-holding-half-the-weight looked "unfocused". When a face is detected, or a centre / radial read is strong, the hard "no landing point" penalty is skipped.</li>
+        <li><b>Uneven negative space</b>: branch frames, dark mass and magazine title bands are often deliberate asymmetry. In design mode with text, vertical gaps are no longer a hard fault; in illustration mode with a centre / radial pattern, mild left–right imbalance is heavily down-weighted.</li>
+        <li><b>Black screen / visionState</b>: a leftover undeclared variable could blank the result panel; it is now initialised, and errors draw text instead of a black canvas.</li>
+        <li><b>Aesthetics sub-tabs unclickable</b>: listeners bound before lazy content injection never attached. Click handling is now document-level delegation so sub-tabs work after hydrate.</li>
+      </ul>
+      <p class="fine">Build tag updated to v5.3.2. If the page still looks old after deploy, confirm GitHub Pages has the new files and force-refresh / clear cache on mobile.</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.3.0 <span class="chg-build">copy buttons claimed false success; much larger word pools</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>Fixed: "Copied" appeared even when the copy had failed</b></p>
       <ul class="tips">
         <li>Following the <code>data-c</code> collision fixed last version, all three copy features were audited. The character generator was correct; the <b>title generator</b> and the <b>workspace plan card</b> were not - errors swallowed by an empty <code>catch</code>, the confirmation sitting <b>outside</b> <code>then()</code> so it showed regardless of the result, and no fallback at all.</li>
@@ -1986,6 +2061,7 @@ function __zjkGoTab(t){
 /* ---------- tabs ---------- */
 const tabs=document.querySelectorAll("nav button[data-tab]");
 function goTab(name){
+  if(window.__pmFeatBump)try{window.__pmFeatBump(name);}catch(e){}
   tabs.forEach(x=>x.classList.remove("on"));
   const btn=document.querySelector('nav button[data-tab="'+name+'"]');
   if(btn)btn.classList.add("on");
@@ -2042,6 +2118,128 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
   };
   const initial=nav.querySelector("button.on")||navBtns[0];
   if(initial)window.__navSelectSync(initial.dataset.tab);
+})();
+
+
+/* ---------- smart guide + local feature rank (no backend) ---------- */
+(function(){
+  var KEY='pm_feat_hits_v1';
+  var LABELS={
+    calc:'Quick calc',ratio:'Trade ratios',market:'Rainbow Market',pull:'Gacha cost',vip:'Top-up · VIP',
+    brand:'Brand dyes',branddata:'Brand data',trade:'Trade tips',sched:'Schedule',
+    check:'Art check',workspace:'Workspace',colorinspire:'Colour inspire',naming:'Names & tags',
+    charcheck:'Random character',flow:'Creative flow',aes:'Aesthetics',lore:'Lore',qa:'QA',
+    feedback:'Feedback',notes:'Notes',changelog:'Changelog'
+  };
+  var PATHS={
+    newbie:{
+      title:'Newbie path',
+      blurb:'Learn ratios and basic conversion first, then trade etiquette and FAQ, before spending.',
+      steps:['calc','ratio','trade','qa','pull']
+    },
+    gacha:{
+      title:'Gacha / spending path',
+      blurb:'Work out pool cost and VIP value, then check schedule and brands before you pull.',
+      steps:['pull','vip','sched','brand','calc']
+    },
+    trade:{
+      title:'Trading path',
+      blurb:'Start from community ratios and market rules, then tips and fees so talks stay clear.',
+      steps:['ratio','market','trade','calc','qa']
+    },
+    brand:{
+      title:'Brand path',
+      blurb:'Check dye cost and brand data, then schedule and colour ideas before you decide.',
+      steps:['brand','branddata','sched','colorinspire','check']
+    },
+    create:{
+      title:'Creating path',
+      blurb:'Art check → workspace → colour / naming / character ideas → flow and aesthetics.',
+      steps:['check','workspace','colorinspire','naming','charcheck','flow','aes']
+    }
+  };
+
+  function loadHits(){
+    try{return JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){return {};}
+  }
+  function saveHits(h){
+    try{localStorage.setItem(KEY,JSON.stringify(h));}catch(e){}
+  }
+  function bump(name){
+    if(!name||!LABELS[name])return;
+    var h=loadHits();
+    h[name]=(h[name]|0)+1;
+    saveHits(h);
+    renderRank();
+  }
+  window.__pmFeatBump=bump;
+
+  function renderRank(){
+    var box=document.getElementById('featRankList');
+    if(!box)return;
+    var h=loadHits();
+    var rows=Object.keys(h).map(function(k){return {k:k,n:h[k]|0,label:LABELS[k]||k};})
+      .filter(function(r){return r.n>0;})
+      .sort(function(a,b){return b.n-a.n||a.label.localeCompare(b.label);});
+    if(!rows.length){
+      box.innerHTML='<p class="fr-empty">No stats yet. Open a few tabs above and the ranking will show up here.</p>';
+      return;
+    }
+    var max=rows[0].n||1;
+    var top=rows.slice(0,10);
+    box.innerHTML='<div class="fr-list">'+top.map(function(r,i){
+      var pct=Math.max(8,Math.round(r.n/max*100));
+      return '<div class="fr-row">'+
+        '<div class="fr-rank">'+(i+1)+'</div>'+
+        '<div class="fr-meta"><div class="fr-name">'+r.label+'</div>'+
+        '<div class="fr-bar"><i style="width:'+pct+'%"></i></div></div>'+
+        '<div class="fr-cnt">'+r.n+'×</div></div>';
+    }).join('')+'</div>';
+  }
+
+  function showPath(role){
+    var p=PATHS[role];
+    var box=document.getElementById('sgPath');
+    if(!p||!box)return;
+    document.querySelectorAll('#sgRoles button').forEach(function(b){
+      b.classList.toggle('on',b.getAttribute('data-role')===role);
+    });
+    var steps=p.steps.map(function(id,i){
+      var label=LABELS[id]||id;
+      var btn='<button type="button" data-go="'+id+'">'+label+'</button>';
+      return i?('<span class="arrow">→</span>'+btn):btn;
+    }).join('');
+    box.hidden=false;
+    box.innerHTML='<h4>'+p.title+'</h4><p>'+p.blurb+'</p>'+
+      '<div class="sg-steps">'+steps+'</div>'+
+      '<p class="sg-note">Tap any stop to jump. The whole path runs on-device — nothing hits a server.</p>';
+    box.querySelectorAll('[data-go]').forEach(function(b){
+      b.addEventListener('click',function(){ if(typeof goTab==='function') goTab(b.getAttribute('data-go')); });
+    });
+    try{localStorage.setItem('pm_sg_role',role);}catch(e){}
+  }
+
+  function boot(){
+    var roles=document.getElementById('sgRoles');
+    if(roles){
+      roles.addEventListener('click',function(e){
+        var b=e.target.closest('button[data-role]');
+        if(b) showPath(b.getAttribute('data-role'));
+      });
+      try{
+        var last=localStorage.getItem('pm_sg_role');
+        if(last&&PATHS[last]) showPath(last);
+      }catch(e){}
+    }
+    var rst=document.getElementById('featRankReset');
+    if(rst) rst.addEventListener('click',function(){
+      try{localStorage.removeItem(KEY);}catch(e){}
+      renderRank();
+    });
+    renderRank();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot);
+  else boot();
 })();
 
 /* ---------- rarity converter ---------- */
@@ -5948,7 +6146,7 @@ function compositionScore(opts) {
       modeLbl.textContent=tt('modelbl')+' · '+currentModes.map(function(m){return ({portrait:tt('mode_portrait'),fashion:tt('mode_fashion'),scene:tt('mode_scene'),collage:tt('mode_collage'),layout:tt('mode_layout')})[m];}).join(' + ');
       var lowColor=a.conf.color<60;
       palEl.innerHTML='<h3>'+tt('pal_title')+' <span class="tag ok">'+tt('pal_tag')+'</span></h3><p class="cond">'+tt('pal_desc')+'</p><div class="chk-sw">'+a.palette.map(function(o){var col=hex(o.r,o.g,o.b);return '<div><span style="background:'+col+'"></span><small>'+colorName(o.r,o.g,o.b)+'<br>'+col+'</small></div>';}).join('')+'</div>'+(lowColor?'<p class="fine">'+tt('pal_lowconf')+'</p>':'');
-      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v4.9.0730</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
+      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.3.2</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
       hideProg();
       result.style.display='block';result.scrollIntoView({behavior:'smooth',block:'start'});
     }catch(err){
