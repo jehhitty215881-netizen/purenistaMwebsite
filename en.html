@@ -411,15 +411,17 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
 <div class="nav-select" id="navSelectWrap">
   <button type="button" id="navSelectBtn" class="nav-select-btn" aria-haspopup="listbox" aria-expanded="false">
-    <span id="navSelectLabel">Quick Calc</span>
+    <span id="navSelectLabel">Smart guide</span>
     <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8l5 5 5-5"/></svg>
   </button>
   <div class="nav-select-backdrop" id="navSelectBackdrop"></div>
   <div class="nav-select-panel" id="navSelectPanel" role="listbox" aria-label="Quick jump to section"></div>
 </div>
 <nav aria-label="Tabs">
+  <span class="navgrp">Guide</span>
+  <button class="on" data-tab="home">Smart guide</button>
   <span class="navgrp">Trading</span>
-  <button class="on" data-tab="calc">Quick Calc</button>
+  <button data-tab="calc">Quick Calc</button>
   <button data-tab="ratio">Trade Ratios</button>
   <button data-tab="market">Rainbow Market</button>
   <span class="navgrp">Spending</span>
@@ -449,9 +451,10 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 </nav>
 
 <!-- ================= Quick Calc ================= -->
-<section id="calc" class="show">
 
-  <div class="card" id="smartGuide">
+<!-- ================= Smart guide ================= -->
+<section id="home" class="show">
+<div class="card" id="smartGuide">
     <h3>Smart guide <span class="tag ok">client-only · no login</span></h3>
     <p class="cond">Pick who you are right now for a suggested path. Everything runs in the browser — <b>no backend, no account</b>.</p>
     <div class="sg-roles" id="sgRoles">
@@ -474,6 +477,11 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     </div>
   </div>
 
+
+  
+</section>
+
+<section id="calc">
 
   <div class="banner">
     <div class="big">SR ＝ 2R ＝ 4N　<em>・</em>　2 current ＝ 1 expired</div>
@@ -1365,7 +1373,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <div class="chg-ver">Version 5.3.2 <span class="chg-build">current・smart guide + local popularity</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>New: smart guide and on-device feature ranking (client-only)</b></p>
       <ul class="tips">
-        <li><b>Smart guide</b>: at the top of Quick calc, pick a role (newbie / gacha / trade / brand / create) for a suggested tab path with one-tap jumps. Runs entirely in the browser — <b>no backend, no login</b>. Last role is remembered locally.</li>
+        <li><b>Smart guide</b>: as its own first tab “Smart guide”; pick a role (newbie / gacha / trade / brand / create) for a suggested tab path with one-tap jumps. Runs entirely in the browser — <b>no backend, no login</b>. Last role is remembered locally.</li>
         <li><b>Feature popularity (this device)</b>: top tabs by how often you open them, stored in localStorage only — <b>never uploaded</b>. Stats can be cleared in one tap.</li>
         <li>Both features are deliberately server-free: the guide is a static path table; the ranking is a local counter. No account, no tracking.</li>
       </ul>
@@ -2125,7 +2133,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
 (function(){
   var KEY='pm_feat_hits_v1';
   var LABELS={
-    calc:'Quick calc',ratio:'Trade ratios',market:'Rainbow Market',pull:'Gacha cost',vip:'Top-up · VIP',
+    home:'Smart guide',calc:'Quick Calc',ratio:'Trade ratios',market:'Rainbow Market',pull:'Gacha cost',vip:'Top-up · VIP',
     brand:'Brand dyes',branddata:'Brand data',trade:'Trade tips',sched:'Schedule',
     check:'Art check',workspace:'Workspace',colorinspire:'Colour inspire',naming:'Names & tags',
     charcheck:'Random character',flow:'Creative flow',aes:'Aesthetics',lore:'Lore',qa:'QA',

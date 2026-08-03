@@ -416,15 +416,17 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
 <div class="nav-select" id="navSelectWrap">
   <button type="button" id="navSelectBtn" class="nav-select-btn" aria-haspopup="listbox" aria-expanded="false">
-    <span id="navSelectLabel">快速換算</span>
+    <span id="navSelectLabel">智能導覽</span>
     <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8l5 5 5-5"/></svg>
   </button>
   <div class="nav-select-backdrop" id="navSelectBackdrop"></div>
   <div class="nav-select-panel" id="navSelectPanel" role="listbox" aria-label="快速切換分頁"></div>
 </div>
 <nav aria-label="分頁">
+  <span class="navgrp">導覽</span>
+  <button class="on" data-tab="home">智能導覽</button>
   <span class="navgrp">交易</span>
-  <button class="on" data-tab="calc">快速換算</button>
+  <button data-tab="calc">快速換算</button>
   <button data-tab="ratio">交換比例</button>
   <button data-tab="market">彩虹市集</button>
   <span class="navgrp">課金</span>
@@ -454,9 +456,10 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 </nav>
 
 <!-- ================= 快速換算 ================= -->
-<section id="calc" class="show">
 
-  <div class="card" id="smartGuide">
+<!-- ================= 智能導覽 ================= -->
+<section id="home" class="show">
+<div class="card" id="smartGuide">
     <h3>智能導覽 <span class="tag ok">純前端・免登入</span></h3>
     <p class="cond">選你現在的身分，立刻推薦一條路徑。全部在瀏覽器內完成，<b>不需要後端或帳號</b>。</p>
     <div class="sg-roles" id="sgRoles">
@@ -479,6 +482,11 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     </div>
   </div>
 
+
+  
+</section>
+
+<section id="calc">
 
   <div class="banner">
     <div class="big">SR ＝ 2R ＝ 4N　<em>・</em>　現池 2 ＝ 過期 1</div>
@@ -1370,7 +1378,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <div class="chg-ver">Version 5.3.2 <span class="chg-build">目前版本・智能導覽＋本機熱門排行</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>新增：智能導覽與功能熱門排行（純前端）</b></p>
       <ul class="tips">
-        <li><b>智能導覽</b>：在「快速換算」頁頂依身分（新手／抽卡／交換／品牌／創作）推薦一條分頁路徑，一鍵跳轉。全部在瀏覽器完成，<b>不需要後端或登入</b>；上次選的身分會記在本機，下次打開還在。</li>
+        <li><b>智能導覽</b>：獨立為導覽列第一個分頁「智能導覽」，依身分（新手／抽卡／交換／品牌／創作）推薦一條分頁路徑，一鍵跳轉。全部在瀏覽器完成，<b>不需要後端或登入</b>；上次選的身分會記在本機，下次打開還在。</li>
         <li><b>本機功能熱門排行</b>：依你在此裝置點過分頁的次數排序前十名，用 localStorage 存在本機，<b>不上傳</b>。可一鍵清除統計。</li>
         <li>兩項都強調「不用後端也能做」：導覽是預設路徑表，排行是本機計數，沒有伺服器、沒有帳號、沒有追蹤。</li>
       </ul>
@@ -2128,7 +2136,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
 (function(){
   var KEY='pm_feat_hits_v1';
   var LABELS={
-    calc:'快速換算',ratio:'交換比例',market:'彩虹市集',pull:'抽卡花費',vip:'儲值・VIP',
+    home:'智能導覽',calc:'快速換算',ratio:'交換比例',market:'彩虹市集',pull:'抽卡花費',vip:'儲值・VIP',
     brand:'品牌染色',branddata:'品牌資料',trade:'交易心法',sched:'排期預測',
     check:'作品健檢',workspace:'創作工作台',colorinspire:'配色靈感',naming:'命名與標籤',
     charcheck:'角色隨機生成',flow:'創作動線',aes:'美學專欄',lore:'科普',qa:'QA',
