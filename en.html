@@ -1459,6 +1459,48 @@ function __lzNeed(id, done){
 function hydrateAet(el){ if(el) __lzNeed(el.id); }
 function hydrateShownAet(){ var c = document.querySelector('.aet.show'); if(c) hydrateAet(c); }
 
+/* ---------- clipboard ---------- */
+/* Shared by every copy button. Three rules, taken from the one implementation on this site that
+   already had them right:
+     - fall back to execCommand where navigator.clipboard is missing (it requires a secure
+       context, so opening the file straight off disk has no async API at all)
+     - report success only once the write has actually resolved
+     - say so plainly on failure, instead of swallowing the error and claiming success */
+function __zjkCopy(text, onOk, onFail){
+  var ok = onOk || function(){}, bad = onFail || function(){};
+  if(!text){ bad(); return; }
+  function legacy(){
+    try{
+      var ta=document.createElement('textarea');
+      ta.value=text;
+      ta.setAttribute('readonly','');
+      ta.style.position='fixed'; ta.style.top='0'; ta.style.opacity='0';
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      if(ta.setSelectionRange) ta.setSelectionRange(0, text.length); // iOS ignores select() alone
+      var done=document.execCommand('copy');
+      document.body.removeChild(ta);
+      done ? ok() : bad();
+    }catch(e){ bad(); }
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(ok).catch(legacy);
+  } else legacy();
+}
+/* Flash a message on the button itself and put back whatever it said before. Re-clicking during
+   the flash must not capture "已複製" as the original text. */
+function __zjkFlash(el, msg, ms){
+  if(!el) return;
+  if(el.dataset.flashing) clearTimeout(+el.dataset.flashing);
+  else el.dataset.orig = el.textContent;
+  el.textContent = msg;
+  var t = setTimeout(function(){
+    el.textContent = el.dataset.orig;
+    delete el.dataset.flashing;
+  }, ms || 1100);
+  el.dataset.flashing = String(t);
+}
+
 /* ---------- naming and tags ---------- */
 /* All of this is generated from fixed vocabulary and the calendar. Nothing here goes out of date,
    which is the whole reason it can exist on a static site - a "trending tags" feature would need a
@@ -1610,9 +1652,8 @@ var NT = {"motif": {"月": {"cn": ["月", "月光", "月色"], "jp": ["月", "�
     }
     if(el.dataset&&el.dataset.c!==undefined){
       var v=el.dataset.c;
-      if(navigator.clipboard) navigator.clipboard.writeText(v).catch(function(){});
-      var old=el.textContent; el.textContent="Copied";
-      setTimeout(function(){ el.textContent=old; }, 900);
+      __zjkCopy(v, function(){ __zjkFlash(el, "Copied", 900); },
+                function(){ __zjkFlash(el, "Copy failed - select it manually", 1800); });
     }
   });
   document.querySelectorAll('#ntStyle .nt-chip').forEach(function(b){
@@ -1732,8 +1773,8 @@ var NT = {"motif": {"月": {"cn": ["月", "月光", "月色"], "jp": ["月", "�
   if(cp) cp.addEventListener('click', function(){
     var txt=plainText();
     if(!txt) return;
-    if(navigator.clipboard) navigator.clipboard.writeText(txt).catch(function(){});
-    var o=cp.textContent; cp.textContent="Copied"; setTimeout(function(){cp.textContent=o;},1000);
+    __zjkCopy(txt, function(){ __zjkFlash(cp, "Copied", 1000); },
+                  function(){ __zjkFlash(cp, "Copy failed - select it manually", 1800); });
   });
   var rs=document.getElementById('wsReset');
   if(rs) rs.addEventListener('click', function(){ S={}; active=null; save(); render(); });
@@ -5845,17 +5886,8 @@ function compositionScore(opts) {
       var text=lines.join('\n');
       var done=function(){if(copyNote)copyNote.textContent='Copied to clipboard — paste it anywhere.';};
       var fail=function(){if(copyNote)copyNote.textContent='Copy failed — please select and copy the fields manually.';};
-      if(navigator.clipboard&&navigator.clipboard.writeText){
-        navigator.clipboard.writeText(text).then(done).catch(fail);
-      }else{
-        try{
-          var ta=document.createElement('textarea');
-          ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
-          document.body.appendChild(ta);ta.focus();ta.select();
-          document.execCommand('copy');document.body.removeChild(ta);done();
-        }catch(e){fail();}
-      }
-    });
+      __zjkCopy(text, done, fail);
+      });
   }
 })();
 
