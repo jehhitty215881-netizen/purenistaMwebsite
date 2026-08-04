@@ -58,7 +58,7 @@ nav{display:flex;gap:8px;margin:22px -16px 18px;padding:10px 16px;position:stick
 }
 nav::-webkit-scrollbar{display:none}
 nav button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;cursor:pointer;transition:.2s;white-space:nowrap}
-nav .navgrp{flex:0 0 auto;display:flex;align-items:center;padding:0 4px 0 10px;font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;white-space:nowrap;opacity:.75}nav .navgrp:first-child{padding-left:0}nav .navgrp::after{content:'';display:block;width:1px;height:15px;margin-left:10px;background:var(--line)}.nav-select-head{padding:11px 16px 5px;font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--violet);text-transform:uppercase;pointer-events:none}.nav-select-head:first-child{padding-top:6px}nav button.on{background:var(--ink);border-color:var(--ink);color:#fff}.navlang{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;text-decoration:none;border:1.5px solid var(--violet);background:var(--panel);color:var(--violet);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap;transition:.2s}.navlang:hover,.navlang:focus-visible{background:var(--violet);color:#fff}.navlang:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
+nav .navgrp{flex:0 0 auto;display:flex;align-items:center;padding:0 4px 0 10px;font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;white-space:nowrap;opacity:.75}nav .navgrp:first-child{padding-left:0}nav .navgrp::after{content:'';display:block;width:1px;height:15px;margin-left:10px;background:var(--line)}.nav-select-grp{border-radius:12px}.nav-select-grp+.nav-select-grp{margin-top:2px}.nav-select-head{display:flex;align-items:center;gap:8px;width:100%;padding:13px 12px;background:transparent;border:0;border-radius:12px;font-family:inherit;font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--violet);text-transform:uppercase;text-align:left;cursor:pointer}.nav-select-head:active{background:var(--violet-soft)}.nav-select-head:focus-visible{outline:3px solid var(--violet);outline-offset:-2px}.nav-select-head .t{flex:1 1 auto}.nav-select-head .n{flex:0 0 auto;font-size:11px;font-weight:700;letter-spacing:0;color:var(--ink-soft);opacity:.75}.nav-select-head .gchev{width:14px;height:14px;flex:0 0 auto;color:var(--ink-soft);transition:transform .2s ease}.nav-select-grp.has-on>.nav-select-head{color:var(--rose)}.nav-select-grp.has-on>.nav-select-head .t::after{content:"";display:inline-block;width:6px;height:6px;margin-left:7px;border-radius:50%;background:var(--rose);vertical-align:middle}.nav-select-grp.open>.nav-select-head .gchev{transform:rotate(180deg)}.nav-select-list{max-height:0;overflow:hidden;transition:max-height .22s ease}.nav-select-grp.open>.nav-select-list{max-height:560px}.nav-select-list .nav-select-opt{margin-left:6px}nav button.on{background:var(--ink);border-color:var(--ink);color:#fff}.navlang{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;text-decoration:none;border:1.5px solid var(--violet);background:var(--panel);color:var(--violet);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap;transition:.2s}.navlang:hover,.navlang:focus-visible{background:var(--violet);color:#fff}.navlang:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
 nav button:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
 section{display:none}
 section.show{display:block;animation:fade .25s ease}
@@ -342,6 +342,9 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 @media(max-width:640px){.chk-grid{grid-template-columns:1fr}}
 .chk-commentary p{font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 9px}
 .chk-commentary .cm-link{background:var(--violet-soft);border-left:3px solid var(--violet);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--ink);line-height:1.7}
+.chk-commentary .cm-view{border-left:3px solid var(--line);border-radius:8px;padding:7px 12px;font-size:12.5px;color:var(--ink-soft);line-height:1.7}
+.cm-learn{color:var(--violet);font-weight:700;text-decoration:none;white-space:nowrap;border-bottom:1.5px solid var(--violet-soft)}
+.cm-learn:hover,.cm-learn:focus-visible{border-bottom-color:var(--violet)}
 .chk-commentary .cm-comp{background:var(--teal-soft);border-radius:10px;padding:10px 13px;font-size:13.5px}
 .chk-commentary .cm-sum{font-family:"DM Serif Display","Noto Serif TC",serif;font-size:16px;color:var(--violet);margin-top:4px}
 .chk-conf-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px 18px}
@@ -415,12 +418,12 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 </header>
 
 <div class="nav-select" id="navSelectWrap">
-  <button type="button" id="navSelectBtn" class="nav-select-btn" aria-haspopup="listbox" aria-expanded="false">
+  <button type="button" id="navSelectBtn" class="nav-select-btn" aria-haspopup="menu" aria-expanded="false">
     <span id="navSelectLabel">智能導覽</span>
     <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8l5 5 5-5"/></svg>
   </button>
   <div class="nav-select-backdrop" id="navSelectBackdrop"></div>
-  <div class="nav-select-panel" id="navSelectPanel" role="listbox" aria-label="快速切換分頁"></div>
+  <div class="nav-select-panel" id="navSelectPanel" role="menu" aria-label="快速切換分頁"></div>
 </div>
 <nav aria-label="分頁">
   <span class="navgrp">導覽</span>
@@ -1375,7 +1378,42 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>更新紀錄 <span class="tag ok">持續維護中</span></h3>
     <p class="cond">這裡會列出每次網站更新的內容，讓大家知道網站一直有人在維護、修 bug、加新功能。</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.3.2 <span class="chg-build">目前版本・智能導覽＋本機熱門排行</span></div>
+      <div class="chg-ver">Version 5.3.3 <span class="chg-build">目前版本・手機選單分層＋健檢判讀修正</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>改進：手機的分頁選單改成分類展開</b></p>
+      <ul class="tips">
+        <li>22 個分頁攤平成一長串，收合導覽列本來是為了讓選擇更快，結果反而要一直捲。現在只顯示七個分類（導覽／交易／課金／資料／創作／學習／關於），點一下才滑開，<b>一次只開一組</b>。打開選單時會自動展開你目前所在的那一組，所以常見情況還是一鍵到位；分類標題也會標出你現在在哪、以及該組有幾個項目。</li>
+        <li>分類標題原本是不可點的裝飾文字，改成真的按鈕之後，面板的無障礙角色一併從 <code>listbox</code> 改為 <code>menu</code>，並補上 <code>aria-expanded</code> 與 <code>aria-controls</code>。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>修正：作品健檢有兩段判讀從來沒有真正跑過</b></p>
+      <ul class="tips">
+        <li><b>文字版面的對齊檢查</b>：判斷結果被讀取的位置，比它被算出來的位置<b>早了約九十行</b>。JavaScript 的變數提升讓這件事不會報錯，只會安靜地讀到「未定義」——所以「文字區塊沒有共同的對齊基準」這條建議從來沒出現過，它連帶會把構圖分數壓到 65 的規則也一次都沒生效。把整段文字偵測移到評分之前就解決了。</li>
+        <li><b>加入點綴色的建議</b>：條件式拿「彩度豐富度的<b>數值</b>」去比對「翻譯過的<b>文字標籤</b>」，兩者永遠不相等，所以「色彩集中在○系，可加入少量●系」也從來沒跳出來過。</li>
+        <li>這兩個是同一類問題：<b>不會壞掉，只會靜靜地什麼都不做</b>，所以放了很久沒被發現。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>修正：插畫模式一邊說不判、一邊照扣分</b></p>
+      <ul class="tips">
+        <li>報告裡寫得很清楚：大片純白是顏料不是曝光失誤、平塗沒有對焦可言，所以插畫模式不判這些。但最後算總分時沒有跟著關——而且插畫模式會把「過曝／死黑」改寫成「高調／低調」這種中性描述，這兩個新字串<b>不符合計分的任何一個分支</b>，於是直接落到最低分。結果就是一張刻意白底白衣的作品，在文字裡被說「這是設計」，在數字上被扣到底。現在不判的項目就不扣分，真的有結論的（細節保留良好、輕微 clipping、層次豐富…）照算。</li>
+        <li>這會讓插畫類作品的分數整體上移一些——原本就是被不該扣的分壓著。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>修正：點得到、但會出錯的地方</b></p>
+      <ul class="tips">
+        <li><b>顏文字被切碎</b>：分隔用的正規式會連顏文字<b>內部</b>的空格一起切，所以 <code>( ; ᴗ ; )</code> 被拆成「(」「;」「ᴗ」「;」「)」五顆按鈕，複製出來是碎片。符號用單空格分隔、顏文字用雙空格分隔，現在依類別各用各的。</li>
+        <li><b>花語按鈕點一下就毀版</b>：複製後閃現「✓」時，程式直接改寫按鈕的文字內容，把裡面的色塊和排版<b>整個抹掉</b>，一秒後還原回來的只剩純文字。改成先備份完整內容再還原。</li>
+        <li><b>配色靈感的關鍵字沒有轉義</b>：輸入的字被直接當成 HTML 插進畫面。站上其他地方都有處理，只有這裡漏了。</li>
+        <li><b>圖片讀取失敗時沒有任何回饋</b>：檔案損毀或格式不支援時畫面完全沒反應，使用者不知道發生了什麼。現在會明講讀取失敗，順便把佔著的暫存位址收掉。</li>
+        <li><b>認不出主體時，色彩豐富度會被灌高</b>：計算色域範圍時兩個負值相乘變成正的極大值，於是「幾乎沒有色彩資訊」被讀成「色彩非常豐富」，風格判定跟著錯。</li>
+        <li>隨機挑選的函式在極端情況下（候選全部相同）會無限重試，補上了次數上限；另外補齊兩個一直缺樣式的元素。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>英文版：補完遺漏的翻譯</b></p>
+      <ul class="tips">
+        <li><b>符號・顏文字・花語整區沒翻</b>：分類名稱與 32 種花名、花語全是中文，周圍的說明文字卻是英文。全部補上，日本花言葉的標記從 <code>【和】</code> 改為 <code>[JP]</code>，複製格式也改用英文標點。</li>
+        <li><b>中文索引鍵外洩到畫面上</b>：意象與情緒的對照表在兩個語言版本都以中文為索引鍵（比對邏輯需要它），但索引鍵不等於顯示名稱——當月題材、產生的標籤、創作工作台的選項因此全跳中文。現在<b>存的還是索引鍵、顯示一律走語言對照</b>，功能不變，畫面正確。</li>
+        <li>還有幾處混雜：「非Symmetrical」、排版示意圖裡四句整句中文、一句英文中間卡了一個「空」字，以及意象表裡「未明」被誤植成韓文字。</li>
+      </ul>
+      <p class="fine">建置標記更新為 v5.3.3。中英文版同步。</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.3.2 <span class="chg-build">智能導覽＋本機熱門排行</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>新增：智能導覽與功能熱門排行（純前端）</b></p>
       <ul class="tips">
         <li><b>智能導覽</b>：獨立為導覽列第一個分頁「智能導覽」，依身分（新手／抽卡／交換／品牌／創作）推薦一條分頁路徑，一鍵跳轉。全部在瀏覽器完成，<b>不需要後端或登入</b>；上次選的身分會記在本機，下次打開還在。</li>
@@ -1644,11 +1682,15 @@ function __zjkCopy(text, onOk, onFail){
    the flash must not capture "已複製" as the original text. */
 function __zjkFlash(el, msg, ms){
   if(!el) return;
+  /* Buttons whose label is markup (the flower cards carry a colour swatch and nested spans)
+     lost that markup permanently when the flash wrote textContent and restored a plain string.
+     Snapshot innerHTML instead, and keep it on the element rather than in a data-attribute so
+     the HTML is never re-parsed on the way back. */
   if(el.dataset.flashing) clearTimeout(+el.dataset.flashing);
-  else el.dataset.orig = el.textContent;
+  else el.__zjkOrigHTML = el.innerHTML;
   el.textContent = msg;
   var t = setTimeout(function(){
-    el.textContent = el.dataset.orig;
+    if(el.__zjkOrigHTML !== undefined){ el.innerHTML = el.__zjkOrigHTML; delete el.__zjkOrigHTML; }
     delete el.dataset.flashing;
   }, ms || 1100);
   el.dataset.flashing = String(t);
@@ -1658,7 +1700,17 @@ function __zjkFlash(el, msg, ms){
 /* All of this is generated from fixed vocabulary and the calendar. Nothing here goes out of date,
    which is the whole reason it can exist on a static site - a "trending tags" feature would need a
    server watching what everyone posts, and would be wrong the moment nobody maintained it. */
-var NT = {"motif": {"月": {"cn": ["月", "月光", "月色"], "jp": ["月", "ムーン"], "en": ["Moon", "Lunar", "Moonlight"], "img": ["silver", "quiet", "far"]}, "星": {"cn": ["星", "星屑", "星河"], "jp": ["星", "スター"], "en": ["Star", "Stellar", "Starlight"], "img": ["scatter", "wish", "night"]}, "花": {"cn": ["花", "花期", "落花"], "jp": ["花", "はな"], "en": ["Bloom", "Flora", "Petal"], "img": ["soft", "brief", "sweet"]}, "薔薇": {"cn": ["薔薇", "玫瑰", "薔薇色"], "jp": ["薔薇", "ローズ"], "en": ["Rose", "Rosa", "Thorn"], "img": ["thorn", "deep", "proud"]}, "海": {"cn": ["海", "潮", "深海"], "jp": ["海", "うみ"], "en": ["Sea", "Ocean", "Tide"], "img": ["blue", "deep", "far"]}, "雨": {"cn": ["雨", "細雨", "雨後"], "jp": ["雨", "あめ"], "en": ["Rain", "Drizzle", "Petrichor"], "img": ["grey", "quiet", "wash"]}, "雪": {"cn": ["雪", "初雪", "雪原"], "jp": ["雪", "ゆき"], "en": ["Snow", "Frost", "Winter"], "img": ["white", "cold", "hush"]}, "夜": {"cn": ["夜", "深夜", "夜色"], "jp": ["夜", "ナイト"], "en": ["Night", "Midnight", "Nocturne"], "img": ["dark", "quiet", "alone"]}, "夢": {"cn": ["夢", "夢境", "夢囈"], "jp": ["夢", "ゆめ"], "en": ["Dream", "Reverie", "Lucid"], "img": ["blur", "soft", "unreal"]}, "光": {"cn": ["光", "微光", "晨光"], "jp": ["光", "ひかり"], "en": ["Light", "Glow", "Radiance"], "img": ["warm", "hope", "bright"]}, "影": {"cn": ["影", "暗影", "剪影"], "jp": ["影", "かげ"], "en": ["Shadow", "Silhouette", "Umbra"], "img": ["dark", "hide", "cool"]}, "蝶": {"cn": ["蝶", "蝴蝶", "蝶翼"], "jp": ["蝶", "ちょう"], "en": ["Butterfly", "Papillon", "Wing"], "img": ["brief", "light", "free"]}, "水": {"cn": ["水", "水面", "漣漪"], "jp": ["水", "みず"], "en": ["Water", "Ripple", "Mirror"], "img": ["clear", "still", "reflect"]}, "風": {"cn": ["風", "微風", "季風"], "jp": ["風", "かぜ"], "en": ["Wind", "Breeze", "Gale"], "img": ["move", "free", "cool"]}, "森": {"cn": ["森", "森林", "林間"], "jp": ["森", "もり"], "en": ["Forest", "Grove", "Woods"], "img": ["green", "deep", "quiet"]}, "城": {"cn": ["城", "古堡", "塔"], "jp": ["城", "キャッスル"], "en": ["Castle", "Tower", "Citadel"], "img": ["tall", "old", "alone"]}, "茶": {"cn": ["茶", "午後", "紅茶"], "jp": ["茶", "ティー"], "en": ["Tea", "Afternoon", "Earl"], "img": ["warm", "calm", "brown"]}, "貓": {"cn": ["貓", "黑貓", "貓步"], "jp": ["猫", "ねこ"], "en": ["Cat", "Kitten", "Paw"], "img": ["soft", "sly", "free"]}, "羽": {"cn": ["羽", "羽毛", "翼"], "jp": ["羽", "つばさ"], "en": ["Feather", "Plume", "Wing"], "img": ["light", "fall", "white"]}, "鏡": {"cn": ["鏡", "鏡中", "映"], "jp": ["鏡", "ミラー"], "en": ["Mirror", "Reflection", "Glass"], "img": ["double", "cold", "true"]}, "雲": {"cn": ["雲", "浮雲", "雲層"], "jp": ["雲", "くも"], "en": ["Cloud", "Cumulus", "Drift"], "img": ["soft", "far", "white"]}, "霧": {"cn": ["霧", "薄霧", "晨霧"], "jp": ["霧", "きり"], "en": ["Mist", "Fog", "Haze"], "img": ["blur", "cool", "hide"]}, "火": {"cn": ["火", "火焰", "燼"], "jp": ["火", "ほのお"], "en": ["Fire", "Flame", "Ember"], "img": ["warm", "fierce", "brief"]}, "冰": {"cn": ["冰", "薄冰", "霜"], "jp": ["氷", "こおり"], "en": ["Ice", "Frost", "Glacier"], "img": ["cold", "clear", "hard"]}, "櫻": {"cn": ["櫻", "櫻花", "花瓣"], "jp": ["桜", "さくら"], "en": ["Sakura", "Cherry", "Blossom"], "img": ["pink", "brief", "spring"]}, "百合": {"cn": ["百合", "白百合", "香"], "jp": ["百合", "ゆり"], "en": ["Lily", "Lilium", "Pure"], "img": ["white", "pure", "tall"]}, "鈴蘭": {"cn": ["鈴蘭", "鈴", "小白花"], "jp": ["すずらん", "鈴蘭"], "en": ["Lily of the Valley", "Bell"], "img": ["small", "shy", "white"]}, "彼岸花": {"cn": ["彼岸花", "曼珠沙華", "紅"], "jp": ["彼岸花", "ヒガンバナ"], "en": ["Spider Lily", "Equinox"], "img": ["red", "death", "autumn"]}, "楓": {"cn": ["楓", "楓紅", "落葉"], "jp": ["楓", "もみじ"], "en": ["Maple", "Autumn Leaf"], "img": ["red", "fall", "warm"]}, "藤": {"cn": ["藤", "紫藤", "藤蔓"], "jp": ["藤", "ふじ"], "en": ["Wisteria", "Vine"], "img": ["hang", "purple", "soft"]}, "荊棘": {"cn": ["荊棘", "刺", "棘"], "jp": ["いばら", "棘"], "en": ["Thorn", "Bramble", "Briar"], "img": ["sharp", "guard", "dark"]}, "羽毛": {"cn": ["羽毛", "絨羽", "翎"], "jp": ["羽根", "はね"], "en": ["Plume", "Down", "Quill"], "img": ["light", "fall", "soft"]}, "翼": {"cn": ["翼", "雙翼", "翅"], "jp": ["翼", "つばさ"], "en": ["Wing", "Pinion", "Flight"], "img": ["free", "rise", "wide"]}, "鳥": {"cn": ["鳥", "小鳥", "候鳥"], "jp": ["鳥", "とり"], "en": ["Bird", "Sparrow", "Migrant"], "img": ["free", "small", "far"]}, "魚": {"cn": ["魚", "游魚", "鱗"], "jp": ["魚", "さかな"], "en": ["Fish", "Koi", "Scale"], "img": ["swim", "silent", "cool"]}, "鹿": {"cn": ["鹿", "小鹿", "角"], "jp": ["鹿", "しか"], "en": ["Deer", "Fawn", "Antler"], "img": ["shy", "forest", "gentle"]}, "狼": {"cn": ["狼", "孤狼", "嚎"], "jp": ["狼", "おおかみ"], "en": ["Wolf", "Lone", "Howl"], "img": ["wild", "alone", "night"]}, "兔": {"cn": ["兔", "白兔", "月兔"], "jp": ["兎", "うさぎ"], "en": ["Rabbit", "Hare", "Bunny"], "img": ["soft", "quick", "moon"]}, "蛇": {"cn": ["蛇", "白蛇", "蜿蜒"], "jp": ["蛇", "へび"], "en": ["Serpent", "Snake", "Coil"], "img": ["sly", "cold", "wind"]}, "龍": {"cn": ["龍", "幼龍", "鱗爪"], "jp": ["竜", "ドラゴン"], "en": ["Dragon", "Wyrm", "Scale"], "img": ["grand", "old", "power"]}, "星座": {"cn": ["星座", "星圖", "黃道"], "jp": ["星座", "せいざ"], "en": ["Constellation", "Zodiac"], "img": ["fate", "far", "order"]}, "彗星": {"cn": ["彗星", "流星", "尾"], "jp": ["彗星", "ほうき星"], "en": ["Comet", "Meteor", "Shooting Star"], "img": ["brief", "wish", "fast"]}, "銀河": {"cn": ["銀河", "星河", "天河"], "jp": ["銀河", "天の川"], "en": ["Galaxy", "Milky Way"], "img": ["vast", "far", "deep"]}, "極光": {"cn": ["極光", "北極光", "光幕"], "jp": ["オーロラ", "極光"], "en": ["Aurora", "Northern Lights"], "img": ["rare", "cold", "glow"]}, "太陽": {"cn": ["太陽", "日光", "驕陽"], "jp": ["太陽", "たいよう"], "en": ["Sun", "Solar", "Daylight"], "img": ["warm", "bright", "open"]}, "黃昏": {"cn": ["黃昏", "薄暮", "夕陽"], "jp": ["夕暮れ", "たそがれ"], "en": ["Dusk", "Twilight", "Sunset"], "img": ["warm", "end", "gold"]}, "黎明": {"cn": ["黎明", "拂曉", "破曉"], "jp": ["夜明け", "あけぼの"], "en": ["Dawn", "Daybreak", "Aurora"], "img": ["new", "cool", "hope"]}, "潮汐": {"cn": ["潮汐", "漲潮", "退潮"], "jp": ["潮", "しお"], "en": ["Tide", "Ebb", "Flow"], "img": ["cycle", "pull", "moon"]}, "島": {"cn": ["島", "孤島", "群島"], "jp": ["島", "しま"], "en": ["Island", "Isle", "Atoll"], "img": ["alone", "far", "sea"]}, "港": {"cn": ["港", "碼頭", "燈塔"], "jp": ["港", "みなと"], "en": ["Harbour", "Pier", "Lighthouse"], "img": ["wait", "home", "light"]}, "船": {"cn": ["船", "小舟", "帆"], "jp": ["舟", "ふね"], "en": ["Boat", "Vessel", "Sail"], "img": ["travel", "drift", "away"]}, "橋": {"cn": ["橋", "石橋", "斷橋"], "jp": ["橋", "はし"], "en": ["Bridge", "Span", "Crossing"], "img": ["link", "cross", "between"]}, "階梯": {"cn": ["階梯", "石階", "旋梯"], "jp": ["階段", "かいだん"], "en": ["Stair", "Steps", "Spiral"], "img": ["climb", "up", "slow"]}, "門": {"cn": ["門", "拱門", "暗門"], "jp": ["扉", "とびら"], "en": ["Door", "Gate", "Threshold"], "img": ["open", "choice", "pass"]}, "窗": {"cn": ["窗", "窗邊", "彩窗"], "jp": ["窓", "まど"], "en": ["Window", "Pane", "Sill"], "img": ["look", "frame", "inside"]}, "鐘": {"cn": ["鐘", "鐘聲", "時鐘"], "jp": ["鐘", "かね"], "en": ["Bell", "Clock", "Chime"], "img": ["time", "call", "toll"]}, "書": {"cn": ["書", "古書", "書頁"], "jp": ["本", "ほん"], "en": ["Book", "Tome", "Page"], "img": ["quiet", "old", "know"]}, "信": {"cn": ["信", "書信", "未寄"], "jp": ["手紙", "てがみ"], "en": ["Letter", "Envelope", "Note"], "img": ["wait", "far", "word"]}, "琴": {"cn": ["琴", "鋼琴", "弦"], "jp": ["ピアノ", "琴"], "en": ["Piano", "Strings", "Lyre"], "img": ["sound", "slow", "alone"]}, "音符": {"cn": ["音符", "旋律", "樂章"], "jp": ["音符", "メロディ"], "en": ["Note", "Melody", "Movement"], "img": ["flow", "light", "time"]}, "糖": {"cn": ["糖", "糖果", "蜜"], "jp": ["飴", "キャンディ"], "en": ["Candy", "Sugar", "Sweet"], "img": ["sweet", "small", "bright"]}, "茶會": {"cn": ["茶會", "下午茶", "點心"], "jp": ["ティーパーティ", "茶会"], "en": ["Tea Party", "Afternoon"], "img": ["warm", "social", "slow"]}, "面具": {"cn": ["面具", "假面", "偽裝"], "jp": ["仮面", "マスク"], "en": ["Mask", "Masquerade", "Guise"], "img": ["hide", "other", "play"]}, "皇冠": {"cn": ["皇冠", "冠冕", "王座"], "jp": ["王冠", "クラウン"], "en": ["Crown", "Diadem", "Throne"], "img": ["proud", "weight", "rule"]}, "寶石": {"cn": ["寶石", "水晶", "礦石"], "jp": ["宝石", "クリスタル"], "en": ["Gem", "Crystal", "Jewel"], "img": ["hard", "clear", "rare"]}, "絲帶": {"cn": ["絲帶", "緞帶", "結"], "jp": ["リボン", "ひも"], "en": ["Ribbon", "Bow", "Lace"], "img": ["tie", "soft", "gift"]}, "紗": {"cn": ["紗", "薄紗", "面紗"], "jp": ["ヴェール", "紗"], "en": ["Veil", "Gauze", "Tulle"], "img": ["hide", "soft", "light"]}, "傘": {"cn": ["傘", "紙傘", "雨傘"], "jp": ["傘", "かさ"], "en": ["Umbrella", "Parasol"], "img": ["shelter", "round", "rain"]}, "燈": {"cn": ["燈", "提燈", "街燈"], "jp": ["灯", "ランタン"], "en": ["Lantern", "Lamp", "Beacon"], "img": ["warm", "guide", "night"]}, "燭": {"cn": ["燭", "燭火", "蠟"], "jp": ["蝋燭", "ろうそく"], "en": ["Candle", "Wick", "Taper"], "img": ["small", "warm", "brief"]}, "煙火": {"cn": ["煙火", "花火", "火樹"], "jp": ["花火", "はなび"], "en": ["Fireworks", "Sparks"], "img": ["brief", "loud", "summer"]}, "廢墟": {"cn": ["廢墟", "遺跡", "殘垣"], "jp": ["廃墟", "いせき"], "en": ["Ruin", "Relic", "Remains"], "img": ["old", "empty", "past"]}, "迷宮": {"cn": ["迷宮", "迷路", "岔路"], "jp": ["迷宮", "めいろ"], "en": ["Labyrinth", "Maze"], "img": ["lost", "turn", "seek"]}, "沙漏": {"cn": ["沙漏", "流沙", "時間"], "jp": ["砂時計", "すなどけい"], "en": ["Hourglass", "Sand"], "img": ["time", "fall", "end"]}, "雨傘節": {"cn": ["雨後", "初晴", "彩虹"], "jp": ["虹", "にじ"], "en": ["Rainbow", "After Rain"], "img": ["hope", "brief", "bright"]}, "泡沫": {"cn": ["泡沫", "泡影", "氣泡"], "jp": ["泡", "あわ"], "en": ["Bubble", "Foam", "Froth"], "img": ["brief", "light", "clear"]}, "灰": {"cn": ["灰", "餘燼", "塵"], "jp": ["灰", "はい"], "en": ["Ash", "Cinder", "Dust"], "img": ["end", "grey", "quiet"]}, "傷": {"cn": ["傷", "疤", "裂痕"], "jp": ["傷", "きず"], "en": ["Scar", "Wound", "Crack"], "img": ["past", "mark", "hurt"]}, "誓言": {"cn": ["誓言", "約定", "誓"], "jp": ["誓い", "やくそく"], "en": ["Vow", "Promise", "Oath"], "img": ["bind", "future", "hold"]}, "回聲": {"cn": ["回聲", "迴響", "餘音"], "jp": ["こだま", "残響"], "en": ["Echo", "Reverb", "Resound"], "img": ["repeat", "far", "fade"]}}, "mood": {"溫柔": {"cn": ["溫柔", "柔軟", "輕柔"], "en": ["Tender", "Gentle", "Soft"], "jp": ["やさしい"]}, "孤獨": {"cn": ["孤獨", "獨自", "一個人"], "en": ["Alone", "Solitude", "Lonely"], "jp": ["ひとり"]}, "神秘": {"cn": ["神秘", "祕密", "未명"], "en": ["Mystic", "Secret", "Arcane"], "jp": ["ひみつ"]}, "療癒": {"cn": ["療癒", "安眠", "靜好"], "en": ["Healing", "Calm", "Serene"], "jp": ["いやし"]}, "華麗": {"cn": ["華麗", "盛裝", "絢爛"], "en": ["Gorgeous", "Opulent", "Grand"], "jp": ["ゴージャス"]}, "憂鬱": {"cn": ["憂鬱", "惆悵", "失落"], "en": ["Melancholy", "Blue", "Wistful"], "jp": ["ゆううつ"]}, "甜美": {"cn": ["甜", "蜜", "糖"], "en": ["Sweet", "Candy", "Sugar"], "jp": ["あまい"]}, "冷冽": {"cn": ["冷", "凜", "清冷"], "en": ["Cold", "Crisp", "Chill"], "jp": ["つめたい"]}, "浪漫": {"cn": ["浪漫", "綺麗", "旖旎"], "en": ["Romantic", "Amorous"], "jp": ["ロマンチック"]}, "清冷": {"cn": ["清冷", "淡漠", "疏離"], "en": ["Aloof", "Distant"], "jp": ["すずしい"]}, "夢幻": {"cn": ["夢幻", "縹緲", "朦朧"], "en": ["Dreamy", "Ethereal"], "jp": ["ゆめみたい"]}, "率性": {"cn": ["率性", "灑脫", "自在"], "en": ["Free", "Effortless"], "jp": ["じゆう"]}, "端莊": {"cn": ["端莊", "優雅", "從容"], "en": ["Elegant", "Poised"], "jp": ["エレガント"]}, "叛逆": {"cn": ["叛逆", "不馴", "鋒利"], "en": ["Rebel", "Defiant"], "jp": ["はんこう"]}, "純真": {"cn": ["純真", "天真", "澄澈"], "en": ["Innocent", "Pure"], "jp": ["むじゃき"]}, "危險": {"cn": ["危險", "致命", "禁忌"], "en": ["Dangerous", "Forbidden"], "jp": ["きけん"]}, "懷舊": {"cn": ["懷舊", "追憶", "泛黃"], "en": ["Nostalgic", "Faded"], "jp": ["なつかしい"]}, "決絕": {"cn": ["決絕", "訣別", "斷念"], "en": ["Resolute", "Final"], "jp": ["けつい"]}, "慵懶": {"cn": ["慵懶", "微醺", "倦"], "en": ["Languid", "Drowsy"], "jp": ["けだるい"]}, "肅殺": {"cn": ["肅殺", "凜然", "沉重"], "en": ["Severe", "Grave"], "jp": ["おごそか"]}, "俏皮": {"cn": ["俏皮", "調皮", "靈動"], "en": ["Playful", "Impish"], "jp": ["いたずら"]}, "虔誠": {"cn": ["虔誠", "聖潔", "祈"], "en": ["Devout", "Sacred"], "jp": ["けいけん"]}, "瘋狂": {"cn": ["瘋狂", "癲", "失序"], "en": ["Mad", "Frenzied"], "jp": ["きょうき"]}, "空靈": {"cn": ["空靈", "澄明", "透"], "en": ["Ethereal", "Limpid"], "jp": ["くうれい"]}, "熾熱": {"cn": ["熾熱", "灼", "滾燙"], "en": ["Ardent", "Blazing"], "jp": ["あつい"]}, "苦澀": {"cn": ["苦澀", "酸楚", "澀"], "en": ["Bitter", "Rueful"], "jp": ["にがい"]}, "安穩": {"cn": ["安穩", "踏實", "定"], "en": ["Settled", "Steady"], "jp": ["あんしん"]}, "疏狂": {"cn": ["疏狂", "狷介", "孤高"], "en": ["Untamed", "Proud"], "jp": ["こだか"]}}, "tpl": {"poetic": ["{m}與{d}", "{d}的{m}", "{m}未眠", "{m}之後", "沉入{m}", "{m}的盡頭", "與{m}的約定", "{m}落下之前", "無人知曉的{m}", "{m}是{d}的", "獻給{m}", "{m}和{m2}", "第二次的{m}", "{m}正在融化", "關於{m}的一切", "{m}的重量", "在{m}之中", "{m}以外的地方", "被{m}留下", "{m}不再回來", "數不清的{m}", "{m}的形狀", "如果{m}會說話", "{m}醒來的時候", "還給{m}", "{m}與{m2}之間", "{m}停在這裡", "{d}與{m}同行", "{m}退潮", "{m}的另一半", "尚未命名的{m}", "{m}正在等", "把{m}藏起來", "{m}以前", "{m}以後", "{m}的第七天", "{m}沒有影子", "{d}地看著{m}", "{m}和它的{m2}", "所有的{m}", "最後一個{m}", "{m}留下的{m2}", "{m}的餘溫", "{m}散場", "整座{m}", "{m}的背面", "半個{m}", "{m}的預感", "遲來的{m}", "{m}正在下沉", "{m}和{d}一起", "假裝是{m}", "{m}的替身", "{m}不需要理由", "把{d}給{m}", "{m}的長度", "{m}與時差", "來自{m}", "往{m}去", "{m}的邊界", "{m}沒有盡頭", "在{m}裡遺失", "{m}的溫度", "{m}之名", "{m}的祕密", "{m}與虛構", "{m}是借來的", "{m}的倒影", "看不見的{m}", "{m}的碎片", "{m}未完", "{m}的第一次", "{m}正好", "{m}剛剛好", "{m}稍微", "{m}與{m2}的距離", "{m}靠近", "{m}和{d}無關", "{m}其實{d}", "{d}是{m}的名字", "{m}安靜下來", "{m}張開", "{m}的另一種說法", "{m}換了顏色", "{m}也會累", "{m}的重播", "重讀{m}", "{m}翻面", "{m}的續集", "沒有{m}的日子", "{m}以外都好", "{m}值得", "{m}剛好路過", "{m}忘了", "{m}記得", "{m}沒有說", "{m}想起{m2}", "{m}的答案", "{m}的問題", "{m}正在寫", "{m}讀到一半", "{m}的注解", "{m}與留白", "{m}的空格", "{m}與句號"], "jp": ["{m}のうた", "{m}の中で", "さよなら{m}", "{m}へ", "ひとひらの{m}", "{m}によせて", "{m}のかけら", "またね、{m}", "{m}のこえ", "{m}をさがして", "{m}のあとで", "{m}とわたし", "{m}のとなり", "{m}にふれる", "{m}のゆくえ", "{m}のいろ", "{m}のかたち", "{m}のおと", "{m}のにおい", "{m}のきおく", "{m}のはじまり", "{m}のおわり", "{m}をわすれない", "{m}にさよなら", "{m}のひみつ", "{m}のねがい", "{m}のゆめ", "{m}のよる", "{m}のあさ", "{m}のひかり", "{m}のかげ", "{m}のみち", "{m}のとびら", "{m}のまど", "{m}のてがみ", "{m}のことば", "{m}のなみだ", "{m}のほほえみ", "{m}といっしょ", "{m}をだいて", "{m}にきえる", "{m}にとける", "{m}をこえて", "{m}のむこう", "{m}のてまえ", "{m}のまんなか", "{m}のはしっこ", "{m}のかけらたち", "{m}とよぶ", "{m}になりたい", "{m}のように", "{m}みたいに", "{m}だけ", "{m}ばかり", "{m}のせい", "{m}のおかげ", "{m}をありがとう", "{m}にさようなら", "{m}をもういちど", "{m}のつづき", "{m}のはんぶん", "{m}とちいさな{m2}", "{m}と{m2}のはなし", "{m}、{m2}、それから", "{m}のひとりごと", "{m}のこもりうた", "{m}のまほう", "{m}のおまじない", "{m}のじかん", "{m}のきせつ", "{m}のてざわり", "{m}のあしあと", "{m}のさきに", "{m}のうしろ", "{m}のうえ", "{m}のした", "{m}のなか", "{m}のそと", "{m}のあいだ", "{m}のかたすみ", "{m}をあつめて", "{m}をならべて", "{m}をかぞえて", "{m}をわけあう", "{m}をのこす", "{m}をひろう", "{m}をおくる", "{m}をまつ", "{m}をさがす", "{m}をみつけた", "{m}にであう", "{m}とわかれる", "{m}をおもう", "{m}をゆるす", "{m}をしんじる", "{m}はしずか", "{m}はやさしい", "{m}はとおい", "{m}はちかい", "{m}はきえない", "{d}な{m}", "{d}い{m}", "{m}と{d}", "{d}の{m}"], "en": ["{m} and {d}", "The {d} {m}", "Before the {m}", "{m} in {d}", "Letters to the {m}", "Where the {m} Sleeps", "A Study in {m}", "{m}, Unspoken", "Beneath the {m}", "{m} Never Answers", "After the {m}", "The Weight of {m}", "Inside the {m}", "Beyond the {m}", "Left by the {m}", "{m} Will Not Return", "Countless {m}", "The Shape of {m}", "If the {m} Could Speak", "When the {m} Wakes", "Return the {m}", "Between {m} and {m2}", "{m} Stops Here", "{d} Beside the {m}", "The {m} Recedes", "The Other Half of {m}", "An Unnamed {m}", "The {m} is Waiting", "Hide the {m}", "Before {m}", "After {m}", "The Seventh {m}", "The {m} Casts No Shadow", "Watching {m}, {d}", "{m} and Its {m2}", "All the {m}", "The Last {m}", "What the {m} Left", "The Warmth of {m}", "The {m} Disperses", "The Whole {m}", "The Far Side of {m}", "Half a {m}", "A Feeling of {m}", "The Late {m}", "The {m} is Sinking", "{m} with {d}", "Pretending to be {m}", "A Double for {m}", "{m} Needs No Reason", "Give {d} to the {m}", "The Length of {m}", "{m} and the Time Lag", "From the {m}", "Toward the {m}", "The Edge of {m}", "The {m} Has No End", "Lost in the {m}", "The Temperature of {m}", "In the Name of {m}", "The Secret {m}", "{m} and Fiction", "The {m} is Borrowed", "Reflection of {m}", "The Invisible {m}", "Fragments of {m}", "{m}, Unfinished", "The First {m}", "{m}, Exactly", "Just Enough {m}", "A Little {m}", "The Distance from {m} to {m2}", "{m} Draws Near", "{m} Has Nothing to Do With {d}", "{m} is Actually {d}", "{d} is the Name of {m}", "The {m} Quiets", "The {m} Opens", "Another Word for {m}", "The {m} Changed Colour", "Even {m} Gets Tired", "A Rerun of {m}", "Reading {m} Again", "{m}, Turned Over", "The Sequel to {m}", "Days Without {m}", "Anything but {m}", "{m} is Worth It", "{m} Passing By", "The {m} Forgot", "The {m} Remembers", "What the {m} Did Not Say", "The {m} Recalls {m2}", "The Answer is {m}", "The Question of {m}", "Writing the {m}", "Halfway Through {m}", "Notes on {m}", "{m} and Negative Space", "A Gap Where {m} Was", "{m}, Full Stop", "Nocturne for {m}", "Elegy for a {m}", "Portrait of {m}", "Variations on {m}", "Requiem for {m}"], "cute": ["{m}的小秘密", "{m}糖果", "毛茸茸的{m}", "{m}泡泡", "小小的{m}", "{m}午睡中", "{m}的下午茶", "{m}餅乾", "{m}布丁", "{m}果凍", "軟軟的{m}", "圓滾滾的{m}", "{m}小夥伴", "和{m}一起", "{m}的口袋", "{m}的被窩", "{m}打呵欠", "{m}在偷笑", "{m}的小房間", "{m}和{m2}的約會", "{m}好忙", "{m}想睡了", "{m}的點心時間", "{m}排排站", "{m}疊疊樂", "{m}的小帽子", "{m}穿新衣", "{m}的緞帶", "{m}的蝴蝶結", "{m}牛奶", "{m}奶昔", "{m}棉花糖", "{m}馬卡龍", "{m}鬆餅", "{m}的野餐", "{m}散步中", "{m}轉圈圈", "{m}跳跳", "{m}的祕密基地", "{m}的抽屜", "{m}的收藏", "{m}的日記", "{m}的小願望", "{m}的星期天", "{m}的假期", "{m}的小旅行", "抱著{m}", "牽著{m}", "追著{m}", "等{m}回來", "找{m}玩", "{m}的名字", "{m}和小{m2}", "兩隻{m}", "三個{m}", "一群{m}", "{m}排隊中", "{m}在打盹", "{m}的枕頭", "{m}的毯子", "{m}的杯子", "{m}的湯匙", "{m}的雨傘", "{m}的圍巾", "{m}的手套", "{m}的襪子", "{m}的鞋子", "{m}的書包", "{m}的鉛筆", "{m}的貼紙", "{m}的氣球", "{m}的風車", "{m}的鈴鐺", "{m}的音樂盒", "{m}的萬花筒", "{m}亮晶晶", "{m}軟綿綿", "{m}暖呼呼", "{m}香香的", "{m}甜甜的", "{m}涼涼的", "早安{m}", "晚安{m}", "午安{m}", "{m}你好", "謝謝{m}", "最喜歡{m}", "{m}第一名", "{m}加油", "{m}別哭", "{m}笑一個", "{m}等等我", "{m}別走", "{m}的小尾巴", "{m}的耳朵", "{m}的鼻子", "{m}的腳印", "{m}的影子", "{m}的搖籃曲", "{m}的童話", "{m}的故事書", "{m}的祕密花園", "{m}的糖果罐"], "dark": ["{m}的葬禮", "凋零的{m}", "{m}裡的怪物", "被詛咒的{m}", "{m}與腐朽", "{m}不會原諒", "最後的{m}", "{m}的殘骸", "{m}已死", "埋葬{m}", "{m}的祭品", "獻祭的{m}", "{m}的墓誌銘", "{m}的遺言", "{m}腐爛了", "{m}的骨骸", "{m}的灰燼", "焚燒{m}", "{m}的裂痕", "破碎的{m}", "{m}的傷口", "{m}在流血", "{m}的鎖鏈", "囚禁{m}", "{m}的牢籠", "{m}無法逃脫", "{m}的審判", "{m}有罪", "{m}的懲罰", "{m}的代價", "{m}的謊言", "背叛{m}", "{m}的背叛", "{m}不可信", "{m}的面具", "{m}的真面目", "{m}的陰謀", "{m}的詛咒", "{m}的低語", "{m}在呼喚", "{m}正在腐蝕", "{m}與深淵", "{m}的深處", "沉沒的{m}", "{m}的溺水", "{m}的窒息", "{m}的寒冷", "{m}凍結了", "{m}的黑夜", "無光的{m}", "{m}的盡頭是{m2}", "{m}吞噬{m2}", "{m}的獵物", "{m}的獠牙", "{m}的爪痕", "{m}的血跡", "{m}不再{d}", "失去{d}的{m}", "{m}的空洞", "空無一物的{m}", "{m}的虛無", "{m}的終焉", "{m}的末日", "{m}的黃昏", "{m}的殞落", "墜落的{m}", "{m}的殘影", "{m}的幻覺", "{m}的夢魘", "{m}的囈語", "瘋狂的{m}", "{m}的疫病", "{m}的毒", "{m}的腐臭", "{m}的蛆", "{m}的枯萎", "{m}的裂縫", "{m}的深淵", "{m}的迴聲", "{m}的餘燼", "{m}的殘渣", "{m}停止呼吸", "{m}的心跳", "{m}的最後一秒", "{m}的倒數", "{m}的終點", "{m}沒有明天", "{m}的絕望", "{m}的孤獨", "{m}被遺棄", "遺忘的{m}", "{m}的廢墟", "{m}的殘垣", "{m}的荒蕪", "{m}的死寂", "{m}的沉默", "{m}與{m2}同歸", "{m}的共犯", "{m}的殉葬", "{m}的輓歌", "{m}的安魂曲"]}, "styles": ["poetic", "jp", "en", "cute", "dark"], "months": {"1": {"lbl": "新年・初雪", "motifs": ["雪", "光", "夜"], "tags": ["#新年", "#初雪", "#冬"]}, "2": {"lbl": "情人節・早春", "motifs": ["花", "夢", "薔薇"], "tags": ["#情人節", "#巧克力", "#早春"]}, "3": {"lbl": "櫻花・畢業", "motifs": ["花", "風", "光"], "tags": ["#櫻花", "#春天", "#畢業"]}, "4": {"lbl": "春日・野餐", "motifs": ["花", "森", "茶"], "tags": ["#春天", "#野餐", "#新綠"]}, "5": {"lbl": "初夏・薔薇", "motifs": ["薔薇", "風", "水"], "tags": ["#薔薇", "#初夏", "#五月"]}, "6": {"lbl": "梅雨・繡球", "motifs": ["雨", "水", "蝶"], "tags": ["#梅雨", "#雨天", "#繡球花"]}, "7": {"lbl": "夏祭・海", "motifs": ["海", "星", "夜"], "tags": ["#夏祭", "#浴衣", "#海"]}, "8": {"lbl": "盛夏・煙火", "motifs": ["星", "夜", "光"], "tags": ["#煙火", "#盛夏", "#夜空"]}, "9": {"lbl": "初秋・月見", "motifs": ["月", "風", "茶"], "tags": ["#中秋", "#月見", "#初秋"]}, "10": {"lbl": "萬聖・楓紅", "motifs": ["夜", "影", "貓"], "tags": ["#萬聖節", "#南瓜", "#楓葉"]}, "11": {"lbl": "深秋・紅茶", "motifs": ["茶", "森", "影"], "tags": ["#深秋", "#紅茶", "#毛衣"]}, "12": {"lbl": "聖誕・年末", "motifs": ["雪", "光", "星"], "tags": ["#聖誕節", "#冬", "#年末"]}}, "base": ["#PurenistaM", "#プレニスタ", "#搭配分享", "#換裝遊戲"], "lang": "zh"};
+var NT = {"motif": {"月": {"cn": ["月", "月光", "月色"], "jp": ["月", "ムーン"], "en": ["Moon", "Lunar", "Moonlight"], "img": ["silver", "quiet", "far"]}, "星": {"cn": ["星", "星屑", "星河"], "jp": ["星", "スター"], "en": ["Star", "Stellar", "Starlight"], "img": ["scatter", "wish", "night"]}, "花": {"cn": ["花", "花期", "落花"], "jp": ["花", "はな"], "en": ["Bloom", "Flora", "Petal"], "img": ["soft", "brief", "sweet"]}, "薔薇": {"cn": ["薔薇", "玫瑰", "薔薇色"], "jp": ["薔薇", "ローズ"], "en": ["Rose", "Rosa", "Thorn"], "img": ["thorn", "deep", "proud"]}, "海": {"cn": ["海", "潮", "深海"], "jp": ["海", "うみ"], "en": ["Sea", "Ocean", "Tide"], "img": ["blue", "deep", "far"]}, "雨": {"cn": ["雨", "細雨", "雨後"], "jp": ["雨", "あめ"], "en": ["Rain", "Drizzle", "Petrichor"], "img": ["grey", "quiet", "wash"]}, "雪": {"cn": ["雪", "初雪", "雪原"], "jp": ["雪", "ゆき"], "en": ["Snow", "Frost", "Winter"], "img": ["white", "cold", "hush"]}, "夜": {"cn": ["夜", "深夜", "夜色"], "jp": ["夜", "ナイト"], "en": ["Night", "Midnight", "Nocturne"], "img": ["dark", "quiet", "alone"]}, "夢": {"cn": ["夢", "夢境", "夢囈"], "jp": ["夢", "ゆめ"], "en": ["Dream", "Reverie", "Lucid"], "img": ["blur", "soft", "unreal"]}, "光": {"cn": ["光", "微光", "晨光"], "jp": ["光", "ひかり"], "en": ["Light", "Glow", "Radiance"], "img": ["warm", "hope", "bright"]}, "影": {"cn": ["影", "暗影", "剪影"], "jp": ["影", "かげ"], "en": ["Shadow", "Silhouette", "Umbra"], "img": ["dark", "hide", "cool"]}, "蝶": {"cn": ["蝶", "蝴蝶", "蝶翼"], "jp": ["蝶", "ちょう"], "en": ["Butterfly", "Papillon", "Wing"], "img": ["brief", "light", "free"]}, "水": {"cn": ["水", "水面", "漣漪"], "jp": ["水", "みず"], "en": ["Water", "Ripple", "Mirror"], "img": ["clear", "still", "reflect"]}, "風": {"cn": ["風", "微風", "季風"], "jp": ["風", "かぜ"], "en": ["Wind", "Breeze", "Gale"], "img": ["move", "free", "cool"]}, "森": {"cn": ["森", "森林", "林間"], "jp": ["森", "もり"], "en": ["Forest", "Grove", "Woods"], "img": ["green", "deep", "quiet"]}, "城": {"cn": ["城", "古堡", "塔"], "jp": ["城", "キャッスル"], "en": ["Castle", "Tower", "Citadel"], "img": ["tall", "old", "alone"]}, "茶": {"cn": ["茶", "午後", "紅茶"], "jp": ["茶", "ティー"], "en": ["Tea", "Afternoon", "Earl"], "img": ["warm", "calm", "brown"]}, "貓": {"cn": ["貓", "黑貓", "貓步"], "jp": ["猫", "ねこ"], "en": ["Cat", "Kitten", "Paw"], "img": ["soft", "sly", "free"]}, "羽": {"cn": ["羽", "羽毛", "翼"], "jp": ["羽", "つばさ"], "en": ["Feather", "Plume", "Wing"], "img": ["light", "fall", "white"]}, "鏡": {"cn": ["鏡", "鏡中", "映"], "jp": ["鏡", "ミラー"], "en": ["Mirror", "Reflection", "Glass"], "img": ["double", "cold", "true"]}, "雲": {"cn": ["雲", "浮雲", "雲層"], "jp": ["雲", "くも"], "en": ["Cloud", "Cumulus", "Drift"], "img": ["soft", "far", "white"]}, "霧": {"cn": ["霧", "薄霧", "晨霧"], "jp": ["霧", "きり"], "en": ["Mist", "Fog", "Haze"], "img": ["blur", "cool", "hide"]}, "火": {"cn": ["火", "火焰", "燼"], "jp": ["火", "ほのお"], "en": ["Fire", "Flame", "Ember"], "img": ["warm", "fierce", "brief"]}, "冰": {"cn": ["冰", "薄冰", "霜"], "jp": ["氷", "こおり"], "en": ["Ice", "Frost", "Glacier"], "img": ["cold", "clear", "hard"]}, "櫻": {"cn": ["櫻", "櫻花", "花瓣"], "jp": ["桜", "さくら"], "en": ["Sakura", "Cherry", "Blossom"], "img": ["pink", "brief", "spring"]}, "百合": {"cn": ["百合", "白百合", "香"], "jp": ["百合", "ゆり"], "en": ["Lily", "Lilium", "Pure"], "img": ["white", "pure", "tall"]}, "鈴蘭": {"cn": ["鈴蘭", "鈴", "小白花"], "jp": ["すずらん", "鈴蘭"], "en": ["Lily of the Valley", "Bell"], "img": ["small", "shy", "white"]}, "彼岸花": {"cn": ["彼岸花", "曼珠沙華", "紅"], "jp": ["彼岸花", "ヒガンバナ"], "en": ["Spider Lily", "Equinox"], "img": ["red", "death", "autumn"]}, "楓": {"cn": ["楓", "楓紅", "落葉"], "jp": ["楓", "もみじ"], "en": ["Maple", "Autumn Leaf"], "img": ["red", "fall", "warm"]}, "藤": {"cn": ["藤", "紫藤", "藤蔓"], "jp": ["藤", "ふじ"], "en": ["Wisteria", "Vine"], "img": ["hang", "purple", "soft"]}, "荊棘": {"cn": ["荊棘", "刺", "棘"], "jp": ["いばら", "棘"], "en": ["Thorn", "Bramble", "Briar"], "img": ["sharp", "guard", "dark"]}, "羽毛": {"cn": ["羽毛", "絨羽", "翎"], "jp": ["羽根", "はね"], "en": ["Plume", "Down", "Quill"], "img": ["light", "fall", "soft"]}, "翼": {"cn": ["翼", "雙翼", "翅"], "jp": ["翼", "つばさ"], "en": ["Wing", "Pinion", "Flight"], "img": ["free", "rise", "wide"]}, "鳥": {"cn": ["鳥", "小鳥", "候鳥"], "jp": ["鳥", "とり"], "en": ["Bird", "Sparrow", "Migrant"], "img": ["free", "small", "far"]}, "魚": {"cn": ["魚", "游魚", "鱗"], "jp": ["魚", "さかな"], "en": ["Fish", "Koi", "Scale"], "img": ["swim", "silent", "cool"]}, "鹿": {"cn": ["鹿", "小鹿", "角"], "jp": ["鹿", "しか"], "en": ["Deer", "Fawn", "Antler"], "img": ["shy", "forest", "gentle"]}, "狼": {"cn": ["狼", "孤狼", "嚎"], "jp": ["狼", "おおかみ"], "en": ["Wolf", "Lone", "Howl"], "img": ["wild", "alone", "night"]}, "兔": {"cn": ["兔", "白兔", "月兔"], "jp": ["兎", "うさぎ"], "en": ["Rabbit", "Hare", "Bunny"], "img": ["soft", "quick", "moon"]}, "蛇": {"cn": ["蛇", "白蛇", "蜿蜒"], "jp": ["蛇", "へび"], "en": ["Serpent", "Snake", "Coil"], "img": ["sly", "cold", "wind"]}, "龍": {"cn": ["龍", "幼龍", "鱗爪"], "jp": ["竜", "ドラゴン"], "en": ["Dragon", "Wyrm", "Scale"], "img": ["grand", "old", "power"]}, "星座": {"cn": ["星座", "星圖", "黃道"], "jp": ["星座", "せいざ"], "en": ["Constellation", "Zodiac"], "img": ["fate", "far", "order"]}, "彗星": {"cn": ["彗星", "流星", "尾"], "jp": ["彗星", "ほうき星"], "en": ["Comet", "Meteor", "Shooting Star"], "img": ["brief", "wish", "fast"]}, "銀河": {"cn": ["銀河", "星河", "天河"], "jp": ["銀河", "天の川"], "en": ["Galaxy", "Milky Way"], "img": ["vast", "far", "deep"]}, "極光": {"cn": ["極光", "北極光", "光幕"], "jp": ["オーロラ", "極光"], "en": ["Aurora", "Northern Lights"], "img": ["rare", "cold", "glow"]}, "太陽": {"cn": ["太陽", "日光", "驕陽"], "jp": ["太陽", "たいよう"], "en": ["Sun", "Solar", "Daylight"], "img": ["warm", "bright", "open"]}, "黃昏": {"cn": ["黃昏", "薄暮", "夕陽"], "jp": ["夕暮れ", "たそがれ"], "en": ["Dusk", "Twilight", "Sunset"], "img": ["warm", "end", "gold"]}, "黎明": {"cn": ["黎明", "拂曉", "破曉"], "jp": ["夜明け", "あけぼの"], "en": ["Dawn", "Daybreak", "Aurora"], "img": ["new", "cool", "hope"]}, "潮汐": {"cn": ["潮汐", "漲潮", "退潮"], "jp": ["潮", "しお"], "en": ["Tide", "Ebb", "Flow"], "img": ["cycle", "pull", "moon"]}, "島": {"cn": ["島", "孤島", "群島"], "jp": ["島", "しま"], "en": ["Island", "Isle", "Atoll"], "img": ["alone", "far", "sea"]}, "港": {"cn": ["港", "碼頭", "燈塔"], "jp": ["港", "みなと"], "en": ["Harbour", "Pier", "Lighthouse"], "img": ["wait", "home", "light"]}, "船": {"cn": ["船", "小舟", "帆"], "jp": ["舟", "ふね"], "en": ["Boat", "Vessel", "Sail"], "img": ["travel", "drift", "away"]}, "橋": {"cn": ["橋", "石橋", "斷橋"], "jp": ["橋", "はし"], "en": ["Bridge", "Span", "Crossing"], "img": ["link", "cross", "between"]}, "階梯": {"cn": ["階梯", "石階", "旋梯"], "jp": ["階段", "かいだん"], "en": ["Stair", "Steps", "Spiral"], "img": ["climb", "up", "slow"]}, "門": {"cn": ["門", "拱門", "暗門"], "jp": ["扉", "とびら"], "en": ["Door", "Gate", "Threshold"], "img": ["open", "choice", "pass"]}, "窗": {"cn": ["窗", "窗邊", "彩窗"], "jp": ["窓", "まど"], "en": ["Window", "Pane", "Sill"], "img": ["look", "frame", "inside"]}, "鐘": {"cn": ["鐘", "鐘聲", "時鐘"], "jp": ["鐘", "かね"], "en": ["Bell", "Clock", "Chime"], "img": ["time", "call", "toll"]}, "書": {"cn": ["書", "古書", "書頁"], "jp": ["本", "ほん"], "en": ["Book", "Tome", "Page"], "img": ["quiet", "old", "know"]}, "信": {"cn": ["信", "書信", "未寄"], "jp": ["手紙", "てがみ"], "en": ["Letter", "Envelope", "Note"], "img": ["wait", "far", "word"]}, "琴": {"cn": ["琴", "鋼琴", "弦"], "jp": ["ピアノ", "琴"], "en": ["Piano", "Strings", "Lyre"], "img": ["sound", "slow", "alone"]}, "音符": {"cn": ["音符", "旋律", "樂章"], "jp": ["音符", "メロディ"], "en": ["Note", "Melody", "Movement"], "img": ["flow", "light", "time"]}, "糖": {"cn": ["糖", "糖果", "蜜"], "jp": ["飴", "キャンディ"], "en": ["Candy", "Sugar", "Sweet"], "img": ["sweet", "small", "bright"]}, "茶會": {"cn": ["茶會", "下午茶", "點心"], "jp": ["ティーパーティ", "茶会"], "en": ["Tea Party", "Afternoon"], "img": ["warm", "social", "slow"]}, "面具": {"cn": ["面具", "假面", "偽裝"], "jp": ["仮面", "マスク"], "en": ["Mask", "Masquerade", "Guise"], "img": ["hide", "other", "play"]}, "皇冠": {"cn": ["皇冠", "冠冕", "王座"], "jp": ["王冠", "クラウン"], "en": ["Crown", "Diadem", "Throne"], "img": ["proud", "weight", "rule"]}, "寶石": {"cn": ["寶石", "水晶", "礦石"], "jp": ["宝石", "クリスタル"], "en": ["Gem", "Crystal", "Jewel"], "img": ["hard", "clear", "rare"]}, "絲帶": {"cn": ["絲帶", "緞帶", "結"], "jp": ["リボン", "ひも"], "en": ["Ribbon", "Bow", "Lace"], "img": ["tie", "soft", "gift"]}, "紗": {"cn": ["紗", "薄紗", "面紗"], "jp": ["ヴェール", "紗"], "en": ["Veil", "Gauze", "Tulle"], "img": ["hide", "soft", "light"]}, "傘": {"cn": ["傘", "紙傘", "雨傘"], "jp": ["傘", "かさ"], "en": ["Umbrella", "Parasol"], "img": ["shelter", "round", "rain"]}, "燈": {"cn": ["燈", "提燈", "街燈"], "jp": ["灯", "ランタン"], "en": ["Lantern", "Lamp", "Beacon"], "img": ["warm", "guide", "night"]}, "燭": {"cn": ["燭", "燭火", "蠟"], "jp": ["蝋燭", "ろうそく"], "en": ["Candle", "Wick", "Taper"], "img": ["small", "warm", "brief"]}, "煙火": {"cn": ["煙火", "花火", "火樹"], "jp": ["花火", "はなび"], "en": ["Fireworks", "Sparks"], "img": ["brief", "loud", "summer"]}, "廢墟": {"cn": ["廢墟", "遺跡", "殘垣"], "jp": ["廃墟", "いせき"], "en": ["Ruin", "Relic", "Remains"], "img": ["old", "empty", "past"]}, "迷宮": {"cn": ["迷宮", "迷路", "岔路"], "jp": ["迷宮", "めいろ"], "en": ["Labyrinth", "Maze"], "img": ["lost", "turn", "seek"]}, "沙漏": {"cn": ["沙漏", "流沙", "時間"], "jp": ["砂時計", "すなどけい"], "en": ["Hourglass", "Sand"], "img": ["time", "fall", "end"]}, "雨傘節": {"cn": ["雨後", "初晴", "彩虹"], "jp": ["虹", "にじ"], "en": ["Rainbow", "After Rain"], "img": ["hope", "brief", "bright"]}, "泡沫": {"cn": ["泡沫", "泡影", "氣泡"], "jp": ["泡", "あわ"], "en": ["Bubble", "Foam", "Froth"], "img": ["brief", "light", "clear"]}, "灰": {"cn": ["灰", "餘燼", "塵"], "jp": ["灰", "はい"], "en": ["Ash", "Cinder", "Dust"], "img": ["end", "grey", "quiet"]}, "傷": {"cn": ["傷", "疤", "裂痕"], "jp": ["傷", "きず"], "en": ["Scar", "Wound", "Crack"], "img": ["past", "mark", "hurt"]}, "誓言": {"cn": ["誓言", "約定", "誓"], "jp": ["誓い", "やくそく"], "en": ["Vow", "Promise", "Oath"], "img": ["bind", "future", "hold"]}, "回聲": {"cn": ["回聲", "迴響", "餘音"], "jp": ["こだま", "残響"], "en": ["Echo", "Reverb", "Resound"], "img": ["repeat", "far", "fade"]}}, "mood": {"溫柔": {"cn": ["溫柔", "柔軟", "輕柔"], "en": ["Tender", "Gentle", "Soft"], "jp": ["やさしい"]}, "孤獨": {"cn": ["孤獨", "獨自", "一個人"], "en": ["Alone", "Solitude", "Lonely"], "jp": ["ひとり"]}, "神秘": {"cn": ["神秘", "祕密", "未明"], "en": ["Mystic", "Secret", "Arcane"], "jp": ["ひみつ"]}, "療癒": {"cn": ["療癒", "安眠", "靜好"], "en": ["Healing", "Calm", "Serene"], "jp": ["いやし"]}, "華麗": {"cn": ["華麗", "盛裝", "絢爛"], "en": ["Gorgeous", "Opulent", "Grand"], "jp": ["ゴージャス"]}, "憂鬱": {"cn": ["憂鬱", "惆悵", "失落"], "en": ["Melancholy", "Blue", "Wistful"], "jp": ["ゆううつ"]}, "甜美": {"cn": ["甜", "蜜", "糖"], "en": ["Sweet", "Candy", "Sugar"], "jp": ["あまい"]}, "冷冽": {"cn": ["冷", "凜", "清冷"], "en": ["Cold", "Crisp", "Chill"], "jp": ["つめたい"]}, "浪漫": {"cn": ["浪漫", "綺麗", "旖旎"], "en": ["Romantic", "Amorous"], "jp": ["ロマンチック"]}, "清冷": {"cn": ["清冷", "淡漠", "疏離"], "en": ["Aloof", "Distant"], "jp": ["すずしい"]}, "夢幻": {"cn": ["夢幻", "縹緲", "朦朧"], "en": ["Dreamy", "Ethereal"], "jp": ["ゆめみたい"]}, "率性": {"cn": ["率性", "灑脫", "自在"], "en": ["Free", "Effortless"], "jp": ["じゆう"]}, "端莊": {"cn": ["端莊", "優雅", "從容"], "en": ["Elegant", "Poised"], "jp": ["エレガント"]}, "叛逆": {"cn": ["叛逆", "不馴", "鋒利"], "en": ["Rebel", "Defiant"], "jp": ["はんこう"]}, "純真": {"cn": ["純真", "天真", "澄澈"], "en": ["Innocent", "Pure"], "jp": ["むじゃき"]}, "危險": {"cn": ["危險", "致命", "禁忌"], "en": ["Dangerous", "Forbidden"], "jp": ["きけん"]}, "懷舊": {"cn": ["懷舊", "追憶", "泛黃"], "en": ["Nostalgic", "Faded"], "jp": ["なつかしい"]}, "決絕": {"cn": ["決絕", "訣別", "斷念"], "en": ["Resolute", "Final"], "jp": ["けつい"]}, "慵懶": {"cn": ["慵懶", "微醺", "倦"], "en": ["Languid", "Drowsy"], "jp": ["けだるい"]}, "肅殺": {"cn": ["肅殺", "凜然", "沉重"], "en": ["Severe", "Grave"], "jp": ["おごそか"]}, "俏皮": {"cn": ["俏皮", "調皮", "靈動"], "en": ["Playful", "Impish"], "jp": ["いたずら"]}, "虔誠": {"cn": ["虔誠", "聖潔", "祈"], "en": ["Devout", "Sacred"], "jp": ["けいけん"]}, "瘋狂": {"cn": ["瘋狂", "癲", "失序"], "en": ["Mad", "Frenzied"], "jp": ["きょうき"]}, "空靈": {"cn": ["空靈", "澄明", "透"], "en": ["Ethereal", "Limpid"], "jp": ["くうれい"]}, "熾熱": {"cn": ["熾熱", "灼", "滾燙"], "en": ["Ardent", "Blazing"], "jp": ["あつい"]}, "苦澀": {"cn": ["苦澀", "酸楚", "澀"], "en": ["Bitter", "Rueful"], "jp": ["にがい"]}, "安穩": {"cn": ["安穩", "踏實", "定"], "en": ["Settled", "Steady"], "jp": ["あんしん"]}, "疏狂": {"cn": ["疏狂", "狷介", "孤高"], "en": ["Untamed", "Proud"], "jp": ["こだか"]}}, "tpl": {"poetic": ["{m}與{d}", "{d}的{m}", "{m}未眠", "{m}之後", "沉入{m}", "{m}的盡頭", "與{m}的約定", "{m}落下之前", "無人知曉的{m}", "{m}是{d}的", "獻給{m}", "{m}和{m2}", "第二次的{m}", "{m}正在融化", "關於{m}的一切", "{m}的重量", "在{m}之中", "{m}以外的地方", "被{m}留下", "{m}不再回來", "數不清的{m}", "{m}的形狀", "如果{m}會說話", "{m}醒來的時候", "還給{m}", "{m}與{m2}之間", "{m}停在這裡", "{d}與{m}同行", "{m}退潮", "{m}的另一半", "尚未命名的{m}", "{m}正在等", "把{m}藏起來", "{m}以前", "{m}以後", "{m}的第七天", "{m}沒有影子", "{d}地看著{m}", "{m}和它的{m2}", "所有的{m}", "最後一個{m}", "{m}留下的{m2}", "{m}的餘溫", "{m}散場", "整座{m}", "{m}的背面", "半個{m}", "{m}的預感", "遲來的{m}", "{m}正在下沉", "{m}和{d}一起", "假裝是{m}", "{m}的替身", "{m}不需要理由", "把{d}給{m}", "{m}的長度", "{m}與時差", "來自{m}", "往{m}去", "{m}的邊界", "{m}沒有盡頭", "在{m}裡遺失", "{m}的溫度", "{m}之名", "{m}的祕密", "{m}與虛構", "{m}是借來的", "{m}的倒影", "看不見的{m}", "{m}的碎片", "{m}未完", "{m}的第一次", "{m}正好", "{m}剛剛好", "{m}稍微", "{m}與{m2}的距離", "{m}靠近", "{m}和{d}無關", "{m}其實{d}", "{d}是{m}的名字", "{m}安靜下來", "{m}張開", "{m}的另一種說法", "{m}換了顏色", "{m}也會累", "{m}的重播", "重讀{m}", "{m}翻面", "{m}的續集", "沒有{m}的日子", "{m}以外都好", "{m}值得", "{m}剛好路過", "{m}忘了", "{m}記得", "{m}沒有說", "{m}想起{m2}", "{m}的答案", "{m}的問題", "{m}正在寫", "{m}讀到一半", "{m}的注解", "{m}與留白", "{m}的空格", "{m}與句號"], "jp": ["{m}のうた", "{m}の中で", "さよなら{m}", "{m}へ", "ひとひらの{m}", "{m}によせて", "{m}のかけら", "またね、{m}", "{m}のこえ", "{m}をさがして", "{m}のあとで", "{m}とわたし", "{m}のとなり", "{m}にふれる", "{m}のゆくえ", "{m}のいろ", "{m}のかたち", "{m}のおと", "{m}のにおい", "{m}のきおく", "{m}のはじまり", "{m}のおわり", "{m}をわすれない", "{m}にさよなら", "{m}のひみつ", "{m}のねがい", "{m}のゆめ", "{m}のよる", "{m}のあさ", "{m}のひかり", "{m}のかげ", "{m}のみち", "{m}のとびら", "{m}のまど", "{m}のてがみ", "{m}のことば", "{m}のなみだ", "{m}のほほえみ", "{m}といっしょ", "{m}をだいて", "{m}にきえる", "{m}にとける", "{m}をこえて", "{m}のむこう", "{m}のてまえ", "{m}のまんなか", "{m}のはしっこ", "{m}のかけらたち", "{m}とよぶ", "{m}になりたい", "{m}のように", "{m}みたいに", "{m}だけ", "{m}ばかり", "{m}のせい", "{m}のおかげ", "{m}をありがとう", "{m}にさようなら", "{m}をもういちど", "{m}のつづき", "{m}のはんぶん", "{m}とちいさな{m2}", "{m}と{m2}のはなし", "{m}、{m2}、それから", "{m}のひとりごと", "{m}のこもりうた", "{m}のまほう", "{m}のおまじない", "{m}のじかん", "{m}のきせつ", "{m}のてざわり", "{m}のあしあと", "{m}のさきに", "{m}のうしろ", "{m}のうえ", "{m}のした", "{m}のなか", "{m}のそと", "{m}のあいだ", "{m}のかたすみ", "{m}をあつめて", "{m}をならべて", "{m}をかぞえて", "{m}をわけあう", "{m}をのこす", "{m}をひろう", "{m}をおくる", "{m}をまつ", "{m}をさがす", "{m}をみつけた", "{m}にであう", "{m}とわかれる", "{m}をおもう", "{m}をゆるす", "{m}をしんじる", "{m}はしずか", "{m}はやさしい", "{m}はとおい", "{m}はちかい", "{m}はきえない", "{d}な{m}", "{d}い{m}", "{m}と{d}", "{d}の{m}"], "en": ["{m} and {d}", "The {d} {m}", "Before the {m}", "{m} in {d}", "Letters to the {m}", "Where the {m} Sleeps", "A Study in {m}", "{m}, Unspoken", "Beneath the {m}", "{m} Never Answers", "After the {m}", "The Weight of {m}", "Inside the {m}", "Beyond the {m}", "Left by the {m}", "{m} Will Not Return", "Countless {m}", "The Shape of {m}", "If the {m} Could Speak", "When the {m} Wakes", "Return the {m}", "Between {m} and {m2}", "{m} Stops Here", "{d} Beside the {m}", "The {m} Recedes", "The Other Half of {m}", "An Unnamed {m}", "The {m} is Waiting", "Hide the {m}", "Before {m}", "After {m}", "The Seventh {m}", "The {m} Casts No Shadow", "Watching {m}, {d}", "{m} and Its {m2}", "All the {m}", "The Last {m}", "What the {m} Left", "The Warmth of {m}", "The {m} Disperses", "The Whole {m}", "The Far Side of {m}", "Half a {m}", "A Feeling of {m}", "The Late {m}", "The {m} is Sinking", "{m} with {d}", "Pretending to be {m}", "A Double for {m}", "{m} Needs No Reason", "Give {d} to the {m}", "The Length of {m}", "{m} and the Time Lag", "From the {m}", "Toward the {m}", "The Edge of {m}", "The {m} Has No End", "Lost in the {m}", "The Temperature of {m}", "In the Name of {m}", "The Secret {m}", "{m} and Fiction", "The {m} is Borrowed", "Reflection of {m}", "The Invisible {m}", "Fragments of {m}", "{m}, Unfinished", "The First {m}", "{m}, Exactly", "Just Enough {m}", "A Little {m}", "The Distance from {m} to {m2}", "{m} Draws Near", "{m} Has Nothing to Do With {d}", "{m} is Actually {d}", "{d} is the Name of {m}", "The {m} Quiets", "The {m} Opens", "Another Word for {m}", "The {m} Changed Colour", "Even {m} Gets Tired", "A Rerun of {m}", "Reading {m} Again", "{m}, Turned Over", "The Sequel to {m}", "Days Without {m}", "Anything but {m}", "{m} is Worth It", "{m} Passing By", "The {m} Forgot", "The {m} Remembers", "What the {m} Did Not Say", "The {m} Recalls {m2}", "The Answer is {m}", "The Question of {m}", "Writing the {m}", "Halfway Through {m}", "Notes on {m}", "{m} and Negative Space", "A Gap Where {m} Was", "{m}, Full Stop", "Nocturne for {m}", "Elegy for a {m}", "Portrait of {m}", "Variations on {m}", "Requiem for {m}"], "cute": ["{m}的小秘密", "{m}糖果", "毛茸茸的{m}", "{m}泡泡", "小小的{m}", "{m}午睡中", "{m}的下午茶", "{m}餅乾", "{m}布丁", "{m}果凍", "軟軟的{m}", "圓滾滾的{m}", "{m}小夥伴", "和{m}一起", "{m}的口袋", "{m}的被窩", "{m}打呵欠", "{m}在偷笑", "{m}的小房間", "{m}和{m2}的約會", "{m}好忙", "{m}想睡了", "{m}的點心時間", "{m}排排站", "{m}疊疊樂", "{m}的小帽子", "{m}穿新衣", "{m}的緞帶", "{m}的蝴蝶結", "{m}牛奶", "{m}奶昔", "{m}棉花糖", "{m}馬卡龍", "{m}鬆餅", "{m}的野餐", "{m}散步中", "{m}轉圈圈", "{m}跳跳", "{m}的祕密基地", "{m}的抽屜", "{m}的收藏", "{m}的日記", "{m}的小願望", "{m}的星期天", "{m}的假期", "{m}的小旅行", "抱著{m}", "牽著{m}", "追著{m}", "等{m}回來", "找{m}玩", "{m}的名字", "{m}和小{m2}", "兩隻{m}", "三個{m}", "一群{m}", "{m}排隊中", "{m}在打盹", "{m}的枕頭", "{m}的毯子", "{m}的杯子", "{m}的湯匙", "{m}的雨傘", "{m}的圍巾", "{m}的手套", "{m}的襪子", "{m}的鞋子", "{m}的書包", "{m}的鉛筆", "{m}的貼紙", "{m}的氣球", "{m}的風車", "{m}的鈴鐺", "{m}的音樂盒", "{m}的萬花筒", "{m}亮晶晶", "{m}軟綿綿", "{m}暖呼呼", "{m}香香的", "{m}甜甜的", "{m}涼涼的", "早安{m}", "晚安{m}", "午安{m}", "{m}你好", "謝謝{m}", "最喜歡{m}", "{m}第一名", "{m}加油", "{m}別哭", "{m}笑一個", "{m}等等我", "{m}別走", "{m}的小尾巴", "{m}的耳朵", "{m}的鼻子", "{m}的腳印", "{m}的影子", "{m}的搖籃曲", "{m}的童話", "{m}的故事書", "{m}的祕密花園", "{m}的糖果罐"], "dark": ["{m}的葬禮", "凋零的{m}", "{m}裡的怪物", "被詛咒的{m}", "{m}與腐朽", "{m}不會原諒", "最後的{m}", "{m}的殘骸", "{m}已死", "埋葬{m}", "{m}的祭品", "獻祭的{m}", "{m}的墓誌銘", "{m}的遺言", "{m}腐爛了", "{m}的骨骸", "{m}的灰燼", "焚燒{m}", "{m}的裂痕", "破碎的{m}", "{m}的傷口", "{m}在流血", "{m}的鎖鏈", "囚禁{m}", "{m}的牢籠", "{m}無法逃脫", "{m}的審判", "{m}有罪", "{m}的懲罰", "{m}的代價", "{m}的謊言", "背叛{m}", "{m}的背叛", "{m}不可信", "{m}的面具", "{m}的真面目", "{m}的陰謀", "{m}的詛咒", "{m}的低語", "{m}在呼喚", "{m}正在腐蝕", "{m}與深淵", "{m}的深處", "沉沒的{m}", "{m}的溺水", "{m}的窒息", "{m}的寒冷", "{m}凍結了", "{m}的黑夜", "無光的{m}", "{m}的盡頭是{m2}", "{m}吞噬{m2}", "{m}的獵物", "{m}的獠牙", "{m}的爪痕", "{m}的血跡", "{m}不再{d}", "失去{d}的{m}", "{m}的空洞", "空無一物的{m}", "{m}的虛無", "{m}的終焉", "{m}的末日", "{m}的黃昏", "{m}的殞落", "墜落的{m}", "{m}的殘影", "{m}的幻覺", "{m}的夢魘", "{m}的囈語", "瘋狂的{m}", "{m}的疫病", "{m}的毒", "{m}的腐臭", "{m}的蛆", "{m}的枯萎", "{m}的裂縫", "{m}的深淵", "{m}的迴聲", "{m}的餘燼", "{m}的殘渣", "{m}停止呼吸", "{m}的心跳", "{m}的最後一秒", "{m}的倒數", "{m}的終點", "{m}沒有明天", "{m}的絕望", "{m}的孤獨", "{m}被遺棄", "遺忘的{m}", "{m}的廢墟", "{m}的殘垣", "{m}的荒蕪", "{m}的死寂", "{m}的沉默", "{m}與{m2}同歸", "{m}的共犯", "{m}的殉葬", "{m}的輓歌", "{m}的安魂曲"]}, "styles": ["poetic", "jp", "en", "cute", "dark"], "months": {"1": {"lbl": "新年・初雪", "motifs": ["雪", "光", "夜"], "tags": ["#新年", "#初雪", "#冬"]}, "2": {"lbl": "情人節・早春", "motifs": ["花", "夢", "薔薇"], "tags": ["#情人節", "#巧克力", "#早春"]}, "3": {"lbl": "櫻花・畢業", "motifs": ["花", "風", "光"], "tags": ["#櫻花", "#春天", "#畢業"]}, "4": {"lbl": "春日・野餐", "motifs": ["花", "森", "茶"], "tags": ["#春天", "#野餐", "#新綠"]}, "5": {"lbl": "初夏・薔薇", "motifs": ["薔薇", "風", "水"], "tags": ["#薔薇", "#初夏", "#五月"]}, "6": {"lbl": "梅雨・繡球", "motifs": ["雨", "水", "蝶"], "tags": ["#梅雨", "#雨天", "#繡球花"]}, "7": {"lbl": "夏祭・海", "motifs": ["海", "星", "夜"], "tags": ["#夏祭", "#浴衣", "#海"]}, "8": {"lbl": "盛夏・煙火", "motifs": ["星", "夜", "光"], "tags": ["#煙火", "#盛夏", "#夜空"]}, "9": {"lbl": "初秋・月見", "motifs": ["月", "風", "茶"], "tags": ["#中秋", "#月見", "#初秋"]}, "10": {"lbl": "萬聖・楓紅", "motifs": ["夜", "影", "貓"], "tags": ["#萬聖節", "#南瓜", "#楓葉"]}, "11": {"lbl": "深秋・紅茶", "motifs": ["茶", "森", "影"], "tags": ["#深秋", "#紅茶", "#毛衣"]}, "12": {"lbl": "聖誕・年末", "motifs": ["雪", "光", "星"], "tags": ["#聖誕節", "#冬", "#年末"]}}, "base": ["#PurenistaM", "#プレニスタ", "#搭配分享", "#換裝遊戲"], "lang": "zh"};
+/* The motif and mood tables stay keyed in Chinese in every build - the key is the lookup
+   identity and the matcher indexes it - but a key is not a label, and on the English build the
+   raw keys were reaching the screen: the seasonal chips, the generated hashtags and every option
+   in the creative workspace all came out in Chinese. Everything that DISPLAYS a motif or mood
+   now goes through here; everything that STORES one still stores the key. */
+function ntWord(kind, k){
+  var m=(kind==='mood'?NT.mood:NT.motif)[k];
+  if(!m) return k;                                  // free text the tables do not know
+  return (NT.lang==='en'&&m.en&&m.en[0]) ? m.en[0] : k;
+}
 (function(){
   var kwEl=document.getElementById('ntKw'), out=document.getElementById('ntOut');
   if(!out) return;
@@ -1773,10 +1825,12 @@ var NT = {"motif": {"月": {"cn": ["月", "月光", "月色"], "jp": ["月", "�
     var src = hits.length ? hits.slice(0,2) : (literal ? [] : [mk]);
     src.forEach(function(k){
       var m=NT.motif[k];
-      t.push('#'+k); t.push('#'+m.en[0]);
+      if(NT.lang!=='en') t.push('#'+k);             // the key is a Chinese tag; only useful in zh
+      t.push('#'+m.en[0]);
       if(m.jp&&m.jp[0]&&m.jp[0]!==k) t.push('#'+m.jp[0]);
     });
-    t.push('#'+dk); t.push('#'+NT.mood[dk].en[0]);
+    if(NT.lang!=='en') t.push('#'+dk);
+    t.push('#'+NT.mood[dk].en[0]);
     var mo=NT.months[String(new Date().getMonth()+1)];
     if(mo) t=t.concat(mo.tags.slice(0,2));
     var uniq=[], seen={};
@@ -1792,7 +1846,8 @@ var NT = {"motif": {"月": {"cn": ["月", "月光", "月色"], "jp": ["月", "�
     if(!mo) return;
     seasonBox.innerHTML='<b>'+"本月（{M} 月）適合的題材".replace('{M}',new Date().getMonth()+1)+'　'+esc(mo.lbl)+'</b>'
       + '<div class="nt-tags">'
-      + mo.motifs.map(function(k){return '<span class="nt-tag" data-seed="'+esc(k)+'">'+esc(k)+'</span>';}).join('')
+      + mo.motifs.map(function(k){var w=ntWord('motif',k);
+          return '<span class="nt-tag" data-seed="'+esc(w)+'">'+esc(w)+'</span>';}).join('')
       + mo.tags.map(function(x){return '<span class="nt-tag" data-c="'+esc(x)+'">'+esc(x)+'</span>';}).join('')
       + '</div>';
   }
@@ -1834,9 +1889,14 @@ var NT = {"motif": {"月": {"cn": ["月", "月光", "月色"], "jp": ["月", "�
   function esc(t){ return String(t).replace(/[&<>"]/g,function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function chips(pairs, cls){
+    /* Symbols are separated by a single space; kaomoji by two, because a kaomoji may CONTAIN
+       spaces - ( ; ᴗ ; ) and ( ˶ˆ ᵕ ˆ˶ ) both do. The old /\s{2,}| / alternation still matched
+       those inner single spaces and shattered each face into "(" ";" "ᴗ" ";" ")". One separator
+       per group, chosen by kind. */
     return pairs.map(function(g){
+      var sep = (cls === 'kao') ? /\s{2,}/ : /\s+/;
       return '<div class="pk-grp"><b>'+esc(g[0])+'</b><div class="pk-row">'
-        + g[1].split(/\s{2,}| /).filter(Boolean).map(function(x){
+        + g[1].split(sep).filter(Boolean).map(function(x){
             return '<button class="pk-i'+(cls?' '+cls:'')+'" data-p="'+esc(x)+'">'+esc(x)+'</button>';
           }).join('')
         + '</div></div>';
@@ -1902,6 +1962,14 @@ var NT = {"motif": {"月": {"cn": ["月", "月光", "月色"], "jp": ["月", "�
     return STEPS.filter(function(s){return s.id===id;})[0].opts||[];
   }
   function pickOf(a){ return a[Math.floor(Math.random()*a.length)]; }
+  /* Steps 1 and 2 hold a motif/mood KEY so the title generator can look it up; the key is never
+     what the reader should see. Everything else is already a plain label and passes through. */
+  function wsLabel(id, v){
+    if(!v) return v;
+    if(id==='theme') return ntWord('motif', v);
+    if(id==='mood')  return ntWord('mood', v);
+    return v;
+  }
   function esc(t){ return String(t).replace(/[&<>"]/g,function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
@@ -1912,12 +1980,12 @@ var NT = {"motif": {"月": {"cn": ["月", "月光", "月色"], "jp": ["月", "�
       var v=S[st.id]||'', opts=optsFor(st.id);
       return '<div class="ws-step'+(active===st.id?' active':'')+(v?' filled':'')+'" data-s="'+st.id+'">'
         + '<div class="ws-head" data-toggle="'+st.id+'"><span class="ws-num">'+(i+1)+'</span>'
-        + '<span class="lbl">'+esc(st.lbl)+'</span><span class="val">'+esc(v)+'</span></div>'
+        + '<span class="lbl">'+esc(st.lbl)+'</span><span class="val">'+esc(wsLabel(st.id,v))+'</span></div>'
         + '<div class="ws-body"><p class="ws-hint">'+st.hint+'</p>'
         + '<button class="ws-roll" data-roll="'+st.id+'">'+"🎲 抽一個"+'</button>'
         + '<div class="ws-opts">'
         + opts.map(function(o){ return '<button class="ws-opt'+(v===o?' on':'')+'" data-pick="'+st.id
-              +'" data-v="'+esc(o)+'">'+esc(o)+'</button>'; }).join('')
+              +'" data-v="'+esc(o)+'">'+esc(wsLabel(st.id,o))+'</button>'; }).join('')
         + '</div><input class="ws-in" data-free="'+st.id+'" placeholder="'+"或自己打⋯⋯"+'" value="'
         + (opts.indexOf(v)<0?esc(v):'') +'"></div></div>';
     }).join('');
@@ -1934,14 +2002,14 @@ var NT = {"motif": {"月": {"cn": ["月", "月光", "月色"], "jp": ["月", "�
         card.classList.add('show');
         card.innerHTML='<h4>'+"創作企劃卡"+'</h4><dl>'
           + STEPS.filter(function(s){return S[s.id];}).map(function(s){
-              return '<dt>'+esc(s.lbl)+'</dt><dd>'+esc(S[s.id])+'</dd>'; }).join('')
+              return '<dt>'+esc(s.lbl)+'</dt><dd>'+esc(wsLabel(s.id,S[s.id]))+'</dd>'; }).join('')
           + '</dl>';
       } else card.classList.remove('show');
     }
   }
   function plainText(){
     return STEPS.filter(function(s){return S[s.id];})
-                .map(function(s){ return s.lbl+'：'+S[s.id]; }).join('\n');
+                .map(function(s){ return s.lbl+'：'+wsLabel(s.id,S[s.id]); }).join('\n');
   }
 
   host.addEventListener('click', function(e){
@@ -1979,7 +2047,8 @@ var NT = {"motif": {"月": {"cn": ["月", "月光", "月色"], "jp": ["月", "�
   if(rs) rs.addEventListener('click', function(){ S={}; active=null; save(); render(); });
   var go=document.getElementById('wsToName');
   if(go) go.addEventListener('click', function(){
-    var kw=[S.theme,S.mood].filter(Boolean).join('');
+    var kw=[wsLabel('theme',S.theme),wsLabel('mood',S.mood)].filter(Boolean)
+              .join(NT.lang==='en'?' ':'');
     var b=document.querySelector('nav button[data-tab="naming"]');
     if(b){ b.click(); var f=document.getElementById('ntKw');
       if(f&&kw){ f.value=kw; var g=document.getElementById('ntGo'); if(g) g.click(); } }
@@ -2095,19 +2164,46 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
   if(!nav||!btn||!label||!panel||!backdrop)return;
   const navBtns=Array.from(nav.children)
     .filter(node=>node.tagName==="BUTTON" && node.dataset.tab);
+  /* Twenty-two destinations in one flat list turned the sheet into a long scroll on a phone -
+     the whole point of collapsing the nav bar was to make choosing quicker, and it did not.
+     The groups already exist in the nav bar, so the sheet now shows the seven group headers
+     and slides exactly one open at a time. Opening the sheet expands whichever group holds
+     the current tab, so the common case is still one tap. */
+  const GCHEV='<svg class="gchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+            + 'stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+            + '<path d="M6 9l6 6 6-6"/></svg>';
+  const groups=[];
+  let curList=null;
   Array.from(nav.children).forEach(node=>{
     if(node.classList && node.classList.contains("navgrp")){
-      const h=document.createElement("div");
+      const wrap=document.createElement("div");
+      wrap.className="nav-select-grp";
+      wrap.setAttribute("role","group");
+      const h=document.createElement("button");
+      h.type="button";
       h.className="nav-select-head";
-      h.textContent=node.textContent;
-      panel.appendChild(h);
+      h.setAttribute("aria-expanded","false");
+      const t=document.createElement("span");t.className="t";t.textContent=node.textContent;
+      const n=document.createElement("span");n.className="n";
+      h.appendChild(t);h.appendChild(n);
+      h.insertAdjacentHTML("beforeend",GCHEV);
+      const list=document.createElement("div");
+      list.className="nav-select-list";
+      list.id="navSelectList"+groups.length;
+      h.setAttribute("aria-controls",list.id);
+      wrap.appendChild(h);wrap.appendChild(list);
+      panel.appendChild(wrap);
+      const g={wrap:wrap,head:h,list:list,count:n};
+      groups.push(g);
+      h.addEventListener("click",()=>toggleGroup(g));
+      curList=list;
       return;
     }
     if(node.tagName!=="BUTTON" || !node.dataset.tab) return;
     const nb=node;
     const opt=document.createElement("div");
     opt.className="nav-select-opt"+(nb.classList.contains("on")?" on":"");
-    opt.setAttribute("role","option");
+    opt.setAttribute("role","menuitem");
     opt.dataset.tab=nb.dataset.tab;
     const span=document.createElement("span");
     span.textContent=nb.textContent;
@@ -2115,9 +2211,33 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     dot.className="dot";
     opt.appendChild(span);opt.appendChild(dot);
     opt.addEventListener("click",()=>{goTab(nb.dataset.tab);closePanel();});
-    panel.appendChild(opt);
+    (curList||panel).appendChild(opt);
   });
-  function openPanel(){panel.classList.add("show");backdrop.classList.add("show");btn.setAttribute("aria-expanded","true");}
+  groups.forEach(g=>{g.count.textContent=g.list.children.length;});
+  function setOpen(g,open){
+    g.wrap.classList.toggle("open",open);
+    g.head.setAttribute("aria-expanded",open?"true":"false");
+  }
+  function toggleGroup(g){
+    const open=!g.wrap.classList.contains("open");
+    groups.forEach(x=>setOpen(x,x===g&&open));
+    // a group near the bottom would otherwise open below the fold with nothing visibly changed
+    if(open)setTimeout(()=>{try{g.wrap.scrollIntoView({block:"nearest",behavior:"smooth"});}catch(e){}},230);
+  }
+  function markGroups(name){
+    groups.forEach(g=>{
+      const has=!!(name&&g.list.querySelector('.nav-select-opt[data-tab="'+name+'"]'));
+      g.wrap.classList.toggle("has-on",has);
+    });
+  }
+  function openPanel(){
+    const on=nav.querySelector('button[data-tab].on');
+    const name=on?on.dataset.tab:null;
+    markGroups(name);
+    groups.forEach(g=>setOpen(g,g.wrap.classList.contains("has-on")));
+    panel.scrollTop=0;
+    panel.classList.add("show");backdrop.classList.add("show");btn.setAttribute("aria-expanded","true");
+  }
   function closePanel(){panel.classList.remove("show");backdrop.classList.remove("show");btn.setAttribute("aria-expanded","false");}
   btn.addEventListener("click",()=>{panel.classList.contains("show")?closePanel():openPanel();});
   backdrop.addEventListener("click",closePanel);
@@ -2126,6 +2246,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     const nb=nav.querySelector('button[data-tab="'+name+'"]');
     if(nb)label.textContent=nb.textContent;
     panel.querySelectorAll(".nav-select-opt").forEach(o=>o.classList.toggle("on",o.dataset.tab===name));
+    markGroups(name);
   };
   const initial=nav.querySelector("button.on")||navBtns[0];
   if(initial)window.__navSelectSync(initial.dataset.tab);
@@ -5173,7 +5294,10 @@ function compositionScore(opts) {
     var sampled=sub.filter(function(_,i){return i%Math.max(1,Math.floor(sub.length/5000))===0;});
     var km=kmeans(sampled,5),palette=km.list.slice(0,5);
     var satRatio=sub.length?validSat/sub.length:0, avgSat=sub.length?satSum/sub.length:0, avgAb=sub.length?abSum/sub.length:0;
-    var gamut=Math.max(0,(labMax[1]-labMin[1])*(labMax[2]-labMin[2]))/40000;
+    /* With an empty subject mask labMax/labMin keep their sentinels, so both spans come out at
+       -1998 and the product of two negatives read as a FULL gamut instead of none - richness was
+       then floored around 0.3 and the style verdict followed it. Clamp each span on its own. */
+    var gamut=sub.length?(Math.max(0,labMax[1]-labMin[1])*Math.max(0,labMax[2]-labMin[2]))/40000:0;
     var entropy=0,totalHue=hues.reduce(function(a,b){return a+b;},0);hues.forEach(function(n){if(n){var pr=n/totalHue;entropy-=pr*Math.log2(pr);}});entropy/=Math.log2(12);
     var richness=satRatio*.45+clamp(gamut,0,1)*.3+entropy*.25;
     var rTune=illustrationMode?.12:0;
@@ -5239,6 +5363,36 @@ function compositionScore(opts) {
     var lw=0,rw=0,tw=0,bw2=0;for(var by2=0;by2<h;by2++)for(var bx2=0;bx2<w;bx2++){var jj=by2*w+bx2,ww=L[jj]+(mask[jj]?60:0);if(bx2<w/2)lw+=ww;else rw+=ww;if(by2<h/2)tw+=ww;else bw2+=ww;}
     var balH=1-Math.abs(lw-rw)/Math.max(1,lw+rw),balV=1-Math.abs(tw-bw2)/Math.max(1,tw+bw2);
     var balanceRaw=Math.round(clamp((balH*.6+balV*.4)*100,0,100));
+    /* Moved up from below the composition score. `a_alignBad` is a `var`, so reading it before
+       this block ran was not an error - it was simply `undefined`, which meant v3align was
+       permanently false: the text-alignment finding never reached compositionScore, the
+       "no shared alignment grid" advice could never appear, and the 65-point cap it triggers
+       never applied. Nothing in this block depends on anything computed between here and its
+       old position, so it runs first. */
+    /* ---- work-type detection ---- */
+    var whiteRatio=0,wn=0;for(var wy=0;wy<h;wy++)for(var wx=0;wx<w;wx++){var wi=wy*w+wx,wp=wi*4;var hsvW=rgb2hsv(d[wp],d[wp+1],d[wp+2]);if(L[wi]>235&&hsvW[1]<.1)whiteRatio++;wn++;}whiteRatio/=wn;
+    // text-like blocks: 12px blocks with very high edge density and low chroma
+    var textScore=textLineScore(L,w,h);
+    var a_alignBad=false;
+    var layoutMode=(typeof currentModes!=='undefined')&&currentModes.indexOf('layout')>=0;
+    var textDetected=layoutMode?(textScore>=.40):false;
+    var textHint=(!layoutMode)&&(textScore>=.75);
+    var TB=12,txtBlocks=0,totBlocks=0;
+    var gridW=Math.max(1,Math.floor((w-TB)/TB)+1),gridH=Math.max(1,Math.floor((h-TB)/TB)+1);
+    var textGrid=new Uint8Array(gridW*gridH);
+    for(var ty=0,gy=0;ty<h-TB;ty+=TB,gy++){for(var txp=0,gx=0;txp<w-TB;txp+=TB,gx++){var eSum=0,satSum2=0,cnt=0;for(var iy=1;iy<TB;iy++)for(var ix=1;ix<TB;ix++){var bi=(ty+iy)*w+(txp+ix);eSum+=grad[bi];var bp=bi*4;satSum2+=rgb2hsv(d[bp],d[bp+1],d[bp+2])[1];cnt++;}totBlocks++;if(eSum/cnt>30&&satSum2/cnt<.4){txtBlocks++;if(gy*gridW+gx<textGrid.length)textGrid[gy*gridW+gx]=1;}}}
+    var textRatio=totBlocks?txtBlocks/totBlocks:0;
+    // text alignment: do block left edges share a grid? (only meaningful when text is confirmed)
+    if(textDetected){
+      var colHist={},colTot=0;
+      for(var ay=0;ay<gridH;ay++){var run=-1;
+        for(var ax=0;ax<gridW;ax++){var on=textGrid[ay*gridW+ax];
+          if(on&&run<0){run=ax;colHist[ax]=(colHist[ax]||0)+1;colTot++;}
+          if(!on)run=-1;}}
+      var colVals=Object.keys(colHist).map(function(k){return colHist[k];}).sort(function(p,q){return q-p;});
+      var top2=(colVals[0]||0)+(colVals[1]||0);
+      a_alignBad=colTot>=4&&(top2/colTot)<0.55;
+    }
     var v3align=!!(a_alignBad);
     var v3prof=modeProfile(currentModes);
     var v3nsAdj=v3ns;
@@ -5328,30 +5482,6 @@ function compositionScore(opts) {
     var dof=illustrationMode?(dofRatio>2.5?tt('dof_flat_strong'):dofRatio>1.4?tt('dof_flat_mid'):tt('dof_flat_low')):(dofRatio>1.8?tt('dof_shallow'):dofRatio>1.2?tt('dof_medium'):tt('dof_deep'));
     var separation=dofRatio>1.8?tt('sep_clear'):dofRatio>1.15?tt('sep_part'):tt('sep_merge');
 
-    /* ---- work-type detection ---- */
-    var whiteRatio=0,wn=0;for(var wy=0;wy<h;wy++)for(var wx=0;wx<w;wx++){var wi=wy*w+wx,wp=wi*4;var hsvW=rgb2hsv(d[wp],d[wp+1],d[wp+2]);if(L[wi]>235&&hsvW[1]<.1)whiteRatio++;wn++;}whiteRatio/=wn;
-    // text-like blocks: 12px blocks with very high edge density and low chroma
-    var textScore=textLineScore(L,w,h);
-    var a_alignBad=false;
-    var layoutMode=(typeof currentModes!=='undefined')&&currentModes.indexOf('layout')>=0;
-    var textDetected=layoutMode?(textScore>=.40):false;
-    var textHint=(!layoutMode)&&(textScore>=.75);
-    var TB=12,txtBlocks=0,totBlocks=0;
-    var gridW=Math.max(1,Math.floor((w-TB)/TB)+1),gridH=Math.max(1,Math.floor((h-TB)/TB)+1);
-    var textGrid=new Uint8Array(gridW*gridH);
-    for(var ty=0,gy=0;ty<h-TB;ty+=TB,gy++){for(var txp=0,gx=0;txp<w-TB;txp+=TB,gx++){var eSum=0,satSum2=0,cnt=0;for(var iy=1;iy<TB;iy++)for(var ix=1;ix<TB;ix++){var bi=(ty+iy)*w+(txp+ix);eSum+=grad[bi];var bp=bi*4;satSum2+=rgb2hsv(d[bp],d[bp+1],d[bp+2])[1];cnt++;}totBlocks++;if(eSum/cnt>30&&satSum2/cnt<.4){txtBlocks++;if(gy*gridW+gx<textGrid.length)textGrid[gy*gridW+gx]=1;}}}
-    var textRatio=totBlocks?txtBlocks/totBlocks:0;
-    // text alignment: do block left edges share a grid? (only meaningful when text is confirmed)
-    if(textDetected){
-      var colHist={},colTot=0;
-      for(var ay=0;ay<gridH;ay++){var run=-1;
-        for(var ax=0;ax<gridW;ax++){var on=textGrid[ay*gridW+ax];
-          if(on&&run<0){run=ax;colHist[ax]=(colHist[ax]||0)+1;colTot++;}
-          if(!on)run=-1;}}
-      var colVals=Object.keys(colHist).map(function(k){return colHist[k];}).sort(function(p,q){return q-p;});
-      var top2=(colVals[0]||0)+(colVals[1]||0);
-      a_alignBad=colTot>=4&&(top2/colTot)<0.55;
-    }
     // cluster adjacent text-like tiles into approximate text/typography regions — position & size only, no OCR/content recognition
     var tVisited=new Uint8Array(gridW*gridH),textBlocksCount=0,textBlocks=[];
     for(var ti=0;ti<gridW*gridH;ti++){
@@ -5824,7 +5954,9 @@ function compositionScore(opts) {
     }
 
     // colour: concrete "add a colour" advice using the measured dominant hue
-    var lowColour=(a.richness==='low'||a.richness===tt('r_vlow')||a.richness===tt('r_low'));
+    /* `richness` is the raw 0-1 number; `rich` is the translated verdict. Comparing the number
+       against strings was always false, so the "add a small accent colour" advice never fired. */
+    var lowColour=(a.rich===tt('r_vlow')||a.rich===tt('r_low'));
     if(!a.isGray&&lowColour&&a.domHue!=null){
       var hn=T.hues[a.domHue%12], cn=T.hues[(a.domHue+6)%12];
       issues.push({w:68,kind:'color',sec:'ae-color',t:tt('v3_color_add').replace('{H}',hn).replace('{C}',cn)});
@@ -6138,9 +6270,19 @@ function compositionScore(opts) {
     if(DEBUG)html+='<pre class="chk-debug">'+JSON.stringify({segConf:a.segConf,clipRatio:a.clipRatio,richness:a.richness,symCorr:a.symCorr,dofRatio:a.dofRatio,sharpVar:a.sharpVar,noiseV:a.noiseV,textRatio:a.textRatio,whiteRatio:a.whiteRatio},null,1)+'</pre>';
 
     // overall score
-    var hiScore=a.highlight===tt('h_good')?90:a.highlight===tt('h_mild')?70:46;
-    var shScore=a.shadow===tt('s_rich')?88:a.shadow===tt('s_press')?66:44;
-    var spScore=a.sharp===tt('sh_sharp')?92:a.sharp===tt('sh_soft')?70:a.sharp===tt('sh_blur')?52:38;
+    /* Exposure, blown highlights and focus are photographic criteria, and outside Photographer
+       the report says so in as many words - a flat white field is paint, not a blown highlight.
+       The score did not follow: illustration mode rewrites `highlight` to the high-key wording
+       and `shadow` to the low-key wording, neither of which matched a branch here, so both fell
+       to the failing value and a deliberate white-on-white piece was excused in the prose and
+       marked down in the number. Flat shading likewise has low Laplacian variance by
+       construction and always landed on 38. Where the criterion does not apply, it no longer
+       costs anything; where a verdict was genuinely reached (h_good, h_mild, s_rich, s_press)
+       it still counts. */
+    var _photoJudge=a.judgeAsPhoto;
+    var hiScore=a.highlight===tt('h_good')?90:a.highlight===tt('h_mild')?70:(_photoJudge?46:88);
+    var shScore=a.shadow===tt('s_rich')?88:a.shadow===tt('s_press')?66:(_photoJudge?44:82);
+    var spScore=!_photoJudge?88:(a.sharp===tt('sh_sharp')?92:a.sharp===tt('sh_soft')?70:a.sharp===tt('sh_blur')?52:38);
     var focScore=a.focusConc>.22?88:a.focusConc>.15?70:56;
     var score=Math.round(clamp(a.balance*.3+spScore*.2+hiScore*.15+shScore*.15+focScore*.2,35,98));
     return {html:html,score:score};
@@ -6158,7 +6300,7 @@ function compositionScore(opts) {
       modeLbl.textContent=tt('modelbl')+' · '+currentModes.map(function(m){return ({portrait:tt('mode_portrait'),fashion:tt('mode_fashion'),scene:tt('mode_scene'),collage:tt('mode_collage'),layout:tt('mode_layout')})[m];}).join(' + ');
       var lowColor=a.conf.color<60;
       palEl.innerHTML='<h3>'+tt('pal_title')+' <span class="tag ok">'+tt('pal_tag')+'</span></h3><p class="cond">'+tt('pal_desc')+'</p><div class="chk-sw">'+a.palette.map(function(o){var col=hex(o.r,o.g,o.b);return '<div><span style="background:'+col+'"></span><small>'+colorName(o.r,o.g,o.b)+'<br>'+col+'</small></div>';}).join('')+'</div>'+(lowColor?'<p class="fine">'+tt('pal_lowconf')+'</p>':'');
-      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.3.2</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
+      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.3.3</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
       hideProg();
       result.style.display='block';result.scrollIntoView({behavior:'smooth',block:'start'});
     }catch(err){
@@ -6177,7 +6319,9 @@ function compositionScore(opts) {
     }
     finally{hideProg();runBtn.disabled=false;runBtn.textContent=tt('analyze');}
   }
-  function load(file){if(!file||!/^image\//.test(file.type))return;var url=URL.createObjectURL(file),img=new Image();img.onload=function(){currentImg=img;opts.style.display='block';opts.scrollIntoView({behavior:'smooth',block:'start'});URL.revokeObjectURL(url);};img.src=url;}
+  function load(file){if(!file||!/^image\//.test(file.type))return;var url=URL.createObjectURL(file),img=new Image();img.onload=function(){currentImg=img;opts.style.display='block';opts.scrollIntoView({behavior:'smooth',block:'start'});URL.revokeObjectURL(url);};/* Without this a corrupt or unsupported file left the object URL allocated and the page
+   silently unchanged - the visitor had no way to tell the drop had failed. */
+  img.onerror=function(){URL.revokeObjectURL(url);currentImg=null;if(repEl)repEl.innerHTML='<p class="cond">'+tt('ci_img_fail')+'</p>';if(result)result.style.display='block';};img.src=url;}
 // the report is injected after load, so the tab handler is delegated from the container
   repEl.addEventListener('click',function(e){
     var b=e.target.closest?e.target.closest('#repSeg button'):null;
@@ -6326,8 +6470,14 @@ function compositionScore(opts) {
   var lastTheme=null,lastTrait=null,lastComp=null,lastMood=null;
 
   function pick(arr,last){
+    if(!arr||!arr.length) return undefined;
     if(arr.length<=1) return arr[0];
-    var v; do{ v=arr[Math.floor(Math.random()*arr.length)]; }while(v===last);
+    /* The loop exists only to avoid repeating the previous roll. An array of length > 1 whose
+       entries are all equal would spin here forever, so it gives up after a bounded number of
+       tries and accepts the repeat - a repeated suggestion is a small annoyance, a frozen tab
+       is not. */
+    var v,guard=0;
+    do{ v=arr[Math.floor(Math.random()*arr.length)]; }while(v===last && ++guard<32);
     return v;
   }
 
@@ -6382,13 +6532,19 @@ function compositionScore(opts) {
     return '<div class="card"><h3>'+tt('ci_result_h')+' <span class="tag ok">'+m.label+'</span></h3>'+(extra||'')+renderPalette(moodId)+'</div>';
   }
 
+  /* The keyword goes straight into innerHTML, so it has to be escaped like every other
+     user-supplied string on this page. Passing a FUNCTION to replace() also stops "$&" and
+     friends in the input being read as replacement patterns. */
+  function ciEsc(s){ return String(s).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
   // ① keyword input
   if(runKwBtn)runKwBtn.addEventListener('click',function(){
     var v=(kwEl.value||'').trim();
     if(!v){ showResult('<div class="card"><p class="cond">'+tt('ci_need_input')+'</p></div>'); return; }
     var id=matchMood(v)||pick(MOODIDS,lastMood);
     lastMood=id;
-    showResult(moodCard(id,'<p class="cond">'+tt('ci_from_kw').replace('{Q}',v)+'</p>'));
+    showResult(moodCard(id,'<p class="cond">'+tt('ci_from_kw').replace('{Q}',function(){return ciEsc(v);})+'</p>'));
   });
 
   // ② image upload -> extract dominant colors -> map to nearest mood by hue/sat/lightness, then show that mood's full palette
@@ -6439,6 +6595,10 @@ function compositionScore(opts) {
         lastMood=id;
         showResult(moodCard(id,'<p class="cond">'+tt('ci_from_img')+'</p>'));
       });
+    };
+    img.onerror=function(){
+      URL.revokeObjectURL(url);
+      showResult('<div class="card"><p class="cond">'+tt('ci_img_fail')+'</p></div>');
     };
     img.src=url;
   }
