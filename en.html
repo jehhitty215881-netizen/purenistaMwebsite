@@ -472,7 +472,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
     <div class="card" id="featRank">
     <h3>Feature ranking <span class="tag" id="featRankTag">Mine · local</span></h3>
-    <p class="cond" id="featRankDesc">Shows how often you open each tab on this device. Connect a free cloud counter to switch to site-wide ranking.</p>
+    <p class="cond" id="featRankDesc">“Mine” counts how often you open each tab on this device and never leaves it; “Site-wide” is the anonymous total across every visitor, and needs no setup.</p>
     <div class="fr-mode" id="featRankMode" role="tablist">
       <button type="button" class="on" data-mode="local">Mine</button>
       <button type="button" data-mode="global">Site-wide</button>
@@ -1378,7 +1378,22 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>Changelog <span class="tag ok">actively maintained</span></h3>
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.4.2 <span class="chg-build">current・site-wide ranking with no setup, art-check fixes restored</span></div>
+      <div class="chg-ver">Version 5.4.3 <span class="chg-build">current・site-wide ranking read fix</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Fixed: the site-wide ranking always said it could not be read</b></p>
+      <ul class="tips">
+        <li>On a freshly deployed site the site-wide ranking never loaded. The cause was <b>“nobody has clicked this yet” being read as “the request failed”</b>: the counter service returns 404 for a counter that has never been incremented, because it does not exist yet. The code treated any non-200 as an error, so on a site with no clicks all 22 tabs 404'd and it looked like the whole service was down.</li>
+        <li><b>A 404 is a zero, not a fault.</b> Only a network error or an unexpected status counts as a failure now, and with no data the panel says the site-wide table is still filling up rather than telling you to try again later.</li>
+        <li>The irony is that the comment in the original code already said “a 404 is a zero, one missing tab must not sink the whole table” — the comment described the intent and the code did not implement it. Re-verified against four scenarios: nothing counted yet, partial data, fully offline, and the read URL changing shape.</li>
+        <li>One safeguard added while there: the documentation writes the read endpoint both with and without a trailing slash, so a failure on the first form now retries the second automatically instead of waiting for a release.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Fixed: the card's description still described the old setup</b></p>
+      <ul class="tips">
+        <li>It still read “connect a free cloud counter to switch to site-wide”, but site-wide no longer needs anything connected. It now just explains the difference between the two modes.</li>
+      </ul>
+      <p class="fine">Build tag updated to v5.4.3. ZH and EN in sync. Site-wide numbers only appear once someone has actually opened a tab — the first one counted will be yours.</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.4.2 <span class="chg-build">site-wide ranking with no setup, art-check fixes restored</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>Site-wide ranking works out of the box now — nothing to set up</b></p>
       <ul class="tips">
         <li>It used to require creating a Cloudflare Worker, binding a database and pasting the URL back into the source before it did anything at all. It is <b>already counting by default</b>, using the same counterapi service this site already relies on for the view counter, the ratio tool and the colour generator — same namespace, no account, no key, no deployment. Switch to the site-wide tab and it is there.</li>
@@ -2484,15 +2499,31 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
       return gFetchInFlight;
     }
     /* counterapi has no batch read, so this is 22 small requests - each to a different path, so
-       each has its own rate-limit budget. A counter that has never been touched 404s; that is a
-       zero, not a failure, so one missing tab must not sink the whole table. */
+       each has its own rate-limit budget.
+
+       The important case is the one that shipped broken: a counter nobody has ever incremented
+       DOES NOT EXIST, and the service answers 404. Mapping "not ok" straight to null made all 22
+       reads look like failures on a site where nothing had been clicked yet, so a brand new
+       deployment reported "could not be read" when the honest answer was "no data yet". A 404 is
+       a zero. Only a network error or an unexpected status is a real failure.
+
+       The trailing slash is a fallback because the documentation writes the read endpoint both
+       ways (:name and :name/); if the bare form ever stops answering, the second attempt covers
+       it without another release. */
     var names=Object.keys(LABELS);
-    gFetchInFlight=Promise.all(names.map(function(k){
-      return fetch(counterUrl(k,false),{mode:'cors'})
-        .then(function(r){return r.ok?r.json():null;})
-        .then(function(d){return countOf(d);})
+    function readOne(k,retry){
+      return fetch(counterUrl(k,false)+(retry?'/':''),{mode:'cors'})
+        .then(function(r){
+          if(r.status===404)return 0;                    // never incremented = zero, not an error
+          if(!r.ok)return retry?null:readOne(k,true);
+          return r.json().then(function(d){
+            var n=countOf(d);
+            return n===null?(retry?0:readOne(k,true)):n;
+          },function(){return retry?null:readOne(k,true);});
+        })
         .catch(function(){return null;});
-    })).then(function(vals){
+    }
+    gFetchInFlight=Promise.all(names.map(function(k){return readOne(k,false);})).then(function(vals){
       var out={},got=0;
       names.forEach(function(k,i){ if(vals[i]!==null){out[k]=vals[i];got++;} });
       if(!got)return done(null);                 // every request failed: keep whatever we had
@@ -6714,7 +6745,7 @@ function compositionScore(opts) {
       modeLbl.textContent=tt('modelbl')+' · '+currentModes.map(function(m){return ({portrait:tt('mode_portrait'),fashion:tt('mode_fashion'),scene:tt('mode_scene'),collage:tt('mode_collage'),layout:tt('mode_layout')})[m];}).join(' + ');
       var lowColor=a.conf.color<60;
       palEl.innerHTML='<h3>'+tt('pal_title')+' <span class="tag ok">'+tt('pal_tag')+'</span></h3><p class="cond">'+tt('pal_desc')+'</p><div class="chk-sw">'+a.palette.map(function(o){var col=hex(o.r,o.g,o.b);return '<div><span style="background:'+col+'"></span><small>'+colorName(o.r,o.g,o.b)+'<br>'+col+'</small></div>';}).join('')+'</div>'+(lowColor?'<p class="fine">'+tt('pal_lowconf')+'</p>':'');
-      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.4.2</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
+      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.4.3</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
       hideProg();
       result.style.display='block';result.scrollIntoView({behavior:'smooth',block:'start'});
     }catch(err){

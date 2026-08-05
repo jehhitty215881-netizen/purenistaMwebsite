@@ -477,7 +477,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
   <div class="card" id="featRank">
     <h3>功能熱門排行 <span class="tag" id="featRankTag">我的・本機</span></h3>
-    <p class="cond" id="featRankDesc">預設顯示你在此裝置的點擊次數。接上免費雲端計數後，可切換「全站」看所有訪客的熱門。</p>
+    <p class="cond" id="featRankDesc">「我的」是你在這台裝置的點擊次數，只存在本機；「全站」是所有訪客的匿名累計，不用設定就能看。</p>
     <div class="fr-mode" id="featRankMode" role="tablist">
       <button type="button" class="on" data-mode="local">我的</button>
       <button type="button" data-mode="global">全站</button>
@@ -1383,7 +1383,22 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>更新紀錄 <span class="tag ok">持續維護中</span></h3>
     <p class="cond">這裡會列出每次網站更新的內容，讓大家知道網站一直有人在維護、修 bug、加新功能。</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.4.2 <span class="chg-build">目前版本・全站排行免設定＋健檢修正回歸</span></div>
+      <div class="chg-ver">Version 5.4.3 <span class="chg-build">目前版本・全站排行讀取修正</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>修正：全站排行一律顯示「暫時讀不到」</b></p>
+      <ul class="tips">
+        <li>上一版剛上線時，全站排行永遠讀不到資料。原因是<b>「還沒有人點過」被當成了「讀取失敗」</b>：計數服務對一支從未被累加過的計數會回 404——那支計數還不存在。程式把「回應不是 200」一律當成錯誤，於是在一個還沒有任何點擊的新網站上，22 個分頁全部 404，看起來就像整個服務掛了。</li>
+        <li><b>404 是零，不是錯誤。</b>現在只有連線失敗或非預期的狀態碼才算讀取失敗；沒有資料時顯示「全站還沒有統計，逐步累積中」，而不是叫人稍後再試。</li>
+        <li>諷刺的是原本的程式註解就寫著「404 代表零，不能讓一個分頁拖垮整張表」——註解描述了意圖，程式卻沒有照做。已用四種情境重跑驗證：全新未累計、部分有資料、完全斷線、以及讀取網址格式改變。</li>
+        <li>順帶加了一層保險：官方文件把讀取網址寫成兩種形式（結尾有無斜線），現在第一種失敗會自動改試第二種，不必等下一次更新。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>修正：排行卡片的說明文字還停在舊版</b></p>
+      <ul class="tips">
+        <li>卡片上仍寫著「接上免費雲端計數後，可切換全站」，但全站已經不需要接任何東西。改成直接說明兩種模式的差別。</li>
+      </ul>
+      <p class="fine">建置標記更新為 v5.4.3。中英文版同步。全站數字要等有人實際點過分頁才會開始出現——第一個累計的就是你自己。</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.4.2 <span class="chg-build">全站排行免設定＋健檢修正回歸</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>全站排行改成開箱即用，不用架任何東西</b></p>
       <ul class="tips">
         <li>原本要先去 Cloudflare 建 Worker、綁資料庫、把網址填回程式碼才會動。現在<b>預設就已經在累計了</b>——用的是這個網站本來就在用的 counterapi（瀏覽次數、比例試算、配色靈感那三支計數就是它），同一個命名空間，不用註冊、不用金鑰、不用部署。切到「全站」分頁就看得到。</li>
@@ -2487,15 +2502,31 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
       return gFetchInFlight;
     }
     /* counterapi has no batch read, so this is 22 small requests - each to a different path, so
-       each has its own rate-limit budget. A counter that has never been touched 404s; that is a
-       zero, not a failure, so one missing tab must not sink the whole table. */
+       each has its own rate-limit budget.
+
+       The important case is the one that shipped broken: a counter nobody has ever incremented
+       DOES NOT EXIST, and the service answers 404. Mapping "not ok" straight to null made all 22
+       reads look like failures on a site where nothing had been clicked yet, so a brand new
+       deployment reported "could not be read" when the honest answer was "no data yet". A 404 is
+       a zero. Only a network error or an unexpected status is a real failure.
+
+       The trailing slash is a fallback because the documentation writes the read endpoint both
+       ways (:name and :name/); if the bare form ever stops answering, the second attempt covers
+       it without another release. */
     var names=Object.keys(LABELS);
-    gFetchInFlight=Promise.all(names.map(function(k){
-      return fetch(counterUrl(k,false),{mode:'cors'})
-        .then(function(r){return r.ok?r.json():null;})
-        .then(function(d){return countOf(d);})
+    function readOne(k,retry){
+      return fetch(counterUrl(k,false)+(retry?'/':''),{mode:'cors'})
+        .then(function(r){
+          if(r.status===404)return 0;                    // never incremented = zero, not an error
+          if(!r.ok)return retry?null:readOne(k,true);
+          return r.json().then(function(d){
+            var n=countOf(d);
+            return n===null?(retry?0:readOne(k,true)):n;
+          },function(){return retry?null:readOne(k,true);});
+        })
         .catch(function(){return null;});
-    })).then(function(vals){
+    }
+    gFetchInFlight=Promise.all(names.map(function(k){return readOne(k,false);})).then(function(vals){
       var out={},got=0;
       names.forEach(function(k,i){ if(vals[i]!==null){out[k]=vals[i];got++;} });
       if(!got)return done(null);                 // every request failed: keep whatever we had
@@ -6718,7 +6749,7 @@ function compositionScore(opts) {
       modeLbl.textContent=tt('modelbl')+' · '+currentModes.map(function(m){return ({portrait:tt('mode_portrait'),fashion:tt('mode_fashion'),scene:tt('mode_scene'),collage:tt('mode_collage'),layout:tt('mode_layout')})[m];}).join(' + ');
       var lowColor=a.conf.color<60;
       palEl.innerHTML='<h3>'+tt('pal_title')+' <span class="tag ok">'+tt('pal_tag')+'</span></h3><p class="cond">'+tt('pal_desc')+'</p><div class="chk-sw">'+a.palette.map(function(o){var col=hex(o.r,o.g,o.b);return '<div><span style="background:'+col+'"></span><small>'+colorName(o.r,o.g,o.b)+'<br>'+col+'</small></div>';}).join('')+'</div>'+(lowColor?'<p class="fine">'+tt('pal_lowconf')+'</p>':'');
-      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.4.2</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
+      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.4.3</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
       hideProg();
       result.style.display='block';result.scrollIntoView({behavior:'smooth',block:'start'});
     }catch(err){
