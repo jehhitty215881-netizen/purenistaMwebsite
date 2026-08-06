@@ -7783,17 +7783,16 @@ function compositionScore(opts) {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
-  var SUPABASE_URL = 'https://wlsutpwmpnzmyxakqnfp.supabase.co';
-  var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0';
-
-  if(!window.supabase || !SUPABASE_ANON){
+  var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
+  var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
+  var T = {"signed": "Signed in as ", "gameid": "Game ID", "admin": "Admin", "logout": "Sign out", "email": "Email", "pass": "Password (min 6 characters)", "display": "Display name (for sign-up, optional)", "login": "Sign in", "signup": "Sign up", "signup_ok": "Sign-up successful. If email confirmation is enabled, check your inbox before signing in.", "loading": "Loading…", "fail": "Failed to load: ", "empty": "No messages yet. Sign in to post the first one.", "user": "User", "hidden": "Hidden", "show": "Show", "hide": "Hide", "del": "Delete", "delmine": "Delete mine", "need_login": "Please sign in first", "need_body": "Please enter a message", "max": "Max 1000 characters", "saved": "Saved", "locale": "en-US"};
+  if(!window.supabase){
     var list = document.getElementById('boardList');
-    if(list) list.innerHTML = '<p class="board-err">Board is not configured (missing Supabase client or key).</p>';
+    if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
     return;
   }
   var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
   var state = { user:null, profile:null };
-
   function $(id){ return document.getElementById(id); }
   function err(msg){
     var el = $('boardErr');
@@ -7810,10 +7809,9 @@ function compositionScore(opts) {
     try{
       var d = new Date(t);
       if(isNaN(d.getTime())) return '';
-      return d.toLocaleString('en-US', { hour12:false });
+      return d.toLocaleString(T.locale, { hour12:false });
     }catch(e){ return ''; }
   }
-
   async function loadProfile(){
     state.profile = null;
     if(!state.user) return;
@@ -7823,24 +7821,20 @@ function compositionScore(opts) {
     var gi = $('boardGameId');
     if(gi) gi.value = (state.profile && state.profile.game_id) || '';
   }
-
   function paintAuth(){
-    var box = $('boardAuth');
-    var userBox = $('boardUser');
-    var compose = $('boardCompose');
+    var box = $('boardAuth'), userBox = $('boardUser'), compose = $('boardCompose');
     if(!box) return;
     if(state.user){
-      box.innerHTML = '';
-      box.hidden = true;
+      box.innerHTML = ''; box.hidden = true;
       if(userBox){
         userBox.hidden = false;
         var name = (state.profile && state.profile.display_name) || (state.user.email||'');
         var role = (state.profile && state.profile.role) || 'user';
         var gid = (state.profile && state.profile.game_id) || '';
-        userBox.innerHTML = 'Signed in as <b>'+esc(name)+'</b>'
-          + (gid ? ' · Game ID <b>'+esc(gid)+'</b>' : '')
-          + (role==='admin' ? ' · <b>Admin</b>' : '')
-          + ' <button type="button" id="boardLogout" style="margin-left:8px">Sign out</button>';
+        userBox.innerHTML = T.signed+'<b>'+esc(name)+'</b>'
+          + (gid ? ' · '+T.gameid+' <b>'+esc(gid)+'</b>' : '')
+          + (role==='admin' ? ' · <b>'+T.admin+'</b>' : '')
+          + ' <button type="button" id="boardLogout" style="margin-left:8px">'+T.logout+'</button>';
         var lo = $('boardLogout');
         if(lo) lo.onclick = async function(){ await sb.auth.signOut(); };
       }
@@ -7851,19 +7845,18 @@ function compositionScore(opts) {
       if(compose) compose.hidden = true;
       box.innerHTML =
         '<div class="row2">'
-        + '<input id="boardEmail" type="email" placeholder="Email" autocomplete="username" />'
-        + '<input id="boardPass" type="password" placeholder="Password (min 6 characters)" autocomplete="current-password" />'
+        + '<input id="boardEmail" type="email" placeholder="'+T.email+'" autocomplete="username" />'
+        + '<input id="boardPass" type="password" placeholder="'+T.pass+'" autocomplete="current-password" />'
         + '</div>'
-        + '<input id="boardDisplay" type="text" placeholder="Display name (for sign-up, optional)" maxlength="30" />'
+        + '<input id="boardDisplay" type="text" placeholder="'+T.display+'" maxlength="30" />'
         + '<div class="board-actions">'
-        + '<button type="button" class="pri" id="boardLogin">Sign in</button>'
-        + '<button type="button" id="boardSignup">Sign up</button>'
+        + '<button type="button" class="pri" id="boardLogin">'+T.login+'</button>'
+        + '<button type="button" id="boardSignup">'+T.signup+'</button>'
         + '</div>';
       $('boardLogin').onclick = doLogin;
       $('boardSignup').onclick = doSignup;
     }
   }
-
   async function doLogin(){
     err('');
     var email = ($('boardEmail')||{}).value||'';
@@ -7877,73 +7870,66 @@ function compositionScore(opts) {
     var pass = ($('boardPass')||{}).value||'';
     var display = (($('boardDisplay')||{}).value||'').trim();
     var res = await sb.auth.signUp({
-      email: email.trim(),
-      password: pass,
+      email: email.trim(), password: pass,
       options: { data: { display_name: display || undefined } }
     });
     if(res.error){ err(res.error.message); return; }
     if(res.data && res.data.user && !res.data.session){
-      err('Sign-up successful. If email confirmation is enabled, check your inbox before signing in.');
+      err(T.signup_ok);
     }
   }
-
   async function loadMessages(){
     var list = $('boardList');
     if(!list) return;
-    list.innerHTML = '<p class="board-empty">Loading…</p>';
+    list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
     var res = await sb.from('messages')
       .select('id,body,status,created_at,user_id, profiles:user_id(display_name,game_id,role)')
       .neq('status','deleted')
       .order('created_at', { ascending: false })
       .limit(50);
     if(res.error){
-      list.innerHTML = '<p class="board-err">Failed to load: '+esc(res.error.message)+'</p>';
+      list.innerHTML = '<p class="board-err">'+T.fail+esc(res.error.message)+'</p>';
       return;
     }
     var rows = res.data || [];
     if(!rows.length){
-      list.innerHTML = '<p class="board-empty">No messages yet. Sign in to post the first one.</p>';
+      list.innerHTML = '<p class="board-empty">'+T.empty+'</p>';
       return;
     }
     var isAdmin = state.profile && state.profile.role === 'admin';
     var uid = state.user && state.user.id;
     list.innerHTML = rows.map(function(m){
       var p = m.profiles || {};
-      var name = p.display_name || 'User';
+      var name = p.display_name || T.user;
       var gid = p.game_id ? (' · '+p.game_id) : '';
       var hidden = m.status === 'hidden';
       var acts = '';
       if(isAdmin){
-        if(hidden){
-          acts += '<button type="button" data-act="show" data-id="'+m.id+'">Show</button>';
-        }else{
-          acts += '<button type="button" data-act="hide" data-id="'+m.id+'">Hide</button>';
-        }
-        acts += '<button type="button" data-act="del" data-id="'+m.id+'">Delete</button>';
+        if(hidden) acts += '<button type="button" data-act="show" data-id="'+m.id+'">'+T.show+'</button>';
+        else acts += '<button type="button" data-act="hide" data-id="'+m.id+'">'+T.hide+'</button>';
+        acts += '<button type="button" data-act="del" data-id="'+m.id+'">'+T.del+'</button>';
       }else if(uid && uid === m.user_id){
-        acts += '<button type="button" data-act="del" data-id="'+m.id+'">Delete mine</button>';
+        acts += '<button type="button" data-act="del" data-id="'+m.id+'">'+T.delmine+'</button>';
       }
       return '<div class="board-msg'+(hidden?' hidden-msg':'')+'">'
         + '<div class="bm-top"><span class="bm-name">'+esc(name)+'</span>'
-        + '<span class="bm-meta">'+esc(fmtTime(m.created_at))+esc(gid)+(hidden?' · Hidden':'')+'</span></div>'
+        + '<span class="bm-meta">'+esc(fmtTime(m.created_at))+esc(gid)+(hidden?' · '+T.hidden:'')+'</span></div>'
         + '<div class="bm-body">'+esc(m.body)+'</div>'
         + (acts ? '<div class="bm-act">'+acts+'</div>' : '')
         + '</div>';
     }).join('');
   }
-
   async function sendMessage(){
     err('');
-    if(!state.user){ err('Please sign in first'); return; }
+    if(!state.user){ err(T.need_login); return; }
     var body = (($('boardBody')||{}).value||'').trim();
-    if(!body){ err('Please enter a message'); return; }
-    if(body.length > 1000){ err('Max 1000 characters'); return; }
+    if(!body){ err(T.need_body); return; }
+    if(body.length > 1000){ err(T.max); return; }
     var res = await sb.from('messages').insert({ user_id: state.user.id, body: body, status: 'visible' });
     if(res.error){ err(res.error.message); return; }
     $('boardBody').value = '';
     await loadMessages();
   }
-
   async function onAct(ev){
     var b = ev.target.closest('button[data-act]');
     if(!b) return;
@@ -7958,19 +7944,17 @@ function compositionScore(opts) {
     if(res.error){ err(res.error.message); return; }
     await loadMessages();
   }
-
   async function saveProfile(){
     err('');
-    if(!state.user){ err('Please sign in first'); return; }
+    if(!state.user){ err(T.need_login); return; }
     var gid = (($('boardGameId')||{}).value||'').trim();
     var res = await sb.from('profiles').update({ game_id: gid || null }).eq('id', state.user.id);
     if(res.error){ err(res.error.message); return; }
     await loadProfile();
     paintAuth();
     err('');
-    alert('Saved');
+    alert(T.saved);
   }
-
   async function boot(){
     var sess = await sb.auth.getSession();
     state.user = sess.data && sess.data.session ? sess.data.session.user : null;
@@ -7983,14 +7967,10 @@ function compositionScore(opts) {
       paintAuth();
       await loadMessages();
     });
-    var send = $('boardSend');
-    if(send) send.onclick = sendMessage;
-    var ref = $('boardRefresh');
-    if(ref) ref.onclick = function(){ loadMessages(); };
-    var list = $('boardList');
-    if(list) list.addEventListener('click', onAct);
-    var save = $('boardSaveProfile');
-    if(save) save.onclick = saveProfile;
+    var send = $('boardSend'); if(send) send.onclick = sendMessage;
+    var ref = $('boardRefresh'); if(ref) ref.onclick = function(){ loadMessages(); };
+    var list = $('boardList'); if(list) list.addEventListener('click', onAct);
+    var save = $('boardSaveProfile'); if(save) save.onclick = saveProfile;
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
