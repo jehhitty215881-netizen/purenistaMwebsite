@@ -436,6 +436,30 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .hx-line:last-child{border-bottom:0}
 .hx-line>b{flex:0 0 42px;font-size:10.5px;font-weight:800;color:var(--violet);letter-spacing:.06em}
 .hx-line>code{flex:1;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px;color:var(--ink);word-break:break-all}
+
+.board-auth{display:grid;gap:10px;margin:10px 0}
+.board-auth .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:560px){.board-auth .row2{grid-template-columns:1fr}}
+.board-auth input,.board-compose textarea{width:100%;font:inherit;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;color:var(--ink)}
+.board-auth input:focus,.board-compose textarea:focus{outline:3px solid var(--violet);outline-offset:1px}
+.board-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.board-actions button,.board-compose button,.board-msg .bm-act button{border:1.5px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-weight:700;font-size:13px;padding:8px 14px;border-radius:999px;cursor:pointer}
+.board-actions button.pri,.board-compose button.pri{background:var(--ink);border-color:var(--ink);color:#fff}
+.board-user{font-size:13px;color:var(--ink-soft);margin:6px 0 10px}
+.board-user b{color:var(--violet)}
+.board-compose{margin:12px 0 16px}
+.board-compose textarea{min-height:88px;resize:vertical}
+.board-list{display:flex;flex-direction:column;gap:10px}
+.board-msg{border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--panel)}
+.board-msg.hidden-msg{opacity:.72;border-style:dashed}
+.board-msg .bm-top{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:6px}
+.board-msg .bm-name{font-weight:800;color:var(--ink)}
+.board-msg .bm-meta{font-size:12px;color:var(--ink-soft)}
+.board-msg .bm-body{font-size:14px;line-height:1.75;white-space:pre-wrap;word-break:break-word}
+.board-msg .bm-act{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.board-empty,.board-err{font-size:13.5px;color:var(--ink-soft);padding:8px 0}
+.board-err{color:#a33}
+
 </style>
 </head>
 <body>
@@ -499,6 +523,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <button data-tab="lore">科普</button>
   <button data-tab="qa">QA</button>
   <span class="navgrp">關於</span>
+  <button data-tab="board">留言板</button>
   <button data-tab="feedback">意見專欄</button>
   <button data-tab="notes">備註</button>
   <button data-tab="changelog">更新紀錄</button>
@@ -1470,6 +1495,35 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <p class="tl-hint" id="hxErr" style="color:var(--rose);display:none"></p>
     <div class="hx-prev" id="hxPrev"></div>
     <div id="hxLines"></div>
+  </div>
+</section>
+
+
+<section id="board">
+  <div class="card">
+    <h3>留言板 <span class="tag ok">會員</span></h3>
+    <p class="cond">登入後可留言。資料存在 Supabase；排行仍使用原本的 Render／計數服務，兩者分開。</p>
+    <div id="boardAuth" class="board-auth"></div>
+    <div id="boardUser" class="board-user" hidden></div>
+    <div id="boardCompose" class="board-compose" hidden>
+      <textarea id="boardBody" maxlength="1000" placeholder="寫點什麼…（最多 1000 字）"></textarea>
+      <div class="board-actions">
+        <button type="button" class="pri" id="boardSend">送出留言</button>
+        <button type="button" id="boardRefresh">重新整理</button>
+      </div>
+    </div>
+    <div id="boardErr" class="board-err" hidden></div>
+    <div id="boardList" class="board-list"><p class="board-empty">載入中…</p></div>
+  </div>
+  <div class="card">
+    <h3>設定遊戲 ID</h3>
+    <p class="cond">登入後可填寫，方便其他人辨識你的遊戲身分。</p>
+    <div class="board-auth">
+      <input id="boardGameId" maxlength="40" placeholder="你的遊戲 ID（選填）" />
+      <div class="board-actions">
+        <button type="button" class="pri" id="boardSaveProfile">儲存</button>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -2496,7 +2550,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     brand:'品牌染色',branddata:'品牌資料',trade:'交易心法',sched:'排期預測',
     check:'作品健檢',workspace:'創作工作台',colorinspire:'配色靈感',naming:'命名與標籤',
     charcheck:'角色隨機生成',flow:'創作動線',aes:'美學專欄',lore:'科普',qa:'QA',
-    feedback:'意見專欄',notes:'備註',changelog:'更新紀錄',
+    board:'留言板',feedback:'意見專欄',notes:'備註',changelog:'更新紀錄',
     swatch:'色票工具',symbols:'特殊符號',hexconv:'色碼轉換'
   };
   var PATHS={
@@ -7727,5 +7781,225 @@ function compositionScore(opts) {
   apply(inp.value, false);
 })();
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  /* ===== 請確認這兩行與你的 Supabase 專案一致 ===== */
+  var SUPABASE_URL = 'https://wlsutpwmpnzmyxakqnfp.supabase.co';
+  var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0'; // ← 只改這裡：貼上 Supabase anon public key
+  /* 到 Supabase → Project Settings → API → anon public 複製貼上取代上一行 */
+
+  if(!window.supabase || !SUPABASE_ANON || SUPABASE_ANON === '(已設定)'){
+    var list = document.getElementById('boardList');
+    if(list) list.innerHTML = '<p class="board-err">留言板尚未設定：請在 index.html 填入 SUPABASE_ANON（Project Settings → API → anon public）。</p>';
+    return;
+  }
+  var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  var state = { user:null, profile:null };
+
+  function $(id){ return document.getElementById(id); }
+  function err(msg){
+    var el = $('boardErr');
+    if(!el) return;
+    if(!msg){ el.hidden = true; el.textContent=''; return; }
+    el.hidden = false; el.textContent = msg;
+  }
+  function esc(s){
+    return String(s||'').replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  function fmtTime(t){
+    try{
+      var d = new Date(t);
+      if(isNaN(d.getTime())) return '';
+      return d.toLocaleString('zh-TW', { hour12:false });
+    }catch(e){ return ''; }
+  }
+
+  async function loadProfile(){
+    state.profile = null;
+    if(!state.user) return;
+    var res = await sb.from('profiles').select('id,display_name,role,game_id').eq('id', state.user.id).maybeSingle();
+    if(res.error){ console.warn(res.error); return; }
+    state.profile = res.data;
+    var gi = $('boardGameId');
+    if(gi) gi.value = (state.profile && state.profile.game_id) || '';
+  }
+
+  function paintAuth(){
+    var box = $('boardAuth');
+    var userBox = $('boardUser');
+    var compose = $('boardCompose');
+    if(!box) return;
+    if(state.user){
+      box.innerHTML = '';
+      box.hidden = true;
+      if(userBox){
+        userBox.hidden = false;
+        var name = (state.profile && state.profile.display_name) || (state.user.email||'');
+        var role = (state.profile && state.profile.role) || 'user';
+        var gid = (state.profile && state.profile.game_id) || '';
+        userBox.innerHTML = '已登入：<b>'+esc(name)+'</b>'
+          + (gid ? ' · 遊戲 ID <b>'+esc(gid)+'</b>' : '')
+          + (role==='admin' ? ' · <b>管理員</b>' : '')
+          + ' <button type="button" id="boardLogout" style="margin-left:8px">登出</button>';
+        var lo = $('boardLogout');
+        if(lo) lo.onclick = async function(){ await sb.auth.signOut(); };
+      }
+      if(compose) compose.hidden = false;
+    }else{
+      box.hidden = false;
+      if(userBox) userBox.hidden = true;
+      if(compose) compose.hidden = true;
+      box.innerHTML =
+        '<div class="row2">'
+        + '<input id="boardEmail" type="email" placeholder="Email" autocomplete="username" />'
+        + '<input id="boardPass" type="password" placeholder="密碼（至少 6 碼）" autocomplete="current-password" />'
+        + '</div>'
+        + '<input id="boardDisplay" type="text" placeholder="顯示名稱（註冊用，可留空）" maxlength="30" />'
+        + '<div class="board-actions">'
+        + '<button type="button" class="pri" id="boardLogin">登入</button>'
+        + '<button type="button" id="boardSignup">註冊</button>'
+        + '</div>';
+      $('boardLogin').onclick = doLogin;
+      $('boardSignup').onclick = doSignup;
+    }
+  }
+
+  async function doLogin(){
+    err('');
+    var email = ($('boardEmail')||{}).value||'';
+    var pass = ($('boardPass')||{}).value||'';
+    var res = await sb.auth.signInWithPassword({ email: email.trim(), password: pass });
+    if(res.error){ err(res.error.message); return; }
+  }
+  async function doSignup(){
+    err('');
+    var email = ($('boardEmail')||{}).value||'';
+    var pass = ($('boardPass')||{}).value||'';
+    var display = (($('boardDisplay')||{}).value||'').trim();
+    var res = await sb.auth.signUp({
+      email: email.trim(),
+      password: pass,
+      options: { data: { display_name: display || undefined } }
+    });
+    if(res.error){ err(res.error.message); return; }
+    if(res.data && res.data.user && !res.data.session){
+      err('註冊成功。若有開啟信箱驗證，請先去收信再登入。');
+    }
+  }
+
+  async function loadMessages(){
+    var list = $('boardList');
+    if(!list) return;
+    list.innerHTML = '<p class="board-empty">載入中…</p>';
+    var res = await sb.from('messages')
+      .select('id,body,status,created_at,user_id, profiles:user_id(display_name,game_id,role)')
+      .neq('status','deleted')
+      .order('created_at', { ascending: false })
+      .limit(50);
+    if(res.error){
+      list.innerHTML = '<p class="board-err">讀取失敗：'+esc(res.error.message)+'</p>';
+      return;
+    }
+    var rows = res.data || [];
+    if(!rows.length){
+      list.innerHTML = '<p class="board-empty">還沒有留言，登入後當第一個發言吧。</p>';
+      return;
+    }
+    var isAdmin = state.profile && state.profile.role === 'admin';
+    var uid = state.user && state.user.id;
+    list.innerHTML = rows.map(function(m){
+      var p = m.profiles || {};
+      var name = p.display_name || '使用者';
+      var gid = p.game_id ? (' · '+p.game_id) : '';
+      var hidden = m.status === 'hidden';
+      var acts = '';
+      if(isAdmin){
+        if(hidden){
+          acts += '<button type="button" data-act="show" data-id="'+m.id+'">顯示</button>';
+        }else{
+          acts += '<button type="button" data-act="hide" data-id="'+m.id+'">隱藏</button>';
+        }
+        acts += '<button type="button" data-act="del" data-id="'+m.id+'">刪除</button>';
+      }else if(uid && uid === m.user_id){
+        acts += '<button type="button" data-act="del" data-id="'+m.id+'">刪除我的</button>';
+      }
+      return '<div class="board-msg'+(hidden?' hidden-msg':'')+'">'
+        + '<div class="bm-top"><span class="bm-name">'+esc(name)+'</span>'
+        + '<span class="bm-meta">'+esc(fmtTime(m.created_at))+esc(gid)+(hidden?' · 已隱藏':'')+'</span></div>'
+        + '<div class="bm-body">'+esc(m.body)+'</div>'
+        + (acts ? '<div class="bm-act">'+acts+'</div>' : '')
+        + '</div>';
+    }).join('');
+  }
+
+  async function sendMessage(){
+    err('');
+    if(!state.user){ err('請先登入'); return; }
+    var body = (($('boardBody')||{}).value||'').trim();
+    if(!body){ err('請輸入內容'); return; }
+    if(body.length > 1000){ err('最多 1000 字'); return; }
+    var res = await sb.from('messages').insert({ user_id: state.user.id, body: body, status: 'visible' });
+    if(res.error){ err(res.error.message); return; }
+    $('boardBody').value = '';
+    await loadMessages();
+  }
+
+  async function onAct(ev){
+    var b = ev.target.closest('button[data-act]');
+    if(!b) return;
+    var id = b.getAttribute('data-id');
+    var act = b.getAttribute('data-act');
+    var patch = null;
+    if(act === 'hide') patch = { status: 'hidden' };
+    if(act === 'show') patch = { status: 'visible' };
+    if(act === 'del') patch = { status: 'deleted' };
+    if(!patch) return;
+    var res = await sb.from('messages').update(patch).eq('id', id);
+    if(res.error){ err(res.error.message); return; }
+    await loadMessages();
+  }
+
+  async function saveProfile(){
+    err('');
+    if(!state.user){ err('請先登入'); return; }
+    var gid = (($('boardGameId')||{}).value||'').trim();
+    var res = await sb.from('profiles').update({ game_id: gid || null }).eq('id', state.user.id);
+    if(res.error){ err(res.error.message); return; }
+    await loadProfile();
+    paintAuth();
+    err('');
+    alert('已儲存');
+  }
+
+  async function boot(){
+    var sess = await sb.auth.getSession();
+    state.user = sess.data && sess.data.session ? sess.data.session.user : null;
+    await loadProfile();
+    paintAuth();
+    await loadMessages();
+    sb.auth.onAuthStateChange(async function(ev, session){
+      state.user = session ? session.user : null;
+      await loadProfile();
+      paintAuth();
+      await loadMessages();
+    });
+    var send = $('boardSend');
+    if(send) send.onclick = sendMessage;
+    var ref = $('boardRefresh');
+    if(ref) ref.onclick = function(){ loadMessages(); };
+    var list = $('boardList');
+    if(list) list.addEventListener('click', onAct);
+    var save = $('boardSaveProfile');
+    if(save) save.onclick = saveProfile;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
+
 </body>
 </html>
