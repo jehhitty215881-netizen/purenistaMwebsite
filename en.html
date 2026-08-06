@@ -455,6 +455,26 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .board-empty,.board-err{font-size:13.5px;color:var(--ink-soft);padding:8px 0}
 .board-err{color:#a33}
 
+.board-chat{display:flex;flex-direction:column;gap:0;min-height:320px;max-height:min(62vh,520px);border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:#faf8ff}
+.board-chat-log{flex:1 1 auto;overflow-y:auto;padding:12px 12px 8px;display:flex;flex-direction:column;gap:8px;scroll-behavior:smooth}
+.board-bubble{max-width:92%;padding:8px 12px;border-radius:14px;border:1.5px solid var(--line);background:#fff;align-self:flex-start}
+.board-bubble.mine{align-self:flex-end;background:var(--violet-soft);border-color:#cfc4ea}
+.board-bubble.hidden-msg{opacity:.65;border-style:dashed}
+.board-bubble .bm-top{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;margin-bottom:4px}
+.board-bubble .bm-name{font-weight:800;font-size:12.5px;color:var(--violet)}
+.board-bubble .bm-meta{font-size:11px;color:var(--ink-soft)}
+.board-bubble .bm-body{font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+.board-bubble .bm-replyto{font-size:12px;color:var(--ink-soft);background:rgba(123,107,181,.08);border-radius:8px;padding:4px 8px;margin-bottom:6px}
+.board-bubble .bm-act{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.board-bubble .bm-act button{border:0;background:transparent;color:var(--violet);font:inherit;font-size:12px;font-weight:700;padding:2px 6px;cursor:pointer;border-radius:6px}
+.board-bubble .bm-act button:hover{background:var(--violet-soft)}
+.board-compose-bar{border-top:1.5px solid var(--line);padding:10px;background:var(--panel)}
+.board-reply-hint{font-size:12.5px;color:var(--violet);margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.board-reply-hint button{border:0;background:transparent;color:var(--ink-soft);font:inherit;font-size:12px;cursor:pointer;text-decoration:underline}
+.board-status{font-size:12px;color:var(--ink-soft);padding:4px 12px 0}
+.board-status.on{color:var(--teal)}
+
+
 </style>
 </head>
 <body>
@@ -1494,33 +1514,42 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 </section>
 
 
+
 <section id="board">
   <div class="card">
-    <h3>Message board <span class="tag ok">Members</span></h3>
-    <p class="cond">Sign in to post. Data is stored on Supabase. Feature ranking still uses the separate counter service.</p>
+    <h3>Chat room <span class="tag ok">Live</span></h3>
+    <p class="cond">Sign in to post and reply. New messages appear automatically while this tab is open. Admins can hide or delete.</p>
     <div id="boardAuth" class="board-auth"></div>
     <div id="boardUser" class="board-user" hidden></div>
-    <div id="boardCompose" class="board-compose" hidden>
-      <textarea id="boardBody" maxlength="1000" placeholder="Write something… (max 1000 characters)"></textarea>
-      <div class="board-actions">
-        <button type="button" class="pri" id="boardSend">Post</button>
-        <button type="button" id="boardRefresh">Refresh</button>
+    <p id="boardStatus" class="board-status">Connecting…</p>
+    <div class="board-chat">
+      <div id="boardList" class="board-chat-log"><p class="board-empty">Loading…</p></div>
+      <div class="board-compose-bar">
+        <div id="boardReplyHint" class="board-reply-hint" hidden></div>
+        <div id="boardCompose" class="board-compose" hidden>
+          <textarea id="boardBody" maxlength="1000" placeholder="Type a message… (Enter to send, Shift+Enter for new line)"></textarea>
+          <div class="board-actions">
+            <button type="button" class="pri" id="boardSend">Send</button>
+            <button type="button" id="boardRefresh">Refresh</button>
+          </div>
+        </div>
+        <div id="boardErr" class="board-err" hidden></div>
       </div>
     </div>
-    <div id="boardErr" class="board-err" hidden></div>
-    <div id="boardList" class="board-list"><p class="board-empty">Loading…</p></div>
   </div>
   <div class="card">
-    <h3>Game ID</h3>
-    <p class="cond">After signing in, you can save a game ID so others can recognise you.</p>
+    <h3>Display name / Game ID</h3>
+    <p class="cond">Edit after signing in so others can recognise you in chat.</p>
     <div class="board-auth">
-      <input id="boardGameId" maxlength="40" placeholder="Your game ID (optional)" />
+      <input id="boardDisplayEdit" maxlength="30" placeholder="Display name" />
+      <input id="boardGameId" maxlength="40" placeholder="Game ID (optional)" />
       <div class="board-actions">
         <button type="button" class="pri" id="boardSaveProfile">Save</button>
       </div>
     </div>
   </div>
 </section>
+
 
 <section id="feedback"><div id="sec-feedback" data-lazy="1"></div></section>
 
@@ -7780,19 +7809,23 @@ function compositionScore(opts) {
 })();
 </script>
 
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
   var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
   var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
-  var T = {"signed": "Signed in as ", "gameid": "Game ID", "admin": "Admin", "logout": "Sign out", "email": "Email", "pass": "Password (min 6 characters)", "display": "Display name (for sign-up, optional)", "login": "Sign in", "signup": "Sign up", "signup_ok": "Sign-up successful. If email confirmation is enabled, check your inbox before signing in.", "loading": "Loading…", "fail": "Failed to load: ", "empty": "No messages yet. Sign in to post the first one.", "user": "User", "hidden": "Hidden", "show": "Show", "hide": "Hide", "del": "Delete", "delmine": "Delete mine", "need_login": "Please sign in first", "need_body": "Please enter a message", "max": "Max 1000 characters", "saved": "Saved", "locale": "en-US"};
+  var T = {"signed": "Signed in as ", "gameid": "Game ID", "admin": "Admin", "logout": "Sign out", "email": "Email", "pass": "Password (min 6 characters)", "display": "Display name (for sign-up, optional)", "login": "Sign in", "signup": "Sign up", "signup_ok": "Sign-up successful. If email confirmation is enabled, check your inbox before signing in.", "loading": "Loading…", "fail": "Failed to load: ", "empty": "No messages yet. Say hi!", "user": "User", "hidden": "Hidden", "show": "Show", "hide": "Hide", "del": "Delete", "delmine": "Delete", "reply": "Reply", "replying": "Replying to", "cancel": "Cancel", "need_login": "Please sign in first", "need_body": "Please enter a message", "max": "Max 1000 characters", "saved": "Saved", "live_on": "Live", "live_off": "Offline (use Refresh)", "locale": "en-US"};
   if(!window.supabase){
     var list = document.getElementById('boardList');
     if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
     return;
   }
   var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-  var state = { user:null, profile:null };
+  var state = { user:null, profile:null, rows:[], replyTo:null, channel:null };
+
   function $(id){ return document.getElementById(id); }
   function err(msg){
     var el = $('boardErr');
@@ -7812,6 +7845,13 @@ function compositionScore(opts) {
       return d.toLocaleString(T.locale, { hour12:false });
     }catch(e){ return ''; }
   }
+  function setStatus(on, text){
+    var el = $('boardStatus');
+    if(!el) return;
+    el.textContent = text || (on ? T.live_on : T.live_off);
+    el.className = 'board-status'+(on?' on':'');
+  }
+
   async function loadProfile(){
     state.profile = null;
     if(!state.user) return;
@@ -7820,7 +7860,10 @@ function compositionScore(opts) {
     state.profile = res.data;
     var gi = $('boardGameId');
     if(gi) gi.value = (state.profile && state.profile.game_id) || '';
+    var dn = $('boardDisplayEdit');
+    if(dn) dn.value = (state.profile && state.profile.display_name) || '';
   }
+
   function paintAuth(){
     var box = $('boardAuth'), userBox = $('boardUser'), compose = $('boardCompose');
     if(!box) return;
@@ -7843,6 +7886,7 @@ function compositionScore(opts) {
       box.hidden = false;
       if(userBox) userBox.hidden = true;
       if(compose) compose.hidden = true;
+      clearReply();
       box.innerHTML =
         '<div class="row2">'
         + '<input id="boardEmail" type="email" placeholder="'+T.email+'" autocomplete="username" />'
@@ -7857,6 +7901,7 @@ function compositionScore(opts) {
       $('boardSignup').onclick = doSignup;
     }
   }
+
   async function doLogin(){
     err('');
     var email = ($('boardEmail')||{}).value||'';
@@ -7878,20 +7923,35 @@ function compositionScore(opts) {
       err(T.signup_ok);
     }
   }
-  async function loadMessages(){
+
+  function findRow(id){
+    for(var i=0;i<state.rows.length;i++) if(String(state.rows[i].id)===String(id)) return state.rows[i];
+    return null;
+  }
+
+  function paintReplyHint(){
+    var el = $('boardReplyHint');
+    if(!el) return;
+    if(!state.replyTo){ el.hidden = true; el.innerHTML=''; return; }
+    var m = findRow(state.replyTo);
+    var name = m && m.profiles ? (m.profiles.display_name||T.user) : T.user;
+    el.hidden = false;
+    el.innerHTML = T.replying+' <b>'+esc(name)+'</b> <button type="button" id="boardReplyCancel">'+T.cancel+'</button>';
+    var c = $('boardReplyCancel');
+    if(c) c.onclick = clearReply;
+  }
+  function clearReply(){ state.replyTo = null; paintReplyHint(); }
+  function setReply(id){ state.replyTo = id; paintReplyHint(); var ta=$('boardBody'); if(ta) ta.focus(); }
+
+  function scrollBottom(){
+    var list = $('boardList');
+    if(list) list.scrollTop = list.scrollHeight;
+  }
+
+  function paintMessages(){
     var list = $('boardList');
     if(!list) return;
-    list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
-    var res = await sb.from('messages')
-      .select('id,body,status,created_at,user_id, profiles:user_id(display_name,game_id,role)')
-      .neq('status','deleted')
-      .order('created_at', { ascending: false })
-      .limit(50);
-    if(res.error){
-      list.innerHTML = '<p class="board-err">'+T.fail+esc(res.error.message)+'</p>';
-      return;
-    }
-    var rows = res.data || [];
+    var rows = state.rows.slice().filter(function(m){ return m.status !== 'deleted'; });
     if(!rows.length){
       list.innerHTML = '<p class="board-empty">'+T.empty+'</p>';
       return;
@@ -7903,38 +7963,87 @@ function compositionScore(opts) {
       var name = p.display_name || T.user;
       var gid = p.game_id ? (' · '+p.game_id) : '';
       var hidden = m.status === 'hidden';
+      var mine = uid && uid === m.user_id;
+      var parent = m.parent_id ? findRow(m.parent_id) : null;
+      var replyBlock = '';
+      if(parent){
+        var pn = (parent.profiles && parent.profiles.display_name) || T.user;
+        var pb = String(parent.body||'').slice(0,80);
+        replyBlock = '<div class="bm-replyto">'+esc(pn)+': '+esc(pb)+'</div>';
+      }
       var acts = '';
+      if(state.user) acts += '<button type="button" data-act="reply" data-id="'+m.id+'">'+T.reply+'</button>';
       if(isAdmin){
         if(hidden) acts += '<button type="button" data-act="show" data-id="'+m.id+'">'+T.show+'</button>';
         else acts += '<button type="button" data-act="hide" data-id="'+m.id+'">'+T.hide+'</button>';
         acts += '<button type="button" data-act="del" data-id="'+m.id+'">'+T.del+'</button>';
-      }else if(uid && uid === m.user_id){
+      }else if(mine){
         acts += '<button type="button" data-act="del" data-id="'+m.id+'">'+T.delmine+'</button>';
       }
-      return '<div class="board-msg'+(hidden?' hidden-msg':'')+'">'
+      return '<div class="board-bubble'+(mine?' mine':'')+(hidden?' hidden-msg':'')+'" data-id="'+m.id+'">'
         + '<div class="bm-top"><span class="bm-name">'+esc(name)+'</span>'
         + '<span class="bm-meta">'+esc(fmtTime(m.created_at))+esc(gid)+(hidden?' · '+T.hidden:'')+'</span></div>'
+        + replyBlock
         + '<div class="bm-body">'+esc(m.body)+'</div>'
         + (acts ? '<div class="bm-act">'+acts+'</div>' : '')
         + '</div>';
     }).join('');
+    scrollBottom();
   }
+
+  async function loadMessages(){
+    var list = $('boardList');
+    if(list && !state.rows.length) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
+    var res = await sb.from('messages')
+      .select('id,body,status,created_at,user_id,parent_id, profiles:user_id(display_name,game_id,role)')
+      .neq('status','deleted')
+      .order('created_at', { ascending: true })
+      .limit(100);
+    if(res.error){
+      // parent_id may not exist yet — fallback
+      if(String(res.error.message||'').indexOf('parent_id')>=0){
+        res = await sb.from('messages')
+          .select('id,body,status,created_at,user_id, profiles:user_id(display_name,game_id,role)')
+          .neq('status','deleted')
+          .order('created_at', { ascending: true })
+          .limit(100);
+      }
+      if(res.error){
+        if(list) list.innerHTML = '<p class="board-err">'+T.fail+esc(res.error.message)+'</p>';
+        return;
+      }
+    }
+    state.rows = (res.data||[]).map(function(m){ if(m.parent_id==null) m.parent_id=null; return m; });
+    paintMessages();
+  }
+
   async function sendMessage(){
     err('');
     if(!state.user){ err(T.need_login); return; }
     var body = (($('boardBody')||{}).value||'').trim();
     if(!body){ err(T.need_body); return; }
     if(body.length > 1000){ err(T.max); return; }
-    var res = await sb.from('messages').insert({ user_id: state.user.id, body: body, status: 'visible' });
-    if(res.error){ err(res.error.message); return; }
+    var payload = { user_id: state.user.id, body: body, status: 'visible' };
+    if(state.replyTo) payload.parent_id = state.replyTo;
+    var res = await sb.from('messages').insert(payload);
+    if(res.error){
+      if(state.replyTo && String(res.error.message||'').indexOf('parent_id')>=0){
+        delete payload.parent_id;
+        res = await sb.from('messages').insert(payload);
+      }
+      if(res.error){ err(res.error.message); return; }
+    }
     $('boardBody').value = '';
+    clearReply();
     await loadMessages();
   }
+
   async function onAct(ev){
     var b = ev.target.closest('button[data-act]');
     if(!b) return;
     var id = b.getAttribute('data-id');
     var act = b.getAttribute('data-act');
+    if(act === 'reply'){ setReply(id); return; }
     var patch = null;
     if(act === 'hide') patch = { status: 'hidden' };
     if(act === 'show') patch = { status: 'visible' };
@@ -7944,23 +8053,44 @@ function compositionScore(opts) {
     if(res.error){ err(res.error.message); return; }
     await loadMessages();
   }
+
   async function saveProfile(){
     err('');
     if(!state.user){ err(T.need_login); return; }
     var gid = (($('boardGameId')||{}).value||'').trim();
-    var res = await sb.from('profiles').update({ game_id: gid || null }).eq('id', state.user.id);
+    var dn = (($('boardDisplayEdit')||{}).value||'').trim();
+    var patch = { game_id: gid || null };
+    if(dn) patch.display_name = dn;
+    var res = await sb.from('profiles').update(patch).eq('id', state.user.id);
     if(res.error){ err(res.error.message); return; }
     await loadProfile();
     paintAuth();
     err('');
     alert(T.saved);
   }
+
+  function subscribe(){
+    try{
+      if(state.channel){ sb.removeChannel(state.channel); state.channel = null; }
+      state.channel = sb.channel('board-chat')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, function(){
+          loadMessages();
+        })
+        .subscribe(function(status){
+          setStatus(status === 'SUBSCRIBED', status === 'SUBSCRIBED' ? T.live_on : T.live_off);
+        });
+    }catch(e){
+      setStatus(false, T.live_off);
+    }
+  }
+
   async function boot(){
     var sess = await sb.auth.getSession();
     state.user = sess.data && sess.data.session ? sess.data.session.user : null;
     await loadProfile();
     paintAuth();
     await loadMessages();
+    subscribe();
     sb.auth.onAuthStateChange(async function(ev, session){
       state.user = session ? session.user : null;
       await loadProfile();
@@ -7971,6 +8101,15 @@ function compositionScore(opts) {
     var ref = $('boardRefresh'); if(ref) ref.onclick = function(){ loadMessages(); };
     var list = $('boardList'); if(list) list.addEventListener('click', onAct);
     var save = $('boardSaveProfile'); if(save) save.onclick = saveProfile;
+    var ta = $('boardBody');
+    if(ta){
+      ta.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' && !e.shiftKey){
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+    }
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
