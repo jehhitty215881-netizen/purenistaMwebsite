@@ -2429,7 +2429,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
      worker: fill in GLOBAL_RANK_ENDPOINT with a Cloudflare Worker URL and it takes over. One
      request returns the whole table instead of 22, and the data lives somewhere you control.
      Only worth the setup if the site gets busy enough for counterapi's limit to bite. */
-  var GLOBAL_RANK_ENDPOINT = '';
+  var GLOBAL_RANK_ENDPOINT = 'https://rank-api-6m8j.onrender.com/api/rank';
   var COUNTER_NS = 'tourmaline8b7d78';
   var COUNTER_PREFIX = 'feat-';
   var rankMode = 'local';
