@@ -488,6 +488,14 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .board-card .bc-title{font-weight:800;font-size:15.5px}
 .board-card .bc-desc{font-size:13px;color:var(--ink-soft);line-height:1.55}
 .board-card .bc-meta{font-size:12px;color:var(--ink-soft);margin-top:4px}
+
+#boardHome[hidden],#boardRoom[hidden],#boardCompose[hidden],#boardReplyHint[hidden],#boardNewWrap[hidden],#boardUser[hidden],#boardAuth[hidden],#boardErr[hidden]{display:none!important}
+.board-room-shell{border:1.5px solid var(--violet);border-radius:14px;padding:12px;background:var(--violet-soft)}
+.board-room-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.board-room-top .back{border:1.5px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-weight:700;font-size:13px;padding:8px 14px;border-radius:999px;cursor:pointer}
+.board-room-top .room-title{font-weight:800;font-size:17px;color:var(--violet)}
+.board-room-top .room-desc{width:100%;font-size:13px;color:var(--ink-soft)}
+
 .board-room-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
 .board-room-top .back{border:1.5px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-weight:700;font-size:13px;padding:7px 12px;border-radius:999px;cursor:pointer}
 .board-room-top .room-title{font-weight:800;font-size:16px}
@@ -1563,7 +1571,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       </div>
     </div>
 
-    <div id="boardRoom" hidden>
+    <div id="boardRoom" class="board-room-shell" hidden>
       <div class="board-room-top">
         <button type="button" class="back" id="boardBack">← 回專版列表</button>
         <span class="room-title" id="boardRoomTitle">—</span>
@@ -7908,24 +7916,29 @@ function compositionScore(opts) {
 
   function showHome(){
     state.board = null;
+    state.rows = [];
     clearReply();
     unsub();
     var home = $('boardHome'), room = $('boardRoom');
-    if(home) home.hidden = false;
-    if(room) room.hidden = true;
+    if(home){ home.hidden = false; home.style.display = ''; }
+    if(room){ room.hidden = true; room.style.display = 'none'; }
     var nw = $('boardNewWrap');
     if(nw) nw.hidden = !isAdmin();
+    var list = $('boardList');
+    if(list) list.innerHTML = '';
   }
   function showRoom(b){
     state.board = b;
     clearReply();
     var home = $('boardHome'), room = $('boardRoom');
-    if(home) home.hidden = true;
-    if(room) room.hidden = false;
+    if(home){ home.hidden = true; home.style.display = 'none'; }
+    if(room){ room.hidden = false; room.style.display = ''; }
     var t = $('boardRoomTitle'); if(t) t.textContent = b.title || '—';
     var d = $('boardRoomDesc'); if(d) d.textContent = b.description || '';
     var compose = $('boardCompose');
     if(compose) compose.hidden = !state.user;
+    var list = $('boardList');
+    if(list) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
     loadMessages();
     subscribe();
   }
