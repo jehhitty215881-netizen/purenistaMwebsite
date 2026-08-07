@@ -8211,6 +8211,8 @@ function compositionScore(opts) {
     if(nw) nw.hidden = !(isAdmin() && isApproved());
     var list = $('boardList');
     if(list) list.innerHTML = '';
+    paintGamePanel();
+    paintTurnPanel();
   }
   function showRoom(b){
     if(!isApproved()){
@@ -8228,6 +8230,8 @@ function compositionScore(opts) {
     if(compose) compose.hidden = !state.user || !isApproved();
     var list = $('boardList');
     if(list) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
+    paintGamePanel();
+    paintTurnPanel();
     loadMessages();
     subscribe();
   }
