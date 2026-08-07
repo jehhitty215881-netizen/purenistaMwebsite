@@ -8441,22 +8441,32 @@ function compositionScore(opts) {
     var holderName = (state.board.profiles && state.board.profiles.display_name)
       || (holder ? T.user : (zh ? '尚未指定' : 'Nobody yet'));
     var isMe = state.user && holder && state.user.id === holder;
+    var canControl = isAdmin() || isMe || !holder; // 沒人佔回合時可開始；有人時僅本人或管理員
     var members = await roomMembers();
 
     var labelNow = zh ? '目前回合' : 'Current turn';
     var labelDice = zh ? '擲骰子' : 'Roll dice';
     var labelClaim = zh ? '我先開始' : 'I start';
-    var labelPass = zh ? '指定下一位' : 'Pass to';
-    var labelDo = zh ? '傳給他' : 'Pass';
-    var diceHint = zh ? '骰子結果會貼到聊天室；可勾選擲完傳給下一位。' : 'Roll posts to chat; optional auto-pass.';
-    var autoPass = zh ? '擲完傳給下一位' : 'Pass after roll';
+    var labelNextSeq = zh ? '傳給下一位（依序）' : 'Next in order';
+    var labelNextRand = zh ? '隨機下一位' : 'Random next';
+    var labelAdmin = zh ? '管理員指定' : 'Admin assign';
+    var labelDo = zh ? '指定' : 'Assign';
+    var diceHint = zh
+      ? '防惡意：只有「輪到的人」或管理員能交棒。一般人可用依序／隨機，不能任意點名。'
+      : 'Anti-grief: only the current player or an admin can pass. Others use order/random only.';
+    var autoPass = zh ? '擲完自動依序下一位' : 'Auto next after roll';
 
     var opts = members.map(function(m){
-      return '<option value="'+m.id+'"'+(holder===m.id?' selected':'')+'>'
-        +esc(m.name)+(m.game_id?' · '+esc(m.game_id):'')+'</option>';
+      return '<option value="'+m.id+'">'+esc(m.name)+(m.game_id?' · '+esc(m.game_id):'')+'</option>';
     }).join('');
-    if(!members.length){
-      opts = '<option value="">'+(zh?'尚無發言成員，先打個招呼':'No members yet')+'</option>';
+
+    var adminBlock = '';
+    if(isAdmin()){
+      adminBlock = '<div class="turn-row">'
+        + '<span style="font-size:12.5px">'+labelAdmin+'</span>'
+        + '<select id="turnNext">'+opts+'</select>'
+        + '<button type="button" id="turnPassAdmin">'+labelDo+'</button>'
+        + '</div>';
     }
 
     el.innerHTML =
@@ -8464,17 +8474,34 @@ function compositionScore(opts) {
       +(isMe ? (zh?'（輪到你）':'(your turn)') : '')+'</div>'
       +'<div class="turn-row">'
       +'<button type="button" class="dice" id="turnDice">'+labelDice+'</button>'
-      +'<button type="button" id="turnClaim">'+labelClaim+'</button>'
+      +(!holder ? '<button type="button" id="turnClaim">'+labelClaim+'</button>' : '')
+      +(canControl ? '<button type="button" id="turnNextSeq">'+labelNextSeq+'</button>' : '')
+      +(canControl ? '<button type="button" id="turnNextRand">'+labelNextRand+'</button>' : '')
       +'</div>'
-      +'<div class="turn-row">'
-      +'<label style="font-size:12px;color:var(--ink-soft)"><input type="checkbox" id="turnAutoPass" /> '+autoPass+'</label>'
-      +'</div>'
-      +'<div class="turn-row">'
-      +'<span style="font-size:12.5px">'+labelPass+'</span>'
-      +'<select id="turnNext">'+opts+'</select>'
-      +'<button type="button" id="turnPass">'+labelDo+'</button>'
-      +'</div>'
+      +(canControl ? '<div class="turn-row"><label style="font-size:12px;color:var(--ink-soft)"><input type="checkbox" id="turnAutoPass" /> '+autoPass+'</label></div>' : '')
+      + adminBlock
       +'<div style="margin-top:6px;font-size:12px;color:var(--ink-soft)">'+diceHint+'</div>';
+
+    function nextInOrder(){
+      if(!members.length) return null;
+      if(!holder) return members[0];
+      var idx = -1;
+      for(var i=0;i<members.length;i++) if(members[i].id === holder) idx = i;
+      var n = members[(idx + 1) % members.length];
+      return n;
+    }
+    function nextRandom(){
+      if(!members.length) return null;
+      var pool = members.filter(function(m){ return m.id !== holder; });
+      if(!pool.length) pool = members;
+      return pool[Math.floor(Math.random()*pool.length)];
+    }
+    async function passTo(m, reason){
+      if(!m){ err(zh?'本房還沒有可傳的成員，請先發言':'No members yet'); return; }
+      if(!canControl){ err(zh?'只有輪到的人或管理員能交棒':'Only current player or admin can pass'); return; }
+      await setTurn(m.id, null);
+      await postSystem((zh?'➡️ 下一位：':'➡️ Next: ')+m.name+(reason?('（'+reason+'）'):''));
+    }
 
     var diceBtn = $('turnDice');
     if(diceBtn) diceBtn.onclick = async function(){
@@ -8482,39 +8509,38 @@ function compositionScore(opts) {
       if(!isApproved()){ err(T.pending); return; }
       var n = 1 + Math.floor(Math.random()*6);
       var name = (state.profile && state.profile.display_name) || T.user;
-      var text = (zh? '🎲 骰子：' : '🎲 Dice: ')+n+(zh?' 點（':' (')+name+')';
-      await postSystem(text);
+      await postSystem((zh? '🎲 骰子：' : '🎲 Dice: ')+n+(zh?' 點（':' (')+name+')');
       var auto = $('turnAutoPass');
-      if(auto && auto.checked){
-        var sel = $('turnNext');
-        var uid = sel && sel.value;
-        if(uid){
-          var opt = sel.options[sel.selectedIndex];
-          var tn = opt ? opt.textContent : '';
-          await setTurn(uid, null);
-          await postSystem((zh?'➡️ 下一位：':'➡️ Next: ')+tn);
-        }
+      if(auto && auto.checked && canControl){
+        await passTo(nextInOrder(), zh?'依序':'order');
       }
     };
     var claim = $('turnClaim');
     if(claim) claim.onclick = async function(){
       if(!state.user){ err(T.need_login); return; }
+      if(holder && !isAdmin()){ err(zh?'已有人開始，請等交棒':'Turn already taken'); return; }
       await setTurn(state.user.id, null);
       var name = (state.profile && state.profile.display_name) || T.user;
       await postSystem((zh?'▶️ 回合開始：':'▶️ Turn starts: ')+name);
     };
-    var pass = $('turnPass');
-    if(pass) pass.onclick = async function(){
-      if(!state.user){ err(T.need_login); return; }
+    var seq = $('turnNextSeq');
+    if(seq) seq.onclick = async function(){ await passTo(nextInOrder(), zh?'依序':'order'); };
+    var rand = $('turnNextRand');
+    if(rand) rand.onclick = async function(){ await passTo(nextRandom(), zh?'隨機':'random'); };
+    var adm = $('turnPassAdmin');
+    if(adm) adm.onclick = async function(){
+      if(!isAdmin()) return;
       var sel = $('turnNext');
       var uid = sel && sel.value;
-      if(!uid){ err(zh?'請選擇下一位':'Pick someone'); return; }
-      var opt = sel.options[sel.selectedIndex];
-      var tn = opt ? opt.textContent : '';
-      await setTurn(uid, null);
-      await postSystem((zh?'➡️ 下一位：':'➡️ Next: ')+tn);
+      if(!uid) return;
+      var m = null;
+      for(var i=0;i<members.length;i++) if(members[i].id===uid) m = members[i];
+      if(!m) m = { id: uid, name: sel.options[sel.selectedIndex].textContent };
+      await setTurn(m.id, null);
+      await postSystem((zh?'➡️ 管理員指定下一位：':'➡️ Admin set next: ')+m.name);
     };
   }
+
 
   async function loadBoards(){
     var list = $('boardCardList');
