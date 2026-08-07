@@ -460,9 +460,9 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .board-empty,.board-err{font-size:13.5px;color:var(--ink-soft);padding:8px 0}
 .board-err{color:#a33}
 
-.board-chat{display:flex;flex-direction:column;gap:0;min-height:320px;max-height:min(62vh,520px);border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:#faf8ff}
-.board-chat-log{flex:1 1 auto;overflow-y:auto;padding:12px 12px 8px;display:flex;flex-direction:column;gap:8px;scroll-behavior:smooth}
-.board-bubble{max-width:92%;padding:8px 12px;border-radius:14px;border:1.5px solid var(--line);background:#fff;align-self:flex-start}
+
+
+.board-bubble{max-width:min(92%,560px);padding:8px 12px;border-radius:14px;border:1.5px solid var(--line);background:#fff;align-self:flex-start}
 .board-bubble.mine{align-self:flex-end;background:var(--violet-soft);border-color:#cfc4ea}
 .board-bubble.hidden-msg{opacity:.65;border-style:dashed}
 .board-bubble .bm-top{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;margin-bottom:4px}
@@ -473,7 +473,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .board-bubble .bm-act{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .board-bubble .bm-act button{border:0;background:transparent;color:var(--violet);font:inherit;font-size:12px;font-weight:700;padding:2px 6px;cursor:pointer;border-radius:6px}
 .board-bubble .bm-act button:hover{background:var(--violet-soft)}
-.board-compose-bar{border-top:1.5px solid var(--line);padding:10px;background:var(--panel)}
+.board-compose-bar{border-top:1.5px solid var(--line);padding:12px;background:var(--panel);flex:0 0 auto}
 .board-reply-hint{font-size:12.5px;color:var(--violet);margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .board-reply-hint button{border:0;background:transparent;color:var(--ink-soft);font:inherit;font-size:12px;cursor:pointer;text-decoration:underline}
 .board-status{font-size:12px;color:var(--ink-soft);padding:4px 12px 0}
@@ -488,20 +488,6 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .board-card .bc-title{font-weight:800;font-size:15.5px}
 .board-card .bc-desc{font-size:13px;color:var(--ink-soft);line-height:1.55}
 .board-card .bc-meta{font-size:12px;color:var(--ink-soft);margin-top:4px}
-
-
-.board-pending{margin:10px 0;padding:12px 14px;border-radius:12px;border:1.5px solid var(--gold);background:var(--gold-soft);font-size:13.5px;color:var(--ink);line-height:1.65}
-.board-pending b{color:var(--gold)}
-.board-review{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
-.board-review h4{font-size:14.5px;margin:0 0 8px}
-.board-review-item{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
-.board-review-item:last-child{border-bottom:0}
-.board-review-item .ri-name{font-weight:800}
-.board-review-item .ri-meta{color:var(--ink-soft);font-size:12px}
-.board-review-item .ri-acts{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
-.board-review-item .ri-acts button{border:1.5px solid var(--line);background:var(--panel);font:inherit;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:999px;cursor:pointer}
-.board-review-item .ri-acts button.ok{background:var(--teal);border-color:var(--teal);color:#fff}
-.board-review-item .ri-acts button.no{background:#fff;color:#a33;border-color:#e0b4b4}
 
 #boardHome[hidden],#boardRoom[hidden],#boardCompose[hidden],#boardReplyHint[hidden],#boardNewWrap[hidden],#boardUser[hidden],#boardAuth[hidden],#boardErr[hidden]{display:none!important}
 .board-room-shell{border:1.5px solid var(--violet);border-radius:14px;padding:12px;background:var(--violet-soft)}
@@ -519,6 +505,76 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .board-new textarea{min-height:64px;resize:vertical}
 
 
+
+
+.sg-jump{margin-top:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:13px 15px;border-radius:15px;border:1.5px solid var(--line);background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft))}
+.sg-jump .sgj-txt{flex:1 1 190px;min-width:0}
+.sg-jump b{display:block;font-size:14.5px;font-weight:800;color:var(--ink);margin:0 0 3px}
+.sg-jump span{display:block;font-size:12px;color:var(--ink-soft);line-height:1.65}
+.sg-jump button{flex:0 0 auto;border:0;background:linear-gradient(135deg,var(--rose),var(--violet));color:#fff;font-family:inherit;font-weight:800;font-size:13.5px;padding:11px 20px;border-radius:999px;cursor:pointer;transition:.15s;letter-spacing:.02em}
+.sg-jump button:hover{opacity:.9;transform:translateY(-1px)}
+.sg-jump button:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
+
+#boardHome[hidden],#boardRoom[hidden],#boardCompose[hidden],#boardReplyHint[hidden],#boardNewWrap[hidden],#boardUser[hidden],#boardAuth[hidden],#boardErr[hidden],#boardPending[hidden],#boardReview[hidden]{display:none!important}
+.board-pending{margin:10px 0;padding:12px 14px;border-radius:12px;border:1.5px solid var(--gold);background:var(--gold-soft);font-size:13.5px;color:var(--ink);line-height:1.65}
+.board-pending b{color:var(--gold)}
+.board-review{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.board-review h4{font-size:14.5px;margin:0 0 8px}
+.board-review-item{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+.board-review-item:last-child{border-bottom:0}
+.board-review-item .ri-name{font-weight:800}
+.board-review-item .ri-meta{color:var(--ink-soft);font-size:12px}
+.board-review-item .ri-acts{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.board-review-item .ri-acts button{border:1.5px solid var(--line);background:var(--panel);font:inherit;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:999px;cursor:pointer}
+.board-review-item .ri-acts button.ok{background:var(--teal);border-color:var(--teal);color:#fff}
+.board-review-item .ri-acts button.no{background:#fff;color:#a33;border-color:#e0b4b4}
+
+
+
+/* chat room — mobile first */
+.board-chat{
+  display:flex;flex-direction:column;gap:0;
+  min-height:55vh;
+  max-height:min(68vh, 640px);
+  border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:#faf8ff;
+}
+.board-chat-log{
+  flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:12px 10px 8px;
+  display:flex;flex-direction:column;gap:8px;scroll-behavior:smooth;
+  min-height:42vh;
+}
+.board-bubble{max-width:88%;padding:8px 11px;border-radius:14px;border:1.5px solid var(--line);background:#fff;align-self:flex-start}
+.board-bubble.mine{align-self:flex-end;background:var(--violet-soft);border-color:#cfc4ea}
+.board-compose-bar{border-top:1.5px solid var(--line);padding:10px;background:var(--panel);flex:0 0 auto}
+.board-compose textarea,#boardBody{min-height:72px;max-height:140px;font-size:16px;/* 避免 iOS 自動放大 */}
+.board-compose .board-actions,.board-actions{gap:8px}
+.board-compose .board-actions button,.board-actions button{min-height:40px;padding:8px 14px}
+.board-room-top .back{min-height:40px;padding:8px 14px}
+.board-card{padding:14px 14px;min-height:48px}
+@media (min-width:720px){
+  .board-chat{
+    min-height:min(70vh,720px);
+    max-height:min(78vh,900px);
+  }
+  .board-chat-log{
+    padding:14px 14px 10px;gap:10px;
+    min-height:min(55vh,620px);
+  }
+  .board-bubble{max-width:min(92%,560px)}
+  .board-compose textarea,#boardBody{min-height:96px;max-height:180px;font-size:inherit}
+}
+@media (max-width:480px){
+  .board-chat{
+    min-height:58vh;
+    max-height:min(72vh, 720px);
+    border-radius:12px;
+  }
+  .board-chat-log{min-height:46vh;padding:10px 8px}
+  .board-bubble{max-width:92%;font-size:14px}
+  .board-room-top{gap:6px}
+  .board-room-top .room-title{font-size:15px}
+}
 
 </style>
 </head>
@@ -605,6 +661,15 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <button type="button" data-role="create">🎨 想創作</button>
     </div>
     <div class="sg-path" id="sgPath" hidden></div>
+
+    <div class="sg-jump">
+      <div class="sgj-txt">
+        <b>想直接聊聊？</b>
+        <span>到留言板跟其他玩家討論交易、配色、抽卡心得。登入後就能發言。</span>
+      </div>
+      <button type="button" data-jump="board">前往留言板 →</button>
+    </div>
+
   </div>
 
   <div class="card" id="featRank">
@@ -7892,7 +7957,6 @@ function compositionScore(opts) {
 
 
 
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
@@ -8368,6 +8432,23 @@ function compositionScore(opts) {
   else boot();
 })();
 </script>
+<script>
 
+/* ---------- home → board shortcut ----------
+   The nav's own listener only binds to `nav button[data-tab]`, so a jump button
+   living inside a card needs its own delegated handler. Uses data-jump so it can
+   never be mistaken for a real nav button. */
+(function(){
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('[data-jump]');
+    if(!b) return;
+    if(typeof goTab === 'function'){
+      goTab(b.getAttribute('data-jump'));
+      window.scrollTo({ top:0, behavior:'smooth' });
+    }
+  });
+})();
+
+</script>
 </body>
 </html>
