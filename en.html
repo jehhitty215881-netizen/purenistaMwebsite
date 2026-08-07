@@ -571,6 +571,29 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   .board-room-top .room-title{font-size:15px}
 }
 
+
+.board-card .bc-tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--rose-soft);color:var(--rose);margin-left:6px;vertical-align:middle}
+.board-card.game-card{border-color:#e0c4d8;background:linear-gradient(135deg,#fff,var(--rose-soft))}
+.board-game-panel{margin:0 0 10px;padding:12px;border:1.5px solid var(--line);border-radius:14px;background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft))}
+.board-game-panel h4{margin:0 0 6px;font-size:14.5px}
+.board-game-panel .gp-hint{font-size:12.5px;color:var(--ink-soft);margin:0 0 10px;line-height:1.55}
+.board-game-panel .gp-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+.board-game-panel select,.board-game-panel input{
+  font:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff;min-height:40px;max-width:100%
+}
+.board-game-panel button.gp-go{
+  border:0;background:linear-gradient(135deg,var(--rose),var(--violet));color:#fff;
+  font:inherit;font-weight:800;font-size:13.5px;padding:10px 16px;border-radius:999px;cursor:pointer;min-height:40px
+}
+.board-game-panel .gp-result{
+  margin-top:8px;padding:10px 12px;border-radius:12px;background:#fff;border:1.5px dashed var(--line);
+  font-size:13.5px;line-height:1.65;white-space:pre-wrap;word-break:break-word;min-height:2.5em
+}
+.board-game-panel .gp-swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.board-game-panel .gp-swatch{
+  width:36px;height:36px;border-radius:10px;border:1.5px solid rgba(0,0,0,.12)
+}
+
 </style>
 </head>
 <body>
@@ -1657,6 +1680,9 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <button type="button" class="back" id="boardBack">← All boards</button>
         <span class="room-title" id="boardRoomTitle">—</span>
         <span class="room-desc" id="boardRoomDesc"></span>
+
+      <div id="boardGamePanel" class="board-game-panel" hidden></div>
+
       </div>
       <p id="boardStatus" class="board-status">Connecting…</p>
       <div class="board-chat">
@@ -8010,6 +8036,137 @@ function compositionScore(opts) {
     return state.profile.approval || 'pending';
   }
 
+
+  var GAME_LABEL = {
+    workspace: {zh:'創作工作台', en:'Workspace'},
+    color: {zh:'配色靈感', en:'Color inspo'},
+    naming: {zh:'命名與標籤', en:'Naming'},
+    char: {zh:'角色隨機', en:'Char random'}
+  };
+  function gameTitle(key){
+    var L = GAME_LABEL[key];
+    if(!L) return key;
+    return (T.locale||'').indexOf('zh')===0 ? L.zh : L.en;
+  }
+  function randPick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function randHex(){
+    var h='#';
+    for(var i=0;i<6;i++) h += '0123456789ABCDEF'[Math.floor(Math.random()*16)];
+    return h;
+  }
+  var CHAR_PARTS = {
+    role: ['旅人','偶像','占卜師','守護者','調香師','星際郵差','古董修復師','夜班圖書館員'],
+    trait: ['寡言','溫柔毒舌','冒失','完美主義','社恐營業中','表面高冷','精力過剩','慢熱'],
+    vibe: ['霧面玫瑰','電子螢光','舊相機','梅雨季','黃金時段','深夜食堂','水族館','砂石路'],
+    item: ['裂開的懷錶','未寄出的信','單邊耳機','手作護身符','過期車票','會發光的種子','沒有字的書']
+  };
+  var NAME_PARTS = {
+    a: ['霧','星','璃','絮','澄','臨','澈','拾','未','暮','白','青'],
+    b: ['野','川','燈','巷','信','海','夢','時','聲','色','階','橋']
+  };
+  var WORK_PROMPTS = [
+    '用三個詞形容今天的角色情緒',
+    '只准用「生活物品」當武器設定',
+    '背景發生在便利商店打烊後',
+    '配色限制：只能用兩個主色+一個點綴',
+    '這張圖的故事必須有「來不及」',
+    '角色的秘密藏在口袋裡的某樣東西'
+  ];
+
+  function paintGamePanel(){
+    var el = $('boardGamePanel');
+    if(!el) return;
+    if(!state.board || state.board.kind !== 'game' || !state.board.game_key){
+      el.hidden = true; el.innerHTML=''; return;
+    }
+    el.hidden = false;
+    var key = state.board.game_key;
+    var title = gameTitle(key);
+    var can = state.user && isApproved();
+    var hint = (T.locale||'').indexOf('zh')===0
+      ? '產生結果後可一鍵貼到本房聊天室，大家一起接龍。'
+      : 'Generate a result and post it to this room so others can riff on it.';
+    var goLabel = (T.locale||'').indexOf('zh')===0 ? '產生並貼到聊天室' : 'Generate & post';
+    var onlyGen = (T.locale||'').indexOf('zh')===0 ? '只產生' : 'Preview only';
+
+    var body = '';
+    if(key === 'char'){
+      body = '<div class="gp-row"><button type="button" class="gp-go" id="gpRun">'+goLabel+'</button>'
+        + '<button type="button" id="gpPreview">'+onlyGen+'</button></div>';
+    }else if(key === 'color'){
+      body = '<div class="gp-row"><button type="button" class="gp-go" id="gpRun">'+goLabel+'</button>'
+        + '<button type="button" id="gpPreview">'+onlyGen+'</button></div>';
+    }else if(key === 'naming'){
+      body = '<div class="gp-row"><button type="button" class="gp-go" id="gpRun">'+goLabel+'</button>'
+        + '<button type="button" id="gpPreview">'+onlyGen+'</button></div>';
+    }else if(key === 'workspace'){
+      body = '<div class="gp-row"><button type="button" class="gp-go" id="gpRun">'+goLabel+'</button>'
+        + '<button type="button" id="gpPreview">'+onlyGen+'</button></div>';
+    }
+    el.innerHTML = '<h4>🎮 '+esc(title)+'</h4><p class="gp-hint">'+hint+'</p>'
+      + body + '<div class="gp-result" id="gpResult"></div><div class="gp-swatches" id="gpSwatches"></div>';
+
+    function gen(){
+      if(key === 'char'){
+        var text = '角色隨機\n・身分：'+randPick(CHAR_PARTS.role)
+          +'\n・性格：'+randPick(CHAR_PARTS.trait)
+          +'\n・氛圍：'+randPick(CHAR_PARTS.vibe)
+          +'\n・關鍵物：'+randPick(CHAR_PARTS.item);
+        return { text: text, colors: null };
+      }
+      if(key === 'color'){
+        var colors = [randHex(), randHex(), randHex(), randHex()];
+        var text = '配色靈感\n'+colors.join(' · ');
+        return { text: text, colors: colors };
+      }
+      if(key === 'naming'){
+        var n1 = randPick(NAME_PARTS.a)+randPick(NAME_PARTS.b);
+        var n2 = randPick(NAME_PARTS.a)+randPick(NAME_PARTS.b)+randPick(NAME_PARTS.a);
+        var tags = ['#柔霧','#對比','#日常奇幻','#低飽和','#角色特寫','#遠景說故事'];
+        var text = '命名與標籤\n・名：'+n1+' ／ '+n2
+          +'\n・標籤：'+randPick(tags)+' '+randPick(tags)+' '+randPick(tags);
+        return { text: text, colors: null };
+      }
+      // workspace
+      var text = '創作工作台・靈感卡\n'+randPick(WORK_PROMPTS);
+      return { text: text, colors: null };
+    }
+    function show(res){
+      var r = $('gpResult'); if(r) r.textContent = res.text;
+      var sw = $('gpSwatches');
+      if(sw){
+        sw.innerHTML = '';
+        if(res.colors){
+          sw.innerHTML = res.colors.map(function(c){
+            return '<span class="gp-swatch" title="'+c+'" style="background:'+c+'"></span>';
+          }).join('');
+        }
+      }
+      return res;
+    }
+    async function post(res){
+      if(!can){ err(T.need_login); return; }
+      if(!isApproved()){ err(T.pending); return; }
+      if(!state.board) return;
+      var payload = {
+        user_id: state.user.id,
+        body: res.text,
+        status: 'visible',
+        board_id: state.board.id
+      };
+      var ins = await sb.from('messages').insert(payload);
+      if(ins.error){ err(ins.error.message); return; }
+      await loadMessages();
+    }
+    var run = $('gpRun');
+    if(run) run.onclick = async function(){ var res = show(gen()); await post(res); };
+    var prev = $('gpPreview');
+    if(prev) prev.onclick = function(){ show(gen()); };
+    if(!can){
+      if(run) run.disabled = true;
+    }
+  }
+
   function paintPending(){
     var el = $('boardPending');
     if(!el) return;
@@ -8182,7 +8339,7 @@ function compositionScore(opts) {
     var list = $('boardCardList');
     if(list) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
     var res = await sb.from('chat_boards')
-      .select('id,title,description,created_at,sort_order')
+      .select('id,title,description,created_at,sort_order,kind,game_key')
       .order('sort_order', { ascending: true })
       .order('created_at', { ascending: true });
     if(res.error){
@@ -8205,8 +8362,10 @@ function compositionScore(opts) {
     }catch(e){}
     list.innerHTML = state.boards.map(function(b){
       var n = counts[b.id] || 0;
-      return '<button type="button" class="board-card" data-bid="'+b.id+'">'
-        + '<span class="bc-title">'+esc(b.title)+'</span>'
+      var isGame = b.kind === 'game';
+      var tag = isGame ? '<span class="bc-tag">GAME</span>' : '';
+      return '<button type="button" class="board-card'+(isGame?' game-card':'')+'" data-bid="'+b.id+'">'
+        + '<span class="bc-title">'+esc(b.title)+tag+'</span>'
         + (b.description ? '<span class="bc-desc">'+esc(b.description)+'</span>' : '')
         + '<span class="bc-meta">'+n+' '+T.msgs+'</span>'
         + '</button>';
