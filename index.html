@@ -479,6 +479,24 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .board-status{font-size:12px;color:var(--ink-soft);padding:4px 12px 0}
 .board-status.on{color:var(--teal)}
 
+.board-home{display:flex;flex-direction:column;gap:10px}
+.board-home-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:4px}
+.board-home-head h4{font-size:15px;margin:0}
+.board-card-list{display:flex;flex-direction:column;gap:10px}
+.board-card{display:flex;flex-direction:column;gap:4px;text-align:left;width:100%;border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--panel);cursor:pointer;font:inherit;color:var(--ink);transition:border-color .15s,background .15s}
+.board-card:hover,.board-card:focus-visible{border-color:var(--violet);background:var(--violet-soft);outline:none}
+.board-card .bc-title{font-weight:800;font-size:15.5px}
+.board-card .bc-desc{font-size:13px;color:var(--ink-soft);line-height:1.55}
+.board-card .bc-meta{font-size:12px;color:var(--ink-soft);margin-top:4px}
+.board-room-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.board-room-top .back{border:1.5px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-weight:700;font-size:13px;padding:7px 12px;border-radius:999px;cursor:pointer}
+.board-room-top .room-title{font-weight:800;font-size:16px}
+.board-room-top .room-desc{width:100%;font-size:13px;color:var(--ink-soft)}
+.board-new{display:grid;gap:8px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.board-new input,.board-new textarea{width:100%;font:inherit;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;color:var(--ink)}
+.board-new textarea{min-height:64px;resize:vertical}
+
+
 
 </style>
 </head>
@@ -1520,31 +1538,56 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
 
 
+
 <section id="board">
   <div class="card">
-    <h3>留言聊天室 <span class="tag ok">即時</span></h3>
-    <p class="cond">登入後可發言、回覆。新訊息會自動出現（需保持此分頁開啟）。管理員可隱藏或刪除。</p>
+    <h3>聊天專版 <span class="tag ok">分版</span></h3>
+    <p class="cond">外面是專版列表（類似論壇板塊）；點進去才是該版的獨立聊天室。管理員可新增專版。</p>
     <div id="boardAuth" class="board-auth"></div>
     <div id="boardUser" class="board-user" hidden></div>
-    <p id="boardStatus" class="board-status">連線中…</p>
-    <div class="board-chat">
-      <div id="boardList" class="board-chat-log"><p class="board-empty">載入中…</p></div>
-      <div class="board-compose-bar">
-        <div id="boardReplyHint" class="board-reply-hint" hidden></div>
-        <div id="boardCompose" class="board-compose" hidden>
-          <textarea id="boardBody" maxlength="1000" placeholder="輸入訊息…（Enter 送出，Shift+Enter 換行）"></textarea>
-          <div class="board-actions">
-            <button type="button" class="pri" id="boardSend">送出</button>
-            <button type="button" id="boardRefresh">重新整理</button>
+    <div id="boardErr" class="board-err" hidden></div>
+
+    <div id="boardHome" class="board-home">
+      <div class="board-home-head">
+        <h4>專版列表</h4>
+        <button type="button" id="boardHomeRefresh" class="back">重新整理</button>
+      </div>
+      <div id="boardCardList" class="board-card-list"><p class="board-empty">載入中…</p></div>
+      <div id="boardNewWrap" class="board-new" hidden>
+        <b style="font-size:13.5px">新增專版（管理員）</b>
+        <input id="boardNewTitle" maxlength="40" placeholder="專版名稱，例如：交換詢問、搭配分享" />
+        <textarea id="boardNewDesc" maxlength="200" placeholder="簡短說明（選填）"></textarea>
+        <div class="board-actions">
+          <button type="button" class="pri" id="boardNewCreate">建立專版</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="boardRoom" hidden>
+      <div class="board-room-top">
+        <button type="button" class="back" id="boardBack">← 回專版列表</button>
+        <span class="room-title" id="boardRoomTitle">—</span>
+        <span class="room-desc" id="boardRoomDesc"></span>
+      </div>
+      <p id="boardStatus" class="board-status">連線中…</p>
+      <div class="board-chat">
+        <div id="boardList" class="board-chat-log"><p class="board-empty">載入中…</p></div>
+        <div class="board-compose-bar">
+          <div id="boardReplyHint" class="board-reply-hint" hidden></div>
+          <div id="boardCompose" class="board-compose" hidden>
+            <textarea id="boardBody" maxlength="1000" placeholder="輸入訊息…（Enter 送出，Shift+Enter 換行）"></textarea>
+            <div class="board-actions">
+              <button type="button" class="pri" id="boardSend">送出</button>
+              <button type="button" id="boardRefresh">重新整理</button>
+            </div>
           </div>
         </div>
-        <div id="boardErr" class="board-err" hidden></div>
       </div>
     </div>
   </div>
   <div class="card">
     <h3>設定遊戲 ID / 暱稱</h3>
-    <p class="cond">登入後可修改，方便聊天室辨識。</p>
+    <p class="cond">登入後可修改，方便各專版聊天室辨識。</p>
     <div class="board-auth">
       <input id="boardDisplayEdit" maxlength="30" placeholder="顯示暱稱" />
       <input id="boardGameId" maxlength="40" placeholder="遊戲 ID（選填）" />
@@ -1554,6 +1597,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     </div>
   </div>
 </section>
+
 
 
 <section id="feedback"><div id="sec-feedback" data-lazy="1"></div></section>
@@ -7814,19 +7858,26 @@ function compositionScore(opts) {
 
 
 
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
   var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
   var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
-  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功。若有開啟信箱驗證，請先去收信再登入。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "還沒有訊息，打個招呼吧。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "locale": "zh-TW"};
+  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功。若有開啟信箱驗證，請先去收信再登入。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "locale": "zh-TW"};
   if(!window.supabase){
-    var list = document.getElementById('boardList');
+    var list = document.getElementById('boardCardList');
     if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
     return;
   }
   var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-  var state = { user:null, profile:null, rows:[], replyTo:null, channel:null };
+  var state = {
+    user:null, profile:null,
+    boards:[], board:null,
+    rows:[], replyTo:null, channel:null
+  };
 
   function $(id){ return document.getElementById(id); }
   function err(msg){
@@ -7852,6 +7903,31 @@ function compositionScore(opts) {
     if(!el) return;
     el.textContent = text || (on ? T.live_on : T.live_off);
     el.className = 'board-status'+(on?' on':'');
+  }
+  function isAdmin(){ return state.profile && state.profile.role === 'admin'; }
+
+  function showHome(){
+    state.board = null;
+    clearReply();
+    unsub();
+    var home = $('boardHome'), room = $('boardRoom');
+    if(home) home.hidden = false;
+    if(room) room.hidden = true;
+    var nw = $('boardNewWrap');
+    if(nw) nw.hidden = !isAdmin();
+  }
+  function showRoom(b){
+    state.board = b;
+    clearReply();
+    var home = $('boardHome'), room = $('boardRoom');
+    if(home) home.hidden = true;
+    if(room) room.hidden = false;
+    var t = $('boardRoomTitle'); if(t) t.textContent = b.title || '—';
+    var d = $('boardRoomDesc'); if(d) d.textContent = b.description || '';
+    var compose = $('boardCompose');
+    if(compose) compose.hidden = !state.user;
+    loadMessages();
+    subscribe();
   }
 
   async function loadProfile(){
@@ -7883,12 +7959,16 @@ function compositionScore(opts) {
         var lo = $('boardLogout');
         if(lo) lo.onclick = async function(){ await sb.auth.signOut(); };
       }
-      if(compose) compose.hidden = false;
+      if(compose) compose.hidden = !state.board;
+      var nw = $('boardNewWrap');
+      if(nw) nw.hidden = !isAdmin() || !!state.board;
     }else{
       box.hidden = false;
       if(userBox) userBox.hidden = true;
       if(compose) compose.hidden = true;
       clearReply();
+      var nw = $('boardNewWrap');
+      if(nw) nw.hidden = true;
       box.innerHTML =
         '<div class="row2">'
         + '<input id="boardEmail" type="email" placeholder="'+T.email+'" autocomplete="username" />'
@@ -7926,11 +8006,64 @@ function compositionScore(opts) {
     }
   }
 
+  async function loadBoards(){
+    var list = $('boardCardList');
+    if(list) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
+    var res = await sb.from('chat_boards')
+      .select('id,title,description,created_at,sort_order')
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true });
+    if(res.error){
+      if(list) list.innerHTML = '<p class="board-err">'+T.fail+esc(res.error.message)+'</p>';
+      return;
+    }
+    state.boards = res.data || [];
+    if(!state.boards.length){
+      if(list) list.innerHTML = '<p class="board-empty">'+T.empty_boards+'</p>';
+      return;
+    }
+    // optional message counts
+    var counts = {};
+    try{
+      var mc = await sb.from('messages').select('board_id').not('board_id','is',null).neq('status','deleted');
+      if(mc.data){
+        mc.data.forEach(function(r){
+          if(r.board_id!=null) counts[r.board_id] = (counts[r.board_id]||0)+1;
+        });
+      }
+    }catch(e){}
+    list.innerHTML = state.boards.map(function(b){
+      var n = counts[b.id] || 0;
+      return '<button type="button" class="board-card" data-bid="'+b.id+'">'
+        + '<span class="bc-title">'+esc(b.title)+'</span>'
+        + (b.description ? '<span class="bc-desc">'+esc(b.description)+'</span>' : '')
+        + '<span class="bc-meta">'+n+' '+T.msgs+'</span>'
+        + '</button>';
+    }).join('');
+  }
+
+  async function createBoard(){
+    err('');
+    if(!isAdmin()){ err(T.need_login); return; }
+    var title = (($('boardNewTitle')||{}).value||'').trim();
+    var desc = (($('boardNewDesc')||{}).value||'').trim();
+    if(!title){ err(T.need_title); return; }
+    var res = await sb.from('chat_boards').insert({
+      title: title,
+      description: desc || null,
+      created_by: state.user.id
+    });
+    if(res.error){ err(res.error.message); return; }
+    if($('boardNewTitle')) $('boardNewTitle').value = '';
+    if($('boardNewDesc')) $('boardNewDesc').value = '';
+    alert(T.created);
+    await loadBoards();
+  }
+
   function findRow(id){
     for(var i=0;i<state.rows.length;i++) if(String(state.rows[i].id)===String(id)) return state.rows[i];
     return null;
   }
-
   function paintReplyHint(){
     var el = $('boardReplyHint');
     if(!el) return;
@@ -7944,7 +8077,6 @@ function compositionScore(opts) {
   }
   function clearReply(){ state.replyTo = null; paintReplyHint(); }
   function setReply(id){ state.replyTo = id; paintReplyHint(); var ta=$('boardBody'); if(ta) ta.focus(); }
-
   function scrollBottom(){
     var list = $('boardList');
     if(list) list.scrollTop = list.scrollHeight;
@@ -7958,7 +8090,7 @@ function compositionScore(opts) {
       list.innerHTML = '<p class="board-empty">'+T.empty+'</p>';
       return;
     }
-    var isAdmin = state.profile && state.profile.role === 'admin';
+    var admin = isAdmin();
     var uid = state.user && state.user.id;
     list.innerHTML = rows.map(function(m){
       var p = m.profiles || {};
@@ -7975,7 +8107,7 @@ function compositionScore(opts) {
       }
       var acts = '';
       if(state.user) acts += '<button type="button" data-act="reply" data-id="'+m.id+'">'+T.reply+'</button>';
-      if(isAdmin){
+      if(admin){
         if(hidden) acts += '<button type="button" data-act="show" data-id="'+m.id+'">'+T.show+'</button>';
         else acts += '<button type="button" data-act="hide" data-id="'+m.id+'">'+T.hide+'</button>';
         acts += '<button type="button" data-act="del" data-id="'+m.id+'">'+T.del+'</button>';
@@ -7995,46 +8127,39 @@ function compositionScore(opts) {
 
   async function loadMessages(){
     var list = $('boardList');
-    if(list && !state.rows.length) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
-    var res = await sb.from('messages')
-      .select('id,body,status,created_at,user_id,parent_id, profiles:user_id(display_name,game_id,role)')
+    if(!state.board){ if(list) list.innerHTML=''; return; }
+    if(list) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
+    var q = sb.from('messages')
+      .select('id,body,status,created_at,user_id,parent_id,board_id, profiles:user_id(display_name,game_id,role)')
+      .eq('board_id', state.board.id)
       .neq('status','deleted')
       .order('created_at', { ascending: true })
-      .limit(100);
+      .limit(150);
+    var res = await q;
     if(res.error){
-      // parent_id may not exist yet — fallback
-      if(String(res.error.message||'').indexOf('parent_id')>=0){
-        res = await sb.from('messages')
-          .select('id,body,status,created_at,user_id, profiles:user_id(display_name,game_id,role)')
-          .neq('status','deleted')
-          .order('created_at', { ascending: true })
-          .limit(100);
-      }
-      if(res.error){
-        if(list) list.innerHTML = '<p class="board-err">'+T.fail+esc(res.error.message)+'</p>';
-        return;
-      }
+      if(list) list.innerHTML = '<p class="board-err">'+T.fail+esc(res.error.message)+'</p>';
+      return;
     }
-    state.rows = (res.data||[]).map(function(m){ if(m.parent_id==null) m.parent_id=null; return m; });
+    state.rows = res.data || [];
     paintMessages();
   }
 
   async function sendMessage(){
     err('');
     if(!state.user){ err(T.need_login); return; }
+    if(!state.board){ return; }
     var body = (($('boardBody')||{}).value||'').trim();
     if(!body){ err(T.need_body); return; }
     if(body.length > 1000){ err(T.max); return; }
-    var payload = { user_id: state.user.id, body: body, status: 'visible' };
+    var payload = {
+      user_id: state.user.id,
+      body: body,
+      status: 'visible',
+      board_id: state.board.id
+    };
     if(state.replyTo) payload.parent_id = state.replyTo;
     var res = await sb.from('messages').insert(payload);
-    if(res.error){
-      if(state.replyTo && String(res.error.message||'').indexOf('parent_id')>=0){
-        delete payload.parent_id;
-        res = await sb.from('messages').insert(payload);
-      }
-      if(res.error){ err(res.error.message); return; }
-    }
+    if(res.error){ err(res.error.message); return; }
     $('boardBody').value = '';
     clearReply();
     await loadMessages();
@@ -8071,13 +8196,22 @@ function compositionScore(opts) {
     alert(T.saved);
   }
 
-  function subscribe(){
+  function unsub(){
     try{
       if(state.channel){ sb.removeChannel(state.channel); state.channel = null; }
-      state.channel = sb.channel('board-chat')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, function(){
-          loadMessages();
-        })
+    }catch(e){}
+    setStatus(false, T.live_off);
+  }
+  function subscribe(){
+    unsub();
+    if(!state.board) return;
+    try{
+      var bid = state.board.id;
+      state.channel = sb.channel('board-chat-'+bid)
+        .on('postgres_changes', {
+          event: '*', schema: 'public', table: 'messages',
+          filter: 'board_id=eq.'+bid
+        }, function(){ loadMessages(); })
         .subscribe(function(status){
           setStatus(status === 'SUBSCRIBED', status === 'SUBSCRIBED' ? T.live_on : T.live_off);
         });
@@ -8091,18 +8225,37 @@ function compositionScore(opts) {
     state.user = sess.data && sess.data.session ? sess.data.session.user : null;
     await loadProfile();
     paintAuth();
-    await loadMessages();
-    subscribe();
+    showHome();
+    await loadBoards();
     sb.auth.onAuthStateChange(async function(ev, session){
       state.user = session ? session.user : null;
       await loadProfile();
       paintAuth();
-      await loadMessages();
+      if(state.board){
+        var compose = $('boardCompose');
+        if(compose) compose.hidden = !state.user;
+      }else{
+        var nw = $('boardNewWrap');
+        if(nw) nw.hidden = !isAdmin();
+      }
+      if(state.board) await loadMessages();
     });
     var send = $('boardSend'); if(send) send.onclick = sendMessage;
     var ref = $('boardRefresh'); if(ref) ref.onclick = function(){ loadMessages(); };
+    var href = $('boardHomeRefresh'); if(href) href.onclick = function(){ loadBoards(); };
     var list = $('boardList'); if(list) list.addEventListener('click', onAct);
     var save = $('boardSaveProfile'); if(save) save.onclick = saveProfile;
+    var back = $('boardBack'); if(back) back.onclick = function(){ showHome(); loadBoards(); };
+    var create = $('boardNewCreate'); if(create) create.onclick = createBoard;
+    var cards = $('boardCardList');
+    if(cards) cards.addEventListener('click', function(e){
+      var btn = e.target.closest('[data-bid]');
+      if(!btn) return;
+      var id = btn.getAttribute('data-bid');
+      var b = null;
+      for(var i=0;i<state.boards.length;i++) if(String(state.boards[i].id)===String(id)) b = state.boards[i];
+      if(b) showRoom(b);
+    });
     var ta = $('boardBody');
     if(ta){
       ta.addEventListener('keydown', function(e){
