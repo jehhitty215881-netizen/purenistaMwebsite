@@ -8449,32 +8449,56 @@ function compositionScore(opts) {
   }
 
   async function roomMembers(){
-    // people who spoke in this board recently
     if(!state.board) return [];
-    var res = await sb.from('messages')
-      .select('user_id, profiles:user_id(display_name,game_id)')
+    // 只從「輪替名單」取人：沒加入就不會被指定
+    var res = await sb.from('board_queue')
+      .select('user_id, joined_at, profiles:user_id(display_name,game_id)')
       .eq('board_id', state.board.id)
-      .neq('status','deleted')
-      .order('created_at', { ascending: false })
-      .limit(80);
-    if(res.error) return [];
-    var seen = {}, list = [];
-    (res.data||[]).forEach(function(m){
-      if(!m.user_id || seen[m.user_id]) return;
-      seen[m.user_id] = 1;
-      var p = m.profiles || {};
-      list.push({ id: m.user_id, name: p.display_name || T.user, game_id: p.game_id||'' });
-    });
-    // include self
-    if(state.user && state.profile && !seen[state.user.id]){
-      list.unshift({
-        id: state.user.id,
-        name: state.profile.display_name || T.user,
-        game_id: state.profile.game_id||''
-      });
+      .order('joined_at', { ascending: true });
+    if(res.error){
+      console.warn(res.error);
+      return [];
     }
-    return list;
+    return (res.data||[]).map(function(r){
+      var p = r.profiles || {};
+      return { id: r.user_id, name: p.display_name || T.user, game_id: p.game_id||'' };
+    });
   }
+
+  async function inQueue(){
+    if(!state.user || !state.board) return false;
+    var res = await sb.from('board_queue').select('user_id')
+      .eq('board_id', state.board.id).eq('user_id', state.user.id).maybeSingle();
+    return !!(res.data && res.data.user_id);
+  }
+
+  async function joinQueue(){
+    if(!state.user || !state.board) return;
+    var res = await sb.from('board_queue').insert({
+      board_id: state.board.id, user_id: state.user.id
+    });
+    if(res.error && res.error.code !== '23505'){ err(res.error.message); return; }
+    var name = (state.profile && state.profile.display_name) || T.user;
+    var zh = (T.locale||'').indexOf('zh')===0;
+    await postSystem((zh?'➕ 加入輪替：':'➕ Joined turn queue: ')+name);
+    await paintTurnPanel();
+  }
+
+  async function leaveQueue(){
+    if(!state.user || !state.board) return;
+    var res = await sb.from('board_queue').delete()
+      .eq('board_id', state.board.id).eq('user_id', state.user.id);
+    if(res.error){ err(res.error.message); return; }
+    var name = (state.profile && state.profile.display_name) || T.user;
+    var zh = (T.locale||'').indexOf('zh')===0;
+    // 若自己是回合持有人，清掉回合
+    if(state.board.turn_user_id === state.user.id){
+      await setTurn(null, null);
+    }
+    await postSystem((zh?'➖ 離開輪替：':'➖ Left turn queue: ')+name);
+    await paintTurnPanel();
+  }
+
 
   async function postSystem(text){
     if(!state.user || !state.board || !isApproved()) return;
@@ -8513,12 +8537,16 @@ function compositionScore(opts) {
     var holderName = (state.board.profiles && state.board.profiles.display_name)
       || (holder ? T.user : (zh ? '尚未指定' : 'Nobody yet'));
     var isMe = state.user && holder && state.user.id === holder;
-    var canControl = isAdmin() || isMe || !holder; // 沒人佔回合時可開始；有人時僅本人或管理員
+    var canControl = isAdmin() || (isMe && joined) || (!holder && joined); // 需在輪替名單內
     var members = await roomMembers();
+    var joined = state.user ? await inQueue() : false;
 
     var labelNow = zh ? '目前回合' : 'Current turn';
     var labelDice = zh ? '擲骰子' : 'Roll dice';
     var labelClaim = zh ? '我先開始' : 'I start';
+    var labelJoin = zh ? '加入輪替' : 'Join turns';
+    var labelLeave = zh ? '離開輪替' : 'Leave turns';
+    var queueHint = zh ? '只有「加入輪替」的人才會被傳到；不在玩就按離開。' : 'Only players who joined the queue can receive turns.';
     var labelNextSeq = zh ? '傳給下一位（依序）' : 'Next in order';
     var labelNextRand = zh ? '隨機下一位' : 'Random next';
     var labelAdmin = zh ? '管理員指定' : 'Admin assign';
@@ -8545,14 +8573,14 @@ function compositionScore(opts) {
       '<div>'+labelNow+'：<b class="'+(isMe?'turn-me':'')+'">'+esc(holderName)+'</b>'
       +(isMe ? (zh?'（輪到你）':'(your turn)') : '')+'</div>'
       +'<div class="turn-row">'
-      +'<button type="button" class="dice" id="turnDice">'+labelDice+'</button>'
+      +'<button type="button" class="dice" id="turnDice">'+labelDice+'</button>'+(state.user && !joined ? '<button type="button" id="turnJoin">'+labelJoin+'</button>' : '')+(state.user && joined ? '<button type="button" id="turnLeave">'+labelLeave+'</button>' : '')
       +(!holder ? '<button type="button" id="turnClaim">'+labelClaim+'</button>' : '')
       +(canControl ? '<button type="button" id="turnNextSeq">'+labelNextSeq+'</button>' : '')
       +(canControl ? '<button type="button" id="turnNextRand">'+labelNextRand+'</button>' : '')
       +'</div>'
       +(canControl ? '<div class="turn-row"><label style="font-size:12px;color:var(--ink-soft)"><input type="checkbox" id="turnAutoPass" /> '+autoPass+'</label></div>' : '')
       + adminBlock
-      +'<div style="margin-top:6px;font-size:12px;color:var(--ink-soft)">'+diceHint+'</div>';
+      +'<div style="margin-top:6px;font-size:12px;color:var(--ink-soft)">'+diceHint+'</div>'+'<div style="margin-top:4px;font-size:12px;color:var(--ink-soft)">'+queueHint+'</div>'+'<div style="margin-top:4px;font-size:12px;color:var(--ink-soft)">'+(zh?'輪替中：':'In queue: ')+members.length+(zh?' 人':'')+'</div>';
 
     function nextInOrder(){
       if(!members.length) return null;
@@ -8591,10 +8619,15 @@ function compositionScore(opts) {
     if(claim) claim.onclick = async function(){
       if(!state.user){ err(T.need_login); return; }
       if(holder && !isAdmin()){ err(zh?'已有人開始，請等交棒':'Turn already taken'); return; }
+      if(!(await inQueue())) await joinQueue();
       await setTurn(state.user.id, null);
       var name = (state.profile && state.profile.display_name) || T.user;
       await postSystem((zh?'▶️ 回合開始：':'▶️ Turn starts: ')+name);
     };
+    var joinBtn = $('turnJoin');
+    if(joinBtn) joinBtn.onclick = function(){ joinQueue(); };
+    var leaveBtn = $('turnLeave');
+    if(leaveBtn) leaveBtn.onclick = function(){ leaveQueue(); };
     var seq = $('turnNextSeq');
     if(seq) seq.onclick = async function(){ await passTo(nextInOrder(), zh?'依序':'order'); };
     var rand = $('turnNextRand');
