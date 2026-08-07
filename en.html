@@ -8194,7 +8194,7 @@ function compositionScore(opts) {
         board_id: state.board.id
       };
       var ins = await sb.from('messages').insert(payload);
-      if(ins.error){ err(ins.error.message); return; }
+      if(ins.error){ err(translateAuthError(ins.error.message)); return; }
       await loadMessages();
     }
     var run = $('gpRun');
@@ -8321,12 +8321,28 @@ function compositionScore(opts) {
     loadReview();
   }
 
+  
+  function translateAuthError(msg){
+    var m = String(msg||'');
+    var low = m.toLowerCase();
+    if(low.indexOf('invalid login credentials')>=0) return 'Sign-in failed: wrong email or password (password is case-sensitive).';
+    if(low.indexOf('email rate limit')>=0) return 'Too many emails sent. Try later, or ask an admin to create your account.';
+    if(low.indexOf('user already registered')>=0) return 'This email is already registered. Use Sign in.';
+    if(low.indexOf('already been registered')>=0) return 'This email is already registered. Use Sign in.';
+    if(low.indexOf('password')>=0 && (low.indexOf('6')>=0||low.indexOf('least')>=0)) return 'Password must be at least 6 characters.';
+    if(low.indexOf('invalid email')>=0) return 'Invalid email format.';
+    if(low.indexOf('email not confirmed')>=0) return 'Email not confirmed yet. Check your inbox or ask an admin.';
+    if(low.indexOf('permission denied')>=0) return 'Permission denied. Sign in again or contact an admin.';
+    if(low.indexOf('failed to fetch')>=0) return 'Network error. Please try again.';
+    return m;
+  }
+
   async function doLogin(){
     err('');
     var email = ($('boardEmail')||{}).value||'';
     var pass = ($('boardPass')||{}).value||'';
     var res = await sb.auth.signInWithPassword({ email: email.trim(), password: pass });
-    if(res.error){ err(res.error.message); return; }
+    if(res.error){ err(translateAuthError(res.error.message)); return; }
   }
   async function doSignup(){
     err('');
@@ -8337,7 +8353,7 @@ function compositionScore(opts) {
       email: email.trim(), password: pass,
       options: { data: { display_name: display || undefined } }
     });
-    if(res.error){ err(res.error.message); return; }
+    if(res.error){ err(translateAuthError(res.error.message)); return; }
     err(T.signup_ok);
   }
 
@@ -8386,7 +8402,7 @@ function compositionScore(opts) {
     if(act === 'unban') patch = { is_banned: false };
     if(act === 'unmute') patch = { muted_until: null };
     var res = await sb.from('profiles').update(patch).eq('id', uid);
-    if(res.error){ err(res.error.message); return; }
+    if(res.error){ err(translateAuthError(res.error.message)); return; }
     await loadModList();
   }
 
@@ -8427,7 +8443,7 @@ function compositionScore(opts) {
     var act = b.getAttribute('data-act');
     var approval = act === 'approve' ? 'approved' : 'rejected';
     var res = await sb.from('profiles').update({ approval: approval }).eq('id', uid);
-    if(res.error){ err(res.error.message); return; }
+    if(res.error){ err(translateAuthError(res.error.message)); return; }
     await loadReview();
   }
 
@@ -8475,7 +8491,7 @@ function compositionScore(opts) {
     var res = await sb.from('board_queue').insert({
       board_id: state.board.id, user_id: state.user.id
     });
-    if(res.error && res.error.code !== '23505'){ err(res.error.message); return; }
+    if(res.error && res.error.code !== '23505'){ err(translateAuthError(res.error.message)); return; }
     var name = (state.profile && state.profile.display_name) || T.user;
     var zh = (T.locale||'').indexOf('zh')===0;
     await postSystem((zh?'➕ 加入輪替：':'➕ Joined turn queue: ')+name);
@@ -8486,7 +8502,7 @@ function compositionScore(opts) {
     if(!state.user || !state.board) return;
     var res = await sb.from('board_queue').delete()
       .eq('board_id', state.board.id).eq('user_id', state.user.id);
-    if(res.error){ err(res.error.message); return; }
+    if(res.error){ err(translateAuthError(res.error.message)); return; }
     var name = (state.profile && state.profile.display_name) || T.user;
     var zh = (T.locale||'').indexOf('zh')===0;
     // 若自己是回合持有人，清掉回合
@@ -8507,7 +8523,7 @@ function compositionScore(opts) {
       board_id: state.board.id
     };
     var ins = await sb.from('messages').insert(payload);
-    if(ins.error){ err(ins.error.message); return false; }
+    if(ins.error){ err(translateAuthError(ins.error.message)); return false; }
     await loadMessages();
     return true;
   }
@@ -8516,7 +8532,7 @@ function compositionScore(opts) {
     if(!state.board) return;
     var patch = { turn_user_id: uid || null, turn_note: note || null };
     var res = await sb.from('chat_boards').update(patch).eq('id', state.board.id);
-    if(res.error){ err(res.error.message); return false; }
+    if(res.error){ err(translateAuthError(res.error.message)); return false; }
     await refreshBoardMeta();
     paintTurnPanel();
     return true;
@@ -8692,7 +8708,7 @@ function compositionScore(opts) {
     var res = await sb.from('chat_boards').insert({
       title: title, description: desc || null, created_by: state.user.id, locale: BOARD_LOCALE, kind: 'chat'
     });
-    if(res.error){ err(res.error.message); return; }
+    if(res.error){ err(translateAuthError(res.error.message)); return; }
     if($('boardNewTitle')) $('boardNewTitle').value = '';
     if($('boardNewDesc')) $('boardNewDesc').value = '';
     alert(T.created);
@@ -8801,7 +8817,7 @@ function compositionScore(opts) {
     };
     if(state.replyTo) payload.parent_id = state.replyTo;
     var res = await sb.from('messages').insert(payload);
-    if(res.error){ err(res.error.message); return; }
+    if(res.error){ err(translateAuthError(res.error.message)); return; }
     $('boardBody').value = '';
     clearReply();
     await loadMessages();
@@ -8821,7 +8837,7 @@ function compositionScore(opts) {
         ? { is_banned: true }
         : { muted_until: new Date(Date.now()+24*60*60*1000).toISOString() };
       var res2 = await sb.from('profiles').update(patch2).eq('id', uid2);
-      if(res2.error){ err(res2.error.message); return; }
+      if(res2.error){ err(translateAuthError(res2.error.message)); return; }
       await loadModList();
       err('');
       return;
@@ -8833,7 +8849,7 @@ function compositionScore(opts) {
     if(act === 'del') patch = { status: 'deleted' };
     if(!patch) return;
     var res = await sb.from('messages').update(patch).eq('id', id);
-    if(res.error){ err(res.error.message); return; }
+    if(res.error){ err(translateAuthError(res.error.message)); return; }
     await loadMessages();
   }
 
@@ -8845,7 +8861,7 @@ function compositionScore(opts) {
     var patch = { game_id: gid || null };
     if(dn) patch.display_name = dn;
     var res = await sb.from('profiles').update(patch).eq('id', state.user.id);
-    if(res.error){ err(res.error.message); return; }
+    if(res.error){ err(translateAuthError(res.error.message)); return; }
     await loadProfile();
     paintAuth();
     err('');
