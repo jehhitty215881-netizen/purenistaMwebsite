@@ -514,6 +514,11 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 #boardHome[hidden],#boardRoom[hidden],#boardCompose[hidden],#boardReplyHint[hidden],#boardNewWrap[hidden],#boardUser[hidden],#boardAuth[hidden],#boardErr[hidden],#boardPending[hidden],#boardReview[hidden]{display:none!important}
 .board-pending{margin:10px 0;padding:12px 14px;border-radius:12px;border:1.5px solid var(--gold);background:var(--gold-soft);font-size:13.5px;color:var(--ink);line-height:1.65}
 .board-pending b{color:var(--gold)}
+.board-approve-note{margin:10px 0 0;padding:10px 12px;border-radius:12px;border:1.5px dashed var(--gold);background:var(--gold-soft);font-size:13px;color:var(--ink);line-height:1.7}
+.board-approve-note .an-head{font-weight:800;display:block;margin-bottom:2px}
+.board-approve-note .an-who{font-weight:800;color:var(--gold)}
+.board-approve-note .an-gid{display:inline-block;font-weight:800;background:rgba(0,0,0,.06);border-radius:6px;padding:1px 6px;margin:0 2px}
+.board-pending .bp-contact{display:block;margin-top:6px}
 .board-review{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
 .board-review h4{font-size:14.5px;margin:0 0 8px}
 .board-review-item{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
@@ -7993,7 +7998,7 @@ function compositionScore(opts) {
   var BOARD_LOCALE = 'en';
   var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
   var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
-  var T = {"signed": "Signed in as ", "gameid": "Game ID", "admin": "Admin", "logout": "Sign out", "email": "Email", "pass": "Password (min 6 characters)", "display": "Display name (for sign-up, optional)", "login": "Sign in", "signup": "Sign up", "signup_ok": "Sign-up OK. Please wait for an admin to approve your account before chatting.", "loading": "Loading…", "fail": "Failed to load: ", "empty": "No messages in this board yet. Say hi!", "empty_boards": "No boards yet. Admins can create one below.", "user": "User", "hidden": "Hidden", "show": "Show", "hide": "Hide", "del": "Delete", "delmine": "Delete", "reply": "Reply", "replying": "Replying to", "cancel": "Cancel", "need_login": "Please sign in first", "need_body": "Please enter a message", "max": "Max 1000 characters", "saved": "Saved", "need_title": "Please enter a board title", "created": "Board created", "live_on": "Live", "live_off": "Offline (use Refresh)", "msgs": "messages", "pending": "Your account is pending approval. You can browse boards after an admin approves you.", "rejected": "Your registration was not approved. Contact the site owner if needed.", "approve": "Approve", "reject": "Reject", "no_pending": "No pending registrations.", "locale": "en-US"};
+  var T = {"signed": "Signed in as ", "gameid": "Game ID", "admin": "Admin", "logout": "Sign out", "email": "Email", "pass": "Password (min 6 characters)", "display": "Display name (for sign-up, optional)", "login": "Sign in", "signup": "Sign up", "signup_ok": "Signed up! You can post once approved. Please DM 棉花棠 (game ID 3728362) to get approved.", "loading": "Loading…", "fail": "Failed to load: ", "empty": "No messages in this board yet. Say hi!", "empty_boards": "No boards yet. Admins can create one below.", "user": "User", "hidden": "Hidden", "show": "Show", "hide": "Hide", "del": "Delete", "delmine": "Delete", "reply": "Reply", "replying": "Replying to", "cancel": "Cancel", "need_login": "Please sign in first", "need_body": "Please enter a message", "max": "Max 1000 characters", "saved": "Saved", "need_title": "Please enter a board title", "created": "Board created", "live_on": "Live", "live_off": "Offline (use Refresh)", "msgs": "messages", "pending": "Your account is pending approval. You can post once an admin approves you.", "rejected": "Your registration was not approved. Contact the site owner if needed.", "approve": "Approve", "reject": "Reject", "no_pending": "No pending registrations.", "locale": "en-US", "approve_note": "Approval is required before you can post", "approve_how": "Please DM", "approve_who": "棉花棠", "approve_gid": "game ID 3728362", "approve_tail": "— an admin will approve you shortly."};
   if(!window.supabase){
     var list = document.getElementById('boardCardList');
     if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
@@ -8207,6 +8212,14 @@ function compositionScore(opts) {
     }
   }
 
+  /* One shared line telling people who to contact for approval, so the wording
+     only has to be maintained in the T dictionary. */
+  function approveContactHTML(){
+    return T.approve_how+' <span class="an-who">'+esc(T.approve_who)+'</span>'
+         + '<span class="an-gid">'+esc(T.approve_gid)+'</span>'
+         + T.approve_tail;
+  }
+
   function paintPending(){
     var el = $('boardPending');
     if(!el) return;
@@ -8214,7 +8227,9 @@ function compositionScore(opts) {
     var st = approvalStatus();
     if(st === 'approved'){ el.hidden = true; el.innerHTML=''; return; }
     el.hidden = false;
-    el.innerHTML = st === 'rejected' ? ('<b>'+T.rejected+'</b>') : ('<b>'+T.pending+'</b>');
+    el.innerHTML = st === 'rejected'
+      ? ('<b>'+T.rejected+'</b>')
+      : ('<b>'+T.pending+'</b><span class="bp-contact">'+approveContactHTML()+'</span>');
   }
 
   function showHome(){
@@ -8314,6 +8329,10 @@ function compositionScore(opts) {
         + '<div class="board-actions">'
         + '<button type="button" class="pri" id="boardLogin">'+T.login+'</button>'
         + '<button type="button" id="boardSignup">'+T.signup+'</button>'
+        + '</div>'
+        + '<div class="board-approve-note">'
+        +   '<span class="an-head">'+esc(T.approve_note)+'</span>'
+        +   approveContactHTML()
         + '</div>';
       $('boardLogin').onclick = doLogin;
       $('boardSignup').onclick = doSignup;

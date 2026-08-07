@@ -519,6 +519,11 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 #boardHome[hidden],#boardRoom[hidden],#boardCompose[hidden],#boardReplyHint[hidden],#boardNewWrap[hidden],#boardUser[hidden],#boardAuth[hidden],#boardErr[hidden],#boardPending[hidden],#boardReview[hidden]{display:none!important}
 .board-pending{margin:10px 0;padding:12px 14px;border-radius:12px;border:1.5px solid var(--gold);background:var(--gold-soft);font-size:13.5px;color:var(--ink);line-height:1.65}
 .board-pending b{color:var(--gold)}
+.board-approve-note{margin:10px 0 0;padding:10px 12px;border-radius:12px;border:1.5px dashed var(--gold);background:var(--gold-soft);font-size:13px;color:var(--ink);line-height:1.7}
+.board-approve-note .an-head{font-weight:800;display:block;margin-bottom:2px}
+.board-approve-note .an-who{font-weight:800;color:var(--gold)}
+.board-approve-note .an-gid{display:inline-block;font-weight:800;background:rgba(0,0,0,.06);border-radius:6px;padding:1px 6px;margin:0 2px}
+.board-pending .bp-contact{display:block;margin-top:6px}
 .board-review{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
 .board-review h4{font-size:14.5px;margin:0 0 8px}
 .board-review-item{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
@@ -7995,7 +8000,7 @@ function compositionScore(opts) {
   var BOARD_LOCALE = 'zh';
   var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
   var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
-  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功，請等待管理員審核通過後再使用聊天室。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "pending": "你的帳號尚在審核中，通過後才能進入專版發言。請稍候管理員處理。", "rejected": "你的註冊未通過審核，如有疑問請聯絡站長。", "approve": "通過", "reject": "拒絕", "no_pending": "目前沒有待審核的註冊。", "locale": "zh-TW"};
+  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功！審核通過後才能發言。請私訊 棉花棠（遊戲 ID 3728362）通過審核。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "pending": "你的帳號尚在審核中，通過後才能進入專版發言。", "rejected": "你的註冊未通過審核，如有疑問請聯絡站長。", "approve": "通過", "reject": "拒絕", "no_pending": "目前沒有待審核的註冊。", "locale": "zh-TW", "approve_note": "註冊後需經審核通過才能發言", "approve_how": "請私訊", "approve_who": "棉花棠", "approve_gid": "遊戲 ID 3728362", "approve_tail": "，管理員會盡快為你開通。"};
   if(!window.supabase){
     var list = document.getElementById('boardCardList');
     if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
@@ -8209,6 +8214,14 @@ function compositionScore(opts) {
     }
   }
 
+  /* One shared line telling people who to contact for approval, so the wording
+     only has to be maintained in the T dictionary. */
+  function approveContactHTML(){
+    return T.approve_how+' <span class="an-who">'+esc(T.approve_who)+'</span>'
+         + '<span class="an-gid">'+esc(T.approve_gid)+'</span>'
+         + T.approve_tail;
+  }
+
   function paintPending(){
     var el = $('boardPending');
     if(!el) return;
@@ -8216,7 +8229,9 @@ function compositionScore(opts) {
     var st = approvalStatus();
     if(st === 'approved'){ el.hidden = true; el.innerHTML=''; return; }
     el.hidden = false;
-    el.innerHTML = st === 'rejected' ? ('<b>'+T.rejected+'</b>') : ('<b>'+T.pending+'</b>');
+    el.innerHTML = st === 'rejected'
+      ? ('<b>'+T.rejected+'</b>')
+      : ('<b>'+T.pending+'</b><span class="bp-contact">'+approveContactHTML()+'</span>');
   }
 
   function showHome(){
@@ -8316,6 +8331,10 @@ function compositionScore(opts) {
         + '<div class="board-actions">'
         + '<button type="button" class="pri" id="boardLogin">'+T.login+'</button>'
         + '<button type="button" id="boardSignup">'+T.signup+'</button>'
+        + '</div>'
+        + '<div class="board-approve-note">'
+        +   '<span class="an-head">'+esc(T.approve_note)+'</span>'
+        +   approveContactHTML()
         + '</div>';
       $('boardLogin').onclick = doLogin;
       $('boardSignup').onclick = doSignup;
