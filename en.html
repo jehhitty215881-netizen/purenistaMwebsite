@@ -501,6 +501,14 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
 
 
+
+.sg-jump{margin-top:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:13px 15px;border-radius:15px;border:1.5px solid var(--line);background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft))}
+.sg-jump .sgj-txt{flex:1 1 190px;min-width:0}
+.sg-jump b{display:block;font-size:14.5px;font-weight:800;color:var(--ink);margin:0 0 3px}
+.sg-jump span{display:block;font-size:12px;color:var(--ink-soft);line-height:1.65}
+.sg-jump button{flex:0 0 auto;border:0;background:linear-gradient(135deg,var(--rose),var(--violet));color:#fff;font-family:inherit;font-weight:800;font-size:13.5px;padding:11px 20px;border-radius:999px;cursor:pointer;transition:.15s;letter-spacing:.02em}
+.sg-jump button:hover{opacity:.9;transform:translateY(-1px)}
+.sg-jump button:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -586,6 +594,15 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <button type="button" data-role="create">🎨 Creating</button>
     </div>
     <div class="sg-path" id="sgPath" hidden></div>
+
+    <div class="sg-jump">
+      <div class="sgj-txt">
+        <b>Rather just talk?</b>
+        <span>Head to the board to swap notes on trades, palettes and pulls. Sign in to post.</span>
+      </div>
+      <button type="button" data-jump="board">Go to the board →</button>
+    </div>
+
   </div>
 
     <div class="card" id="featRank">
@@ -8279,6 +8296,21 @@ function compositionScore(opts) {
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
+})();
+
+/* ---------- home → board shortcut ----------
+   The nav's own listener only binds to `nav button[data-tab]`, so a jump button
+   living inside a card needs its own delegated handler. Uses data-jump so it can
+   never be mistaken for a real nav button. */
+(function(){
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('[data-jump]');
+    if(!b) return;
+    if(typeof goTab === 'function'){
+      goTab(b.getAttribute('data-jump'));
+      window.scrollTo({ top:0, behavior:'smooth' });
+    }
+  });
 })();
 </script>
 
