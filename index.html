@@ -469,6 +469,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .board-bubble .bm-name{font-weight:800;font-size:12.5px;color:var(--violet)}
 .board-bubble .bm-meta{font-size:11px;color:var(--ink-soft)}
 .board-bubble .bm-body{font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+.bm-swatch{display:inline-block;width:13px;height:13px;border-radius:4px;border:1px solid rgba(0,0,0,.18);vertical-align:-2px;margin-right:4px}
 .board-bubble .bm-replyto{font-size:12px;color:var(--ink-soft);background:rgba(123,107,181,.08);border-radius:8px;padding:4px 8px;margin-bottom:6px}
 .board-bubble .bm-act{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .board-bubble .bm-act button{border:0;background:transparent;color:var(--violet);font:inherit;font-size:12px;font-weight:700;padding:2px 6px;cursor:pointer;border-radius:6px}
@@ -8782,9 +8783,18 @@ function compositionScore(opts) {
       + '<div class="bm-top"><span class="bm-name">'+esc(name)+'</span>'
       + '<span class="bm-meta">'+esc(fmtTime(m.created_at))+esc(gid)+(hidden?' \u00b7 '+T.hidden:'')+'</span></div>'
       + replyBlock
-      + '<div class="bm-body">'+esc(m.body)+'</div>'
+      + '<div class="bm-body">'+colorize(esc(m.body))+'</div>'
       + (acts ? '<div class="bm-act">'+acts+'</div>' : '')
       + '</div>';
+  }
+
+  /* Turn any #RRGGBB written in a message into a little colour chip followed by
+     the code itself. Runs on ALREADY-ESCAPED text, and the regex only admits
+     hex digits, so nothing user-supplied can escape into the style attribute. */
+  function colorize(escaped){
+    return escaped.replace(/#([0-9A-Fa-f]{6})\b/g, function(whole, hex){
+      return '<span class="bm-swatch" style="background:#'+hex+'"></span>'+whole;
+    });
   }
 
   function nodeFromHTML(html){
