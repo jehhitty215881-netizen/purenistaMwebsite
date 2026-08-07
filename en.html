@@ -2821,7 +2821,9 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
      worker: fill in GLOBAL_RANK_ENDPOINT with a Cloudflare Worker URL and it takes over. One
      request returns the whole table instead of 22, and the data lives somewhere you control.
      Only worth the setup if the site gets busy enough for counterapi's limit to bite. */
-  var GLOBAL_RANK_ENDPOINT = 'https://rank-api-6m8j.onrender.com/api/rank';
+  var GLOBAL_RANK_ENDPOINT = ''; /* moved to Supabase feature_hits */
+  var SUPA_RANK_URL = 'https://wlsutpwmpnzmyxakqnfp.supabase.co';
+  var SUPA_RANK_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0';
   var COUNTER_NS = 'tourmaline8b7d78';
   var COUNTER_PREFIX = 'feat-';
   var rankMode = 'local';
@@ -2881,107 +2883,73 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
   }
 
   function bumpGlobal(name){
-    if(!globalEnabled()||!name||!LABELS[name])return;
-    /* 同一分頁 60 秒內只向全站 +1，避免連續切換洗榜 */
+    if(!name||!LABELS[name])return;
     var sk='pm_fr_g_'+name, now=Date.now();
-    /* The throttle used to live only in sessionStorage, inside a try/catch that swallowed the
-       failure - so in private mode, or wherever storage is blocked, every single tab switch
-       posted. Memory holds the floor; storage only extends it across reloads. */
-    if(now-(gBumpMem[name]||0)<60000)return;
+    /* 3 秒防連點；同一分頁快速連切不重複灌水 */
+    if(now-(gBumpMem[name]||0)<3000)return;
     try{
       var last=parseInt(sessionStorage.getItem(sk)||'0',10)||0;
-      if(now-last<60000){gBumpMem[name]=last;return;}
+      if(now-last<3000){gBumpMem[name]=last;return;}
       sessionStorage.setItem(sk,String(now));
     }catch(e){}
     gBumpMem[name]=now;
-    if(workerMode()){
-      fetch(GLOBAL_RANK_ENDPOINT,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({tab:name}),
-        mode:'cors',
-        keepalive:true
-      }).then(function(r){return r.ok?r.json():null;}).then(function(data){
-        if(data&&typeof data==='object'&&!data.error){
-          globalHitsCache=data; globalHitsTs=Date.now();
-          if(rankMode==='global') renderRank();
-        }
-      }).catch(function(){});
-      return;
-    }
-    // counterapi: one counter per tab, and the reply already carries that tab's new total
-    fetch(counterUrl(name,true),{mode:'cors',keepalive:true})
-      .then(function(r){return r.ok?r.json():null;})
-      .then(function(d){
-        var n=countOf(d);
-        if(n===null)return;
-        if(!globalHitsCache)globalHitsCache={};
-        globalHitsCache[name]=n;
-        saveSeen(name,n);          // remember the real site-wide figure for this tab
+
+    var headers={
+      'Content-Type':'application/json',
+      'apikey': SUPA_RANK_KEY,
+      'Authorization': 'Bearer '+SUPA_RANK_KEY
+    };
+    fetch(SUPA_RANK_URL+'/rest/v1/rpc/bump_feature_hit',{
+      method:'POST',
+      headers:headers,
+      body:JSON.stringify({p_tab:name}),
+      mode:'cors',
+      keepalive:true
+    }).then(function(r){return r.ok?r.json():null;}).then(function(n){
+      if(typeof n==='number'){
+        if(!globalHitsCache) globalHitsCache={};
+        globalHitsCache[name]=n|0;
+        globalHitsTs=Date.now();
+        try{ saveSeen(name, n|0); }catch(e){}
         if(rankMode==='global') renderRank();
-      }).catch(function(){});
+      }
+    }).catch(function(){});
   }
+
 
   function fetchGlobalHits(force){
-    if(!force&&globalHitsCache&&(Date.now()-globalHitsTs)<30000)return Promise.resolve(globalHitsCache);
-    /* renderRank() and boot() both ask for the table, and on counterapi one "ask" is 22 requests.
-       Without this the first render fired 44. Callers arriving while a read is in flight join it. */
+    if(!force&&globalHitsCache&&(Date.now()-globalHitsTs)<15000)return Promise.resolve(globalHitsCache);
     if(gFetchInFlight)return gFetchInFlight;
-    // after two full failures the endpoint is not going to start working this session
-    if(!force&&gReadFails>=2)return Promise.resolve(null);
+    if(!force&&gReadFails>=3)return Promise.resolve(globalHitsCache||seenAsHits());
     function done(v){ gFetchInFlight=null; return v; }
-    if(workerMode()){
-      gFetchInFlight=fetch(GLOBAL_RANK_ENDPOINT,{method:'GET',mode:'cors'})
-        .then(function(r){return r.ok?r.json():null;})
-        .then(function(data){
-          if(data&&typeof data==='object'&&!data.error){
-            globalHitsCache=data; globalHitsTs=Date.now();
-            return done(data);
-          }
-          return done(null);
-        }).catch(function(){return done(null);});
-      return gFetchInFlight;
-    }
-    /* counterapi has no batch read, so this is 22 small requests - each to a different path, so
-       each has its own rate-limit budget.
-
-       The important case is the one that shipped broken: a counter nobody has ever incremented
-       DOES NOT EXIST, and the service answers 404. Mapping "not ok" straight to null made all 22
-       reads look like failures on a site where nothing had been clicked yet, so a brand new
-       deployment reported "could not be read" when the honest answer was "no data yet". A 404 is
-       a zero. Only a network error or an unexpected status is a real failure.
-
-       The trailing slash is a fallback because the documentation writes the read endpoint both
-       ways (:name and :name/); if the bare form ever stops answering, the second attempt covers
-       it without another release. */
-    var names=Object.keys(LABELS);
-    function note(e){ if(!gReadError)gReadError=e; return null; }
-    function readOne(k,retry){
-      return fetch(counterUrl(k,false)+(retry?'/':''))
-        .then(function(r){
-          if(r.status===404)return 0;                    // never incremented = zero, not an error
-          if(!r.ok)return retry?note('HTTP '+r.status):readOne(k,true);
-          return r.json().then(function(d){
-            var n=countOf(d);
-            return n===null?(retry?0:readOne(k,true)):n;
-          },function(){return retry?note('bad JSON'):readOne(k,true);});
-        })
-        .catch(function(e){
-          // a rejected fetch is almost always CORS or no connection, and the two look identical here
-          return retry?note(String((e&&e.message)||e||'network')):readOne(k,true);
-        });
-    }
-    gFetchInFlight=Promise.all(names.map(function(k){return readOne(k,false);})).then(function(vals){
-      var out={},got=0;
-      names.forEach(function(k,i){ if(vals[i]!==null){out[k]=vals[i];got++;} });
-      if(!got){ gReadFails++; return done(null); }   // every request failed: keep whatever we had
+    var headers={
+      'apikey': SUPA_RANK_KEY,
+      'Authorization': 'Bearer '+SUPA_RANK_KEY
+    };
+    gFetchInFlight=fetch(SUPA_RANK_URL+'/rest/v1/feature_hits?select=tab,hits',{
+      method:'GET', headers:headers, mode:'cors'
+    }).then(function(r){
+      if(!r.ok) throw new Error('rank http '+r.status);
+      return r.json();
+    }).then(function(rows){
       gReadFails=0; gReadError=null;
-      globalHitsCache=out; globalHitsTs=Date.now();
-      try{sessionStorage.setItem('pm_fr_gcache',JSON.stringify({t:globalHitsTs,d:out}));}catch(e){}
-      return done(out);
-    }).catch(function(){return done(null);});
+      var data={};
+      if(Array.isArray(rows)){
+        rows.forEach(function(row){
+          if(row&&row.tab) data[row.tab]=row.hits|0;
+        });
+      }
+      globalHitsCache=data; globalHitsTs=Date.now();
+      return done(data);
+    }).catch(function(e){
+      gReadFails++;
+      gReadError=(e&&e.message)||'rank fetch failed';
+      var fallback=globalHitsCache||seenAsHits();
+      return done(fallback);
+    });
     return gFetchInFlight;
   }
+
 
   function renderRankRows(h, emptyMsg){
     var box=document.getElementById('featRankList');
