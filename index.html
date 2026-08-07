@@ -599,6 +599,25 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   width:36px;height:36px;border-radius:10px;border:1.5px solid rgba(0,0,0,.12)
 }
 
+
+.board-turn{
+  margin:0 0 10px;padding:10px 12px;border-radius:12px;border:1.5px solid var(--violet);
+  background:#fff;font-size:13.5px;line-height:1.55
+}
+.board-turn b{color:var(--violet)}
+.board-turn .turn-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.board-turn select,.board-turn input{
+  font:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff;min-height:40px;flex:1 1 140px
+}
+.board-turn button{
+  border:1.5px solid var(--line);background:var(--panel);font:inherit;font-weight:700;font-size:13px;
+  padding:8px 12px;border-radius:999px;cursor:pointer;min-height:40px
+}
+.board-turn button.dice{
+  border:0;background:linear-gradient(135deg,var(--rose),var(--violet));color:#fff;font-weight:800
+}
+.board-turn .turn-me{color:var(--teal);font-weight:800}
+
 </style>
 </head>
 <body>
@@ -1686,6 +1705,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <span class="room-title" id="boardRoomTitle">—</span>
         <span class="room-desc" id="boardRoomDesc"></span>
 
+            <div id="boardTurnPanel" class="board-turn" hidden></div>
       <div id="boardGamePanel" class="board-game-panel" hidden></div>
 
       </div>
@@ -8337,11 +8357,166 @@ function compositionScore(opts) {
     await loadReview();
   }
 
+  
+  async function refreshBoardMeta(){
+    if(!state.board) return;
+    var res = await sb.from('chat_boards')
+      .select('id,title,description,kind,game_key,turn_user_id,turn_note, profiles:turn_user_id(display_name,game_id)')
+      .eq('id', state.board.id).maybeSingle();
+    if(res.error){
+      // columns may not exist yet
+      return;
+    }
+    if(res.data){
+      state.board = Object.assign({}, state.board, res.data);
+    }
+  }
+
+  async function roomMembers(){
+    // people who spoke in this board recently
+    if(!state.board) return [];
+    var res = await sb.from('messages')
+      .select('user_id, profiles:user_id(display_name,game_id)')
+      .eq('board_id', state.board.id)
+      .neq('status','deleted')
+      .order('created_at', { ascending: false })
+      .limit(80);
+    if(res.error) return [];
+    var seen = {}, list = [];
+    (res.data||[]).forEach(function(m){
+      if(!m.user_id || seen[m.user_id]) return;
+      seen[m.user_id] = 1;
+      var p = m.profiles || {};
+      list.push({ id: m.user_id, name: p.display_name || T.user, game_id: p.game_id||'' });
+    });
+    // include self
+    if(state.user && state.profile && !seen[state.user.id]){
+      list.unshift({
+        id: state.user.id,
+        name: state.profile.display_name || T.user,
+        game_id: state.profile.game_id||''
+      });
+    }
+    return list;
+  }
+
+  async function postSystem(text){
+    if(!state.user || !state.board || !isApproved()) return;
+    var payload = {
+      user_id: state.user.id,
+      body: text,
+      status: 'visible',
+      board_id: state.board.id
+    };
+    var ins = await sb.from('messages').insert(payload);
+    if(ins.error){ err(ins.error.message); return false; }
+    await loadMessages();
+    return true;
+  }
+
+  async function setTurn(uid, note){
+    if(!state.board) return;
+    var patch = { turn_user_id: uid || null, turn_note: note || null };
+    var res = await sb.from('chat_boards').update(patch).eq('id', state.board.id);
+    if(res.error){ err(res.error.message); return false; }
+    await refreshBoardMeta();
+    paintTurnPanel();
+    return true;
+  }
+
+  async function paintTurnPanel(){
+    var el = $('boardTurnPanel');
+    if(!el) return;
+    if(!state.board || state.board.kind !== 'game'){
+      el.hidden = true; el.innerHTML=''; return;
+    }
+    el.hidden = false;
+    var zh = (T.locale||'').indexOf('zh')===0;
+    await refreshBoardMeta();
+    var holder = state.board.turn_user_id;
+    var holderName = (state.board.profiles && state.board.profiles.display_name)
+      || (holder ? T.user : (zh ? '尚未指定' : 'Nobody yet'));
+    var isMe = state.user && holder && state.user.id === holder;
+    var members = await roomMembers();
+
+    var labelNow = zh ? '目前回合' : 'Current turn';
+    var labelDice = zh ? '擲骰子' : 'Roll dice';
+    var labelClaim = zh ? '我先開始' : 'I start';
+    var labelPass = zh ? '指定下一位' : 'Pass to';
+    var labelDo = zh ? '傳給他' : 'Pass';
+    var diceHint = zh ? '骰子結果會貼到聊天室；可勾選擲完傳給下一位。' : 'Roll posts to chat; optional auto-pass.';
+    var autoPass = zh ? '擲完傳給下一位' : 'Pass after roll';
+
+    var opts = members.map(function(m){
+      return '<option value="'+m.id+'"'+(holder===m.id?' selected':'')+'>'
+        +esc(m.name)+(m.game_id?' · '+esc(m.game_id):'')+'</option>';
+    }).join('');
+    if(!members.length){
+      opts = '<option value="">'+(zh?'尚無發言成員，先打個招呼':'No members yet')+'</option>';
+    }
+
+    el.innerHTML =
+      '<div>'+labelNow+'：<b class="'+(isMe?'turn-me':'')+'">'+esc(holderName)+'</b>'
+      +(isMe ? (zh?'（輪到你）':'(your turn)') : '')+'</div>'
+      +'<div class="turn-row">'
+      +'<button type="button" class="dice" id="turnDice">'+labelDice+'</button>'
+      +'<button type="button" id="turnClaim">'+labelClaim+'</button>'
+      +'</div>'
+      +'<div class="turn-row">'
+      +'<label style="font-size:12px;color:var(--ink-soft)"><input type="checkbox" id="turnAutoPass" /> '+autoPass+'</label>'
+      +'</div>'
+      +'<div class="turn-row">'
+      +'<span style="font-size:12.5px">'+labelPass+'</span>'
+      +'<select id="turnNext">'+opts+'</select>'
+      +'<button type="button" id="turnPass">'+labelDo+'</button>'
+      +'</div>'
+      +'<div style="margin-top:6px;font-size:12px;color:var(--ink-soft)">'+diceHint+'</div>';
+
+    var diceBtn = $('turnDice');
+    if(diceBtn) diceBtn.onclick = async function(){
+      if(!state.user){ err(T.need_login); return; }
+      if(!isApproved()){ err(T.pending); return; }
+      var n = 1 + Math.floor(Math.random()*6);
+      var name = (state.profile && state.profile.display_name) || T.user;
+      var text = (zh? '🎲 骰子：' : '🎲 Dice: ')+n+(zh?' 點（':' (')+name+')';
+      await postSystem(text);
+      var auto = $('turnAutoPass');
+      if(auto && auto.checked){
+        var sel = $('turnNext');
+        var uid = sel && sel.value;
+        if(uid){
+          var opt = sel.options[sel.selectedIndex];
+          var tn = opt ? opt.textContent : '';
+          await setTurn(uid, null);
+          await postSystem((zh?'➡️ 下一位：':'➡️ Next: ')+tn);
+        }
+      }
+    };
+    var claim = $('turnClaim');
+    if(claim) claim.onclick = async function(){
+      if(!state.user){ err(T.need_login); return; }
+      await setTurn(state.user.id, null);
+      var name = (state.profile && state.profile.display_name) || T.user;
+      await postSystem((zh?'▶️ 回合開始：':'▶️ Turn starts: ')+name);
+    };
+    var pass = $('turnPass');
+    if(pass) pass.onclick = async function(){
+      if(!state.user){ err(T.need_login); return; }
+      var sel = $('turnNext');
+      var uid = sel && sel.value;
+      if(!uid){ err(zh?'請選擇下一位':'Pick someone'); return; }
+      var opt = sel.options[sel.selectedIndex];
+      var tn = opt ? opt.textContent : '';
+      await setTurn(uid, null);
+      await postSystem((zh?'➡️ 下一位：':'➡️ Next: ')+tn);
+    };
+  }
+
   async function loadBoards(){
     var list = $('boardCardList');
     if(list) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
     var res = await sb.from('chat_boards')
-      .select('id,title,description,created_at,sort_order,kind,game_key')
+      .select('id,title,description,created_at,sort_order,kind,game_key,turn_user_id,turn_note')
       .order('sort_order', { ascending: true })
       .order('created_at', { ascending: true });
     if(res.error){
