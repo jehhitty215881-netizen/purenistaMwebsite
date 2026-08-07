@@ -618,6 +618,15 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 }
 .board-turn .turn-me{color:var(--teal);font-weight:800}
 
+
+.board-mod{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.board-mod h4{font-size:14.5px;margin:0 0 8px}
+.board-mod-item{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.board-mod-item .ri-acts button.warn{color:#a33;border-color:#e0b4b4}
+.board-mod-item .ri-acts button.ok{background:var(--teal);border-color:var(--teal);color:#fff}
+.board-ban-banner{margin:8px 0;padding:10px 12px;border-radius:12px;background:#fde8e8;border:1.5px solid #e0b4b4;color:#a33;font-size:13.5px;line-height:1.55}
+.board-mute-banner{margin:8px 0;padding:10px 12px;border-radius:12px;background:var(--gold-soft);border:1.5px solid var(--gold);font-size:13.5px;line-height:1.55}
+
 </style>
 </head>
 <body>
@@ -1671,12 +1680,20 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 <section id="board">
   <div class="card">
     <h3>聊天專版 <span class="tag ok">分版</span></h3>
-    <p class="cond">外面是專版列表（類似論壇板塊）；點進去才是該版的獨立聊天室。管理員可新增專版。</p>
+    <p class="cond">外面是專版列表（類似論壇板塊）；點進去才是該版的獨立聊天室。管理員可新增專版。中文／英文站聊天室分開，互不共通。</p>
     <div id="boardAuth" class="board-auth"></div>
     <div id="boardUser" class="board-user" hidden></div>
     <div id="boardErr" class="board-err" hidden></div>
 
     <div id="boardPending" class="board-pending" hidden></div>
+    
+    <div id="boardBanBanner" class="board-ban-banner" hidden></div>
+    <div id="boardMuteBanner" class="board-mute-banner" hidden></div>
+    <div id="boardMod" class="board-mod" hidden>
+      <h4>封鎖／禁言管理</h4>
+      <div id="boardModList"><p class="board-empty">載入中…</p></div>
+    </div>
+
     <div id="boardReview" class="board-review" hidden>
       <h4>待審核註冊</h4>
       <div id="boardReviewList"><p class="board-empty">載入中…</p></div>
@@ -8006,6 +8023,7 @@ function compositionScore(opts) {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
+  var BOARD_LOCALE = 'zh';
   var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
   var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
   var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功，請等待管理員審核通過後再使用聊天室。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "pending": "你的帳號尚在審核中，通過後才能進入專版發言。請稍候管理員處理。", "rejected": "你的註冊未通過審核，如有疑問請聯絡站長。", "approve": "通過", "reject": "拒絕", "no_pending": "目前沒有待審核的註冊。", "locale": "zh-TW"};
@@ -8052,6 +8070,39 @@ function compositionScore(opts) {
     if(state.profile.role === 'admin') return true;
     return state.profile.approval === 'approved';
   }
+  
+  function isBanned(){
+    return !!(state.profile && state.profile.is_banned);
+  }
+  function isMuted(){
+    if(!state.profile || !state.profile.muted_until) return false;
+    try{ return new Date(state.profile.muted_until).getTime() > Date.now(); }
+    catch(e){ return false; }
+  }
+  function canSpeak(){
+    return state.user && isApproved() && !isBanned() && !isMuted();
+  }
+  function paintModBanners(){
+    var ban = $('boardBanBanner'), mute = $('boardMuteBanner');
+    var zh = (T.locale||'').indexOf('zh')===0;
+    if(ban){
+      if(state.user && isBanned()){
+        ban.hidden = false;
+        ban.textContent = zh ? '你的帳號已被封鎖，無法使用留言與遊戲房。' : 'Your account is banned from the board.';
+      } else { ban.hidden = true; ban.textContent=''; }
+    }
+    if(mute){
+      if(state.user && !isBanned() && isMuted()){
+        mute.hidden = false;
+        var until = '';
+        try{ until = new Date(state.profile.muted_until).toLocaleString(T.locale||undefined); }catch(e){}
+        mute.textContent = zh
+          ? ('你目前被禁言至 '+until+'，期間無法發言。')
+          : ('You are muted until '+until+'.');
+      } else { mute.hidden = true; mute.textContent=''; }
+    }
+  }
+
   function approvalStatus(){
     if(!state.profile) return null;
     if(state.profile.role === 'admin') return 'approved';
@@ -8215,6 +8266,10 @@ function compositionScore(opts) {
     paintTurnPanel();
   }
   function showRoom(b){
+    if(isBanned()){
+      err((T.locale||'').indexOf('zh')===0?'你已被封鎖':'You are banned');
+      return;
+    }
     if(!isApproved()){
       err(T.pending);
       return;
@@ -8227,7 +8282,7 @@ function compositionScore(opts) {
     var t = $('boardRoomTitle'); if(t) t.textContent = b.title || '—';
     var d = $('boardRoomDesc'); if(d) d.textContent = b.description || '';
     var compose = $('boardCompose');
-    if(compose) compose.hidden = !state.user || !isApproved();
+    if(compose) compose.hidden = !canSpeak();
     var list = $('boardList');
     if(list) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
     paintGamePanel();
@@ -8240,11 +8295,11 @@ function compositionScore(opts) {
     state.profile = null;
     if(!state.user) return;
     var res = await sb.from('profiles')
-      .select('id,display_name,role,game_id,approval')
+      .select('id,display_name,role,game_id,approval,is_banned,muted_until')
       .eq('id', state.user.id).maybeSingle();
     if(res.error){
       // approval column may not exist yet
-      res = await sb.from('profiles').select('id,display_name,role,game_id').eq('id', state.user.id).maybeSingle();
+      res = await sb.from('profiles').select('id,display_name,role,game_id,approval,is_banned,muted_until').eq('id', state.user.id).maybeSingle();
       if(res.error){ console.warn(res.error); return; }
       if(res.data) res.data.approval = 'approved';
     }
@@ -8318,6 +8373,55 @@ function compositionScore(opts) {
     });
     if(res.error){ err(res.error.message); return; }
     err(T.signup_ok);
+  }
+
+  
+  async function loadModList(){
+    var wrap = $('boardMod'), list = $('boardModList');
+    if(!wrap || !list) return;
+    if(!isAdmin()){ wrap.hidden = true; return; }
+    wrap.hidden = false;
+    list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
+    var res = await sb.from('profiles')
+      .select('id,display_name,game_id,is_banned,muted_until,role,approval,created_at')
+      .or('is_banned.eq.true,muted_until.gt.'+new Date().toISOString())
+      .order('created_at', { ascending: false })
+      .limit(50);
+    if(res.error){
+      // try without filter if columns missing
+      list.innerHTML = '<p class="board-err">'+T.fail+esc(res.error.message)+'</p>';
+      return;
+    }
+    var rows = res.data || [];
+    if(!rows.length){
+      list.innerHTML = '<p class="board-empty">'+(T.locale&&T.locale.indexOf('zh')===0?'目前沒有封鎖或禁言中的使用者。':'No banned/muted users.')+'</p>';
+      return;
+    }
+    var zh = (T.locale||'').indexOf('zh')===0;
+    list.innerHTML = rows.map(function(r){
+      var st = [];
+      if(r.is_banned) st.push(zh?'已封鎖':'banned');
+      if(r.muted_until && new Date(r.muted_until)>new Date()) st.push(zh?'禁言中':'muted');
+      return '<div class="board-mod-item" data-uid="'+r.id+'">'
+        + '<span class="ri-name">'+esc(r.display_name||T.user)+'</span>'
+        + '<span class="ri-meta">'+esc(st.join(' · '))+'</span>'
+        + '<span class="ri-acts">'
+        + (r.is_banned ? '<button type="button" class="ok" data-mod="unban" data-uid="'+r.id+'">'+(zh?'解除封鎖':'Unban')+'</button>' : '')
+        + (r.muted_until ? '<button type="button" class="ok" data-mod="unmute" data-uid="'+r.id+'">'+(zh?'解除禁言':'Unmute')+'</button>' : '')
+        + '</span></div>';
+    }).join('');
+  }
+  async function onMod(ev){
+    var b = ev.target.closest('button[data-mod]');
+    if(!b || !isAdmin()) return;
+    var uid = b.getAttribute('data-uid');
+    var act = b.getAttribute('data-mod');
+    var patch = {};
+    if(act === 'unban') patch = { is_banned: false };
+    if(act === 'unmute') patch = { muted_until: null };
+    var res = await sb.from('profiles').update(patch).eq('id', uid);
+    if(res.error){ err(res.error.message); return; }
+    await loadModList();
   }
 
   async function loadReview(){
@@ -8546,7 +8650,8 @@ function compositionScore(opts) {
     var list = $('boardCardList');
     if(list) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
     var res = await sb.from('chat_boards')
-      .select('id,title,description,created_at,sort_order,kind,game_key,turn_user_id,turn_note')
+      .select('id,title,description,created_at,sort_order,kind,game_key,turn_user_id,turn_note,locale')
+      .eq('locale', BOARD_LOCALE)
       .order('sort_order', { ascending: true })
       .order('created_at', { ascending: true });
     if(res.error){
@@ -8586,7 +8691,7 @@ function compositionScore(opts) {
     var desc = (($('boardNewDesc')||{}).value||'').trim();
     if(!title){ err(T.need_title); return; }
     var res = await sb.from('chat_boards').insert({
-      title: title, description: desc || null, created_by: state.user.id
+      title: title, description: desc || null, created_by: state.user.id, locale: BOARD_LOCALE, kind: 'chat'
     });
     if(res.error){ err(res.error.message); return; }
     if($('boardNewTitle')) $('boardNewTitle').value = '';
@@ -8646,6 +8751,10 @@ function compositionScore(opts) {
         if(hidden) acts += '<button type="button" data-act="show" data-id="'+m.id+'">'+T.show+'</button>';
         else acts += '<button type="button" data-act="hide" data-id="'+m.id+'">'+T.hide+'</button>';
         acts += '<button type="button" data-act="del" data-id="'+m.id+'">'+T.del+'</button>';
+        if(m.user_id && m.user_id !== uid){
+          acts += '<button type="button" data-act="mute" data-uid="'+m.user_id+'">'+(T.locale&&T.locale.indexOf('zh')===0?'禁言1天':'Mute 1d')+'</button>';
+          acts += '<button type="button" data-act="ban" data-uid="'+m.user_id+'">'+(T.locale&&T.locale.indexOf('zh')===0?'封鎖':'Ban')+'</button>';
+        }
       }else if(mine){
         acts += '<button type="button" data-act="del" data-id="'+m.id+'">'+T.delmine+'</button>';
       }
@@ -8682,6 +8791,8 @@ function compositionScore(opts) {
     err('');
     if(!state.user){ err(T.need_login); return; }
     if(!isApproved()){ err(T.pending); return; }
+    if(isBanned()){ err((T.locale||'').indexOf('zh')===0?'你已被封鎖':'You are banned'); return; }
+    if(isMuted()){ err((T.locale||'').indexOf('zh')===0?'你目前被禁言':'You are muted'); return; }
     if(!state.board) return;
     var body = (($('boardBody')||{}).value||'').trim();
     if(!body){ err(T.need_body); return; }
@@ -8703,6 +8814,20 @@ function compositionScore(opts) {
     var id = b.getAttribute('data-id');
     var act = b.getAttribute('data-act');
     if(act === 'reply'){ setReply(id); return; }
+
+    if(act === 'mute' || act === 'ban'){
+      var uid2 = b.getAttribute('data-uid');
+      if(!uid2 || !isAdmin()) return;
+      var patch2 = act === 'ban'
+        ? { is_banned: true }
+        : { muted_until: new Date(Date.now()+24*60*60*1000).toISOString() };
+      var res2 = await sb.from('profiles').update(patch2).eq('id', uid2);
+      if(res2.error){ err(res2.error.message); return; }
+      await loadModList();
+      err('');
+      return;
+    }
+
     var patch = null;
     if(act === 'hide') patch = { status: 'hidden' };
     if(act === 'show') patch = { status: 'visible' };
@@ -8775,6 +8900,7 @@ function compositionScore(opts) {
     var back = $('boardBack'); if(back) back.onclick = function(){ showHome(); loadBoards(); };
     var create = $('boardNewCreate'); if(create) create.onclick = createBoard;
     var rev = $('boardReviewList'); if(rev) rev.addEventListener('click', onReview);
+    var mod = $('boardModList'); if(mod) mod.addEventListener('click', onMod);
     var cards = $('boardCardList');
     if(cards) cards.addEventListener('click', function(e){
       var btn = e.target.closest('[data-bid]');
