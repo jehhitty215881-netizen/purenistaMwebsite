@@ -8743,57 +8743,124 @@ function compositionScore(opts) {
     if(list) list.scrollTop = list.scrollHeight;
   }
 
+  function nearBottom(el){
+    return (el.scrollHeight - el.scrollTop - el.clientHeight) < 80;
+  }
+
+  /* Build the HTML for a single message bubble. Split out of paintMessages so
+     the painter can compare old vs new markup per message and skip untouched
+     ones -- that is what stops the whole list flickering on every update. */
+  function bubbleHTML(m){
+    var admin = isAdmin();
+    var uid = state.user && state.user.id;
+    var p = m.profiles || {};
+    var name = p.display_name || T.user;
+    var gid = p.game_id ? (' \u00b7 '+p.game_id) : '';
+    var hidden = m.status === 'hidden';
+    var mine = uid && uid === m.user_id;
+    var parent = m.parent_id ? findRow(m.parent_id) : null;
+    var replyBlock = '';
+    if(parent){
+      var pn = (parent.profiles && parent.profiles.display_name) || T.user;
+      var pb = String(parent.body||'').slice(0,80);
+      replyBlock = '<div class="bm-replyto">'+esc(pn)+': '+esc(pb)+'</div>';
+    }
+    var acts = '';
+    if(state.user && isApproved()) acts += '<button type="button" data-act="reply" data-id="'+m.id+'">'+T.reply+'</button>';
+    if(admin){
+      if(hidden) acts += '<button type="button" data-act="show" data-id="'+m.id+'">'+T.show+'</button>';
+      else acts += '<button type="button" data-act="hide" data-id="'+m.id+'">'+T.hide+'</button>';
+      acts += '<button type="button" data-act="del" data-id="'+m.id+'">'+T.del+'</button>';
+      if(m.user_id && m.user_id !== uid){
+        acts += '<button type="button" data-act="mute" data-uid="'+m.user_id+'">'+(T.locale&&T.locale.indexOf('zh')===0?'\u7981\u8a001\u5929':'Mute 1d')+'</button>';
+        acts += '<button type="button" data-act="ban" data-uid="'+m.user_id+'">'+(T.locale&&T.locale.indexOf('zh')===0?'\u5c01\u9396':'Ban')+'</button>';
+      }
+    }else if(mine){
+      acts += '<button type="button" data-act="del" data-id="'+m.id+'">'+T.delmine+'</button>';
+    }
+    return '<div class="board-bubble'+(mine?' mine':'')+(hidden?' hidden-msg':'')+'" data-id="'+m.id+'">'
+      + '<div class="bm-top"><span class="bm-name">'+esc(name)+'</span>'
+      + '<span class="bm-meta">'+esc(fmtTime(m.created_at))+esc(gid)+(hidden?' \u00b7 '+T.hidden:'')+'</span></div>'
+      + replyBlock
+      + '<div class="bm-body">'+esc(m.body)+'</div>'
+      + (acts ? '<div class="bm-act">'+acts+'</div>' : '')
+      + '</div>';
+  }
+
+  function nodeFromHTML(html){
+    var t = document.createElement('div');
+    t.innerHTML = html;
+    var n = t.firstElementChild;
+    if(n) n._html = html;
+    return n;
+  }
+
+  /* Incremental painter. Instead of blowing away innerHTML on every refresh it
+     reconciles the existing bubbles against state.rows: untouched messages keep
+     their DOM node (no repaint, no flicker), changed ones are swapped, missing
+     ones are inserted in place, stale ones removed. Scroll position is only
+     forced to the bottom when the reader was already sitting there. */
   function paintMessages(){
     var list = $('boardList');
     if(!list) return;
     var rows = state.rows.slice().filter(function(m){ return m.status !== 'deleted'; });
+    var stick = nearBottom(list);
+
     if(!rows.length){
-      list.innerHTML = '<p class="board-empty">'+T.empty+'</p>';
+      var lone = list.children.length === 1
+        && list.firstElementChild
+        && list.firstElementChild.className === 'board-empty';
+      if(!lone) list.innerHTML = '<p class="board-empty">'+T.empty+'</p>';
       return;
     }
-    var admin = isAdmin();
-    var uid = state.user && state.user.id;
-    list.innerHTML = rows.map(function(m){
-      var p = m.profiles || {};
-      var name = p.display_name || T.user;
-      var gid = p.game_id ? (' · '+p.game_id) : '';
-      var hidden = m.status === 'hidden';
-      var mine = uid && uid === m.user_id;
-      var parent = m.parent_id ? findRow(m.parent_id) : null;
-      var replyBlock = '';
-      if(parent){
-        var pn = (parent.profiles && parent.profiles.display_name) || T.user;
-        var pb = String(parent.body||'').slice(0,80);
-        replyBlock = '<div class="bm-replyto">'+esc(pn)+': '+esc(pb)+'</div>';
+
+    var keep = {}, i, k, n;
+    for(i=0;i<rows.length;i++) keep[String(rows[i].id)] = true;
+
+    // drop bubbles that no longer belong, plus any placeholder / error text
+    i = 0;
+    while(i < list.children.length){
+      var c = list.children[i];
+      var cid = c.getAttribute('data-id');
+      if(!cid || !keep[cid]) list.removeChild(c);
+      else i++;
+    }
+
+    var map = {};
+    for(k=0;k<list.children.length;k++){
+      map[list.children[k].getAttribute('data-id')] = list.children[k];
+    }
+
+    var prev = null;
+    for(n=0;n<rows.length;n++){
+      var m = rows[n];
+      var key = String(m.id);
+      var html = bubbleHTML(m);
+      var node = map[key];
+      if(node && node._html !== html){
+        var swapped = nodeFromHTML(html);
+        list.replaceChild(swapped, node);
+        node = swapped;
+        map[key] = swapped;
+      }else if(!node){
+        node = nodeFromHTML(html);
+        map[key] = node;
       }
-      var acts = '';
-      if(state.user && isApproved()) acts += '<button type="button" data-act="reply" data-id="'+m.id+'">'+T.reply+'</button>';
-      if(admin){
-        if(hidden) acts += '<button type="button" data-act="show" data-id="'+m.id+'">'+T.show+'</button>';
-        else acts += '<button type="button" data-act="hide" data-id="'+m.id+'">'+T.hide+'</button>';
-        acts += '<button type="button" data-act="del" data-id="'+m.id+'">'+T.del+'</button>';
-        if(m.user_id && m.user_id !== uid){
-          acts += '<button type="button" data-act="mute" data-uid="'+m.user_id+'">'+(T.locale&&T.locale.indexOf('zh')===0?'禁言1天':'Mute 1d')+'</button>';
-          acts += '<button type="button" data-act="ban" data-uid="'+m.user_id+'">'+(T.locale&&T.locale.indexOf('zh')===0?'封鎖':'Ban')+'</button>';
-        }
-      }else if(mine){
-        acts += '<button type="button" data-act="del" data-id="'+m.id+'">'+T.delmine+'</button>';
-      }
-      return '<div class="board-bubble'+(mine?' mine':'')+(hidden?' hidden-msg':'')+'" data-id="'+m.id+'">'
-        + '<div class="bm-top"><span class="bm-name">'+esc(name)+'</span>'
-        + '<span class="bm-meta">'+esc(fmtTime(m.created_at))+esc(gid)+(hidden?' · '+T.hidden:'')+'</span></div>'
-        + replyBlock
-        + '<div class="bm-body">'+esc(m.body)+'</div>'
-        + (acts ? '<div class="bm-act">'+acts+'</div>' : '')
-        + '</div>';
-    }).join('');
-    scrollBottom();
+      var want = prev ? prev.nextSibling : list.firstChild;
+      if(node !== want) list.insertBefore(node, want);
+      prev = node;
+    }
+
+    if(stick) scrollBottom();
   }
 
   async function loadMessages(){
     var list = $('boardList');
-    if(!state.board){ if(list) list.innerHTML=''; return; }
-    if(list) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
+    if(!state.board){
+      state.rows = [];
+      if(list) list.innerHTML = '';
+      return;
+    }
     var res = await sb.from('messages')
       .select('id,body,status,created_at,user_id,parent_id,board_id, profiles:user_id(display_name,game_id,role)')
       .eq('board_id', state.board.id)
@@ -8801,7 +8868,12 @@ function compositionScore(opts) {
       .order('created_at', { ascending: true })
       .limit(150);
     if(res.error){
-      if(list) list.innerHTML = '<p class="board-err">'+T.fail+esc(res.error.message)+'</p>';
+      // only wipe the list if there is nothing worth keeping on screen
+      if(list && !state.rows.length){
+        list.innerHTML = '<p class="board-err">'+T.fail+esc(res.error.message)+'</p>';
+      }else{
+        err(T.fail+res.error.message);
+      }
       return;
     }
     state.rows = res.data || [];
@@ -8874,7 +8946,19 @@ function compositionScore(opts) {
     alert(T.saved);
   }
 
+  /* Realtime can fire several times in a burst (a message insert, a status
+     update, a moderator action). Coalesce them into one refetch. */
+  var reloadTimer = null;
+  function queueReload(){
+    if(reloadTimer) return;
+    reloadTimer = setTimeout(function(){
+      reloadTimer = null;
+      loadMessages();
+    }, 120);
+  }
+
   function unsub(){
+    if(reloadTimer){ clearTimeout(reloadTimer); reloadTimer = null; }
     try{ if(state.channel){ sb.removeChannel(state.channel); state.channel = null; } }catch(e){}
     setStatus(false, T.live_off);
   }
@@ -8887,7 +8971,7 @@ function compositionScore(opts) {
         .on('postgres_changes', {
           event: '*', schema: 'public', table: 'messages',
           filter: 'board_id=eq.'+bid
-        }, function(){ loadMessages(); })
+        }, function(){ queueReload(); })
         .subscribe(function(status){
           setStatus(status === 'SUBSCRIBED', status === 'SUBSCRIBED' ? T.live_on : T.live_off);
         });
