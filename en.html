@@ -431,6 +431,50 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .hx-line:last-child{border-bottom:0}
 .hx-line>b{flex:0 0 42px;font-size:10.5px;font-weight:800;color:var(--violet);letter-spacing:.06em}
 .hx-line>code{flex:1;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px;color:var(--ink);word-break:break-all}
+
+.board-auth{display:grid;gap:10px;margin:10px 0}
+.board-auth .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:560px){.board-auth .row2{grid-template-columns:1fr}}
+.board-auth input,.board-compose textarea{width:100%;font:inherit;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;color:var(--ink)}
+.board-auth input:focus,.board-compose textarea:focus{outline:3px solid var(--violet);outline-offset:1px}
+.board-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.board-actions button,.board-compose button,.board-msg .bm-act button{border:1.5px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-weight:700;font-size:13px;padding:8px 14px;border-radius:999px;cursor:pointer}
+.board-actions button.pri,.board-compose button.pri{background:var(--ink);border-color:var(--ink);color:#fff}
+.board-user{font-size:13px;color:var(--ink-soft);margin:6px 0 10px}
+.board-user b{color:var(--violet)}
+.board-compose{margin:12px 0 16px}
+.board-compose textarea{min-height:88px;resize:vertical}
+.board-list{display:flex;flex-direction:column;gap:10px}
+.board-msg{border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--panel)}
+.board-msg.hidden-msg{opacity:.72;border-style:dashed}
+.board-msg .bm-top{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:6px}
+.board-msg .bm-name{font-weight:800;color:var(--ink)}
+.board-msg .bm-meta{font-size:12px;color:var(--ink-soft)}
+.board-msg .bm-body{font-size:14px;line-height:1.75;white-space:pre-wrap;word-break:break-word}
+.board-msg .bm-act{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.board-empty,.board-err{font-size:13.5px;color:var(--ink-soft);padding:8px 0}
+.board-err{color:#a33}
+
+.board-chat{display:flex;flex-direction:column;gap:0;min-height:320px;max-height:min(62vh,520px);border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:#faf8ff}
+.board-chat-log{flex:1 1 auto;overflow-y:auto;padding:12px 12px 8px;display:flex;flex-direction:column;gap:8px;scroll-behavior:smooth}
+.board-bubble{max-width:92%;padding:8px 12px;border-radius:14px;border:1.5px solid var(--line);background:#fff;align-self:flex-start}
+.board-bubble.mine{align-self:flex-end;background:var(--violet-soft);border-color:#cfc4ea}
+.board-bubble.hidden-msg{opacity:.65;border-style:dashed}
+.board-bubble .bm-top{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;margin-bottom:4px}
+.board-bubble .bm-name{font-weight:800;font-size:12.5px;color:var(--violet)}
+.board-bubble .bm-meta{font-size:11px;color:var(--ink-soft)}
+.board-bubble .bm-body{font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+.board-bubble .bm-replyto{font-size:12px;color:var(--ink-soft);background:rgba(123,107,181,.08);border-radius:8px;padding:4px 8px;margin-bottom:6px}
+.board-bubble .bm-act{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.board-bubble .bm-act button{border:0;background:transparent;color:var(--violet);font:inherit;font-size:12px;font-weight:700;padding:2px 6px;cursor:pointer;border-radius:6px}
+.board-bubble .bm-act button:hover{background:var(--violet-soft)}
+.board-compose-bar{border-top:1.5px solid var(--line);padding:10px;background:var(--panel)}
+.board-reply-hint{font-size:12.5px;color:var(--violet);margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.board-reply-hint button{border:0;background:transparent;color:var(--ink-soft);font:inherit;font-size:12px;cursor:pointer;text-decoration:underline}
+.board-status{font-size:12px;color:var(--ink-soft);padding:4px 12px 0}
+.board-status.on{color:var(--teal)}
+
+
 </style>
 </head>
 <body>
@@ -494,6 +538,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <button data-tab="lore">Trivia</button>
   <button data-tab="qa">Q&amp;A</button>
   <span class="navgrp">About</span>
+  <button data-tab="board">Board</button>
   <button data-tab="feedback">Feedback</button>
   <button data-tab="notes">Notes</button>
   <button data-tab="changelog">Changelog</button>
@@ -1467,6 +1512,44 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <div id="hxLines"></div>
   </div>
 </section>
+
+
+
+<section id="board">
+  <div class="card">
+    <h3>Chat room <span class="tag ok">Live</span></h3>
+    <p class="cond">Sign in to post and reply. New messages appear automatically while this tab is open. Admins can hide or delete.</p>
+    <div id="boardAuth" class="board-auth"></div>
+    <div id="boardUser" class="board-user" hidden></div>
+    <p id="boardStatus" class="board-status">Connecting…</p>
+    <div class="board-chat">
+      <div id="boardList" class="board-chat-log"><p class="board-empty">Loading…</p></div>
+      <div class="board-compose-bar">
+        <div id="boardReplyHint" class="board-reply-hint" hidden></div>
+        <div id="boardCompose" class="board-compose" hidden>
+          <textarea id="boardBody" maxlength="1000" placeholder="Type a message… (Enter to send, Shift+Enter for new line)"></textarea>
+          <div class="board-actions">
+            <button type="button" class="pri" id="boardSend">Send</button>
+            <button type="button" id="boardRefresh">Refresh</button>
+          </div>
+        </div>
+        <div id="boardErr" class="board-err" hidden></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Display name / Game ID</h3>
+    <p class="cond">Edit after signing in so others can recognise you in chat.</p>
+    <div class="board-auth">
+      <input id="boardDisplayEdit" maxlength="30" placeholder="Display name" />
+      <input id="boardGameId" maxlength="40" placeholder="Game ID (optional)" />
+      <div class="board-actions">
+        <button type="button" class="pri" id="boardSaveProfile">Save</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <section id="feedback"><div id="sec-feedback" data-lazy="1"></div></section>
 
@@ -2493,7 +2576,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     brand:'Brand dyes',branddata:'Brand data',trade:'Trade tips',sched:'Schedule',
     check:'Art check',workspace:'Workspace',colorinspire:'Colour inspire',naming:'Names & tags',
     charcheck:'Random character',flow:'Creative flow',aes:'Aesthetics',lore:'Lore',qa:'QA',
-    feedback:'Feedback',notes:'Notes',changelog:'Changelog',
+    board:'Board',feedback:'Feedback',notes:'Notes',changelog:'Changelog',
     swatch:'Swatches',symbols:'Symbols',hexconv:'Colour convert'
   };
   var PATHS={
@@ -7725,5 +7808,313 @@ function compositionScore(opts) {
   apply(inp.value, false);
 })();
 </script>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
+  var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
+  var T = {"signed": "Signed in as ", "gameid": "Game ID", "admin": "Admin", "logout": "Sign out", "email": "Email", "pass": "Password (min 6 characters)", "display": "Display name (for sign-up, optional)", "login": "Sign in", "signup": "Sign up", "signup_ok": "Sign-up successful. If email confirmation is enabled, check your inbox before signing in.", "loading": "Loading…", "fail": "Failed to load: ", "empty": "No messages yet. Say hi!", "user": "User", "hidden": "Hidden", "show": "Show", "hide": "Hide", "del": "Delete", "delmine": "Delete", "reply": "Reply", "replying": "Replying to", "cancel": "Cancel", "need_login": "Please sign in first", "need_body": "Please enter a message", "max": "Max 1000 characters", "saved": "Saved", "live_on": "Live", "live_off": "Offline (use Refresh)", "locale": "en-US"};
+  if(!window.supabase){
+    var list = document.getElementById('boardList');
+    if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
+    return;
+  }
+  var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  var state = { user:null, profile:null, rows:[], replyTo:null, channel:null };
+
+  function $(id){ return document.getElementById(id); }
+  function err(msg){
+    var el = $('boardErr');
+    if(!el) return;
+    if(!msg){ el.hidden = true; el.textContent=''; return; }
+    el.hidden = false; el.textContent = msg;
+  }
+  function esc(s){
+    return String(s||'').replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  function fmtTime(t){
+    try{
+      var d = new Date(t);
+      if(isNaN(d.getTime())) return '';
+      return d.toLocaleString(T.locale, { hour12:false });
+    }catch(e){ return ''; }
+  }
+  function setStatus(on, text){
+    var el = $('boardStatus');
+    if(!el) return;
+    el.textContent = text || (on ? T.live_on : T.live_off);
+    el.className = 'board-status'+(on?' on':'');
+  }
+
+  async function loadProfile(){
+    state.profile = null;
+    if(!state.user) return;
+    var res = await sb.from('profiles').select('id,display_name,role,game_id').eq('id', state.user.id).maybeSingle();
+    if(res.error){ console.warn(res.error); return; }
+    state.profile = res.data;
+    var gi = $('boardGameId');
+    if(gi) gi.value = (state.profile && state.profile.game_id) || '';
+    var dn = $('boardDisplayEdit');
+    if(dn) dn.value = (state.profile && state.profile.display_name) || '';
+  }
+
+  function paintAuth(){
+    var box = $('boardAuth'), userBox = $('boardUser'), compose = $('boardCompose');
+    if(!box) return;
+    if(state.user){
+      box.innerHTML = ''; box.hidden = true;
+      if(userBox){
+        userBox.hidden = false;
+        var name = (state.profile && state.profile.display_name) || (state.user.email||'');
+        var role = (state.profile && state.profile.role) || 'user';
+        var gid = (state.profile && state.profile.game_id) || '';
+        userBox.innerHTML = T.signed+'<b>'+esc(name)+'</b>'
+          + (gid ? ' · '+T.gameid+' <b>'+esc(gid)+'</b>' : '')
+          + (role==='admin' ? ' · <b>'+T.admin+'</b>' : '')
+          + ' <button type="button" id="boardLogout" style="margin-left:8px">'+T.logout+'</button>';
+        var lo = $('boardLogout');
+        if(lo) lo.onclick = async function(){ await sb.auth.signOut(); };
+      }
+      if(compose) compose.hidden = false;
+    }else{
+      box.hidden = false;
+      if(userBox) userBox.hidden = true;
+      if(compose) compose.hidden = true;
+      clearReply();
+      box.innerHTML =
+        '<div class="row2">'
+        + '<input id="boardEmail" type="email" placeholder="'+T.email+'" autocomplete="username" />'
+        + '<input id="boardPass" type="password" placeholder="'+T.pass+'" autocomplete="current-password" />'
+        + '</div>'
+        + '<input id="boardDisplay" type="text" placeholder="'+T.display+'" maxlength="30" />'
+        + '<div class="board-actions">'
+        + '<button type="button" class="pri" id="boardLogin">'+T.login+'</button>'
+        + '<button type="button" id="boardSignup">'+T.signup+'</button>'
+        + '</div>';
+      $('boardLogin').onclick = doLogin;
+      $('boardSignup').onclick = doSignup;
+    }
+  }
+
+  async function doLogin(){
+    err('');
+    var email = ($('boardEmail')||{}).value||'';
+    var pass = ($('boardPass')||{}).value||'';
+    var res = await sb.auth.signInWithPassword({ email: email.trim(), password: pass });
+    if(res.error){ err(res.error.message); return; }
+  }
+  async function doSignup(){
+    err('');
+    var email = ($('boardEmail')||{}).value||'';
+    var pass = ($('boardPass')||{}).value||'';
+    var display = (($('boardDisplay')||{}).value||'').trim();
+    var res = await sb.auth.signUp({
+      email: email.trim(), password: pass,
+      options: { data: { display_name: display || undefined } }
+    });
+    if(res.error){ err(res.error.message); return; }
+    if(res.data && res.data.user && !res.data.session){
+      err(T.signup_ok);
+    }
+  }
+
+  function findRow(id){
+    for(var i=0;i<state.rows.length;i++) if(String(state.rows[i].id)===String(id)) return state.rows[i];
+    return null;
+  }
+
+  function paintReplyHint(){
+    var el = $('boardReplyHint');
+    if(!el) return;
+    if(!state.replyTo){ el.hidden = true; el.innerHTML=''; return; }
+    var m = findRow(state.replyTo);
+    var name = m && m.profiles ? (m.profiles.display_name||T.user) : T.user;
+    el.hidden = false;
+    el.innerHTML = T.replying+' <b>'+esc(name)+'</b> <button type="button" id="boardReplyCancel">'+T.cancel+'</button>';
+    var c = $('boardReplyCancel');
+    if(c) c.onclick = clearReply;
+  }
+  function clearReply(){ state.replyTo = null; paintReplyHint(); }
+  function setReply(id){ state.replyTo = id; paintReplyHint(); var ta=$('boardBody'); if(ta) ta.focus(); }
+
+  function scrollBottom(){
+    var list = $('boardList');
+    if(list) list.scrollTop = list.scrollHeight;
+  }
+
+  function paintMessages(){
+    var list = $('boardList');
+    if(!list) return;
+    var rows = state.rows.slice().filter(function(m){ return m.status !== 'deleted'; });
+    if(!rows.length){
+      list.innerHTML = '<p class="board-empty">'+T.empty+'</p>';
+      return;
+    }
+    var isAdmin = state.profile && state.profile.role === 'admin';
+    var uid = state.user && state.user.id;
+    list.innerHTML = rows.map(function(m){
+      var p = m.profiles || {};
+      var name = p.display_name || T.user;
+      var gid = p.game_id ? (' · '+p.game_id) : '';
+      var hidden = m.status === 'hidden';
+      var mine = uid && uid === m.user_id;
+      var parent = m.parent_id ? findRow(m.parent_id) : null;
+      var replyBlock = '';
+      if(parent){
+        var pn = (parent.profiles && parent.profiles.display_name) || T.user;
+        var pb = String(parent.body||'').slice(0,80);
+        replyBlock = '<div class="bm-replyto">'+esc(pn)+': '+esc(pb)+'</div>';
+      }
+      var acts = '';
+      if(state.user) acts += '<button type="button" data-act="reply" data-id="'+m.id+'">'+T.reply+'</button>';
+      if(isAdmin){
+        if(hidden) acts += '<button type="button" data-act="show" data-id="'+m.id+'">'+T.show+'</button>';
+        else acts += '<button type="button" data-act="hide" data-id="'+m.id+'">'+T.hide+'</button>';
+        acts += '<button type="button" data-act="del" data-id="'+m.id+'">'+T.del+'</button>';
+      }else if(mine){
+        acts += '<button type="button" data-act="del" data-id="'+m.id+'">'+T.delmine+'</button>';
+      }
+      return '<div class="board-bubble'+(mine?' mine':'')+(hidden?' hidden-msg':'')+'" data-id="'+m.id+'">'
+        + '<div class="bm-top"><span class="bm-name">'+esc(name)+'</span>'
+        + '<span class="bm-meta">'+esc(fmtTime(m.created_at))+esc(gid)+(hidden?' · '+T.hidden:'')+'</span></div>'
+        + replyBlock
+        + '<div class="bm-body">'+esc(m.body)+'</div>'
+        + (acts ? '<div class="bm-act">'+acts+'</div>' : '')
+        + '</div>';
+    }).join('');
+    scrollBottom();
+  }
+
+  async function loadMessages(){
+    var list = $('boardList');
+    if(list && !state.rows.length) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
+    var res = await sb.from('messages')
+      .select('id,body,status,created_at,user_id,parent_id, profiles:user_id(display_name,game_id,role)')
+      .neq('status','deleted')
+      .order('created_at', { ascending: true })
+      .limit(100);
+    if(res.error){
+      // parent_id may not exist yet — fallback
+      if(String(res.error.message||'').indexOf('parent_id')>=0){
+        res = await sb.from('messages')
+          .select('id,body,status,created_at,user_id, profiles:user_id(display_name,game_id,role)')
+          .neq('status','deleted')
+          .order('created_at', { ascending: true })
+          .limit(100);
+      }
+      if(res.error){
+        if(list) list.innerHTML = '<p class="board-err">'+T.fail+esc(res.error.message)+'</p>';
+        return;
+      }
+    }
+    state.rows = (res.data||[]).map(function(m){ if(m.parent_id==null) m.parent_id=null; return m; });
+    paintMessages();
+  }
+
+  async function sendMessage(){
+    err('');
+    if(!state.user){ err(T.need_login); return; }
+    var body = (($('boardBody')||{}).value||'').trim();
+    if(!body){ err(T.need_body); return; }
+    if(body.length > 1000){ err(T.max); return; }
+    var payload = { user_id: state.user.id, body: body, status: 'visible' };
+    if(state.replyTo) payload.parent_id = state.replyTo;
+    var res = await sb.from('messages').insert(payload);
+    if(res.error){
+      if(state.replyTo && String(res.error.message||'').indexOf('parent_id')>=0){
+        delete payload.parent_id;
+        res = await sb.from('messages').insert(payload);
+      }
+      if(res.error){ err(res.error.message); return; }
+    }
+    $('boardBody').value = '';
+    clearReply();
+    await loadMessages();
+  }
+
+  async function onAct(ev){
+    var b = ev.target.closest('button[data-act]');
+    if(!b) return;
+    var id = b.getAttribute('data-id');
+    var act = b.getAttribute('data-act');
+    if(act === 'reply'){ setReply(id); return; }
+    var patch = null;
+    if(act === 'hide') patch = { status: 'hidden' };
+    if(act === 'show') patch = { status: 'visible' };
+    if(act === 'del') patch = { status: 'deleted' };
+    if(!patch) return;
+    var res = await sb.from('messages').update(patch).eq('id', id);
+    if(res.error){ err(res.error.message); return; }
+    await loadMessages();
+  }
+
+  async function saveProfile(){
+    err('');
+    if(!state.user){ err(T.need_login); return; }
+    var gid = (($('boardGameId')||{}).value||'').trim();
+    var dn = (($('boardDisplayEdit')||{}).value||'').trim();
+    var patch = { game_id: gid || null };
+    if(dn) patch.display_name = dn;
+    var res = await sb.from('profiles').update(patch).eq('id', state.user.id);
+    if(res.error){ err(res.error.message); return; }
+    await loadProfile();
+    paintAuth();
+    err('');
+    alert(T.saved);
+  }
+
+  function subscribe(){
+    try{
+      if(state.channel){ sb.removeChannel(state.channel); state.channel = null; }
+      state.channel = sb.channel('board-chat')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, function(){
+          loadMessages();
+        })
+        .subscribe(function(status){
+          setStatus(status === 'SUBSCRIBED', status === 'SUBSCRIBED' ? T.live_on : T.live_off);
+        });
+    }catch(e){
+      setStatus(false, T.live_off);
+    }
+  }
+
+  async function boot(){
+    var sess = await sb.auth.getSession();
+    state.user = sess.data && sess.data.session ? sess.data.session.user : null;
+    await loadProfile();
+    paintAuth();
+    await loadMessages();
+    subscribe();
+    sb.auth.onAuthStateChange(async function(ev, session){
+      state.user = session ? session.user : null;
+      await loadProfile();
+      paintAuth();
+      await loadMessages();
+    });
+    var send = $('boardSend'); if(send) send.onclick = sendMessage;
+    var ref = $('boardRefresh'); if(ref) ref.onclick = function(){ loadMessages(); };
+    var list = $('boardList'); if(list) list.addEventListener('click', onAct);
+    var save = $('boardSaveProfile'); if(save) save.onclick = saveProfile;
+    var ta = $('boardBody');
+    if(ta){
+      ta.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' && !e.shiftKey){
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
+
 </body>
 </html>
