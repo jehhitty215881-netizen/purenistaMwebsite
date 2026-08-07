@@ -489,6 +489,20 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .board-card .bc-desc{font-size:13px;color:var(--ink-soft);line-height:1.55}
 .board-card .bc-meta{font-size:12px;color:var(--ink-soft);margin-top:4px}
 
+
+.board-pending{margin:10px 0;padding:12px 14px;border-radius:12px;border:1.5px solid var(--gold);background:var(--gold-soft);font-size:13.5px;color:var(--ink);line-height:1.65}
+.board-pending b{color:var(--gold)}
+.board-review{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.board-review h4{font-size:14.5px;margin:0 0 8px}
+.board-review-item{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+.board-review-item:last-child{border-bottom:0}
+.board-review-item .ri-name{font-weight:800}
+.board-review-item .ri-meta{color:var(--ink-soft);font-size:12px}
+.board-review-item .ri-acts{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.board-review-item .ri-acts button{border:1.5px solid var(--line);background:var(--panel);font:inherit;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:999px;cursor:pointer}
+.board-review-item .ri-acts button.ok{background:var(--teal);border-color:var(--teal);color:#fff}
+.board-review-item .ri-acts button.no{background:#fff;color:#a33;border-color:#e0b4b4}
+
 #boardHome[hidden],#boardRoom[hidden],#boardCompose[hidden],#boardReplyHint[hidden],#boardNewWrap[hidden],#boardUser[hidden],#boardAuth[hidden],#boardErr[hidden]{display:none!important}
 .board-room-shell{border:1.5px solid var(--violet);border-radius:14px;padding:12px;background:var(--violet-soft)}
 .board-room-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
@@ -506,14 +520,6 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
 
 
-
-.sg-jump{margin-top:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:13px 15px;border-radius:15px;border:1.5px solid var(--line);background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft))}
-.sg-jump .sgj-txt{flex:1 1 190px;min-width:0}
-.sg-jump b{display:block;font-size:14.5px;font-weight:800;color:var(--ink);margin:0 0 3px}
-.sg-jump span{display:block;font-size:12px;color:var(--ink-soft);line-height:1.65}
-.sg-jump button{flex:0 0 auto;border:0;background:linear-gradient(135deg,var(--rose),var(--violet));color:#fff;font-family:inherit;font-weight:800;font-size:13.5px;padding:11px 20px;border-radius:999px;cursor:pointer;transition:.15s;letter-spacing:.02em}
-.sg-jump button:hover{opacity:.9;transform:translateY(-1px)}
-.sg-jump button:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -599,15 +605,6 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <button type="button" data-role="create">🎨 想創作</button>
     </div>
     <div class="sg-path" id="sgPath" hidden></div>
-
-    <div class="sg-jump">
-      <div class="sgj-txt">
-        <b>想直接聊聊？</b>
-        <span>到留言板跟其他玩家討論交易、配色、抽卡心得。登入後就能發言。</span>
-      </div>
-      <button type="button" data-jump="board">前往留言板 →</button>
-    </div>
-
   </div>
 
   <div class="card" id="featRank">
@@ -1571,6 +1568,13 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <div id="boardAuth" class="board-auth"></div>
     <div id="boardUser" class="board-user" hidden></div>
     <div id="boardErr" class="board-err" hidden></div>
+
+    <div id="boardPending" class="board-pending" hidden></div>
+    <div id="boardReview" class="board-review" hidden>
+      <h4>待審核註冊</h4>
+      <div id="boardReviewList"><p class="board-empty">載入中…</p></div>
+    </div>
+
 
     <div id="boardHome" class="board-home">
       <div class="board-home-head">
@@ -7886,12 +7890,15 @@ function compositionScore(opts) {
 
 
 
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
   var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
   var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
-  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功。若有開啟信箱驗證，請先去收信再登入。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "locale": "zh-TW"};
+  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功，請等待管理員審核通過後再使用聊天室。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "pending": "你的帳號尚在審核中，通過後才能進入專版發言。請稍候管理員處理。", "rejected": "你的註冊未通過審核，如有疑問請聯絡站長。", "approve": "通過", "reject": "拒絕", "no_pending": "目前沒有待審核的註冊。", "locale": "zh-TW"};
   if(!window.supabase){
     var list = document.getElementById('boardCardList');
     if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
@@ -7930,6 +7937,26 @@ function compositionScore(opts) {
     el.className = 'board-status'+(on?' on':'');
   }
   function isAdmin(){ return state.profile && state.profile.role === 'admin'; }
+  function isApproved(){
+    if(!state.profile) return false;
+    if(state.profile.role === 'admin') return true;
+    return state.profile.approval === 'approved';
+  }
+  function approvalStatus(){
+    if(!state.profile) return null;
+    if(state.profile.role === 'admin') return 'approved';
+    return state.profile.approval || 'pending';
+  }
+
+  function paintPending(){
+    var el = $('boardPending');
+    if(!el) return;
+    if(!state.user || !state.profile){ el.hidden = true; return; }
+    var st = approvalStatus();
+    if(st === 'approved'){ el.hidden = true; el.innerHTML=''; return; }
+    el.hidden = false;
+    el.innerHTML = st === 'rejected' ? ('<b>'+T.rejected+'</b>') : ('<b>'+T.pending+'</b>');
+  }
 
   function showHome(){
     state.board = null;
@@ -7940,11 +7967,15 @@ function compositionScore(opts) {
     if(home){ home.hidden = false; home.style.display = ''; }
     if(room){ room.hidden = true; room.style.display = 'none'; }
     var nw = $('boardNewWrap');
-    if(nw) nw.hidden = !isAdmin();
+    if(nw) nw.hidden = !(isAdmin() && isApproved());
     var list = $('boardList');
     if(list) list.innerHTML = '';
   }
   function showRoom(b){
+    if(!isApproved()){
+      err(T.pending);
+      return;
+    }
     state.board = b;
     clearReply();
     var home = $('boardHome'), room = $('boardRoom');
@@ -7953,7 +7984,7 @@ function compositionScore(opts) {
     var t = $('boardRoomTitle'); if(t) t.textContent = b.title || '—';
     var d = $('boardRoomDesc'); if(d) d.textContent = b.description || '';
     var compose = $('boardCompose');
-    if(compose) compose.hidden = !state.user;
+    if(compose) compose.hidden = !state.user || !isApproved();
     var list = $('boardList');
     if(list) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
     loadMessages();
@@ -7963,9 +7994,17 @@ function compositionScore(opts) {
   async function loadProfile(){
     state.profile = null;
     if(!state.user) return;
-    var res = await sb.from('profiles').select('id,display_name,role,game_id').eq('id', state.user.id).maybeSingle();
-    if(res.error){ console.warn(res.error); return; }
+    var res = await sb.from('profiles')
+      .select('id,display_name,role,game_id,approval')
+      .eq('id', state.user.id).maybeSingle();
+    if(res.error){
+      // approval column may not exist yet
+      res = await sb.from('profiles').select('id,display_name,role,game_id').eq('id', state.user.id).maybeSingle();
+      if(res.error){ console.warn(res.error); return; }
+      if(res.data) res.data.approval = 'approved';
+    }
     state.profile = res.data;
+    if(state.profile && state.profile.approval == null) state.profile.approval = 'approved';
     var gi = $('boardGameId');
     if(gi) gi.value = (state.profile && state.profile.game_id) || '';
     var dn = $('boardDisplayEdit');
@@ -7989,9 +8028,9 @@ function compositionScore(opts) {
         var lo = $('boardLogout');
         if(lo) lo.onclick = async function(){ await sb.auth.signOut(); };
       }
-      if(compose) compose.hidden = !state.board;
+      if(compose) compose.hidden = !state.board || !isApproved();
       var nw = $('boardNewWrap');
-      if(nw) nw.hidden = !isAdmin() || !!state.board;
+      if(nw) nw.hidden = !(isAdmin() && isApproved()) || !!state.board;
     }else{
       box.hidden = false;
       if(userBox) userBox.hidden = true;
@@ -8012,6 +8051,8 @@ function compositionScore(opts) {
       $('boardLogin').onclick = doLogin;
       $('boardSignup').onclick = doSignup;
     }
+    paintPending();
+    loadReview();
   }
 
   async function doLogin(){
@@ -8031,9 +8072,48 @@ function compositionScore(opts) {
       options: { data: { display_name: display || undefined } }
     });
     if(res.error){ err(res.error.message); return; }
-    if(res.data && res.data.user && !res.data.session){
-      err(T.signup_ok);
+    err(T.signup_ok);
+  }
+
+  async function loadReview(){
+    var wrap = $('boardReview'), list = $('boardReviewList');
+    if(!wrap || !list) return;
+    if(!isAdmin()){ wrap.hidden = true; return; }
+    wrap.hidden = false;
+    list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
+    var res = await sb.from('profiles')
+      .select('id,display_name,approval,game_id,created_at')
+      .eq('approval','pending')
+      .order('created_at', { ascending: true });
+    if(res.error){
+      list.innerHTML = '<p class="board-err">'+T.fail+esc(res.error.message)+'</p>';
+      return;
     }
+    var rows = res.data || [];
+    if(!rows.length){
+      list.innerHTML = '<p class="board-empty">'+T.no_pending+'</p>';
+      return;
+    }
+    list.innerHTML = rows.map(function(r){
+      return '<div class="board-review-item" data-uid="'+r.id+'">'
+        + '<span class="ri-name">'+esc(r.display_name||T.user)+'</span>'
+        + '<span class="ri-meta">'+esc(fmtTime(r.created_at))+(r.game_id?' · '+esc(r.game_id):'')+'</span>'
+        + '<span class="ri-acts">'
+        + '<button type="button" class="ok" data-act="approve" data-uid="'+r.id+'">'+T.approve+'</button>'
+        + '<button type="button" class="no" data-act="reject" data-uid="'+r.id+'">'+T.reject+'</button>'
+        + '</span></div>';
+    }).join('');
+  }
+
+  async function onReview(ev){
+    var b = ev.target.closest('button[data-act]');
+    if(!b) return;
+    var uid = b.getAttribute('data-uid');
+    var act = b.getAttribute('data-act');
+    var approval = act === 'approve' ? 'approved' : 'rejected';
+    var res = await sb.from('profiles').update({ approval: approval }).eq('id', uid);
+    if(res.error){ err(res.error.message); return; }
+    await loadReview();
   }
 
   async function loadBoards(){
@@ -8052,7 +8132,6 @@ function compositionScore(opts) {
       if(list) list.innerHTML = '<p class="board-empty">'+T.empty_boards+'</p>';
       return;
     }
-    // optional message counts
     var counts = {};
     try{
       var mc = await sb.from('messages').select('board_id').not('board_id','is',null).neq('status','deleted');
@@ -8079,9 +8158,7 @@ function compositionScore(opts) {
     var desc = (($('boardNewDesc')||{}).value||'').trim();
     if(!title){ err(T.need_title); return; }
     var res = await sb.from('chat_boards').insert({
-      title: title,
-      description: desc || null,
-      created_by: state.user.id
+      title: title, description: desc || null, created_by: state.user.id
     });
     if(res.error){ err(res.error.message); return; }
     if($('boardNewTitle')) $('boardNewTitle').value = '';
@@ -8136,7 +8213,7 @@ function compositionScore(opts) {
         replyBlock = '<div class="bm-replyto">'+esc(pn)+': '+esc(pb)+'</div>';
       }
       var acts = '';
-      if(state.user) acts += '<button type="button" data-act="reply" data-id="'+m.id+'">'+T.reply+'</button>';
+      if(state.user && isApproved()) acts += '<button type="button" data-act="reply" data-id="'+m.id+'">'+T.reply+'</button>';
       if(admin){
         if(hidden) acts += '<button type="button" data-act="show" data-id="'+m.id+'">'+T.show+'</button>';
         else acts += '<button type="button" data-act="hide" data-id="'+m.id+'">'+T.hide+'</button>';
@@ -8159,13 +8236,12 @@ function compositionScore(opts) {
     var list = $('boardList');
     if(!state.board){ if(list) list.innerHTML=''; return; }
     if(list) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
-    var q = sb.from('messages')
+    var res = await sb.from('messages')
       .select('id,body,status,created_at,user_id,parent_id,board_id, profiles:user_id(display_name,game_id,role)')
       .eq('board_id', state.board.id)
       .neq('status','deleted')
       .order('created_at', { ascending: true })
       .limit(150);
-    var res = await q;
     if(res.error){
       if(list) list.innerHTML = '<p class="board-err">'+T.fail+esc(res.error.message)+'</p>';
       return;
@@ -8177,15 +8253,13 @@ function compositionScore(opts) {
   async function sendMessage(){
     err('');
     if(!state.user){ err(T.need_login); return; }
-    if(!state.board){ return; }
+    if(!isApproved()){ err(T.pending); return; }
+    if(!state.board) return;
     var body = (($('boardBody')||{}).value||'').trim();
     if(!body){ err(T.need_body); return; }
     if(body.length > 1000){ err(T.max); return; }
     var payload = {
-      user_id: state.user.id,
-      body: body,
-      status: 'visible',
-      board_id: state.board.id
+      user_id: state.user.id, body: body, status: 'visible', board_id: state.board.id
     };
     if(state.replyTo) payload.parent_id = state.replyTo;
     var res = await sb.from('messages').insert(payload);
@@ -8227,9 +8301,7 @@ function compositionScore(opts) {
   }
 
   function unsub(){
-    try{
-      if(state.channel){ sb.removeChannel(state.channel); state.channel = null; }
-    }catch(e){}
+    try{ if(state.channel){ sb.removeChannel(state.channel); state.channel = null; } }catch(e){}
     setStatus(false, T.live_off);
   }
   function subscribe(){
@@ -8245,9 +8317,7 @@ function compositionScore(opts) {
         .subscribe(function(status){
           setStatus(status === 'SUBSCRIBED', status === 'SUBSCRIBED' ? T.live_on : T.live_off);
         });
-    }catch(e){
-      setStatus(false, T.live_off);
-    }
+    }catch(e){ setStatus(false, T.live_off); }
   }
 
   async function boot(){
@@ -8261,14 +8331,13 @@ function compositionScore(opts) {
       state.user = session ? session.user : null;
       await loadProfile();
       paintAuth();
-      if(state.board){
+      if(state.board && isApproved()){
         var compose = $('boardCompose');
         if(compose) compose.hidden = !state.user;
-      }else{
-        var nw = $('boardNewWrap');
-        if(nw) nw.hidden = !isAdmin();
+        await loadMessages();
+      }else if(state.board && !isApproved()){
+        showHome();
       }
-      if(state.board) await loadMessages();
     });
     var send = $('boardSend'); if(send) send.onclick = sendMessage;
     var ref = $('boardRefresh'); if(ref) ref.onclick = function(){ loadMessages(); };
@@ -8277,10 +8346,12 @@ function compositionScore(opts) {
     var save = $('boardSaveProfile'); if(save) save.onclick = saveProfile;
     var back = $('boardBack'); if(back) back.onclick = function(){ showHome(); loadBoards(); };
     var create = $('boardNewCreate'); if(create) create.onclick = createBoard;
+    var rev = $('boardReviewList'); if(rev) rev.addEventListener('click', onReview);
     var cards = $('boardCardList');
     if(cards) cards.addEventListener('click', function(e){
       var btn = e.target.closest('[data-bid]');
       if(!btn) return;
+      if(!isApproved()){ err(T.pending); paintPending(); return; }
       var id = btn.getAttribute('data-bid');
       var b = null;
       for(var i=0;i<state.boards.length;i++) if(String(state.boards[i].id)===String(id)) b = state.boards[i];
@@ -8289,30 +8360,12 @@ function compositionScore(opts) {
     var ta = $('boardBody');
     if(ta){
       ta.addEventListener('keydown', function(e){
-        if(e.key === 'Enter' && !e.shiftKey){
-          e.preventDefault();
-          sendMessage();
-        }
+        if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
       });
     }
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
-})();
-
-/* ---------- home → board shortcut ----------
-   The nav's own listener only binds to `nav button[data-tab]`, so a jump button
-   living inside a card needs its own delegated handler. Uses data-jump so it can
-   never be mistaken for a real nav button. */
-(function(){
-  document.addEventListener('click', function(e){
-    var b = e.target.closest('[data-jump]');
-    if(!b) return;
-    if(typeof goTab === 'function'){
-      goTab(b.getAttribute('data-jump'));
-      window.scrollTo({ top:0, behavior:'smooth' });
-    }
-  });
 })();
 </script>
 
