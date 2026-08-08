@@ -8160,8 +8160,16 @@ function compositionScore(opts) {
         return { text: text, colors: null };
       }
       if(key === 'color'){
-        var colors = [randHex(), randHex(), randHex(), randHex()];
-        var text = '配色靈感\n'+colors.join(' · ');
+        // 1~4 色隨機：色數本身也是抽出來的，單色和四色都可能出現
+        var n = 1 + Math.floor(Math.random() * 4);
+        var colors = [];
+        while(colors.length < n){
+          var c = randHex();
+          if(colors.indexOf(c) === -1) colors.push(c);   // 避免抽到重複色
+        }
+        var zhC = (T.locale||'').indexOf('zh') === 0;
+        var head = zhC ? ('配色靈感（'+n+' 色）') : ('Palette ('+n+')');
+        var text = head+'\n'+colors.join(' · ');
         return { text: text, colors: colors };
       }
       if(key === 'naming'){
