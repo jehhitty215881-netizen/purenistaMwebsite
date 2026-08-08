@@ -726,13 +726,14 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <button data-tab="calc">快速換算</button>
   <button data-tab="ratio">交換比例</button>
   <button data-tab="market">彩虹市集</button>
+  <button data-tab="trade">交易心法</button>
   <span class="navgrp">課金</span>
   <button data-tab="pull">抽卡花費</button>
   <button data-tab="vip">儲值・VIP</button>
-  <span class="navgrp">資料</span>
+  <span class="navgrp">品牌</span>
   <button data-tab="brand">品牌染色</button>
   <button data-tab="branddata">品牌資料</button>
-  <button data-tab="trade">交易心法</button>
+  <button data-tab="lore">科普</button>
   <button data-tab="sched">排期預測</button>
   <span class="navgrp">靈感</span>
   <button data-tab="colorinspire">靈感庫</button>
@@ -748,7 +749,6 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <button data-tab="gallery">創作分享</button>
   <span class="navgrp">學習</span>
   <button data-tab="aes">美學專欄</button>
-  <button data-tab="lore">科普</button>
   <button data-tab="qa">QA</button>
   <span class="navgrp">關於</span>
   <button data-tab="board">留言板</button>
@@ -1882,6 +1882,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>原本五條路徑加起來只涵蓋站上 18 個分頁，特殊符號、色碼轉換、科普、留言板、意見專欄、備註、更新紀錄這些從來不會被推薦到。現在<b>除了智能導覽本身，每個分頁都至少出現在一條路徑裡</b>。</li>
         <li>創作相關拆成兩條，因為它們其實是兩個不同的時刻：<b>創作路徑</b>（創作動線 → 靈感庫 → 創作挑戰 → 角色隨機生成 → 美學專欄 → 作品健檢）處理從沒方向到畫完；<b>發布路徑</b>（色票工具 → 色碼轉換 → 命名與標籤 → 特殊符號 → 創作分享）處理畫完之後的整理與分享。硬塞成一條會變成十一步，那就不是路徑而是清單了。</li>
         <li>順帶修好上一次改動時不小心從創作路徑漏掉的<b>美學專欄</b>。</li>
+        <li><b>品牌路徑</b>也修正了：原本裡面有靈感庫與作品健檢，但這條路是純粹在查資料，創作工具放進來並不合理。改成染色成本 → 品牌資料 → 科普 → 排期預測，四項都是「決定要不要入手」需要的資訊。科普整個在講品牌命名的由來，本來就該收在這裡。</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>調整：配色靈感房</b></p>
       <ul class="tips">
@@ -1895,6 +1896,12 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <p class="cond" style="margin:12px 0 4px"><b>調整：註冊審核說明</b></p>
       <ul class="tips">
         <li>註冊表單下方、註冊成功的提示、以及待審核橫幅三個地方，都會說明需要通過審核才能發言，並附上聯絡方式。之前註冊完只會看到「等待審核」，卻沒說要找誰。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>修正：兩個分頁被歸在錯的分組</b></p>
+      <ul class="tips">
+        <li><b>交易心法</b>原本在「資料」組，但它整篇在講交易時該注意什麼，屬於交易而不是查資料，已移到「交易」組。</li>
+        <li><b>科普</b>原本在「學習」組，但它的內容全是品牌命名的由來（deux 是法文「二」、原色取自法文單字那些），是品牌資料的一部分，已移到品牌組。「資料」組因此更名為<b>品牌</b>，四個分頁全是品牌相關。</li>
+        <li>「學習」組剩下美學專欄與 QA，兩者都是不綁特定品牌的通用內容。</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>修正：英文版的功能名稱有三處對不上</b></p>
       <ul class="tips">
@@ -2950,8 +2957,8 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     },
     brand:{
       title:'品牌路徑',
-      blurb:'染色成本與品牌資料先查清楚，再對排期與靈感庫，做決定比較踏實。',
-      steps:['brand','branddata','sched','colorinspire','check']
+      blurb:'純粹是查資料的一條路：染色成本、品牌資料、命名由來、什麼時候會出，四個湊齊再決定要不要入手。',
+      steps:['brand','branddata','lore','sched']
     },
     create:{
       title:'創作路徑',

@@ -721,13 +721,14 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <button data-tab="calc">Quick Calc</button>
   <button data-tab="ratio">Trade Ratios</button>
   <button data-tab="market">Rainbow Market</button>
+  <button data-tab="trade">Trade Smarts</button>
   <span class="navgrp">Spending</span>
   <button data-tab="pull">Pull Costs</button>
   <button data-tab="vip">Top-up & VIP</button>
-  <span class="navgrp">Reference</span>
+  <span class="navgrp">Brands</span>
   <button data-tab="brand">BRAND Dyeing</button>
   <button data-tab="branddata">Brand data</button>
-  <button data-tab="trade">Trade Smarts</button>
+  <button data-tab="lore">Trivia</button>
   <button data-tab="sched">Schedule</button>
   <span class="navgrp">Ideas</span>
   <button data-tab="colorinspire">Idea bank</button>
@@ -743,7 +744,6 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <button data-tab="gallery">Shared work</button>
   <span class="navgrp">Learn</span>
   <button data-tab="aes">Aesthetics</button>
-  <button data-tab="lore">Trivia</button>
   <button data-tab="qa">Q&amp;A</button>
   <span class="navgrp">About</span>
   <button data-tab="board">Board</button>
@@ -1877,6 +1877,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>The original five paths only ever reached 18 of the site's tabs — Symbols, Colour convert, Trivia, Board, Feedback, Notes and Changelog were never recommended by any of them. Now <b>every tab except the guide itself appears in at least one path</b>.</li>
         <li>The creative side is split in two, because it covers two different moments: the <b>Creating path</b> (Workflow → Idea bank → Challenges → Character generator → Aesthetics → Art check) takes you from no direction to a finished piece, and the <b>Publishing path</b> (Swatches → Colour convert → Naming → Symbols → Shared work) handles what happens afterwards. Forcing them into one route would have made an eleven-step list, which is not a path.</li>
         <li>This also restores <b>Aesthetics</b>, which was accidentally dropped from the creating path in the previous change.</li>
+        <li>The <b>brand path</b> was corrected too: it used to include the idea bank and art check, but that route is purely about looking things up, so creative tools did not belong there. It is now dye cost → brand data → naming trivia → schedule, all four being what you need in order to decide whether to buy. The trivia column is entirely about where brand names come from, so it belonged here all along.</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>Changed: colour inspiration room</b></p>
       <ul class="tips">
@@ -1890,6 +1891,12 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <p class="cond" style="margin:12px 0 4px"><b>Changed: approval notice on sign-up</b></p>
       <ul class="tips">
         <li>The sign-up form, the post-registration confirmation and the pending banner all now explain that approval is required before posting, and who to contact. Previously registration ended with "awaiting approval" and no indication of whom to ask.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Fixed: two tabs filed under the wrong group</b></p>
+      <ul class="tips">
+        <li><b>Trade Smarts</b> sat under "Reference", but the whole page is about what to watch for when trading, which makes it trading rather than reference. It has moved to the Trading group.</li>
+        <li><b>Trivia</b> sat under "Learn", but its content is entirely about where brand names come from (deux being French for "two", the original colours taken from French words, and so on), which makes it part of the brand material. It has moved across, and the group is renamed <b>Brands</b> now that all four tabs in it are brand-related.</li>
+        <li>"Learn" keeps Aesthetics and Q&A, both of which are general and not tied to any particular brand.</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>Fixed: three feature names out of step in the English version</b></p>
       <ul class="tips">
@@ -2947,8 +2954,8 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     },
     brand:{
       title:'Brand path',
-      blurb:'Check dye cost and brand data, then schedule and the idea bank before you decide.',
-      steps:['brand','branddata','sched','colorinspire','check']
+      blurb:'Purely a reference route: dye cost, brand data, the story behind the names, and when things come out — check all four before deciding.',
+      steps:['brand','branddata','lore','sched']
     },
     create:{
       title:'Creating path',
