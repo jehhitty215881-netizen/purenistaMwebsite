@@ -58,7 +58,23 @@ nav{display:flex;gap:8px;margin:22px -16px 18px;padding:10px 16px;position:stick
 }
 nav::-webkit-scrollbar{display:none}
 nav button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;cursor:pointer;transition:.2s;white-space:nowrap}
-nav .navgrp{flex:0 0 auto;display:flex;align-items:center;padding:0 4px 0 10px;font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;white-space:nowrap;opacity:.75}nav .navgrp:first-child{padding-left:0}nav .navgrp::after{content:'';display:block;width:1px;height:15px;margin-left:10px;background:var(--line)}.nav-select-grp{border-radius:12px}.nav-select-grp+.nav-select-grp{margin-top:2px}.nav-select-head{display:flex;align-items:center;gap:8px;width:100%;padding:13px 12px;background:transparent;border:0;border-radius:12px;font-family:inherit;font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--violet);text-transform:uppercase;text-align:left;cursor:pointer}.nav-select-head:active{background:var(--violet-soft)}.nav-select-head:focus-visible{outline:3px solid var(--violet);outline-offset:-2px}.nav-select-head .t{flex:1 1 auto}.nav-select-head .n{flex:0 0 auto;font-size:11px;font-weight:700;letter-spacing:0;color:var(--ink-soft);opacity:.75}.nav-select-head .gchev{width:14px;height:14px;flex:0 0 auto;color:var(--ink-soft);transition:transform .2s ease}.nav-select-grp.has-on>.nav-select-head{color:var(--rose)}.nav-select-grp.has-on>.nav-select-head .t::after{content:"";display:inline-block;width:6px;height:6px;margin-left:7px;border-radius:50%;background:var(--rose);vertical-align:middle}.nav-select-grp.open>.nav-select-head .gchev{transform:rotate(180deg)}.nav-select-list{max-height:0;overflow:hidden;transition:max-height .22s ease}.nav-select-grp.open>.nav-select-list{max-height:560px}.nav-select-list .nav-select-opt{margin-left:6px}nav button.on{background:var(--ink);border-color:var(--ink);color:#fff}.navlang{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;text-decoration:none;border:1.5px solid var(--violet);background:var(--panel);color:var(--violet);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap;transition:.2s}.navlang:hover,.navlang:focus-visible{background:var(--violet);color:#fff}.navlang:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
+nav .navgrp{flex:0 0 auto;display:flex;align-items:center;padding:0 4px 0 10px;font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;white-space:nowrap;opacity:.75}nav .navgrp:first-child{padding-left:0}nav .navgrp::after{content:'';display:block;width:1px;height:15px;margin-left:10px;background:var(--line)}.nav-select-grp{border-radius:12px}.nav-select-grp+.nav-select-grp{margin-top:2px}.nav-select-head{display:flex;align-items:center;gap:8px;width:100%;padding:13px 12px;background:transparent;border:0;border-radius:12px;font-family:inherit;font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--violet);text-transform:uppercase;text-align:left;cursor:pointer}.nav-select-head:active{background:var(--violet-soft)}.nav-select-head:focus-visible{outline:3px solid var(--violet);outline-offset:-2px}.nav-select-head .t{flex:1 1 auto}.nav-select-head .n{flex:0 0 auto;font-size:11px;font-weight:700;letter-spacing:0;color:var(--ink-soft);opacity:.75}.nav-select-head .gchev{width:14px;height:14px;flex:0 0 auto;color:var(--ink-soft);transition:transform .2s ease}.nav-select-grp.has-on>.nav-select-head{color:var(--rose)}.nav-select-grp.has-on>.nav-select-head .t::after{content:"";display:inline-block;width:6px;height:6px;margin-left:7px;border-radius:50%;background:var(--rose);vertical-align:middle}.nav-select-grp.open>.nav-select-head .gchev{transform:rotate(180deg)}.nav-select-list{max-height:0;overflow:hidden;transition:max-height .22s ease}.nav-select-grp.open>.nav-select-list{max-height:560px}.nav-select-list .nav-select-opt{margin-left:6px}nav button.on{background:var(--ink);border-color:var(--ink);color:#fff}.to-guide{position:fixed;right:16px;bottom:16px;z-index:18;display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--violet);background:var(--panel);color:var(--violet);font-family:inherit;font-weight:800;font-size:13px;padding:10px 16px;border-radius:999px;cursor:pointer;box-shadow:0 4px 14px rgba(42,33,56,.18);transition:opacity .18s ease,transform .18s ease}
+.to-guide[hidden]{display:none}
+.to-guide:hover,.to-guide:focus-visible{background:var(--violet);color:#fff}
+.to-guide:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
+.to-guide:active{transform:translateY(1px)}
+.to-guide .tg-ico{font-size:14px;line-height:1}
+.to-guide-bar{position:fixed;right:16px;bottom:16px;z-index:18;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;max-width:calc(100vw - 32px)}
+.to-guide-bar[hidden]{display:none}
+.to-guide-bar .to-guide{position:static;right:auto;bottom:auto;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.to-next{background:linear-gradient(135deg,var(--violet),var(--rose));border-color:transparent;color:#fff}
+.to-next:hover,.to-next:focus-visible{background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;filter:brightness(1.06)}
+@media(max-width:480px){.to-guide-bar{right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));gap:6px}}
+@media(max-width:480px){
+  .to-guide{right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));padding:9px 14px;font-size:12.5px}
+}
+@media(prefers-reduced-motion:reduce){.to-guide{transition:none}}
+.navlang{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;text-decoration:none;border:1.5px solid var(--violet);background:var(--panel);color:var(--violet);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap;transition:.2s}.navlang:hover,.navlang:focus-visible{background:var(--violet);color:#fff}.navlang:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
 nav button:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
 section{display:none}
 section.show{display:block;animation:fade .25s ease}
@@ -752,6 +768,13 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <button data-tab="changelog">Changelog</button>
   <a class="navlang" href="index.html">🌐 中文</a>
 </nav>
+
+<div class="to-guide-bar" id="toGuideBar" hidden>
+  <button type="button" id="toGuide" class="to-guide" aria-label="Back to the smart guide">
+    <span class="tg-ico" aria-hidden="true">←</span>Smart guide
+  </button>
+  <button type="button" id="toNext" class="to-guide to-next" hidden></button>
+</div>
 
 <!-- ================= Quick Calc ================= -->
 
@@ -1865,6 +1888,11 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>Anyone who would rather not see it can switch it off above the list, and that preference is remembered on their device. How far you have read is also stored only in your own browser, never in the database — nobody else can see what you have read, and there are no read receipts.</li>
         <li>Details: your own messages never count as unread; a first visit does not dump dozens of unread onto you but starts counting from that moment; and opening a room clears its badge.</li>
       </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Added: a button back to the smart guide</b></p>
+      <ul class="tips">
+        <li>Once you leave the smart guide, a floating <b>"↑ Smart guide"</b> button appears in the bottom-right corner to take you straight back. On a phone the menu has to be scrolled a long way sideways to reach the first tab, and this skips that.</li>
+        <li>It stays hidden on the guide itself, so there is never a button pointing at the page you are already on. It sits clear of the phone's home indicator and never covers a dialog.</li>
+      </ul>
       <p class="cond" style="margin:12px 0 4px"><b>Changed: creative tabs regrouped</b></p>
       <ul class="tips">
         <li>The "Create" group had grown to seven tabs with overlapping purposes, making it hard to tell where to start. They are now grouped by which stage you are at: <b>Ideas</b> (Idea bank, Challenges, Character generator), <b>Making</b> (Swatches, Colour convert, Naming, Symbols) and <b>Finished</b> (Art check, Shared work). "Workflow" moved up to the Guide group alongside the smart guide, since both answer the same question — where do I begin.</li>
@@ -1878,6 +1906,12 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>The creative side is split in two, because it covers two different moments: the <b>Creating path</b> (Workflow → Idea bank → Challenges → Character generator → Aesthetics → Art check) takes you from no direction to a finished piece, and the <b>Publishing path</b> (Swatches → Colour convert → Naming → Symbols → Shared work) handles what happens afterwards. Forcing them into one route would have made an eleven-step list, which is not a path.</li>
         <li>This also restores <b>Aesthetics</b>, which was accidentally dropped from the creating path in the previous change.</li>
         <li>The <b>brand path</b> was corrected too: it used to include the idea bank and art check, but that route is purely about looking things up, so creative tools did not belong there. It is now dye cost → brand data → naming trivia → schedule, all four being what you need in order to decide whether to buy. The trivia column is entirely about where brand names come from, so it belonged here all along.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Changed: following a path no longer means going back to the guide each time</b></p>
+      <ul class="tips">
+        <li>There was already a button in the bottom-right corner for returning to the smart guide, but it used an "↑" that reads as scroll-to-top, and its outlined style made it easy to dismiss as decoration. The icon is now "←"; position and size are unchanged.</li>
+        <li>The more practical problem: while following a path, the place you actually want is the <b>next stop</b>, not the guide. That used to take three taps — back to the guide, find the path again, pick the next one. Now, whenever the current tab sits on your chosen path, a second button appears reading <b>"Next: ... →"</b> and goes straight there.</li>
+        <li>Details: it disappears at the final stop, only the return button shows on tabs outside the path, and switching to a different path retargets it automatically.</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>Changed: colour inspiration room</b></p>
       <ul class="tips">
@@ -1924,7 +1958,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>All of these checks now run in the database itself. Permission columns cannot be altered by the account they belong to, messages can only be self-deleted rather than edited or un-hidden, room fields are locked to non-admins, and the hand-over rules (only the current player may pass, and only to someone who joined the queue) are enforced there too.</li>
         <li>The turn queue table has also been created properly — the original statement never ran successfully, which is why the panel always showed zero players in the queue.</li>
       </ul>
-      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. This release passes 129 automated tests: 14 for live board updates, 15 for unread badges, 15 for the smart guide and ranking, 14 for path coverage, 28 for the permission hardening, and 27 database plus 16 front-end tests for shared work. The permission tests run against a real local database as four different kinds of account; the coverage tests assert that every tab is reachable from at least one path, so this release's omission cannot recur unnoticed.</p>
+      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. This release passes 143 automated tests: 14 for live board updates, 15 for unread badges, 15 for the smart guide and ranking, 7 for path coverage, 14 for the return and next-stop bar, 28 for the permission hardening, and 27 database plus 23 front-end tests for shared work. The permission tests run against a real local database as four different kinds of account; the coverage tests assert that every tab is reachable from at least one path, so this release's omission cannot recur unnoticed.</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.5 <span class="chg-build">removed leftovers pointing at an external service</span></div>
@@ -2821,9 +2855,42 @@ function goTab(name){
   if(window.__navSelectSync)window.__navSelectSync(name);
   if(name==="aes")hydrateShownAet();
   if(name==="lore"||name==="branddata"||name==="feedback")__lzNeed("sec-"+name);
+  syncGuideBtn(name);
   window.scrollTo({top:0,behavior:"smooth"});
 }
+/* Only shown once you have left the guide, so the guide never carries a button
+   back to itself. If the current tab sits on the chosen path, a second button
+   jumps straight to the next stop. */
+function syncGuideBtn(name){
+  const bar=document.getElementById("toGuideBar");
+  if(bar)bar.hidden=(name==="home");
+  const nx=document.getElementById("toNext");
+  if(!nx)return;
+  let info=null;
+  if(name!=="home"&&window.__pmNextStop){
+    try{ info=window.__pmNextStop(name); }catch(e){ info=null; }
+  }
+  if(info){
+    nx.hidden=false;
+    nx.textContent="Next: "+info.label+" →";
+    nx.setAttribute("data-go",info.id);
+  }else{
+    nx.hidden=true;
+    nx.removeAttribute("data-go");
+  }
+}
 tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
+(function(){
+  const b=document.getElementById("toGuide");
+  if(b)b.addEventListener("click",()=>goTab("home"));
+  const nx=document.getElementById("toNext");
+  if(nx)nx.addEventListener("click",function(){
+    const id=nx.getAttribute("data-go");
+    if(id)goTab(id);
+  });
+  const cur=document.querySelector("nav button[data-tab].on");
+  syncGuideBtn(cur?cur.dataset.tab:"home");
+})();
 
 /* ---------- custom mobile nav dropdown (replaces native <select>) ---------- */
 (function(){
@@ -3040,6 +3107,19 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     bumpGlobal(name);
   }
   window.__pmFeatBump=bump;
+
+  /* When following a path, the tab people actually want next is the next stop,
+     not the guide itself. This reports the stop after the current tab on the
+     chosen path so the floating bar can jump straight there. */
+  window.__pmNextStop=function(tab){
+    var role=null;
+    try{ role=localStorage.getItem('pm_sg_role'); }catch(e){}
+    if(!role||!PATHS[role])return null;
+    var st=PATHS[role].steps, i=st.indexOf(tab);
+    if(i<0||i>=st.length-1)return null;
+    var id=st[i+1];
+    return LABELS[id]?{id:id,label:LABELS[id]}:null;
+  };
 
   function workerMode(){
     return !!(GLOBAL_RANK_ENDPOINT && String(GLOBAL_RANK_ENDPOINT).indexOf('http')===0);

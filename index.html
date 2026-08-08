@@ -58,7 +58,23 @@ nav{display:flex;gap:8px;margin:22px -16px 18px;padding:10px 16px;position:stick
 }
 nav::-webkit-scrollbar{display:none}
 nav button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;cursor:pointer;transition:.2s;white-space:nowrap}
-nav .navgrp{flex:0 0 auto;display:flex;align-items:center;padding:0 4px 0 10px;font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;white-space:nowrap;opacity:.75}nav .navgrp:first-child{padding-left:0}nav .navgrp::after{content:'';display:block;width:1px;height:15px;margin-left:10px;background:var(--line)}.nav-select-grp{border-radius:12px}.nav-select-grp+.nav-select-grp{margin-top:2px}.nav-select-head{display:flex;align-items:center;gap:8px;width:100%;padding:13px 12px;background:transparent;border:0;border-radius:12px;font-family:inherit;font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--violet);text-transform:uppercase;text-align:left;cursor:pointer}.nav-select-head:active{background:var(--violet-soft)}.nav-select-head:focus-visible{outline:3px solid var(--violet);outline-offset:-2px}.nav-select-head .t{flex:1 1 auto}.nav-select-head .n{flex:0 0 auto;font-size:11px;font-weight:700;letter-spacing:0;color:var(--ink-soft);opacity:.75}.nav-select-head .gchev{width:14px;height:14px;flex:0 0 auto;color:var(--ink-soft);transition:transform .2s ease}.nav-select-grp.has-on>.nav-select-head{color:var(--rose)}.nav-select-grp.has-on>.nav-select-head .t::after{content:"";display:inline-block;width:6px;height:6px;margin-left:7px;border-radius:50%;background:var(--rose);vertical-align:middle}.nav-select-grp.open>.nav-select-head .gchev{transform:rotate(180deg)}.nav-select-list{max-height:0;overflow:hidden;transition:max-height .22s ease}.nav-select-grp.open>.nav-select-list{max-height:560px}.nav-select-list .nav-select-opt{margin-left:6px}nav button.on{background:var(--ink);border-color:var(--ink);color:#fff}.navlang{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;text-decoration:none;border:1.5px solid var(--violet);background:var(--panel);color:var(--violet);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap;transition:.2s}.navlang:hover,.navlang:focus-visible{background:var(--violet);color:#fff}.navlang:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
+nav .navgrp{flex:0 0 auto;display:flex;align-items:center;padding:0 4px 0 10px;font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;white-space:nowrap;opacity:.75}nav .navgrp:first-child{padding-left:0}nav .navgrp::after{content:'';display:block;width:1px;height:15px;margin-left:10px;background:var(--line)}.nav-select-grp{border-radius:12px}.nav-select-grp+.nav-select-grp{margin-top:2px}.nav-select-head{display:flex;align-items:center;gap:8px;width:100%;padding:13px 12px;background:transparent;border:0;border-radius:12px;font-family:inherit;font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--violet);text-transform:uppercase;text-align:left;cursor:pointer}.nav-select-head:active{background:var(--violet-soft)}.nav-select-head:focus-visible{outline:3px solid var(--violet);outline-offset:-2px}.nav-select-head .t{flex:1 1 auto}.nav-select-head .n{flex:0 0 auto;font-size:11px;font-weight:700;letter-spacing:0;color:var(--ink-soft);opacity:.75}.nav-select-head .gchev{width:14px;height:14px;flex:0 0 auto;color:var(--ink-soft);transition:transform .2s ease}.nav-select-grp.has-on>.nav-select-head{color:var(--rose)}.nav-select-grp.has-on>.nav-select-head .t::after{content:"";display:inline-block;width:6px;height:6px;margin-left:7px;border-radius:50%;background:var(--rose);vertical-align:middle}.nav-select-grp.open>.nav-select-head .gchev{transform:rotate(180deg)}.nav-select-list{max-height:0;overflow:hidden;transition:max-height .22s ease}.nav-select-grp.open>.nav-select-list{max-height:560px}.nav-select-list .nav-select-opt{margin-left:6px}nav button.on{background:var(--ink);border-color:var(--ink);color:#fff}.to-guide{position:fixed;right:16px;bottom:16px;z-index:18;display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--violet);background:var(--panel);color:var(--violet);font-family:inherit;font-weight:800;font-size:13px;padding:10px 16px;border-radius:999px;cursor:pointer;box-shadow:0 4px 14px rgba(42,33,56,.18);transition:opacity .18s ease,transform .18s ease}
+.to-guide[hidden]{display:none}
+.to-guide:hover,.to-guide:focus-visible{background:var(--violet);color:#fff}
+.to-guide:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
+.to-guide:active{transform:translateY(1px)}
+.to-guide .tg-ico{font-size:14px;line-height:1}
+.to-guide-bar{position:fixed;right:16px;bottom:16px;z-index:18;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;max-width:calc(100vw - 32px)}
+.to-guide-bar[hidden]{display:none}
+.to-guide-bar .to-guide{position:static;right:auto;bottom:auto;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.to-next{background:linear-gradient(135deg,var(--violet),var(--rose));border-color:transparent;color:#fff}
+.to-next:hover,.to-next:focus-visible{background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;filter:brightness(1.06)}
+@media(max-width:480px){.to-guide-bar{right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));gap:6px}}
+@media(max-width:480px){
+  .to-guide{right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));padding:9px 14px;font-size:12.5px}
+}
+@media(prefers-reduced-motion:reduce){.to-guide{transition:none}}
+.navlang{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;text-decoration:none;border:1.5px solid var(--violet);background:var(--panel);color:var(--violet);font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap;transition:.2s}.navlang:hover,.navlang:focus-visible{background:var(--violet);color:#fff}.navlang:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
 nav button:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
 section{display:none}
 section.show{display:block;animation:fade .25s ease}
@@ -757,6 +773,13 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <button data-tab="changelog">更新紀錄</button>
   <a class="navlang" href="en.html">🌐 English</a>
 </nav>
+
+<div class="to-guide-bar" id="toGuideBar" hidden>
+  <button type="button" id="toGuide" class="to-guide" aria-label="回到智能導覽">
+    <span class="tg-ico" aria-hidden="true">←</span>智能導覽
+  </button>
+  <button type="button" id="toNext" class="to-guide to-next" hidden></button>
+</div>
 
 <!-- ================= 快速換算 ================= -->
 
@@ -1870,6 +1893,11 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>不想看的人可以在列表上方直接關掉，設定記在自己的裝置上。「讀到哪裡」也只存在瀏覽器本機，不會寫進資料庫——別人看不到你讀了什麼，也不會有已讀回條那種壓力。</li>
         <li>幾個細節：自己發的訊息不算未讀；第一次進站不會突然跳出幾十則未讀，而是從那一刻開始計算；進到房間就自動清掉。</li>
       </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>新增：回到智能導覽的按鈕</b></p>
+      <ul class="tips">
+        <li>離開智能導覽後，畫面右下角會出現一顆<b>「↑ 智能導覽」</b>浮動按鈕，一鍵回去。手機上導覽列要橫向捲很久才找得到第一個分頁，這顆省掉那段。</li>
+        <li>在智能導覽本頁不會出現，免得放一顆回自己的按鈕。位置避開手機底部的home 指示線，也不會蓋住彈出視窗。</li>
+      </ul>
       <p class="cond" style="margin:12px 0 4px"><b>調整：創作相關分頁重新分組</b></p>
       <ul class="tips">
         <li>原本「創作」一組塞了七個分頁，彼此定位重疊，不容易一眼看出該從哪個開始。改成照創作進行到哪一步來分：<b>靈感</b>（靈感庫、創作挑戰、角色隨機生成）、<b>動手</b>（色票工具、色碼轉換、命名與標籤、特殊符號）、<b>完成後</b>（作品健檢、創作分享）。「創作動線」移到最前面的「導覽」，跟智能導覽放在一起——它們都是在回答「我該從哪開始」。</li>
@@ -1883,6 +1911,12 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>創作相關拆成兩條，因為它們其實是兩個不同的時刻：<b>創作路徑</b>（創作動線 → 靈感庫 → 創作挑戰 → 角色隨機生成 → 美學專欄 → 作品健檢）處理從沒方向到畫完；<b>發布路徑</b>（色票工具 → 色碼轉換 → 命名與標籤 → 特殊符號 → 創作分享）處理畫完之後的整理與分享。硬塞成一條會變成十一步，那就不是路徑而是清單了。</li>
         <li>順帶修好上一次改動時不小心從創作路徑漏掉的<b>美學專欄</b>。</li>
         <li><b>品牌路徑</b>也修正了：原本裡面有靈感庫與作品健檢，但這條路是純粹在查資料，創作工具放進來並不合理。改成染色成本 → 品牌資料 → 科普 → 排期預測，四項都是「決定要不要入手」需要的資訊。科普整個在講品牌命名的由來，本來就該收在這裡。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>調整：照路徑逛的時候不用一直回導覽頁</b></p>
+      <ul class="tips">
+        <li>右下角原本就有一顆回智能導覽的按鈕，但它用的是「↑」，看起來像回到頁面頂端，加上外框樣式偏淡，很容易被當成裝飾而忽略。圖示改成「←」，位置與大小不變。</li>
+        <li>更實際的問題是：照路徑走的時候，你真正想去的是<b>下一站</b>，而不是導覽頁。原本得「回導覽 → 找到那條路徑 → 點下一個」三步。現在只要目前分頁在你選的那條路徑上，旁邊就會多一顆<b>「下一站：○○○ →」</b>，一鍵直接過去。</li>
+        <li>細節：走到最後一站就不再顯示；跳到路徑外的分頁時只留返回鍵；換一條路徑會自動改指向新的下一站。</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>調整：配色靈感房</b></p>
       <ul class="tips">
@@ -1929,7 +1963,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>這些判斷全部移到資料庫層強制執行。權限相關的欄位本人改不動，訊息只能自刪而不能改字、也不能解除隱藏，遊戲房的標題等欄位對一般人完全鎖死，交棒規則（只有輪到的人能交棒、只能傳給有加入輪替的人）也一併寫進資料庫。</li>
         <li>順帶補上「輪替名單」的資料表——之前那段建表指令沒有成功執行過，所以面板上的「輪替中」人數一直是 0。</li>
       </ul>
-      <p class="fine">建置標記更新為 v5.5.0。中英文版同步。本版共通過 129 項自動測試：留言板即時更新 14 項、未讀提醒 15 項、智能導覽與排行 15 項、路徑涵蓋率 14 項、權限修補 28 項、創作分享的資料庫權限 27 項與前端 16 項。其中權限相關的測試是在本機真實資料庫上以四種身分實際嘗試繞過；路徑涵蓋率會檢查每個分頁都被至少一條路徑收錄，避免這次的遺漏再發生。</p>
+      <p class="fine">建置標記更新為 v5.5.0。中英文版同步。本版共通過 143 項自動測試：留言板即時更新 14 項、未讀提醒 15 項、智能導覽與排行 15 項、路徑涵蓋率 7 項、返回與下一站 14 項、權限修補 28 項、創作分享的資料庫權限 27 項與前端 23 項。其中權限相關的測試是在本機真實資料庫上以四種身分實際嘗試繞過；路徑涵蓋率會檢查每個分頁都被至少一條路徑收錄，避免這次的遺漏再發生。</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.5 <span class="chg-build">清掉叫你去用外部服務的殘留</span></div>
@@ -2824,9 +2858,41 @@ function goTab(name){
   if(window.__navSelectSync)window.__navSelectSync(name);
   if(name==="aes")hydrateShownAet();
   if(name==="lore"||name==="branddata"||name==="feedback")__lzNeed("sec-"+name);
+  syncGuideBtn(name);
   window.scrollTo({top:0,behavior:"smooth"});
 }
+/* 只有離開智能導覽時才出現，免得在導覽頁上放一顆回自己的按鈕。
+   若目前分頁正好在使用者選的路徑上，再多給一顆「下一站」直接跳。 */
+function syncGuideBtn(name){
+  const bar=document.getElementById("toGuideBar");
+  if(bar)bar.hidden=(name==="home");
+  const nx=document.getElementById("toNext");
+  if(!nx)return;
+  let info=null;
+  if(name!=="home"&&window.__pmNextStop){
+    try{ info=window.__pmNextStop(name); }catch(e){ info=null; }
+  }
+  if(info){
+    nx.hidden=false;
+    nx.textContent="下一站："+info.label+" →";
+    nx.setAttribute("data-go",info.id);
+  }else{
+    nx.hidden=true;
+    nx.removeAttribute("data-go");
+  }
+}
 tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
+(function(){
+  const b=document.getElementById("toGuide");
+  if(b)b.addEventListener("click",()=>goTab("home"));
+  const nx=document.getElementById("toNext");
+  if(nx)nx.addEventListener("click",function(){
+    const id=nx.getAttribute("data-go");
+    if(id)goTab(id);
+  });
+  const cur=document.querySelector("nav button[data-tab].on");
+  syncGuideBtn(cur?cur.dataset.tab:"home");
+})();
 
 /* ---------- custom mobile nav dropdown (replaces native <select>) ---------- */
 (function(){
@@ -3043,6 +3109,19 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     bumpGlobal(name);
   }
   window.__pmFeatBump=bump;
+
+  /* 照路徑逛的時候，真正想去的通常是下一站，而不是導覽頁本身。
+     這裡回報「目前分頁在使用者選的那條路徑上的下一站」，讓浮動列
+     能一鍵跳過去，省掉「回導覽 → 找路徑 → 點下一個」三步。 */
+  window.__pmNextStop=function(tab){
+    var role=null;
+    try{ role=localStorage.getItem('pm_sg_role'); }catch(e){}
+    if(!role||!PATHS[role])return null;
+    var st=PATHS[role].steps, i=st.indexOf(tab);
+    if(i<0||i>=st.length-1)return null;
+    var id=st[i+1];
+    return LABELS[id]?{id:id,label:LABELS[id]}:null;
+  };
 
   function workerMode(){
     return !!(GLOBAL_RANK_ENDPOINT && String(GLOBAL_RANK_ENDPOINT).indexOf('http')===0);
