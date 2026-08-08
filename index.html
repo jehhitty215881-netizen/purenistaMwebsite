@@ -591,6 +591,12 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
 
 .board-card .bc-tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--rose-soft);color:var(--rose);margin-left:6px;vertical-align:middle}
+.board-card .bc-new{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--teal-soft);color:var(--teal);margin-left:6px;vertical-align:middle}
+.board-card.has-new{border-color:var(--teal)}
+.board-unread-opt{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 10px;font-size:12.5px;color:var(--ink-soft)}
+.board-unread-opt label{display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:700;color:var(--ink)}
+.board-unread-opt input{width:16px;height:16px;accent-color:var(--violet);cursor:pointer}
+.board-unread-opt .uo-hint{flex:1 1 100%;font-size:11.5px;line-height:1.6}
 .board-card.game-card{border-color:#e0c4d8;background:linear-gradient(135deg,#fff,var(--rose-soft))}
 .board-game-panel{margin:0 0 10px;padding:12px;border:1.5px solid var(--line);border-radius:14px;background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft))}
 .board-game-panel h4{margin:0 0 6px;font-size:14.5px}
@@ -1728,6 +1734,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <h4>專版列表</h4>
         <button type="button" id="boardHomeRefresh" class="back">重新整理</button>
       </div>
+      <div id="boardUnreadOpt" class="board-unread-opt"></div>
       <div id="boardCardList" class="board-card-list"><p class="board-empty">載入中…</p></div>
       <div id="boardNewWrap" class="board-new" hidden>
         <b style="font-size:13.5px">新增專版（管理員）</b>
@@ -1826,6 +1833,12 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <p class="cond" style="margin:12px 0 4px"><b>調整：手機上的回合面板太擠</b></p>
       <ul class="tips">
         <li>按鈕改成兩欄等寬排列，不再一個一行、長短不一。三行玩法說明收進可摺疊的「玩法說明」，預設收起來——那些字只有第一次需要看，卻佔掉半個螢幕；「輪替中：N 人」留在外面，因為那是隨時要看的狀態。房間外框與面板的內距也收窄，把寬度還給內容。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>新增：專版列表的未讀提醒</b></p>
+      <ul class="tips">
+        <li>原本要知道哪個專版有新留言，只能一個一個點進去看。現在列表上會直接標出「N 新」，用的是站上的青綠色而不是紅點，看起來不會太有壓力。</li>
+        <li>不想看的人可以在列表上方直接關掉，設定記在自己的裝置上。「讀到哪裡」也只存在瀏覽器本機，不會寫進資料庫——別人看不到你讀了什麼，也不會有已讀回條那種壓力。</li>
+        <li>幾個細節：自己發的訊息不算未讀；第一次進站不會突然跳出幾十則未讀，而是從那一刻開始計算；進到房間就自動清掉。</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>調整：註冊審核說明</b></p>
       <ul class="tips">
@@ -8051,7 +8064,7 @@ function compositionScore(opts) {
   var BOARD_LOCALE = 'zh';
   var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
   var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
-  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功！審核通過後才能發言。請私訊 棉花棠（遊戲 ID 3728362）通過審核。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "pending": "你的帳號尚在審核中，通過後才能進入專版發言。", "rejected": "你的註冊未通過審核，如有疑問請聯絡站長。", "approve": "通過", "reject": "拒絕", "no_pending": "目前沒有待審核的註冊。", "locale": "zh-TW", "approve_note": "註冊後需經審核通過才能發言", "approve_how": "請私訊", "approve_who": "棉花棠", "approve_gid": "遊戲 ID 3728362", "approve_tail": "，管理員會盡快為你開通。"};
+  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功！審核通過後才能發言。請私訊 棉花棠（遊戲 ID 3728362）通過審核。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "pending": "你的帳號尚在審核中，通過後才能進入專版發言。", "rejected": "你的註冊未通過審核，如有疑問請聯絡站長。", "approve": "通過", "reject": "拒絕", "no_pending": "目前沒有待審核的註冊。", "locale": "zh-TW", "approve_note": "註冊後需經審核通過才能發言", "approve_how": "請私訊", "approve_who": "棉花棠", "approve_gid": "遊戲 ID 3728362", "approve_tail": "，管理員會盡快為你開通。", "unread": "新", "unread_toggle": "顯示未讀提醒", "unread_hint": "只記在這台裝置上，不會讓別人看到你讀了什麼"};
   if(!window.supabase){
     var list = document.getElementById('boardCardList');
     if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
@@ -8332,6 +8345,7 @@ function compositionScore(opts) {
     paintTurnPanel();
     loadMessages();
     subscribe();
+    setLastRead(b.id, null);   // 一進房先當作讀到現在，離開時再由 loadMessages 更新
   }
 
   async function loadProfile(){
@@ -8768,6 +8782,47 @@ function compositionScore(opts) {
   }
 
 
+  /* 未讀提醒。整份「讀到哪裡」只存在這台裝置的 localStorage，不會寫進資料庫，
+     所以別人看不到你讀了什麼，換裝置也不會互相影響。不想看紅點的人可以關掉。 */
+  function unreadKey(bid){ return 'pnb_read_'+BOARD_LOCALE+'_'+bid; }
+  function getLastRead(bid){
+    try{ return localStorage.getItem(unreadKey(bid)); }catch(e){ return null; }
+  }
+  function setLastRead(bid, iso){
+    try{ localStorage.setItem(unreadKey(bid), iso || new Date().toISOString()); }catch(e){}
+  }
+  function unreadEnabled(){
+    try{ return localStorage.getItem('pnb_unread_off') !== '1'; }catch(e){ return true; }
+  }
+  function setUnreadEnabled(on){
+    try{
+      if(on) localStorage.removeItem('pnb_unread_off');
+      else localStorage.setItem('pnb_unread_off','1');
+    }catch(e){}
+  }
+  /* 進到房間、或房間裡收到新訊息時，把「讀到哪裡」推到最新那則的時間 */
+  function markBoardRead(){
+    if(!state.board) return;
+    var newest = null;
+    for(var i=0;i<state.rows.length;i++){
+      var t = Date.parse(state.rows[i].created_at);
+      if(!isNaN(t) && (newest === null || t > newest)) newest = t;
+    }
+    setLastRead(state.board.id, newest ? new Date(newest).toISOString() : null);
+  }
+  function paintUnreadOpt(){
+    var el = $('boardUnreadOpt');
+    if(!el) return;
+    el.innerHTML = '<label><input type="checkbox" id="boardUnreadChk"'
+      + (unreadEnabled() ? ' checked' : '') + ' /> '+esc(T.unread_toggle)+'</label>'
+      + '<span class="uo-hint">'+esc(T.unread_hint)+'</span>';
+    var chk = $('boardUnreadChk');
+    if(chk) chk.onchange = function(){
+      setUnreadEnabled(chk.checked);
+      loadBoards();
+    };
+  }
+
   async function loadBoards(){
     var list = $('boardCardList');
     if(list) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
@@ -8785,21 +8840,34 @@ function compositionScore(opts) {
       if(list) list.innerHTML = '<p class="board-empty">'+T.empty_boards+'</p>';
       return;
     }
-    var counts = {};
+    paintUnreadOpt();
+    var counts = {}, unread = {};
     try{
-      var mc = await sb.from('messages').select('board_id').not('board_id','is',null).neq('status','deleted');
+      var mc = await sb.from('messages').select('board_id,created_at,user_id')
+        .not('board_id','is',null).neq('status','deleted');
       if(mc.data){
         mc.data.forEach(function(r){
-          if(r.board_id!=null) counts[r.board_id] = (counts[r.board_id]||0)+1;
+          if(r.board_id==null) return;
+          counts[r.board_id] = (counts[r.board_id]||0)+1;
+          var lr = getLastRead(r.board_id);
+          if(!lr) return;                                          // 還沒有基準就先不算
+          if(state.user && r.user_id === state.user.id) return;    // 自己發的不算未讀
+          if(Date.parse(r.created_at) > Date.parse(lr)){
+            unread[r.board_id] = (unread[r.board_id]||0)+1;
+          }
         });
       }
     }catch(e){}
+    // 第一次看到的專版先記下基準，避免一進站就跳出幾十則「未讀」
+    state.boards.forEach(function(b){ if(!getLastRead(b.id)) setLastRead(b.id, null); });
     list.innerHTML = state.boards.map(function(b){
       var n = counts[b.id] || 0;
+      var u = unreadEnabled() ? (unread[b.id] || 0) : 0;
       var isGame = b.kind === 'game';
       var tag = isGame ? '<span class="bc-tag">GAME</span>' : '';
-      return '<button type="button" class="board-card'+(isGame?' game-card':'')+'" data-bid="'+b.id+'">'
-        + '<span class="bc-title">'+esc(b.title)+tag+'</span>'
+      var newTag = u ? '<span class="bc-new">'+(u > 99 ? '99+' : u)+' '+T.unread+'</span>' : '';
+      return '<button type="button" class="board-card'+(isGame?' game-card':'')+(u?' has-new':'')+'" data-bid="'+b.id+'">'
+        + '<span class="bc-title">'+esc(b.title)+tag+newTag+'</span>'
         + (b.description ? '<span class="bc-desc">'+esc(b.description)+'</span>' : '')
         + '<span class="bc-meta">'+n+' '+T.msgs+'</span>'
         + '</button>';
@@ -8988,6 +9056,7 @@ function compositionScore(opts) {
     }
     state.rows = res.data || [];
     paintMessages();
+    markBoardRead();
   }
 
   async function sendMessage(){

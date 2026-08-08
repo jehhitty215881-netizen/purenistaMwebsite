@@ -586,6 +586,12 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
 
 .board-card .bc-tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--rose-soft);color:var(--rose);margin-left:6px;vertical-align:middle}
+.board-card .bc-new{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--teal-soft);color:var(--teal);margin-left:6px;vertical-align:middle}
+.board-card.has-new{border-color:var(--teal)}
+.board-unread-opt{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 10px;font-size:12.5px;color:var(--ink-soft)}
+.board-unread-opt label{display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:700;color:var(--ink)}
+.board-unread-opt input{width:16px;height:16px;accent-color:var(--violet);cursor:pointer}
+.board-unread-opt .uo-hint{flex:1 1 100%;font-size:11.5px;line-height:1.6}
 .board-card.game-card{border-color:#e0c4d8;background:linear-gradient(135deg,#fff,var(--rose-soft))}
 .board-game-panel{margin:0 0 10px;padding:12px;border:1.5px solid var(--line);border-radius:14px;background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft))}
 .board-game-panel h4{margin:0 0 6px;font-size:14.5px}
@@ -1723,6 +1729,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <h4>Boards</h4>
         <button type="button" id="boardHomeRefresh" class="back">Refresh</button>
       </div>
+      <div id="boardUnreadOpt" class="board-unread-opt"></div>
       <div id="boardCardList" class="board-card-list"><p class="board-empty">Loading…</p></div>
       <div id="boardNewWrap" class="board-new" hidden>
         <b style="font-size:13.5px">New board (admin)</b>
@@ -1821,6 +1828,12 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <p class="cond" style="margin:12px 0 4px"><b>Changed: the turn panel was cramped on phones</b></p>
       <ul class="tips">
         <li>Buttons are now laid out in two equal columns instead of wrapping raggedly one per line. The three lines of explanatory text are folded into a collapsible "How it works" section, closed by default — useful once, but half a screen of space every time. The queue count stays visible since it is live status. Room and panel padding were tightened to give the content back its width.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Added: unread badges on the board list</b></p>
+      <ul class="tips">
+        <li>Finding out which board had new posts previously meant opening each one in turn. The list now shows an "N new" badge directly, in the site's teal rather than a red dot, so it reads as information rather than pressure.</li>
+        <li>Anyone who would rather not see it can switch it off above the list, and that preference is remembered on their device. How far you have read is also stored only in your own browser, never in the database — nobody else can see what you have read, and there are no read receipts.</li>
+        <li>Details: your own messages never count as unread; a first visit does not dump dozens of unread onto you but starts counting from that moment; and opening a room clears its badge.</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>Changed: approval notice on sign-up</b></p>
       <ul class="tips">
@@ -8049,7 +8062,7 @@ function compositionScore(opts) {
   var BOARD_LOCALE = 'en';
   var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
   var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
-  var T = {"signed": "Signed in as ", "gameid": "Game ID", "admin": "Admin", "logout": "Sign out", "email": "Email", "pass": "Password (min 6 characters)", "display": "Display name (for sign-up, optional)", "login": "Sign in", "signup": "Sign up", "signup_ok": "Signed up! You can post once approved. Please DM 棉花棠 (game ID 3728362) to get approved.", "loading": "Loading…", "fail": "Failed to load: ", "empty": "No messages in this board yet. Say hi!", "empty_boards": "No boards yet. Admins can create one below.", "user": "User", "hidden": "Hidden", "show": "Show", "hide": "Hide", "del": "Delete", "delmine": "Delete", "reply": "Reply", "replying": "Replying to", "cancel": "Cancel", "need_login": "Please sign in first", "need_body": "Please enter a message", "max": "Max 1000 characters", "saved": "Saved", "need_title": "Please enter a board title", "created": "Board created", "live_on": "Live", "live_off": "Offline (use Refresh)", "msgs": "messages", "pending": "Your account is pending approval. You can post once an admin approves you.", "rejected": "Your registration was not approved. Contact the site owner if needed.", "approve": "Approve", "reject": "Reject", "no_pending": "No pending registrations.", "locale": "en-US", "approve_note": "Approval is required before you can post", "approve_how": "Please DM", "approve_who": "棉花棠", "approve_gid": "game ID 3728362", "approve_tail": "— an admin will approve you shortly."};
+  var T = {"signed": "Signed in as ", "gameid": "Game ID", "admin": "Admin", "logout": "Sign out", "email": "Email", "pass": "Password (min 6 characters)", "display": "Display name (for sign-up, optional)", "login": "Sign in", "signup": "Sign up", "signup_ok": "Signed up! You can post once approved. Please DM 棉花棠 (game ID 3728362) to get approved.", "loading": "Loading…", "fail": "Failed to load: ", "empty": "No messages in this board yet. Say hi!", "empty_boards": "No boards yet. Admins can create one below.", "user": "User", "hidden": "Hidden", "show": "Show", "hide": "Hide", "del": "Delete", "delmine": "Delete", "reply": "Reply", "replying": "Replying to", "cancel": "Cancel", "need_login": "Please sign in first", "need_body": "Please enter a message", "max": "Max 1000 characters", "saved": "Saved", "need_title": "Please enter a board title", "created": "Board created", "live_on": "Live", "live_off": "Offline (use Refresh)", "msgs": "messages", "pending": "Your account is pending approval. You can post once an admin approves you.", "rejected": "Your registration was not approved. Contact the site owner if needed.", "approve": "Approve", "reject": "Reject", "no_pending": "No pending registrations.", "locale": "en-US", "approve_note": "Approval is required before you can post", "approve_how": "Please DM", "approve_who": "棉花棠", "approve_gid": "game ID 3728362", "approve_tail": "— an admin will approve you shortly.", "unread": "new", "unread_toggle": "Show unread badges", "unread_hint": "Kept on this device only; nobody else can see what you have read"};
   if(!window.supabase){
     var list = document.getElementById('boardCardList');
     if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
@@ -8330,6 +8343,7 @@ function compositionScore(opts) {
     paintTurnPanel();
     loadMessages();
     subscribe();
+    setLastRead(b.id, null);   // 一進房先當作讀到現在，離開時再由 loadMessages 更新
   }
 
   async function loadProfile(){
@@ -8762,6 +8776,47 @@ function compositionScore(opts) {
   }
 
 
+  /* 未讀提醒。整份「讀到哪裡」只存在這台裝置的 localStorage，不會寫進資料庫，
+     所以別人看不到你讀了什麼，換裝置也不會互相影響。不想看紅點的人可以關掉。 */
+  function unreadKey(bid){ return 'pnb_read_'+BOARD_LOCALE+'_'+bid; }
+  function getLastRead(bid){
+    try{ return localStorage.getItem(unreadKey(bid)); }catch(e){ return null; }
+  }
+  function setLastRead(bid, iso){
+    try{ localStorage.setItem(unreadKey(bid), iso || new Date().toISOString()); }catch(e){}
+  }
+  function unreadEnabled(){
+    try{ return localStorage.getItem('pnb_unread_off') !== '1'; }catch(e){ return true; }
+  }
+  function setUnreadEnabled(on){
+    try{
+      if(on) localStorage.removeItem('pnb_unread_off');
+      else localStorage.setItem('pnb_unread_off','1');
+    }catch(e){}
+  }
+  /* 進到房間、或房間裡收到新訊息時，把「讀到哪裡」推到最新那則的時間 */
+  function markBoardRead(){
+    if(!state.board) return;
+    var newest = null;
+    for(var i=0;i<state.rows.length;i++){
+      var t = Date.parse(state.rows[i].created_at);
+      if(!isNaN(t) && (newest === null || t > newest)) newest = t;
+    }
+    setLastRead(state.board.id, newest ? new Date(newest).toISOString() : null);
+  }
+  function paintUnreadOpt(){
+    var el = $('boardUnreadOpt');
+    if(!el) return;
+    el.innerHTML = '<label><input type="checkbox" id="boardUnreadChk"'
+      + (unreadEnabled() ? ' checked' : '') + ' /> '+esc(T.unread_toggle)+'</label>'
+      + '<span class="uo-hint">'+esc(T.unread_hint)+'</span>';
+    var chk = $('boardUnreadChk');
+    if(chk) chk.onchange = function(){
+      setUnreadEnabled(chk.checked);
+      loadBoards();
+    };
+  }
+
   async function loadBoards(){
     var list = $('boardCardList');
     if(list) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
@@ -8779,21 +8834,34 @@ function compositionScore(opts) {
       if(list) list.innerHTML = '<p class="board-empty">'+T.empty_boards+'</p>';
       return;
     }
-    var counts = {};
+    paintUnreadOpt();
+    var counts = {}, unread = {};
     try{
-      var mc = await sb.from('messages').select('board_id').not('board_id','is',null).neq('status','deleted');
+      var mc = await sb.from('messages').select('board_id,created_at,user_id')
+        .not('board_id','is',null).neq('status','deleted');
       if(mc.data){
         mc.data.forEach(function(r){
-          if(r.board_id!=null) counts[r.board_id] = (counts[r.board_id]||0)+1;
+          if(r.board_id==null) return;
+          counts[r.board_id] = (counts[r.board_id]||0)+1;
+          var lr = getLastRead(r.board_id);
+          if(!lr) return;                                          // 還沒有基準就先不算
+          if(state.user && r.user_id === state.user.id) return;    // 自己發的不算未讀
+          if(Date.parse(r.created_at) > Date.parse(lr)){
+            unread[r.board_id] = (unread[r.board_id]||0)+1;
+          }
         });
       }
     }catch(e){}
+    // 第一次看到的專版先記下基準，避免一進站就跳出幾十則「未讀」
+    state.boards.forEach(function(b){ if(!getLastRead(b.id)) setLastRead(b.id, null); });
     list.innerHTML = state.boards.map(function(b){
       var n = counts[b.id] || 0;
+      var u = unreadEnabled() ? (unread[b.id] || 0) : 0;
       var isGame = b.kind === 'game';
       var tag = isGame ? '<span class="bc-tag">GAME</span>' : '';
-      return '<button type="button" class="board-card'+(isGame?' game-card':'')+'" data-bid="'+b.id+'">'
-        + '<span class="bc-title">'+esc(b.title)+tag+'</span>'
+      var newTag = u ? '<span class="bc-new">'+(u > 99 ? '99+' : u)+' '+T.unread+'</span>' : '';
+      return '<button type="button" class="board-card'+(isGame?' game-card':'')+(u?' has-new':'')+'" data-bid="'+b.id+'">'
+        + '<span class="bc-title">'+esc(b.title)+tag+newTag+'</span>'
         + (b.description ? '<span class="bc-desc">'+esc(b.description)+'</span>' : '')
         + '<span class="bc-meta">'+n+' '+T.msgs+'</span>'
         + '</button>';
@@ -8982,6 +9050,7 @@ function compositionScore(opts) {
     }
     state.rows = res.data || [];
     paintMessages();
+    markBoardRead();
   }
 
   async function sendMessage(){
