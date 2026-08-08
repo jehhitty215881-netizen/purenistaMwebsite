@@ -761,11 +761,11 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>Smart guide <span class="tag ok">client-only · no login</span></h3>
     <p class="cond">Pick who you are right now for a suggested path. Everything runs in the browser — <b>no backend, no account</b>.</p>
     <div class="sg-roles" id="sgRoles">
-      <button type="button" data-role="newbie">🌱 Newbie</button>
-      <button type="button" data-role="gacha">✨ Gacha</button>
-      <button type="button" data-role="trade">🔄 Trading</button>
-      <button type="button" data-role="brand">🏷 Brands</button>
-      <button type="button" data-role="create">🎨 Creating</button>
+      <button type="button" data-role="newbie">Newbie</button>
+      <button type="button" data-role="gacha">Gacha</button>
+      <button type="button" data-role="trade">Trading</button>
+      <button type="button" data-role="brand">Brands</button>
+      <button type="button" data-role="create">Creating</button>
     </div>
     <div class="sg-path" id="sgPath" hidden></div>
 
@@ -1869,6 +1869,11 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>Two tabs were renamed: "Color Inspire" is now <b>Idea bank</b> and "Workspace" is now <b>Challenges</b>. Nothing about how they work has changed; the names simply match what they actually do.</li>
         <li><b>Existing links still work.</b> None of the internal tab identifiers changed, so previously shared URLs open exactly as before. The mobile quick-switch menu picks up the new grouping automatically.</li>
       </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Changed: the smart guide</b></p>
+      <ul class="tips">
+        <li>The emoji on the role buttons have been removed in favour of plain text.</li>
+        <li>The creating path was rewritten. It used to be a list of tools; it now follows the stage you are at — Workflow → Idea bank → Challenges → Character generator → Swatches → Naming → Art check → Shared work — matching the new menu grouping and including this release's Shared work tab. The brand path's wording was updated to the new names too.</li>
+      </ul>
       <p class="cond" style="margin:12px 0 4px"><b>Changed: colour inspiration room</b></p>
       <ul class="tips">
         <li>Hex codes now render with a small chip of the actual colour beside them. Posting to the room previously produced a bare string like #11997B that nobody could read as a colour. Older messages benefit too, since the chips are drawn at display time.</li>
@@ -1881,6 +1886,11 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <p class="cond" style="margin:12px 0 4px"><b>Changed: approval notice on sign-up</b></p>
       <ul class="tips">
         <li>The sign-up form, the post-registration confirmation and the pending banner all now explain that approval is required before posting, and who to contact. Previously registration ended with "awaiting approval" and no indication of whom to ask.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Fixed: the smart guide always topped the feature ranking</b></p>
+      <ul class="tips">
+        <li>The smart guide is the tab every visit opens on, so simply loading the site counted as a visit to it. Its tally ran far ahead of everything else and pushed the features people actually chose to open down the list, which made the ranking useless.</li>
+        <li>It is now excluded from the count, both locally and site-wide. Tallies recorded under the old behaviour are cleared automatically on the next visit — no need to press "reset".</li>
       </ul>
       <p class="cond" style="margin:8px 0 4px"><b>Fixed: the board flickered every time anyone posted</b></p>
       <ul class="tips">
@@ -1899,7 +1909,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>All of these checks now run in the database itself. Permission columns cannot be altered by the account they belong to, messages can only be self-deleted rather than edited or un-hidden, room fields are locked to non-admins, and the hand-over rules (only the current player may pass, and only to someone who joined the queue) are enforced there too.</li>
         <li>The turn queue table has also been created properly — the original statement never ran successfully, which is why the panel always showed zero players in the queue.</li>
       </ul>
-      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. This release passes 100 automated tests: 14 for live board updates, 15 for unread badges, 28 for the permission hardening, and 27 database plus 31 front-end tests for shared work (including hex parsing edge cases and output escaping). The permission tests run against a real local database, attempting the bypasses as four different kinds of account.</p>
+      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. This release passes 115 automated tests: 14 for live board updates, 15 for unread badges, 15 for the smart guide and ranking, 28 for the permission hardening, and 27 database plus 31 front-end tests for shared work (including hex parsing edge cases and output escaping). The permission tests run against a real local database, attempting the bypasses as four different kinds of account.</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.5 <span class="chg-build">removed leftovers pointing at an external service</span></div>
@@ -2902,6 +2912,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
 /* ---------- smart guide + local feature rank (no backend) ---------- */
 (function(){
   var KEY='pm_feat_hits_v1';
+  var RANK_SKIP='home';   // 預設分頁，不列入熱門排行
   var LABELS={
     home:'Smart guide',calc:'Quick Calc',ratio:'Trade ratios',market:'Rainbow Market',pull:'Gacha cost',vip:'Top-up · VIP',
     brand:'Brand dyes',branddata:'Brand data',trade:'Trade tips',sched:'Schedule',
@@ -2928,13 +2939,13 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     },
     brand:{
       title:'Brand path',
-      blurb:'Check dye cost and brand data, then schedule and colour ideas before you decide.',
+      blurb:'Check dye cost and brand data, then schedule and the idea bank before you decide.',
       steps:['brand','branddata','sched','colorinspire','check']
     },
     create:{
       title:'Creating path',
-      blurb:'Art check → workspace → colour / naming / character ideas → flow and aesthetics.',
-      steps:['check','workspace','colorinspire','naming','charcheck','flow','aes']
+      blurb:'Follow the stage you are at: find a direction, look up colours and names while making, then check the result and share it.',
+      steps:['flow','colorinspire','workspace','charcheck','swatch','naming','check','gallery']
     }
   };
 
@@ -2983,13 +2994,20 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
   }
 
   function loadHits(){
-    try{return JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){return {};}
+    try{
+      var h=JSON.parse(localStorage.getItem(KEY)||'{}')||{};
+      if(h[RANK_SKIP]!==undefined){ delete h[RANK_SKIP]; saveHits(h); }
+      return h;
+    }catch(e){return {};}
   }
   function saveHits(h){
     try{localStorage.setItem(KEY,JSON.stringify(h));}catch(e){}
   }
   function bump(name){
     if(!name||!LABELS[name])return;
+    /* 智能導覽是每次進站的預設分頁，計進去只會讓它永遠排第一，
+       蓋掉真正被主動點開的功能。所以不列入統計。 */
+    if(name===RANK_SKIP)return;
     var h=loadHits();
     h[name]=(h[name]|0)+1;
     saveHits(h);
@@ -3091,6 +3109,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     var _loc=(document.documentElement.getAttribute('lang')||'en').indexOf('zh')===0?'zh':'en';
     var rows=Object.keys(h||{})
       .filter(function(k){return Object.prototype.hasOwnProperty.call(LABELS,k);})
+      .filter(function(k){return k!==RANK_SKIP;})   // 也濾掉先前已經記到的舊資料
       .map(function(k){return {k:k,n:h[k]|0,label:LABELS[k]};})
       .filter(function(r){return r.n>0;})
       .sort(function(a,b){return b.n-a.n||a.label.localeCompare(b.label,_loc);});

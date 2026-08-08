@@ -766,11 +766,11 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>智能導覽 <span class="tag ok">純前端・免登入</span></h3>
     <p class="cond">選你現在的身分，立刻推薦一條路徑。全部在瀏覽器內完成，<b>不需要後端或帳號</b>。</p>
     <div class="sg-roles" id="sgRoles">
-      <button type="button" data-role="newbie">🌱 新手入門</button>
-      <button type="button" data-role="gacha">✨ 想抽卡</button>
-      <button type="button" data-role="trade">🔄 想交換</button>
-      <button type="button" data-role="brand">🏷 看品牌</button>
-      <button type="button" data-role="create">🎨 想創作</button>
+      <button type="button" data-role="newbie">新手入門</button>
+      <button type="button" data-role="gacha">想抽卡</button>
+      <button type="button" data-role="trade">想交換</button>
+      <button type="button" data-role="brand">看品牌</button>
+      <button type="button" data-role="create">想創作</button>
     </div>
     <div class="sg-path" id="sgPath" hidden></div>
 
@@ -786,7 +786,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
   <div class="card" id="featRank">
     <h3>功能熱門排行 <span class="tag" id="featRankTag">我的・本機</span></h3>
-    <p class="cond" id="featRankDesc">「我的」是你在這台裝置的點擊次數，只存在本機；「全站」是所有訪客的匿名累計（存於雲端，不會因伺服器重開而歸零）。</p>
+    <p class="cond" id="featRankDesc">「我的」是你在這台裝置的點擊次數，只存在本機；「全站」是所有訪客的匿名累計（存於雲端，不會因伺服器重開而歸零）。智能導覽是預設分頁，不列入統計。</p>
     <div class="fr-mode" id="featRankMode" role="tablist">
       <button type="button" class="on" data-mode="local">我的</button>
       <button type="button" data-mode="global">全站</button>
@@ -1874,6 +1874,11 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>兩個分頁改了顯示名稱：「配色靈感」→<b>靈感庫</b>、「創作工作台」→<b>創作挑戰</b>。功能完全沒動，只是名字更貼近實際在做的事。</li>
         <li><b>舊連結不會失效。</b>分頁的內部代號一個都沒改，之前分享出去的網址照樣打得開。手機的快速切換選單也會自動跟著新分組，不用另外設定。</li>
       </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>調整：智能導覽</b></p>
+      <ul class="tips">
+        <li>身分按鈕上的 emoji 拿掉了，改成純文字。</li>
+        <li>「創作路徑」重寫。原本是照工具列出來的，現在照創作進行到哪一步走：創作動線 → 靈感庫 → 創作挑戰 → 角色隨機生成 → 色票工具 → 命名與標籤 → 作品健檢 → 創作分享，跟新的選單分組一致，也把這版新增的「創作分享」補進去。「品牌路徑」的說明同步改用新名稱。</li>
+      </ul>
       <p class="cond" style="margin:12px 0 4px"><b>調整：配色靈感房</b></p>
       <ul class="tips">
         <li>抽出來的色碼旁邊會顯示實際顏色的小色塊。原本貼進聊天室只剩一串 #11997B 這樣的代號，沒有人看得出來是什麼顏色。舊訊息也會一起變好看，因為色塊是顯示時才畫上去的。</li>
@@ -1886,6 +1891,11 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <p class="cond" style="margin:12px 0 4px"><b>調整：註冊審核說明</b></p>
       <ul class="tips">
         <li>註冊表單下方、註冊成功的提示、以及待審核橫幅三個地方，都會說明需要通過審核才能發言，並附上聯絡方式。之前註冊完只會看到「等待審核」，卻沒說要找誰。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>修正：功能熱門排行永遠是智能導覽第一名</b></p>
+      <ul class="tips">
+        <li>智能導覽是每次進站的預設分頁，等於一開網站就自動記一次。它的次數因此遠高於其他功能，把真正被主動點開的東西全壓在下面，排行也就失去了參考價值。</li>
+        <li>現在智能導覽不列入統計，本機和全站兩邊都不記。之前已經記到的次數也會在下次開啟時自動清掉，不用手動按「清除本機統計」。</li>
       </ul>
       <p class="cond" style="margin:8px 0 4px"><b>修正：留言板每次有人發言都整片閃一下</b></p>
       <ul class="tips">
@@ -1904,7 +1914,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>這些判斷全部移到資料庫層強制執行。權限相關的欄位本人改不動，訊息只能自刪而不能改字、也不能解除隱藏，遊戲房的標題等欄位對一般人完全鎖死，交棒規則（只有輪到的人能交棒、只能傳給有加入輪替的人）也一併寫進資料庫。</li>
         <li>順帶補上「輪替名單」的資料表——之前那段建表指令沒有成功執行過，所以面板上的「輪替中」人數一直是 0。</li>
       </ul>
-      <p class="fine">建置標記更新為 v5.5.0。中英文版同步。本版共通過 100 項自動測試：留言板即時更新 14 項、未讀提醒 15 項、權限修補 28 項、創作分享的資料庫權限 27 項與前端 31 項（含色碼解析邊界與內容跳脫），其中權限相關的測試是在本機真實資料庫上以四種身分實際嘗試繞過。</p>
+      <p class="fine">建置標記更新為 v5.5.0。中英文版同步。本版共通過 115 項自動測試：留言板即時更新 14 項、未讀提醒 15 項、智能導覽與排行 15 項、權限修補 28 項、創作分享的資料庫權限 27 項與前端 31 項（含色碼解析邊界與內容跳脫）。其中權限相關的測試是在本機真實資料庫上以四種身分實際嘗試繞過。</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.5 <span class="chg-build">清掉叫你去用外部服務的殘留</span></div>
@@ -2905,6 +2915,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
 /* ---------- smart guide + local feature rank (no backend) ---------- */
 (function(){
   var KEY='pm_feat_hits_v1';
+  var RANK_SKIP='home';   // 預設分頁，不列入熱門排行
   var LABELS={
     home:'智能導覽',calc:'快速換算',ratio:'交換比例',market:'彩虹市集',pull:'抽卡花費',vip:'儲值・VIP',
     brand:'品牌染色',branddata:'品牌資料',trade:'交易心法',sched:'排期預測',
@@ -2931,13 +2942,13 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     },
     brand:{
       title:'品牌路徑',
-      blurb:'染色成本與品牌資料先查清楚，再對排期與配色靈感，做決定比較踏實。',
+      blurb:'染色成本與品牌資料先查清楚，再對排期與靈感庫，做決定比較踏實。',
       steps:['brand','branddata','sched','colorinspire','check']
     },
     create:{
       title:'創作路徑',
-      blurb:'健檢看問題 → 工作台整理想法 → 配色／命名／角色靈感 → 動線與美學補充。',
-      steps:['check','workspace','colorinspire','naming','charcheck','flow','aes']
+      blurb:'照創作進行到哪一步走：先在靈感區找方向，動手時查色票與命名，做完再健檢並分享出去。',
+      steps:['flow','colorinspire','workspace','charcheck','swatch','naming','check','gallery']
     }
   };
 
@@ -2986,13 +2997,20 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
   }
 
   function loadHits(){
-    try{return JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){return {};}
+    try{
+      var h=JSON.parse(localStorage.getItem(KEY)||'{}')||{};
+      if(h[RANK_SKIP]!==undefined){ delete h[RANK_SKIP]; saveHits(h); }
+      return h;
+    }catch(e){return {};}
   }
   function saveHits(h){
     try{localStorage.setItem(KEY,JSON.stringify(h));}catch(e){}
   }
   function bump(name){
     if(!name||!LABELS[name])return;
+    /* 智能導覽是每次進站的預設分頁，計進去只會讓它永遠排第一，
+       蓋掉真正被主動點開的功能。所以不列入統計。 */
+    if(name===RANK_SKIP)return;
     var h=loadHits();
     h[name]=(h[name]|0)+1;
     saveHits(h);
@@ -3094,6 +3112,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     var _loc=(document.documentElement.getAttribute('lang')||'en').indexOf('zh')===0?'zh':'en';
     var rows=Object.keys(h||{})
       .filter(function(k){return Object.prototype.hasOwnProperty.call(LABELS,k);})
+      .filter(function(k){return k!==RANK_SKIP;})   // 也濾掉先前已經記到的舊資料
       .map(function(k){return {k:k,n:h[k]|0,label:LABELS[k]};})
       .filter(function(r){return r.n>0;})
       .sort(function(a,b){return b.n-a.n||a.label.localeCompare(b.label,_loc);});
