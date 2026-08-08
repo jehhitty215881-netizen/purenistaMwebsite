@@ -1849,7 +1849,39 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>Changelog <span class="tag ok">actively maintained</span></h3>
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.5.0 <span class="chg-build">current・live board updates and permission hardening</span></div>
+      <div class="chg-ver">Version 5.5.0 <span class="chg-build">current・shared work, unread badges and permission hardening</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>Added: shared work and personal palettes</b></p>
+      <ul class="tips">
+        <li>A new "Shared work" tab. Two things can be saved: <b>palettes</b> (a set of hex codes, entered by hand or kept straight from a roll in the colour room with "Save to my palettes") and <b>ideas</b> (free text — character notes, names, anything).</li>
+        <li>Saved items are <b>private by default</b>; publish them when you want to share, and unpublish at any time. Once public, others can favourite them, and the "Favourites" tab collects everything you have hearted.</li>
+        <li>Palettes render as actual colour chips rather than bare codes, and the whole set can be copied in one tap.</li>
+        <li>Permissions are enforced in the database as before: private items are invisible to everyone else, nobody can save under another person's name, edit or delete someone else's work, publish another person's private item, or favourite something they cannot see; banned and unapproved accounts cannot save at all. Colour format and the eight-colour limit are validated server-side too.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Added: unread badges on the board list</b></p>
+      <ul class="tips">
+        <li>Finding out which board had new posts previously meant opening each one in turn. The list now shows an "N new" badge directly, in the site's teal rather than a red dot, so it reads as information rather than pressure.</li>
+        <li>Anyone who would rather not see it can switch it off above the list, and that preference is remembered on their device. How far you have read is also stored only in your own browser, never in the database — nobody else can see what you have read, and there are no read receipts.</li>
+        <li>Details: your own messages never count as unread; a first visit does not dump dozens of unread onto you but starts counting from that moment; and opening a room clears its badge.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Changed: creative tabs regrouped</b></p>
+      <ul class="tips">
+        <li>The "Create" group had grown to seven tabs with overlapping purposes, making it hard to tell where to start. They are now grouped by which stage you are at: <b>Ideas</b> (Idea bank, Challenges, Character generator), <b>Making</b> (Swatches, Colour convert, Naming, Symbols) and <b>Finished</b> (Art check, Shared work). "Workflow" moved up to the Guide group alongside the smart guide, since both answer the same question — where do I begin.</li>
+        <li>Two tabs were renamed: "Color Inspire" is now <b>Idea bank</b> and "Workspace" is now <b>Challenges</b>. Nothing about how they work has changed; the names simply match what they actually do.</li>
+        <li><b>Existing links still work.</b> None of the internal tab identifiers changed, so previously shared URLs open exactly as before. The mobile quick-switch menu picks up the new grouping automatically.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Changed: colour inspiration room</b></p>
+      <ul class="tips">
+        <li>Hex codes now render with a small chip of the actual colour beside them. Posting to the room previously produced a bare string like #11997B that nobody could read as a colour. Older messages benefit too, since the chips are drawn at display time.</li>
+        <li>Rolls produce 1–4 colours instead of always 4; the count itself is randomised and shown in the heading, and no colour repeats within a single roll.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Changed: the turn panel was cramped on phones</b></p>
+      <ul class="tips">
+        <li>Buttons are now laid out in two equal columns instead of wrapping raggedly one per line. The three lines of explanatory text are folded into a collapsible "How it works" section, closed by default — useful once, but half a screen of space every time. The queue count stays visible since it is live status. Room and panel padding were tightened to give the content back its width.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Changed: approval notice on sign-up</b></p>
+      <ul class="tips">
+        <li>The sign-up form, the post-registration confirmation and the pending banner all now explain that approval is required before posting, and who to contact. Previously registration ended with "awaiting approval" and no indication of whom to ask.</li>
+      </ul>
       <p class="cond" style="margin:8px 0 4px"><b>Fixed: the board flickered every time anyone posted</b></p>
       <ul class="tips">
         <li>Any incoming message caused the entire message list to be cleared and rebuilt, so a single new post repainted all hundred-plus messages above it. Rendering is now incremental: unchanged messages keep their existing element untouched, a new message inserts a single node, and hiding or deleting swaps only that one message.</li>
@@ -1867,39 +1899,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>All of these checks now run in the database itself. Permission columns cannot be altered by the account they belong to, messages can only be self-deleted rather than edited or un-hidden, room fields are locked to non-admins, and the hand-over rules (only the current player may pass, and only to someone who joined the queue) are enforced there too.</li>
         <li>The turn queue table has also been created properly — the original statement never ran successfully, which is why the panel always showed zero players in the queue.</li>
       </ul>
-      <p class="cond" style="margin:12px 0 4px"><b>Changed: colour inspiration room</b></p>
-      <ul class="tips">
-        <li>Hex codes now render with a small chip of the actual colour beside them. Posting to the room previously produced a bare string like #11997B that nobody could read as a colour. Older messages benefit too, since the chips are drawn at display time.</li>
-        <li>Rolls produce 1–4 colours instead of always 4; the count itself is randomised and shown in the heading, and no colour repeats within a single roll.</li>
-      </ul>
-      <p class="cond" style="margin:12px 0 4px"><b>Changed: the turn panel was cramped on phones</b></p>
-      <ul class="tips">
-        <li>Buttons are now laid out in two equal columns instead of wrapping raggedly one per line. The three lines of explanatory text are folded into a collapsible "How it works" section, closed by default — useful once, but half a screen of space every time. The queue count stays visible since it is live status. Room and panel padding were tightened to give the content back its width.</li>
-      </ul>
-      <p class="cond" style="margin:12px 0 4px"><b>Changed: creative tabs regrouped</b></p>
-      <ul class="tips">
-        <li>The "Create" group had grown to seven tabs with overlapping purposes, making it hard to tell where to start. They are now grouped by which stage you are at: <b>Ideas</b> (Idea bank, Challenges, Character generator), <b>Making</b> (Swatches, Colour convert, Naming, Symbols) and <b>Finished</b> (Art check, Shared work). "Workflow" moved up to the Guide group alongside the smart guide, since both answer the same question — where do I begin.</li>
-        <li>Two tabs were renamed: "Color Inspire" is now <b>Idea bank</b> and "Workspace" is now <b>Challenges</b>. Nothing about how they work has changed; the names simply match what they actually do.</li>
-        <li><b>Existing links still work.</b> None of the internal tab identifiers changed, so previously shared URLs open exactly as before. The mobile quick-switch menu picks up the new grouping automatically.</li>
-      </ul>
-      <p class="cond" style="margin:12px 0 4px"><b>Added: shared work and personal palettes</b></p>
-      <ul class="tips">
-        <li>A new "Shared work" tab. Two things can be saved: <b>palettes</b> (a set of hex codes, entered by hand or kept straight from a roll in the colour room with "Save to my palettes") and <b>ideas</b> (free text — character notes, names, anything).</li>
-        <li>Saved items are <b>private by default</b>; publish them when you want to share, and unpublish at any time. Once public, others can favourite them, and the "Favourites" tab collects everything you have hearted.</li>
-        <li>Palettes render as actual colour chips rather than bare codes, and the whole set can be copied in one tap.</li>
-        <li>Permissions are enforced in the database as before: private items are invisible to everyone else, nobody can save under another person's name, edit or delete someone else's work, publish another person's private item, or favourite something they cannot see; banned and unapproved accounts cannot save at all. Colour format and the eight-colour limit are validated server-side too.</li>
-      </ul>
-      <p class="cond" style="margin:12px 0 4px"><b>Added: unread badges on the board list</b></p>
-      <ul class="tips">
-        <li>Finding out which board had new posts previously meant opening each one in turn. The list now shows an "N new" badge directly, in the site's teal rather than a red dot, so it reads as information rather than pressure.</li>
-        <li>Anyone who would rather not see it can switch it off above the list, and that preference is remembered on their device. How far you have read is also stored only in your own browser, never in the database — nobody else can see what you have read, and there are no read receipts.</li>
-        <li>Details: your own messages never count as unread; a first visit does not dump dozens of unread onto you but starts counting from that moment; and opening a room clears its badge.</li>
-      </ul>
-      <p class="cond" style="margin:12px 0 4px"><b>Changed: approval notice on sign-up</b></p>
-      <ul class="tips">
-        <li>The sign-up form, the post-registration confirmation and the pending banner all now explain that approval is required before posting, and who to contact. Previously registration ended with "awaiting approval" and no indication of whom to ask.</li>
-      </ul>
-      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. The board's live-update logic is covered by 14 tests (insertion, status change, deletion, out-of-order arrival, empty list and error recovery); the permission work by 28 tests (10 bypass techniques all blocked, with posting, nickname edits, self-delete, admin approval/ban/mute, queue join/leave and turn passing all still working).</p>
+      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. This release passes 100 automated tests: 14 for live board updates, 15 for unread badges, 28 for the permission hardening, and 27 database plus 31 front-end tests for shared work (including hex parsing edge cases and output escaping). The permission tests run against a real local database, attempting the bypasses as four different kinds of account.</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.5 <span class="chg-build">removed leftovers pointing at an external service</span></div>
