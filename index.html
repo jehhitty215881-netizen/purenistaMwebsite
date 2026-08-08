@@ -64,7 +64,9 @@ nav .navgrp{flex:0 0 auto;display:flex;align-items:center;padding:0 4px 0 10px;f
 .to-guide:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
 .to-guide:active{transform:translateY(1px)}
 .to-guide .tg-ico{font-size:14px;line-height:1}
-.to-guide-bar{position:fixed;right:16px;bottom:16px;z-index:18;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;max-width:calc(100vw - 32px)}
+.to-guide-bar{position:fixed;right:16px;bottom:16px;z-index:18;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;max-width:calc(100vw - 32px);transition:transform .22s ease,opacity .22s ease}
+.to-guide-bar.tucked{transform:translateY(calc(100% + 28px));opacity:0;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.to-guide-bar{transition:none}}
 .to-guide-bar[hidden]{display:none}
 .to-guide-bar .to-guide{position:static;right:auto;bottom:auto;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .to-next{background:linear-gradient(135deg,var(--violet),var(--rose));border-color:transparent;color:#fff}
@@ -1916,6 +1918,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <ul class="tips">
         <li>右下角原本就有一顆回智能導覽的按鈕，但它用的是「↑」，看起來像回到頁面頂端，加上外框樣式偏淡，很容易被當成裝飾而忽略。圖示改成「←」，位置與大小不變。</li>
         <li>更實際的問題是：照路徑走的時候，你真正想去的是<b>下一站</b>，而不是導覽頁。原本得「回導覽 → 找到那條路徑 → 點下一個」三步。現在只要目前分頁在你選的那條路徑上，旁邊就會多一顆<b>「下一站：○○○ →」</b>，一鍵直接過去。</li>
+        <li>兩顆按鈕會<b>跟著捲動自動讓開</b>：往下滑代表正在讀內容，就收到畫面外；往上滑代表在找東西，立刻滑回來。第一個畫面高度內不會收起，回到頂端或切換分頁也會自動出現。</li>
         <li>細節：走到最後一站就不再顯示；跳到路徑外的分頁時只留返回鍵；換一條路徑會自動改指向新的下一站。</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>調整：配色靈感房</b></p>
@@ -1963,7 +1966,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>這些判斷全部移到資料庫層強制執行。權限相關的欄位本人改不動，訊息只能自刪而不能改字、也不能解除隱藏，遊戲房的標題等欄位對一般人完全鎖死，交棒規則（只有輪到的人能交棒、只能傳給有加入輪替的人）也一併寫進資料庫。</li>
         <li>順帶補上「輪替名單」的資料表——之前那段建表指令沒有成功執行過，所以面板上的「輪替中」人數一直是 0。</li>
       </ul>
-      <p class="fine">建置標記更新為 v5.5.0。中英文版同步。本版共通過 143 項自動測試：留言板即時更新 14 項、未讀提醒 15 項、智能導覽與排行 15 項、路徑涵蓋率 7 項、返回與下一站 14 項、權限修補 28 項、創作分享的資料庫權限 27 項與前端 23 項。其中權限相關的測試是在本機真實資料庫上以四種身分實際嘗試繞過；路徑涵蓋率會檢查每個分頁都被至少一條路徑收錄，避免這次的遺漏再發生。</p>
+      <p class="fine">建置標記更新為 v5.5.0。中英文版同步。本版共通過 155 項自動測試：留言板即時更新 14 項、未讀提醒 15 項、智能導覽與排行 15 項、路徑涵蓋率 7 項、返回與下一站 14 項、浮動列捲動行為 12 項、權限修補 28 項、創作分享的資料庫權限 27 項與前端 23 項。其中權限相關的測試是在本機真實資料庫上以四種身分實際嘗試繞過；路徑涵蓋率會檢查每個分頁都被至少一條路徑收錄，避免這次的遺漏再發生。</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.5 <span class="chg-build">清掉叫你去用外部服務的殘留</span></div>
@@ -2865,7 +2868,7 @@ function goTab(name){
    若目前分頁正好在使用者選的路徑上，再多給一顆「下一站」直接跳。 */
 function syncGuideBtn(name){
   const bar=document.getElementById("toGuideBar");
-  if(bar)bar.hidden=(name==="home");
+  if(bar){ bar.hidden=(name==="home"); bar.classList.remove("tucked"); }
   const nx=document.getElementById("toNext");
   if(!nx)return;
   let info=null;
@@ -2892,6 +2895,25 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
   });
   const cur=document.querySelector("nav button[data-tab].on");
   syncGuideBtn(cur?cur.dataset.tab:"home");
+
+  /* 往下滑＝正在讀內容，把浮動列收起來讓開；往上滑＝在找東西，再拿回來。
+     小於 6px 的位移不理會（手指微抖），而且不更新基準點，所以連續的小幅
+     滑動會累加，不會因為滑太慢而永遠觸發不了。 */
+  const bar=document.getElementById("toGuideBar");
+  if(bar){
+    let lastY=window.scrollY||0, ticking=false;
+    const update=function(){
+      ticking=false;
+      const y=window.scrollY||0, d=y-lastY;
+      if(Math.abs(d)<6)return;
+      if(d>0&&y>120)bar.classList.add("tucked");
+      else if(d<0)bar.classList.remove("tucked");
+      lastY=y;
+    };
+    window.addEventListener("scroll",function(){
+      if(!ticking){ticking=true;requestAnimationFrame(update);}
+    },{passive:true});
+  }
 })();
 
 /* ---------- custom mobile nav dropdown (replaces native <select>) ---------- */

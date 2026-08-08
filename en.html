@@ -64,7 +64,9 @@ nav .navgrp{flex:0 0 auto;display:flex;align-items:center;padding:0 4px 0 10px;f
 .to-guide:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
 .to-guide:active{transform:translateY(1px)}
 .to-guide .tg-ico{font-size:14px;line-height:1}
-.to-guide-bar{position:fixed;right:16px;bottom:16px;z-index:18;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;max-width:calc(100vw - 32px)}
+.to-guide-bar{position:fixed;right:16px;bottom:16px;z-index:18;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;max-width:calc(100vw - 32px);transition:transform .22s ease,opacity .22s ease}
+.to-guide-bar.tucked{transform:translateY(calc(100% + 28px));opacity:0;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.to-guide-bar{transition:none}}
 .to-guide-bar[hidden]{display:none}
 .to-guide-bar .to-guide{position:static;right:auto;bottom:auto;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .to-next{background:linear-gradient(135deg,var(--violet),var(--rose));border-color:transparent;color:#fff}
@@ -1911,6 +1913,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <ul class="tips">
         <li>There was already a button in the bottom-right corner for returning to the smart guide, but it used an "↑" that reads as scroll-to-top, and its outlined style made it easy to dismiss as decoration. The icon is now "←"; position and size are unchanged.</li>
         <li>The more practical problem: while following a path, the place you actually want is the <b>next stop</b>, not the guide. That used to take three taps — back to the guide, find the path again, pick the next one. Now, whenever the current tab sits on your chosen path, a second button appears reading <b>"Next: ... →"</b> and goes straight there.</li>
+        <li>Both buttons now <b>get out of the way as you scroll</b>: scrolling down means you are reading, so they slide off screen; scrolling up means you are looking for something, so they come straight back. They never hide within the first screenful, and reappear when you reach the top or switch tabs.</li>
         <li>Details: it disappears at the final stop, only the return button shows on tabs outside the path, and switching to a different path retargets it automatically.</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>Changed: colour inspiration room</b></p>
@@ -1958,7 +1961,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>All of these checks now run in the database itself. Permission columns cannot be altered by the account they belong to, messages can only be self-deleted rather than edited or un-hidden, room fields are locked to non-admins, and the hand-over rules (only the current player may pass, and only to someone who joined the queue) are enforced there too.</li>
         <li>The turn queue table has also been created properly — the original statement never ran successfully, which is why the panel always showed zero players in the queue.</li>
       </ul>
-      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. This release passes 143 automated tests: 14 for live board updates, 15 for unread badges, 15 for the smart guide and ranking, 7 for path coverage, 14 for the return and next-stop bar, 28 for the permission hardening, and 27 database plus 23 front-end tests for shared work. The permission tests run against a real local database as four different kinds of account; the coverage tests assert that every tab is reachable from at least one path, so this release's omission cannot recur unnoticed.</p>
+      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. This release passes 155 automated tests: 14 for live board updates, 15 for unread badges, 15 for the smart guide and ranking, 7 for path coverage, 14 for the return and next-stop bar, 12 for its scroll behaviour, 28 for the permission hardening, and 27 database plus 23 front-end tests for shared work. The permission tests run against a real local database as four different kinds of account; the coverage tests assert that every tab is reachable from at least one path, so this release's omission cannot recur unnoticed.</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.5 <span class="chg-build">removed leftovers pointing at an external service</span></div>
@@ -2863,7 +2866,7 @@ function goTab(name){
    jumps straight to the next stop. */
 function syncGuideBtn(name){
   const bar=document.getElementById("toGuideBar");
-  if(bar)bar.hidden=(name==="home");
+  if(bar){ bar.hidden=(name==="home"); bar.classList.remove("tucked"); }
   const nx=document.getElementById("toNext");
   if(!nx)return;
   let info=null;
@@ -2890,6 +2893,26 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
   });
   const cur=document.querySelector("nav button[data-tab].on");
   syncGuideBtn(cur?cur.dataset.tab:"home");
+
+  /* Scrolling down means you are reading, so the bar tucks away; scrolling up
+     means you are looking for something, so it comes back. Movements under 6px
+     are ignored as finger jitter, and deliberately do not reset the baseline,
+     so a slow drift still adds up rather than never triggering. */
+  const bar=document.getElementById("toGuideBar");
+  if(bar){
+    let lastY=window.scrollY||0, ticking=false;
+    const update=function(){
+      ticking=false;
+      const y=window.scrollY||0, d=y-lastY;
+      if(Math.abs(d)<6)return;
+      if(d>0&&y>120)bar.classList.add("tucked");
+      else if(d<0)bar.classList.remove("tucked");
+      lastY=y;
+    };
+    window.addEventListener("scroll",function(){
+      if(!ticking){ticking=true;requestAnimationFrame(update);}
+    },{passive:true});
+  }
 })();
 
 /* ---------- custom mobile nav dropdown (replaces native <select>) ---------- */
