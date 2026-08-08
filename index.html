@@ -771,6 +771,8 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <button type="button" data-role="trade">想交換</button>
       <button type="button" data-role="brand">看品牌</button>
       <button type="button" data-role="create">想創作</button>
+      <button type="button" data-role="publish">要發布</button>
+      <button type="button" data-role="browse">隨便逛逛</button>
     </div>
     <div class="sg-path" id="sgPath" hidden></div>
 
@@ -1876,8 +1878,10 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>調整：智能導覽</b></p>
       <ul class="tips">
-        <li>身分按鈕上的 emoji 拿掉了，改成純文字。</li>
-        <li>「創作路徑」重寫。原本是照工具列出來的，現在照創作進行到哪一步走：創作動線 → 靈感庫 → 創作挑戰 → 角色隨機生成 → 色票工具 → 命名與標籤 → 作品健檢 → 創作分享，跟新的選單分組一致，也把這版新增的「創作分享」補進去。「品牌路徑」的說明同步改用新名稱。</li>
+        <li>身分按鈕上的 emoji 拿掉了，改成純文字，並新增兩個身分：<b>要發布</b>與<b>隨便逛逛</b>。</li>
+        <li>原本五條路徑加起來只涵蓋站上 18 個分頁，特殊符號、色碼轉換、科普、留言板、意見專欄、備註、更新紀錄這些從來不會被推薦到。現在<b>除了智能導覽本身，每個分頁都至少出現在一條路徑裡</b>。</li>
+        <li>創作相關拆成兩條，因為它們其實是兩個不同的時刻：<b>創作路徑</b>（創作動線 → 靈感庫 → 創作挑戰 → 角色隨機生成 → 美學專欄 → 作品健檢）處理從沒方向到畫完；<b>發布路徑</b>（色票工具 → 色碼轉換 → 命名與標籤 → 特殊符號 → 創作分享）處理畫完之後的整理與分享。硬塞成一條會變成十一步，那就不是路徑而是清單了。</li>
+        <li>順帶修好上一次改動時不小心從創作路徑漏掉的<b>美學專欄</b>。</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>調整：配色靈感房</b></p>
       <ul class="tips">
@@ -1891,6 +1895,10 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <p class="cond" style="margin:12px 0 4px"><b>調整：註冊審核說明</b></p>
       <ul class="tips">
         <li>註冊表單下方、註冊成功的提示、以及待審核橫幅三個地方，都會說明需要通過審核才能發言，並附上聯絡方式。之前註冊完只會看到「等待審核」，卻沒說要找誰。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>修正：英文版的功能名稱有三處對不上</b></p>
+      <ul class="tips">
+        <li>英文版的熱門排行少了「創作分享」，而且靈感庫與創作挑戰的改名沒有同步過去，排行仍顯示舊名稱。另外導覽列與排行列表對同一個分頁用了不同寫法（例如 Pull Costs 與 Gacha cost），現在一律以導覽列為準。</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>修正：功能熱門排行永遠是智能導覽第一名</b></p>
       <ul class="tips">
@@ -1914,7 +1922,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>這些判斷全部移到資料庫層強制執行。權限相關的欄位本人改不動，訊息只能自刪而不能改字、也不能解除隱藏，遊戲房的標題等欄位對一般人完全鎖死，交棒規則（只有輪到的人能交棒、只能傳給有加入輪替的人）也一併寫進資料庫。</li>
         <li>順帶補上「輪替名單」的資料表——之前那段建表指令沒有成功執行過，所以面板上的「輪替中」人數一直是 0。</li>
       </ul>
-      <p class="fine">建置標記更新為 v5.5.0。中英文版同步。本版共通過 115 項自動測試：留言板即時更新 14 項、未讀提醒 15 項、智能導覽與排行 15 項、權限修補 28 項、創作分享的資料庫權限 27 項與前端 31 項（含色碼解析邊界與內容跳脫）。其中權限相關的測試是在本機真實資料庫上以四種身分實際嘗試繞過。</p>
+      <p class="fine">建置標記更新為 v5.5.0。中英文版同步。本版共通過 129 項自動測試：留言板即時更新 14 項、未讀提醒 15 項、智能導覽與排行 15 項、路徑涵蓋率 14 項、權限修補 28 項、創作分享的資料庫權限 27 項與前端 16 項。其中權限相關的測試是在本機真實資料庫上以四種身分實際嘗試繞過；路徑涵蓋率會檢查每個分頁都被至少一條路徑收錄，避免這次的遺漏再發生。</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.5 <span class="chg-build">清掉叫你去用外部服務的殘留</span></div>
@@ -2947,8 +2955,18 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     },
     create:{
       title:'創作路徑',
-      blurb:'照創作進行到哪一步走：先在靈感區找方向，動手時查色票與命名，做完再健檢並分享出去。',
-      steps:['flow','colorinspire','workspace','charcheck','swatch','naming','check','gallery']
+      blurb:'從沒方向到畫完：先看動線知道整條路，再抽靈感、挑挑戰、骰角色，畫完用健檢看問題。',
+      steps:['flow','colorinspire','workspace','charcheck','aes','check']
+    },
+    publish:{
+      title:'發布路徑',
+      blurb:'畫完之後的那一段：整理色票、取標題與標籤、加點符號裝飾，最後存進創作分享，公開讓別人收藏。',
+      steps:['swatch','hexconv','naming','symbols','gallery']
+    },
+    browse:{
+      title:'隨便逛逛',
+      blurb:'沒有特定目的的時候：看看美學與科普長知識，到留言板跟人聊，順手看看站上最近改了什麼。',
+      steps:['aes','lore','qa','board','feedback','changelog','notes']
     }
   };
 

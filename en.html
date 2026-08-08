@@ -766,6 +766,8 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <button type="button" data-role="trade">Trading</button>
       <button type="button" data-role="brand">Brands</button>
       <button type="button" data-role="create">Creating</button>
+      <button type="button" data-role="publish">Publishing</button>
+      <button type="button" data-role="browse">Browsing</button>
     </div>
     <div class="sg-path" id="sgPath" hidden></div>
 
@@ -1871,8 +1873,10 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>Changed: the smart guide</b></p>
       <ul class="tips">
-        <li>The emoji on the role buttons have been removed in favour of plain text.</li>
-        <li>The creating path was rewritten. It used to be a list of tools; it now follows the stage you are at — Workflow → Idea bank → Challenges → Character generator → Swatches → Naming → Art check → Shared work — matching the new menu grouping and including this release's Shared work tab. The brand path's wording was updated to the new names too.</li>
+        <li>The emoji on the role buttons have been removed in favour of plain text, and two roles were added: <b>Publishing</b> and <b>Browsing</b>.</li>
+        <li>The original five paths only ever reached 18 of the site's tabs — Symbols, Colour convert, Trivia, Board, Feedback, Notes and Changelog were never recommended by any of them. Now <b>every tab except the guide itself appears in at least one path</b>.</li>
+        <li>The creative side is split in two, because it covers two different moments: the <b>Creating path</b> (Workflow → Idea bank → Challenges → Character generator → Aesthetics → Art check) takes you from no direction to a finished piece, and the <b>Publishing path</b> (Swatches → Colour convert → Naming → Symbols → Shared work) handles what happens afterwards. Forcing them into one route would have made an eleven-step list, which is not a path.</li>
+        <li>This also restores <b>Aesthetics</b>, which was accidentally dropped from the creating path in the previous change.</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>Changed: colour inspiration room</b></p>
       <ul class="tips">
@@ -1886,6 +1890,10 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <p class="cond" style="margin:12px 0 4px"><b>Changed: approval notice on sign-up</b></p>
       <ul class="tips">
         <li>The sign-up form, the post-registration confirmation and the pending banner all now explain that approval is required before posting, and who to contact. Previously registration ended with "awaiting approval" and no indication of whom to ask.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Fixed: three feature names out of step in the English version</b></p>
+      <ul class="tips">
+        <li>The English feature ranking was missing Shared work, and the renames of Idea bank and Challenges had not been carried across, so it still showed the old names. The menu and the ranking also spelled the same tab differently in places (Pull Costs versus Gacha cost); the menu wording now wins everywhere.</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>Fixed: the smart guide always topped the feature ranking</b></p>
       <ul class="tips">
@@ -1909,7 +1917,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>All of these checks now run in the database itself. Permission columns cannot be altered by the account they belong to, messages can only be self-deleted rather than edited or un-hidden, room fields are locked to non-admins, and the hand-over rules (only the current player may pass, and only to someone who joined the queue) are enforced there too.</li>
         <li>The turn queue table has also been created properly — the original statement never ran successfully, which is why the panel always showed zero players in the queue.</li>
       </ul>
-      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. This release passes 115 automated tests: 14 for live board updates, 15 for unread badges, 15 for the smart guide and ranking, 28 for the permission hardening, and 27 database plus 31 front-end tests for shared work (including hex parsing edge cases and output escaping). The permission tests run against a real local database, attempting the bypasses as four different kinds of account.</p>
+      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. This release passes 129 automated tests: 14 for live board updates, 15 for unread badges, 15 for the smart guide and ranking, 14 for path coverage, 28 for the permission hardening, and 27 database plus 16 front-end tests for shared work. The permission tests run against a real local database as four different kinds of account; the coverage tests assert that every tab is reachable from at least one path, so this release's omission cannot recur unnoticed.</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.5 <span class="chg-build">removed leftovers pointing at an external service</span></div>
@@ -2914,12 +2922,12 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
   var KEY='pm_feat_hits_v1';
   var RANK_SKIP='home';   // 預設分頁，不列入熱門排行
   var LABELS={
-    home:'Smart guide',calc:'Quick Calc',ratio:'Trade ratios',market:'Rainbow Market',pull:'Gacha cost',vip:'Top-up · VIP',
-    brand:'Brand dyes',branddata:'Brand data',trade:'Trade tips',sched:'Schedule',
-    check:'Art check',workspace:'Workspace',colorinspire:'Colour inspire',naming:'Names & tags',
-    charcheck:'Random character',flow:'Creative flow',aes:'Aesthetics',lore:'Lore',qa:'QA',
+    home:'Smart guide',calc:'Quick Calc',ratio:'Trade Ratios',market:'Rainbow Market',pull:'Pull Costs',vip:'Top-up & VIP',
+    brand:'BRAND Dyeing',branddata:'Brand data',trade:'Trade Smarts',sched:'Schedule',
+    check:'Art check',workspace:'Challenges',colorinspire:'Idea bank',naming:'Naming',
+    charcheck:'Character generator',flow:'Workflow',aes:'Aesthetics',lore:'Trivia',qa:'Q&A',
     board:'Board',feedback:'Feedback',notes:'Notes',changelog:'Changelog',
-    swatch:'Swatches',symbols:'Symbols',hexconv:'Colour convert'
+    swatch:'Swatches',symbols:'Symbols',hexconv:'Colour convert',gallery:'Shared work'
   };
   var PATHS={
     newbie:{
@@ -2944,8 +2952,18 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     },
     create:{
       title:'Creating path',
-      blurb:'Follow the stage you are at: find a direction, look up colours and names while making, then check the result and share it.',
-      steps:['flow','colorinspire','workspace','charcheck','swatch','naming','check','gallery']
+      blurb:'From no direction to a finished piece: see the whole route, roll ideas, pick a challenge, generate a character, then check the result.',
+      steps:['flow','colorinspire','workspace','charcheck','aes','check']
+    },
+    publish:{
+      title:'Publishing path',
+      blurb:'The part after the drawing: tidy the palette, write a title and tags, add a few symbols, then save it to Shared work for others to favourite.',
+      steps:['swatch','hexconv','naming','symbols','gallery']
+    },
+    browse:{
+      title:'Just browsing',
+      blurb:'For when there is no particular goal: read the aesthetics and trivia columns, talk to people on the board, see what changed recently.',
+      steps:['aes','lore','qa','board','feedback','changelog','notes']
     }
   };
 
