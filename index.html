@@ -591,6 +591,36 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
 
 .board-card .bc-tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--rose-soft);color:var(--rose);margin-left:6px;vertical-align:middle}
+.gl-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.gl-tabs button{border:1.5px solid var(--line);background:var(--panel);color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:999px;cursor:pointer}
+.gl-tabs button.on{background:var(--violet);border-color:var(--violet);color:#fff}
+.gl-note{margin:0 0 12px;padding:10px 12px;border-radius:12px;background:var(--gold-soft);border:1.5px dashed var(--gold);font-size:12.5px;line-height:1.7;color:var(--ink)}
+.gl-form{border:1.5px solid var(--line);border-radius:14px;padding:12px 13px;margin:0 0 14px;background:var(--panel)}
+.gl-form .gf-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 8px}
+.gl-form label.gf-k{display:flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;color:var(--ink);cursor:pointer}
+.gl-form input[type=text],.gl-form textarea{width:100%;padding:8px 11px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:13px;color:var(--ink);background:var(--bg)}
+.gl-form textarea{min-height:76px;resize:vertical}
+.gl-form .gf-pub{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink);cursor:pointer}
+.gl-form .gf-pub input{width:16px;height:16px;accent-color:var(--violet)}
+.gl-form .gf-save{border:none;background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;font-family:inherit;font-weight:800;font-size:13px;padding:9px 22px;border-radius:999px;cursor:pointer}
+.gl-form .gf-prev{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 0}
+.gl-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.gl-item{border:1.5px solid var(--line);border-radius:14px;padding:12px 13px;background:var(--panel);display:flex;flex-direction:column;gap:7px}
+.gl-item.is-private{border-style:dashed}
+.gl-item .gi-top{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.gl-item .gi-title{font-weight:800;font-size:14px;color:var(--ink);min-width:0;overflow-wrap:anywhere}
+.gl-item .gi-kind{font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--violet-soft);color:var(--violet)}
+.gl-item .gi-priv{font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--line);color:var(--ink-soft)}
+.gl-item .gi-sw{display:flex;flex-wrap:wrap;gap:6px}
+.gl-item .gi-sw i{width:30px;height:30px;border-radius:9px;border:1px solid rgba(0,0,0,.12);display:block}
+.gl-item .gi-codes{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--ink-soft);overflow-wrap:anywhere}
+.gl-item .gi-body{font-size:13px;line-height:1.7;color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere}
+.gl-item .gi-meta{font-size:11.5px;color:var(--ink-soft)}
+.gl-item .gi-acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:4px}
+.gl-item .gi-acts button{border:1.5px solid var(--line);background:transparent;color:var(--ink-soft);font-family:inherit;font-weight:700;font-size:11.5px;padding:5px 11px;border-radius:999px;cursor:pointer}
+.gl-item .gi-acts button:hover{border-color:var(--violet);color:var(--violet)}
+.gl-item .gi-acts button.fav.on{background:var(--rose-soft);border-color:var(--rose);color:var(--rose)}
+@media(max-width:480px){.gl-list{grid-template-columns:1fr}}
 .board-card .bc-new{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--teal-soft);color:var(--teal);margin-left:6px;vertical-align:middle}
 .board-card.has-new{border-color:var(--teal)}
 .board-unread-opt{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 10px;font-size:12.5px;color:var(--ink-soft)}
@@ -691,6 +721,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 <nav aria-label="分頁">
   <span class="navgrp">導覽</span>
   <button class="on" data-tab="home">智能導覽</button>
+  <button data-tab="flow">創作動線</button>
   <span class="navgrp">交易</span>
   <button data-tab="calc">快速換算</button>
   <button data-tab="ratio">交換比例</button>
@@ -703,17 +734,18 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <button data-tab="branddata">品牌資料</button>
   <button data-tab="trade">交易心法</button>
   <button data-tab="sched">排期預測</button>
-  <span class="navgrp">創作</span>
-  <button data-tab="check">作品健檢</button>
-  <button data-tab="workspace">創作工作台</button>
-  <button data-tab="colorinspire">配色靈感</button>
-  <button data-tab="naming">命名與標籤</button>
+  <span class="navgrp">靈感</span>
+  <button data-tab="colorinspire">靈感庫</button>
+  <button data-tab="workspace">創作挑戰</button>
   <button data-tab="charcheck">角色隨機生成</button>
-  <button data-tab="flow">創作動線</button>
-  <span class="navgrp">工具</span>
+  <span class="navgrp">動手</span>
   <button data-tab="swatch">色票工具</button>
-  <button data-tab="symbols">特殊符號</button>
   <button data-tab="hexconv">色碼轉換</button>
+  <button data-tab="naming">命名與標籤</button>
+  <button data-tab="symbols">特殊符號</button>
+  <span class="navgrp">完成後</span>
+  <button data-tab="check">作品健檢</button>
+  <button data-tab="gallery">創作分享</button>
   <span class="navgrp">學習</span>
   <button data-tab="aes">美學專欄</button>
   <button data-tab="lore">科普</button>
@@ -1205,7 +1237,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
 <section id="workspace">
   <div class="card">
-    <h3>創作工作台 <span class="tag ok">從沒想法到有企劃</span></h3><p class="cond" style="margin:2px 0 13px">七個步驟，每一步做一個決定。<b>不用照順序</b>，想到哪填哪；填滿四項以上就會產生一張企劃卡，可以複製下來邊做邊看。<br>選項都是<b>類型而不是遊戲道具名</b>——道具會隨改版過期，類型不會。</p><div class="dc-wrap" id="dcBox"></div><div class="ws-bar"><b>進度</b><div class="tk"><i id="wsFill"></i></div><b id="wsCount">0 / 7</b><button class="ws-btn ghost" id="wsRollAll" type="button">🎲 全部隨機</button></div><div id="wsSteps"></div><div class="ws-card" id="wsCard"></div><div class="ws-acts"><button class="ws-btn" id="wsCopy" type="button">複製企劃卡</button><button class="ws-btn ghost" id="wsToName" type="button">用主題和情緒去生標題 →</button><button class="ws-btn ghost" id="wsReset" type="button">清空</button></div>
+    <h3>創作挑戰 <span class="tag ok">從沒想法到有企劃</span></h3><p class="cond" style="margin:2px 0 13px">七個步驟，每一步做一個決定。<b>不用照順序</b>，想到哪填哪；填滿四項以上就會產生一張企劃卡，可以複製下來邊做邊看。<br>選項都是<b>類型而不是遊戲道具名</b>——道具會隨改版過期，類型不會。</p><div class="dc-wrap" id="dcBox"></div><div class="ws-bar"><b>進度</b><div class="tk"><i id="wsFill"></i></div><b id="wsCount">0 / 7</b><button class="ws-btn ghost" id="wsRollAll" type="button">🎲 全部隨機</button></div><div id="wsSteps"></div><div class="ws-card" id="wsCard"></div><div class="ws-acts"><button class="ws-btn" id="wsCopy" type="button">複製企劃卡</button><button class="ws-btn ghost" id="wsToName" type="button">用主題和情緒去生標題 →</button><button class="ws-btn ghost" id="wsReset" type="button">清空</button></div>
   </div>
 </section>
 
@@ -1308,7 +1340,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
 <section id="colorinspire">
   <div class="card">
-    <h3>配色靈感生成器 <span class="tag ok">配色＋隨機靈感・同一套玩法</span></h3>
+    <h3>靈感庫 <span class="tag ok">配色＋隨機靈感・同一套玩法</span></h3>
     <p class="cond" style="margin:2px 0 12px">幫角色配色，或直接讓它幫你隨機生一套主題／設定／構圖／配色的靈感組合。三種輸入擇一即可，內容只在你的裝置上處理。</p>
 
     <p class="chk-opts-head">① 關鍵字：</p>
@@ -1787,6 +1819,21 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
 
 
+<section id="gallery">
+  <div class="card">
+    <h3>創作分享 <span class="tag ok">新</span></h3>
+    <p class="cond">把抽到的配色、想到的角色設定或名字存起來。存起來預設只有自己看得到，想分享再按公開。</p>
+    <div class="gl-tabs" id="glTabs">
+      <button type="button" class="on" data-gl="pub"></button>
+      <button type="button" data-gl="mine"></button>
+      <button type="button" data-gl="fav"></button>
+    </div>
+    <div id="glNote" class="gl-note" hidden></div>
+    <div id="glForm" class="gl-form" hidden></div>
+    <div id="glList" class="gl-list"><p class="board-empty">載入中…</p></div>
+  </div>
+</section>
+
 <section id="feedback"><div id="sec-feedback" data-lazy="1"></div></section>
 
 <!-- ================= 備註 ================= -->
@@ -1833,6 +1880,19 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <p class="cond" style="margin:12px 0 4px"><b>調整：手機上的回合面板太擠</b></p>
       <ul class="tips">
         <li>按鈕改成兩欄等寬排列，不再一個一行、長短不一。三行玩法說明收進可摺疊的「玩法說明」，預設收起來——那些字只有第一次需要看，卻佔掉半個螢幕；「輪替中：N 人」留在外面，因為那是隨時要看的狀態。房間外框與面板的內距也收窄，把寬度還給內容。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>調整：創作相關分頁重新分組</b></p>
+      <ul class="tips">
+        <li>原本「創作」一組塞了七個分頁，彼此定位重疊，不容易一眼看出該從哪個開始。改成照創作進行到哪一步來分：<b>靈感</b>（靈感庫、創作挑戰、角色隨機生成）、<b>動手</b>（色票工具、色碼轉換、命名與標籤、特殊符號）、<b>完成後</b>（作品健檢、創作分享）。「創作動線」移到最前面的「導覽」，跟智能導覽放在一起——它們都是在回答「我該從哪開始」。</li>
+        <li>兩個分頁改了顯示名稱：「配色靈感」→<b>靈感庫</b>、「創作工作台」→<b>創作挑戰</b>。功能完全沒動，只是名字更貼近實際在做的事。</li>
+        <li><b>舊連結不會失效。</b>分頁的內部代號一個都沒改，之前分享出去的網址照樣打得開。手機的快速切換選單也會自動跟著新分組，不用另外設定。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>新增：創作分享／我的色票</b></p>
+      <ul class="tips">
+        <li>新增「創作分享」分頁。可以存兩種東西：<b>色票</b>（一組色碼，可以手動輸入，也可以在配色靈感房抽完直接按「存到我的色票」）和<b>點子</b>（純文字，角色設定、命名、任何想法）。</li>
+        <li>存起來預設<b>只有自己看得到</b>，想分享再按「公開」，隨時可以再收回。公開後別人可以按愛心收藏，「我的收藏」分頁會集中列出你收藏過的東西。</li>
+        <li>色票會直接顯示色塊而不是只有代號，也可以一鍵複製整組色碼。</li>
+        <li>權限一樣在資料庫層強制：私人的東西別人查不到，不能冒用別人的身分存東西、不能改或刪別人的創作、不能把別人未公開的東西改成公開、不能收藏看不到的東西；被封鎖或還沒過審的帳號則完全不能存。色碼格式與數量上限（最多 8 色）也由資料庫驗證。</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>新增：專版列表的未讀提醒</b></p>
       <ul class="tips">
@@ -2848,10 +2908,10 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
   var LABELS={
     home:'智能導覽',calc:'快速換算',ratio:'交換比例',market:'彩虹市集',pull:'抽卡花費',vip:'儲值・VIP',
     brand:'品牌染色',branddata:'品牌資料',trade:'交易心法',sched:'排期預測',
-    check:'作品健檢',workspace:'創作工作台',colorinspire:'配色靈感',naming:'命名與標籤',
+    check:'作品健檢',workspace:'創作挑戰',colorinspire:'靈感庫',naming:'命名與標籤',
     charcheck:'角色隨機生成',flow:'創作動線',aes:'美學專欄',lore:'科普',qa:'QA',
     board:'留言板',feedback:'意見專欄',notes:'備註',changelog:'更新紀錄',
-    swatch:'色票工具',symbols:'特殊符號',hexconv:'色碼轉換'
+    swatch:'色票工具',symbols:'特殊符號',hexconv:'色碼轉換',gallery:'創作分享'
   };
   var PATHS={
     newbie:{
@@ -8064,7 +8124,7 @@ function compositionScore(opts) {
   var BOARD_LOCALE = 'zh';
   var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
   var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
-  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功！審核通過後才能發言。請私訊 棉花棠（遊戲 ID 3728362）通過審核。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "pending": "你的帳號尚在審核中，通過後才能進入專版發言。", "rejected": "你的註冊未通過審核，如有疑問請聯絡站長。", "approve": "通過", "reject": "拒絕", "no_pending": "目前沒有待審核的註冊。", "locale": "zh-TW", "approve_note": "註冊後需經審核通過才能發言", "approve_how": "請私訊", "approve_who": "棉花棠", "approve_gid": "遊戲 ID 3728362", "approve_tail": "，管理員會盡快為你開通。", "unread": "新", "unread_toggle": "顯示未讀提醒", "unread_hint": "只記在這台裝置上，不會讓別人看到你讀了什麼"};
+  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功！審核通過後才能發言。請私訊 棉花棠（遊戲 ID 3728362）通過審核。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "pending": "你的帳號尚在審核中，通過後才能進入專版發言。", "rejected": "你的註冊未通過審核，如有疑問請聯絡站長。", "approve": "通過", "reject": "拒絕", "no_pending": "目前沒有待審核的註冊。", "locale": "zh-TW", "approve_note": "註冊後需經審核通過才能發言", "approve_how": "請私訊", "approve_who": "棉花棠", "approve_gid": "遊戲 ID 3728362", "approve_tail": "，管理員會盡快為你開通。", "unread": "新", "unread_toggle": "顯示未讀提醒", "unread_hint": "只記在這台裝置上，不會讓別人看到你讀了什麼", "gl_pub": "公開分享", "gl_mine": "我的創作", "gl_fav": "我的收藏", "gl_new": "新增", "gl_kind": "類型", "gl_palette": "色票", "gl_idea": "點子", "gl_title": "標題（選填）", "gl_colors": "色碼，用空白或逗號分隔，最多 8 個", "gl_body": "內容：角色設定、命名、任何想法", "gl_public": "公開分享，讓別人可以收藏", "gl_save": "儲存", "gl_saved": "已儲存", "gl_deleted": "已刪除", "gl_empty_pub": "還沒有人公開分享，來當第一個吧。", "gl_empty_mine": "還沒有存過東西。抽到喜歡的配色就存起來吧。", "gl_empty_fav": "還沒有收藏。看到喜歡的按愛心就會出現在這裡。", "gl_need_login": "請先登入才能儲存", "gl_need_colors": "請至少輸入一個色碼", "gl_need_body": "請輸入內容", "gl_bad_color": "色碼格式要像 #11997B", "gl_del": "刪除", "gl_publish": "公開", "gl_unpublish": "取消公開", "gl_private_tag": "未公開", "gl_confirm_del": "確定要刪除嗎？刪掉就找不回來了。", "gl_by": "by", "gl_favs": "收藏", "gl_copy": "複製色碼", "gl_copied": "已複製", "gl_save_swatch": "存到我的色票", "gl_from_room": "來自配色靈感房"};
   if(!window.supabase){
     var list = document.getElementById('boardCardList');
     if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
@@ -8149,7 +8209,7 @@ function compositionScore(opts) {
 
 
   var GAME_LABEL = {
-    workspace: {zh:'創作工作台', en:'Workspace'},
+    workspace: {zh:'創作挑戰', en:'Challenges'},
     color: {zh:'配色靈感', en:'Color inspo'},
     naming: {zh:'命名與標籤', en:'Naming'},
     char: {zh:'角色隨機', en:'Char random'}
@@ -8206,7 +8266,8 @@ function compositionScore(opts) {
         + '<button type="button" id="gpPreview">'+onlyGen+'</button></div>';
     }else if(key === 'color'){
       body = '<div class="gp-row"><button type="button" class="gp-go" id="gpRun">'+goLabel+'</button>'
-        + '<button type="button" id="gpPreview">'+onlyGen+'</button></div>';
+        + '<button type="button" id="gpPreview">'+onlyGen+'</button>'
+        + '<button type="button" id="gpKeep" hidden>'+T.gl_save_swatch+'</button></div>';
     }else if(key === 'naming'){
       body = '<div class="gp-row"><button type="button" class="gp-go" id="gpRun">'+goLabel+'</button>'
         + '<button type="button" id="gpPreview">'+onlyGen+'</button></div>';
@@ -8247,7 +8308,7 @@ function compositionScore(opts) {
         return { text: text, colors: null };
       }
       // workspace
-      var text = '創作工作台・靈感卡\n'+randPick(WORK_PROMPTS);
+      var text = '創作挑戰・靈感卡\n'+randPick(WORK_PROMPTS);
       return { text: text, colors: null };
     }
     function show(res){
@@ -8277,10 +8338,24 @@ function compositionScore(opts) {
       if(ins.error){ err(translateAuthError(ins.error.message)); return; }
       await loadMessages();
     }
+    var lastRes = null;
+    function refreshKeep(){
+      var k = $('gpKeep');
+      if(k) k.hidden = !(lastRes && lastRes.colors && lastRes.colors.length);
+    }
     var run = $('gpRun');
-    if(run) run.onclick = async function(){ var res = show(gen()); await post(res); };
+    if(run) run.onclick = async function(){ lastRes = show(gen()); refreshKeep(); await post(lastRes); };
     var prev = $('gpPreview');
-    if(prev) prev.onclick = function(){ show(gen()); };
+    if(prev) prev.onclick = function(){ lastRes = show(gen()); refreshKeep(); };
+    var keep = $('gpKeep');
+    if(keep) keep.onclick = async function(){
+      if(!lastRes || !lastRes.colors) return;
+      keep.disabled = true;
+      var okSaved = await glQuickSave(lastRes.colors, T.gl_from_room);
+      keep.textContent = okSaved ? T.gl_saved : T.gl_save_swatch;
+      setTimeout(function(){ keep.textContent = T.gl_save_swatch; keep.disabled = false; }, 1500);
+    };
+    refreshKeep();
     if(!can){
       if(run) run.disabled = true;
     }
@@ -9157,6 +9232,292 @@ function compositionScore(opts) {
     }catch(e){ setStatus(false, T.live_off); }
   }
 
+  /* ================= 創作分享 / 我的色票 =================
+     一則「創作」= 一組色票或一段文字點子。存起來預設私人（is_public=false），
+     按下公開才會出現在分享區讓別人收藏。私人與公開共用同一張表，
+     所以「發布」只是一個開關，不是另一套功能。 */
+  var gl = { view: 'pub', items: [], favCount: {}, myFavs: {}, kind: 'palette', busy: false };
+
+  function glZh(){ return (T.locale||'').indexOf('zh') === 0; }
+
+  /* 從一段自由文字裡撈出色碼。允許有沒有 # 都可以，統一轉成大寫 #RRGGBB，
+     重複的只留一個，最多 8 個。 */
+  function parseColors(str){
+    var out = [], seen = {};
+    // 先切成一段一段再整段比對，而不是在長字串裡找六位——否則 #1234567
+    // 會被切出一組假色碼。分隔符是任何不是十六進位或 # 的字元。
+    var toks = String(str||'').split(/[^0-9A-Fa-f#]+/);
+    for(var i=0;i<toks.length && out.length<8;i++){
+      if(!/^#?[0-9A-Fa-f]{6}$/.test(toks[i])) continue;
+      var c = '#'+toks[i].replace('#','').toUpperCase();
+      if(!seen[c]){ seen[c] = 1; out.push(c); }
+    }
+    return out;
+  }
+
+  function glCanSave(){ return !!(state.user && isApproved() && !isBanned()); }
+
+  function glSetView(v){
+    gl.view = v;
+    var tabs = $('glTabs');
+    if(tabs){
+      var bs = tabs.querySelectorAll('[data-gl]');
+      for(var i=0;i<bs.length;i++) bs[i].classList.toggle('on', bs[i].getAttribute('data-gl') === v);
+    }
+    glLoad();
+  }
+
+  function glPaintTabs(){
+    var tabs = $('glTabs');
+    if(!tabs) return;
+    var map = { pub: T.gl_pub, mine: T.gl_mine, fav: T.gl_fav };
+    var bs = tabs.querySelectorAll('[data-gl]');
+    for(var i=0;i<bs.length;i++){
+      bs[i].textContent = map[bs[i].getAttribute('data-gl')] || '';
+    }
+  }
+
+  function glPaintForm(){
+    var el = $('glForm');
+    var note = $('glNote');
+    if(!el) return;
+    if(gl.view !== 'mine'){ el.hidden = true; if(note) note.hidden = true; return; }
+    if(!glCanSave()){
+      el.hidden = true;
+      if(note){
+        note.hidden = false;
+        note.innerHTML = state.user ? esc(T.pending) : esc(T.gl_need_login);
+      }
+      return;
+    }
+    if(note) note.hidden = true;
+    el.hidden = false;
+    var isPal = gl.kind === 'palette';
+    el.innerHTML =
+      '<div class="gf-row">'
+      + '<label class="gf-k"><input type="radio" name="glKind" value="palette"'+(isPal?' checked':'')+' /> '+esc(T.gl_palette)+'</label>'
+      + '<label class="gf-k"><input type="radio" name="glKind" value="idea"'+(!isPal?' checked':'')+' /> '+esc(T.gl_idea)+'</label>'
+      + '</div>'
+      + '<div class="gf-row"><input type="text" id="glTitle" maxlength="60" placeholder="'+esc(T.gl_title)+'" /></div>'
+      + (isPal
+          ? '<div class="gf-row"><input type="text" id="glColors" placeholder="'+esc(T.gl_colors)+'" /></div><div class="gf-prev" id="glPrev"></div>'
+          : '<div class="gf-row"><textarea id="glBody" maxlength="2000" placeholder="'+esc(T.gl_body)+'"></textarea></div>')
+      + '<div class="gf-row" style="margin-top:8px">'
+      + '<label class="gf-pub"><input type="checkbox" id="glPublic" /> '+esc(T.gl_public)+'</label>'
+      + '<button type="button" class="gf-save" id="glSave">'+esc(T.gl_save)+'</button>'
+      + '</div>';
+
+    var radios = el.querySelectorAll('input[name=glKind]');
+    for(var i=0;i<radios.length;i++){
+      radios[i].onchange = function(){ gl.kind = this.value; glPaintForm(); };
+    }
+    var ci = $('glColors');
+    if(ci) ci.oninput = function(){
+      var prev = $('glPrev');
+      if(!prev) return;
+      prev.innerHTML = parseColors(ci.value).map(function(c){
+        return '<i style="width:22px;height:22px;border-radius:7px;display:inline-block;border:1px solid rgba(0,0,0,.12);background:'+c+'"></i>';
+      }).join('');
+    };
+    var sv = $('glSave');
+    if(sv) sv.onclick = glSave;
+  }
+
+  async function glSave(){
+    if(gl.busy) return;
+    if(!glCanSave()){ alert(T.gl_need_login); return; }
+    var title = (($('glTitle')||{}).value||'').trim();
+    var isPub = !!(($('glPublic')||{}).checked);
+    var payload = {
+      user_id: state.user.id, kind: gl.kind, title: title,
+      is_public: isPub, locale: BOARD_LOCALE, body: '', colors: []
+    };
+    if(gl.kind === 'palette'){
+      var raw = (($('glColors')||{}).value||'');
+      var cols = parseColors(raw);
+      if(!cols.length){ alert(raw.trim() ? T.gl_bad_color : T.gl_need_colors); return; }
+      payload.colors = cols;
+    }else{
+      var body = (($('glBody')||{}).value||'').trim();
+      if(!body){ alert(T.gl_need_body); return; }
+      payload.body = body;
+    }
+    gl.busy = true;
+    try{
+      var res = await sb.from('creations').insert(payload);
+      if(res.error){ alert(T.fail + res.error.message); return; }
+      alert(T.gl_saved);
+      glPaintForm();
+      await glLoad();
+    } finally { gl.busy = false; }
+  }
+
+  /* 從聊天室的配色產生器直接存一組色票 */
+  async function glQuickSave(colors, title){
+    if(!glCanSave()){ alert(T.gl_need_login); return false; }
+    var cols = parseColors((colors||[]).join(' '));
+    if(!cols.length) return false;
+    var res = await sb.from('creations').insert({
+      user_id: state.user.id, kind: 'palette',
+      title: title || T.gl_from_room, colors: cols,
+      is_public: false, locale: BOARD_LOCALE, body: ''
+    });
+    if(res.error){ alert(T.fail + res.error.message); return false; }
+    return true;
+  }
+
+  async function glLoad(){
+    var list = $('glList');
+    if(list && !gl.items.length) list.innerHTML = '<p class="board-empty">'+T.loading+'</p>';
+    glPaintTabs();
+    glPaintForm();
+
+    var sel = 'id,user_id,kind,title,body,colors,is_public,created_at, profiles:user_id(display_name,game_id)';
+    var res;
+    if(gl.view === 'mine'){
+      if(!state.user){ gl.items = []; glPaint(); return; }
+      res = await sb.from('creations').select(sel)
+        .eq('user_id', state.user.id).order('created_at', { ascending: false }).limit(120);
+    }else if(gl.view === 'fav'){
+      if(!state.user){ gl.items = []; glPaint(); return; }
+      var f = await sb.from('creation_favs').select('creation_id')
+        .eq('user_id', state.user.id).order('created_at', { ascending: false }).limit(120);
+      var ids = (f.data||[]).map(function(r){ return r.creation_id; });
+      if(!ids.length){ gl.items = []; glPaint(); return; }
+      res = await sb.from('creations').select(sel).in('id', ids).order('created_at', { ascending: false });
+    }else{
+      res = await sb.from('creations').select(sel)
+        .eq('is_public', true).eq('locale', BOARD_LOCALE)
+        .order('created_at', { ascending: false }).limit(120);
+    }
+    if(res.error){
+      if(list) list.innerHTML = '<p class="board-err">'+T.fail+esc(res.error.message)+'</p>';
+      return;
+    }
+    gl.items = res.data || [];
+
+    // 收藏數與「我收藏了哪些」一次抓齊
+    gl.favCount = {}; gl.myFavs = {};
+    try{
+      var fv = await sb.from('creation_favs').select('creation_id,user_id');
+      (fv.data||[]).forEach(function(r){
+        gl.favCount[r.creation_id] = (gl.favCount[r.creation_id]||0)+1;
+        if(state.user && r.user_id === state.user.id) gl.myFavs[r.creation_id] = 1;
+      });
+    }catch(e){}
+    glPaint();
+  }
+
+  function glItemHTML(it){
+    var mine = state.user && state.user.id === it.user_id;
+    var author = (it.profiles && it.profiles.display_name) || T.user;
+    var n = gl.favCount[it.id] || 0;
+    var faved = !!gl.myFavs[it.id];
+    var kindLabel = it.kind === 'palette' ? T.gl_palette : T.gl_idea;
+    var h = '<div class="gl-item'+(it.is_public ? '' : ' is-private')+'" data-cid="'+it.id+'">'
+      + '<div class="gi-top">'
+      +   (it.title ? '<span class="gi-title">'+esc(it.title)+'</span>' : '')
+      +   '<span class="gi-kind">'+esc(kindLabel)+'</span>'
+      +   (!it.is_public ? '<span class="gi-priv">'+esc(T.gl_private_tag)+'</span>' : '')
+      + '</div>';
+    if(it.kind === 'palette' && it.colors && it.colors.length){
+      h += '<div class="gi-sw">'+it.colors.map(function(c){
+             // 資料庫已經擋過非法色碼，這裡再確認一次才寫進 style
+             if(!/^#[0-9A-Fa-f]{6}$/.test(c)) return '';
+             return '<i title="'+esc(c)+'" style="background:'+esc(c)+'"></i>';
+           }).join('')+'</div>'
+        +  '<div class="gi-codes">'+esc(it.colors.join('  '))+'</div>';
+    }
+    if(it.kind === 'idea' && it.body){
+      h += '<div class="gi-body">'+esc(it.body)+'</div>';
+    }
+    h += '<div class="gi-meta">'+esc(T.gl_by)+' '+esc(author)+' · '+esc(fmtTime(it.created_at))+'</div>'
+      +  '<div class="gi-acts">';
+    if(it.kind === 'palette'){
+      h += '<button type="button" data-ga="copy">'+esc(T.gl_copy)+'</button>';
+    }
+    if(it.is_public || faved){
+      h += '<button type="button" class="fav'+(faved?' on':'')+'" data-ga="fav">♥ '+n+'</button>';
+    }
+    if(mine || isAdmin()){
+      if(mine){
+        h += '<button type="button" data-ga="pub">'+esc(it.is_public ? T.gl_unpublish : T.gl_publish)+'</button>';
+      }
+      h += '<button type="button" data-ga="del">'+esc(T.gl_del)+'</button>';
+    }
+    return h + '</div></div>';
+  }
+
+  function glPaint(){
+    var list = $('glList');
+    if(!list) return;
+    if(!gl.items.length){
+      var msg = gl.view === 'mine' ? T.gl_empty_mine
+              : gl.view === 'fav'  ? T.gl_empty_fav : T.gl_empty_pub;
+      list.innerHTML = '<p class="board-empty">'+esc(msg)+'</p>';
+      return;
+    }
+    list.innerHTML = gl.items.map(glItemHTML).join('');
+  }
+
+  function glFind(id){
+    for(var i=0;i<gl.items.length;i++) if(String(gl.items[i].id) === String(id)) return gl.items[i];
+    return null;
+  }
+
+  async function glAct(e){
+    var btn = e.target.closest ? e.target.closest('[data-ga]') : null;
+    if(!btn) return;
+    var wrap = btn.closest('[data-cid]');
+    if(!wrap) return;
+    var id = wrap.getAttribute('data-cid');
+    var it = glFind(id);
+    if(!it) return;
+    var act = btn.getAttribute('data-ga');
+
+    if(act === 'copy'){
+      var txt = (it.colors||[]).join(' ');
+      try{ await navigator.clipboard.writeText(txt); btn.textContent = T.gl_copied; }
+      catch(err){ btn.textContent = txt; }
+      setTimeout(function(){ btn.textContent = T.gl_copy; }, 1400);
+      return;
+    }
+    if(gl.busy) return;
+    gl.busy = true;
+    try{
+      if(act === 'fav'){
+        if(!glCanSave()){ alert(T.gl_need_login); return; }
+        if(gl.myFavs[it.id]){
+          await sb.from('creation_favs').delete().eq('creation_id', it.id).eq('user_id', state.user.id);
+        }else{
+          await sb.from('creation_favs').insert({ creation_id: it.id, user_id: state.user.id });
+        }
+        await glLoad();
+      }else if(act === 'pub'){
+        var r = await sb.from('creations').update({ is_public: !it.is_public }).eq('id', it.id);
+        if(r.error){ alert(T.fail + r.error.message); return; }
+        await glLoad();
+      }else if(act === 'del'){
+        if(!confirm(T.gl_confirm_del)) return;
+        var d = await sb.from('creations').delete().eq('id', it.id);
+        if(d.error){ alert(T.fail + d.error.message); return; }
+        await glLoad();
+      }
+    } finally { gl.busy = false; }
+  }
+
+  function initGallery(){
+    var tabs = $('glTabs');
+    if(tabs) tabs.addEventListener('click', function(e){
+      var b = e.target.closest ? e.target.closest('[data-gl]') : null;
+      if(b) glSetView(b.getAttribute('data-gl'));
+    });
+    var list = $('glList');
+    if(list) list.addEventListener('click', glAct);
+    glPaintTabs();
+    glLoad();
+  }
+
   async function boot(){
     var sess = await sb.auth.getSession();
     state.user = sess.data && sess.data.session ? sess.data.session.user : null;
@@ -9168,6 +9529,7 @@ function compositionScore(opts) {
       state.user = session ? session.user : null;
       await loadProfile();
       paintAuth();
+      glLoad();
       if(state.board && isApproved()){
         var compose = $('boardCompose');
         if(compose) compose.hidden = !state.user;
@@ -9185,6 +9547,7 @@ function compositionScore(opts) {
     var create = $('boardNewCreate'); if(create) create.onclick = createBoard;
     var rev = $('boardReviewList'); if(rev) rev.addEventListener('click', onReview);
     var mod = $('boardModList'); if(mod) mod.addEventListener('click', onMod);
+    initGallery();
     var cards = $('boardCardList');
     if(cards) cards.addEventListener('click', function(e){
       var btn = e.target.closest('[data-bid]');
