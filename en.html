@@ -575,6 +575,13 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   .board-bubble{max-width:92%;font-size:14px}
   .board-room-top{gap:6px}
   .board-room-top .room-title{font-size:15px}
+  /* 手機上把層層巢狀的內距收窄，把寬度還給內容 */
+  .board-room-shell{padding:8px;border-radius:12px}
+  .board-turn{padding:10px;font-size:13px}
+  .board-turn .turn-actions{grid-template-columns:1fr 1fr;gap:6px}
+  .board-turn .turn-actions button{font-size:12.5px;padding:9px 4px;min-height:42px}
+  .board-game-panel{padding:10px}
+  .board-game-panel .gp-row{gap:6px}
 }
 
 
@@ -618,6 +625,16 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   border:0;background:linear-gradient(135deg,var(--rose),var(--violet));color:#fff;font-weight:800
 }
 .board-turn .turn-me{color:var(--teal);font-weight:800}
+.board-turn .turn-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px}
+.board-turn .turn-actions button{width:100%;padding:9px 8px;text-align:center}
+.board-turn .turn-admin{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.board-turn .turn-admin .ta-lbl{grid-column:1/-1;font-size:12.5px;color:var(--ink-soft)}
+.board-turn .turn-admin select{min-width:0;width:100%}
+.board-turn .turn-count{margin-top:8px;font-size:12.5px;color:var(--ink-soft)}
+.board-turn .turn-help{margin-top:6px;font-size:12px;color:var(--ink-soft)}
+.board-turn .turn-help summary{cursor:pointer;font-weight:700;color:var(--violet);padding:4px 0}
+.board-turn .turn-help p{margin:6px 0 0;line-height:1.6}
+.board-turn.turn-busy button{opacity:.5;pointer-events:none}
 
 
 .board-mod{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
@@ -1778,7 +1795,41 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>Changelog <span class="tag ok">actively maintained</span></h3>
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.4.5 <span class="chg-build">current・removed leftovers pointing at an external service</span></div>
+      <div class="chg-ver">Version 5.5.0 <span class="chg-build">current・live board updates and permission hardening</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>Fixed: the board flickered every time anyone posted</b></p>
+      <ul class="tips">
+        <li>Any incoming message caused the entire message list to be cleared and rebuilt, so a single new post repainted all hundred-plus messages above it. Rendering is now incremental: unchanged messages keep their existing element untouched, a new message inserts a single node, and hiding or deleting swaps only that one message.</li>
+        <li>Scroll position is no longer hijacked. Every repaint used to force the view to the bottom, which yanked you back down while reading older messages. It now only follows along if you were already at the bottom.</li>
+        <li>The "loading" placeholder used to replace the whole list on every refresh, which was itself a flicker; it now appears only when first entering a room. Multiple realtime events from a single action are coalesced into one update.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Fixed: ordinary players never got the pass-turn buttons</b></p>
+      <ul class="tips">
+        <li>The turn panel checked permissions on a line placed above where "has joined the queue" was read. Because of JavaScript variable hoisting that value was always undefined at the point of the check, so only admins ever saw "Next in order" and "Random next". Joining the queue made no difference. The ordering has been corrected.</li>
+        <li>Double taps sent the action twice — easy to do on a phone, and the reason two identical "left turn queue" notices appeared in the room. The whole button group now locks while an action is in flight, and unlocks properly even if it fails.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Fixed: bans and mutes did not stop anyone determined to bypass them</b></p>
+      <ul class="tips">
+        <li>Bans, mutes and approval were enforced only in front-end JavaScript, with no matching protection in the database. A banned user could open developer tools and run one command to clear their own ban. The same approach could un-hide a moderated message, silently rewrite an already-posted message, rename a game room, or seize a turn belonging to someone else.</li>
+        <li>All of these checks now run in the database itself. Permission columns cannot be altered by the account they belong to, messages can only be self-deleted rather than edited or un-hidden, room fields are locked to non-admins, and the hand-over rules (only the current player may pass, and only to someone who joined the queue) are enforced there too.</li>
+        <li>The turn queue table has also been created properly — the original statement never ran successfully, which is why the panel always showed zero players in the queue.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Changed: colour inspiration room</b></p>
+      <ul class="tips">
+        <li>Hex codes now render with a small chip of the actual colour beside them. Posting to the room previously produced a bare string like #11997B that nobody could read as a colour. Older messages benefit too, since the chips are drawn at display time.</li>
+        <li>Rolls produce 1–4 colours instead of always 4; the count itself is randomised and shown in the heading, and no colour repeats within a single roll.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Changed: the turn panel was cramped on phones</b></p>
+      <ul class="tips">
+        <li>Buttons are now laid out in two equal columns instead of wrapping raggedly one per line. The three lines of explanatory text are folded into a collapsible "How it works" section, closed by default — useful once, but half a screen of space every time. The queue count stays visible since it is live status. Room and panel padding were tightened to give the content back its width.</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>Changed: approval notice on sign-up</b></p>
+      <ul class="tips">
+        <li>The sign-up form, the post-registration confirmation and the pending banner all now explain that approval is required before posting, and who to contact. Previously registration ended with "awaiting approval" and no indication of whom to ask.</li>
+      </ul>
+      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. The board's live-update logic is covered by 14 tests (insertion, status change, deletion, out-of-order arrival, empty list and error recovery); the permission work by 28 tests (10 bypass techniques all blocked, with posting, nickname edits, self-delete, admin approval/ban/mute, queue join/leave and turn passing all still working).</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.4.5 <span class="chg-build">removed leftovers pointing at an external service</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>Fixed: the artwork check told you to enable a feature that no longer exists</b></p>
       <ul class="tips">
         <li>When the check decided there was no reliable evidence of text, the explanation ended with <b>“pick ‘text / layout’ under (2), or turn on AI vision assist”</b>. The AI vision assist interface was removed entirely in v5.2.4 — there is no switch to turn on and nothing to configure. It asked people to do something impossible, and left them thinking they had missed a setup step.</li>
@@ -1789,7 +1840,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <ul class="tips">
         <li>Site-wide ranking needs no setup, so those two files only made it look like there was homework outstanding. Removed; ask if the day ever comes. <b>The site itself is unaffected</b> — everything it reaches out to (counters, fonts, the anime face model) is automatic, and none of it requires you to sign up for or host anything.</li>
       </ul>
-      <p class="fine">Build tag updated to v5.4.5. ZH and EN in sync.</p>
+      <p class="fine">Build tag updated to v5.5.0. ZH and EN in sync.</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.4 <span class="chg-build">site-wide ranking on a source that actually works</span></div>
@@ -7169,7 +7220,7 @@ function compositionScore(opts) {
       modeLbl.textContent=tt('modelbl')+' · '+currentModes.map(function(m){return ({portrait:tt('mode_portrait'),fashion:tt('mode_fashion'),scene:tt('mode_scene'),collage:tt('mode_collage'),layout:tt('mode_layout')})[m];}).join(' + ');
       var lowColor=a.conf.color<60;
       palEl.innerHTML='<h3>'+tt('pal_title')+' <span class="tag ok">'+tt('pal_tag')+'</span></h3><p class="cond">'+tt('pal_desc')+'</p><div class="chk-sw">'+a.palette.map(function(o){var col=hex(o.r,o.g,o.b);return '<div><span style="background:'+col+'"></span><small>'+colorName(o.r,o.g,o.b)+'<br>'+col+'</small></div>';}).join('')+'</div>'+(lowColor?'<p class="fine">'+tt('pal_lowconf')+'</p>':'');
-      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.4.5</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
+      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.5.0</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
       hideProg();
       result.style.display='block';result.scrollIntoView({behavior:'smooth',block:'start'});
     }catch(err){
@@ -8566,6 +8617,24 @@ function compositionScore(opts) {
     return true;
   }
 
+  /* 交棒／加入／離開都會寫入資料庫再貼系統訊息。手機上很容易連點兩下，
+     結果就是同一則「離開輪替」被貼兩次。動作進行中先鎖住整組按鈕。 */
+  var turnBusy = false;
+  function turnAction(fn){
+    return async function(){
+      if(turnBusy) return;
+      turnBusy = true;
+      var p = $('boardTurnPanel');
+      if(p) p.classList.add('turn-busy');
+      try{ await fn(); }
+      finally{
+        turnBusy = false;
+        var q = $('boardTurnPanel');
+        if(q) q.classList.remove('turn-busy');
+      }
+    };
+  }
+
   async function paintTurnPanel(){
     var el = $('boardTurnPanel');
     if(!el) return;
@@ -8579,9 +8648,11 @@ function compositionScore(opts) {
     var holderName = (state.board.profiles && state.board.profiles.display_name)
       || (holder ? T.user : (zh ? '尚未指定' : 'Nobody yet'));
     var isMe = state.user && holder && state.user.id === holder;
-    var canControl = isAdmin() || (isMe && joined) || (!holder && joined); // 需在輪替名單內
     var members = await roomMembers();
     var joined = state.user ? await inQueue() : false;
+    // joined 必須先取得再判斷權限。原本這行寫在 joined 之前，因為 var 提升，
+    // 值永遠是 undefined，導致一般玩家就算加入輪替也拿不到交棒按鈕。
+    var canControl = isAdmin() || (isMe && joined) || (!holder && joined);
 
     var labelNow = zh ? '目前回合' : 'Current turn';
     var labelDice = zh ? '擲骰子' : 'Roll dice';
@@ -8604,8 +8675,8 @@ function compositionScore(opts) {
 
     var adminBlock = '';
     if(isAdmin()){
-      adminBlock = '<div class="turn-row">'
-        + '<span style="font-size:12.5px">'+labelAdmin+'</span>'
+      adminBlock = '<div class="turn-row turn-admin">'
+        + '<span class="ta-lbl">'+labelAdmin+'</span>'
         + '<select id="turnNext">'+opts+'</select>'
         + '<button type="button" id="turnPassAdmin">'+labelDo+'</button>'
         + '</div>';
@@ -8614,7 +8685,7 @@ function compositionScore(opts) {
     el.innerHTML =
       '<div>'+labelNow+'：<b class="'+(isMe?'turn-me':'')+'">'+esc(holderName)+'</b>'
       +(isMe ? (zh?'（輪到你）':'(your turn)') : '')+'</div>'
-      +'<div class="turn-row">'
+      +'<div class="turn-row turn-actions">'
       +'<button type="button" class="dice" id="turnDice">'+labelDice+'</button>'+(state.user && !joined ? '<button type="button" id="turnJoin">'+labelJoin+'</button>' : '')+(state.user && joined ? '<button type="button" id="turnLeave">'+labelLeave+'</button>' : '')
       +(!holder ? '<button type="button" id="turnClaim">'+labelClaim+'</button>' : '')
       +(canControl ? '<button type="button" id="turnNextSeq">'+labelNextSeq+'</button>' : '')
@@ -8622,7 +8693,9 @@ function compositionScore(opts) {
       +'</div>'
       +(canControl ? '<div class="turn-row"><label style="font-size:12px;color:var(--ink-soft)"><input type="checkbox" id="turnAutoPass" /> '+autoPass+'</label></div>' : '')
       + adminBlock
-      +'<div style="margin-top:6px;font-size:12px;color:var(--ink-soft)">'+diceHint+'</div>'+'<div style="margin-top:4px;font-size:12px;color:var(--ink-soft)">'+queueHint+'</div>'+'<div style="margin-top:4px;font-size:12px;color:var(--ink-soft)">'+(zh?'輪替中：':'In queue: ')+members.length+(zh?' 人':'')+'</div>';
+      +'<div class="turn-count">'+(zh?'輪替中：':'In queue: ')+members.length+(zh?' 人':'')+'</div>'
+      +'<details class="turn-help"><summary>'+(zh?'玩法說明':'How it works')+'</summary>'
+      +  '<p>'+diceHint+'</p><p>'+queueHint+'</p></details>';
 
     function nextInOrder(){
       if(!members.length) return null;
@@ -8646,7 +8719,7 @@ function compositionScore(opts) {
     }
 
     var diceBtn = $('turnDice');
-    if(diceBtn) diceBtn.onclick = async function(){
+    if(diceBtn) diceBtn.onclick = turnAction(async function(){
       if(!state.user){ err(T.need_login); return; }
       if(!isApproved()){ err(T.pending); return; }
       var n = 1 + Math.floor(Math.random()*6);
@@ -8656,24 +8729,24 @@ function compositionScore(opts) {
       if(auto && auto.checked && canControl){
         await passTo(nextInOrder(), zh?'依序':'order');
       }
-    };
+    });
     var claim = $('turnClaim');
-    if(claim) claim.onclick = async function(){
+    if(claim) claim.onclick = turnAction(async function(){
       if(!state.user){ err(T.need_login); return; }
       if(holder && !isAdmin()){ err(zh?'已有人開始，請等交棒':'Turn already taken'); return; }
       if(!(await inQueue())) await joinQueue();
       await setTurn(state.user.id, null);
       var name = (state.profile && state.profile.display_name) || T.user;
       await postSystem((zh?'▶️ 回合開始：':'▶️ Turn starts: ')+name);
-    };
+    });
     var joinBtn = $('turnJoin');
-    if(joinBtn) joinBtn.onclick = function(){ joinQueue(); };
+    if(joinBtn) joinBtn.onclick = turnAction(function(){ return joinQueue(); });
     var leaveBtn = $('turnLeave');
-    if(leaveBtn) leaveBtn.onclick = function(){ leaveQueue(); };
+    if(leaveBtn) leaveBtn.onclick = turnAction(function(){ return leaveQueue(); });
     var seq = $('turnNextSeq');
-    if(seq) seq.onclick = async function(){ await passTo(nextInOrder(), zh?'依序':'order'); };
+    if(seq) seq.onclick = turnAction(async function(){ await passTo(nextInOrder(), zh?'依序':'order'); });
     var rand = $('turnNextRand');
-    if(rand) rand.onclick = async function(){ await passTo(nextRandom(), zh?'隨機':'random'); };
+    if(rand) rand.onclick = turnAction(async function(){ await passTo(nextRandom(), zh?'隨機':'random'); });
     var adm = $('turnPassAdmin');
     if(adm) adm.onclick = async function(){
       if(!isAdmin()) return;

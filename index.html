@@ -580,6 +580,13 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   .board-bubble{max-width:92%;font-size:14px}
   .board-room-top{gap:6px}
   .board-room-top .room-title{font-size:15px}
+  /* 手機上把層層巢狀的內距收窄，把寬度還給內容 */
+  .board-room-shell{padding:8px;border-radius:12px}
+  .board-turn{padding:10px;font-size:13px}
+  .board-turn .turn-actions{grid-template-columns:1fr 1fr;gap:6px}
+  .board-turn .turn-actions button{font-size:12.5px;padding:9px 4px;min-height:42px}
+  .board-game-panel{padding:10px}
+  .board-game-panel .gp-row{gap:6px}
 }
 
 
@@ -623,6 +630,16 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   border:0;background:linear-gradient(135deg,var(--rose),var(--violet));color:#fff;font-weight:800
 }
 .board-turn .turn-me{color:var(--teal);font-weight:800}
+.board-turn .turn-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px}
+.board-turn .turn-actions button{width:100%;padding:9px 8px;text-align:center}
+.board-turn .turn-admin{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.board-turn .turn-admin .ta-lbl{grid-column:1/-1;font-size:12.5px;color:var(--ink-soft)}
+.board-turn .turn-admin select{min-width:0;width:100%}
+.board-turn .turn-count{margin-top:8px;font-size:12.5px;color:var(--ink-soft)}
+.board-turn .turn-help{margin-top:6px;font-size:12px;color:var(--ink-soft)}
+.board-turn .turn-help summary{cursor:pointer;font-weight:700;color:var(--violet);padding:4px 0}
+.board-turn .turn-help p{margin:6px 0 0;line-height:1.6}
+.board-turn.turn-busy button{opacity:.5;pointer-events:none}
 
 
 .board-mod{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
@@ -1783,7 +1800,41 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>更新紀錄 <span class="tag ok">持續維護中</span></h3>
     <p class="cond">這裡會列出每次網站更新的內容，讓大家知道網站一直有人在維護、修 bug、加新功能。</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.4.5 <span class="chg-build">目前版本・清掉叫你去用外部服務的殘留</span></div>
+      <div class="chg-ver">Version 5.5.0 <span class="chg-build">目前版本・留言板即時更新與權限修補</span></div>
+      <p class="cond" style="margin:8px 0 4px"><b>修正：留言板每次有人發言都整片閃一下</b></p>
+      <ul class="tips">
+        <li>只要收到新訊息，程式就把整份訊息列表清空重畫一次——就算只有一則新留言，前面一百多則也全部重來，視覺上就是「刷」一下。這版改成逐則比對：內容沒變的訊息完全不動，新訊息只插入一個節點，隱藏或刪除只換掉那一則。</li>
+        <li>捲動位置不再被搶走。原本每次重畫都強制捲到底，往上翻舊訊息時會一直被拉回去；現在只有在你本來就停在最下面時才會自動跟進。</li>
+        <li>「載入中…」的字樣原本每次重新抓取都會先蓋掉整個列表，本身就是一次閃爍，現在只在剛進聊天室時顯示。同一個動作若觸發多個即時事件，也會合併成一次更新。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>修正：一般玩家永遠拿不到交棒按鈕</b></p>
+      <ul class="tips">
+        <li>回合面板判斷權限的那一行寫在「是否已加入輪替」取值之前，因為 JavaScript 的變數提升，判斷當下該值永遠是 undefined，結果只有管理員看得到「傳給下一位」和「隨機下一位」。一般人就算按了加入輪替，按鈕也不會出現。把順序調正了。</li>
+        <li>連點兩下會送出兩次。手機上很容易發生，聊天室因此出現兩則一模一樣的「離開輪替」。現在動作進行中整組按鈕會鎖住，連點幾下都只會送出一次；失敗時也會正常解鎖，不會卡死。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>修正：封鎖與禁言擋不住真正想繞過的人</b></p>
+      <ul class="tips">
+        <li>封鎖、禁言、審核原本只靠前端 JavaScript 判斷，資料庫層沒有對應的保護。也就是說，被封鎖的人只要開開發者工具打一行指令，就能把自己改回未封鎖狀態。同樣的方式還能把管理員隱藏的訊息翻回公開、事後偷改自己已發出的留言內容、改掉遊戲房的標題，或是搶走不屬於自己的回合。</li>
+        <li>這些判斷全部移到資料庫層強制執行。權限相關的欄位本人改不動，訊息只能自刪而不能改字、也不能解除隱藏，遊戲房的標題等欄位對一般人完全鎖死，交棒規則（只有輪到的人能交棒、只能傳給有加入輪替的人）也一併寫進資料庫。</li>
+        <li>順帶補上「輪替名單」的資料表——之前那段建表指令沒有成功執行過，所以面板上的「輪替中」人數一直是 0。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>調整：配色靈感房</b></p>
+      <ul class="tips">
+        <li>抽出來的色碼旁邊會顯示實際顏色的小色塊。原本貼進聊天室只剩一串 #11997B 這樣的代號，沒有人看得出來是什麼顏色。舊訊息也會一起變好看，因為色塊是顯示時才畫上去的。</li>
+        <li>色數從固定四色改成 1～4 色隨機，色數本身也是抽的，標題會標明抽到幾色。同一次不會抽到重複的顏色。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>調整：手機上的回合面板太擠</b></p>
+      <ul class="tips">
+        <li>按鈕改成兩欄等寬排列，不再一個一行、長短不一。三行玩法說明收進可摺疊的「玩法說明」，預設收起來——那些字只有第一次需要看，卻佔掉半個螢幕；「輪替中：N 人」留在外面，因為那是隨時要看的狀態。房間外框與面板的內距也收窄，把寬度還給內容。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>調整：註冊審核說明</b></p>
+      <ul class="tips">
+        <li>註冊表單下方、註冊成功的提示、以及待審核橫幅三個地方，都會說明需要通過審核才能發言，並附上聯絡方式。之前註冊完只會看到「等待審核」，卻沒說要找誰。</li>
+      </ul>
+      <p class="fine">建置標記更新為 v5.5.0。中英文版同步。留言板的即時更新邏輯以 14 項測試驗證（新訊息插入、狀態變更、刪除、亂序補進、空列表與錯誤畫面復原），權限修補以 28 項測試驗證（10 種繞過手法全數擋下，且發言、改暱稱、自刪、管理員審核封鎖禁言、加入離開輪替、交棒等功能不受影響）。</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.4.5 <span class="chg-build">清掉叫你去用外部服務的殘留</span></div>
       <p class="cond" style="margin:8px 0 4px"><b>修正：作品健檢會叫你啟用一個早就不存在的功能</b></p>
       <ul class="tips">
         <li>當健檢判斷「這張沒有可靠的文字依據」時，說明最後寫著<b>「請在②選『文字／版面』，或啟用 AI 視覺輔助」</b>。但 AI 視覺輔助的介面在 v5.2.4 就整個拿掉了——沒有開關可以開，也沒有地方可以設定。等於叫人去做一件做不到的事，還讓人以為自己漏了什麼設定沒弄。</li>
@@ -1794,7 +1845,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <ul class="tips">
         <li>全站排行已經不需要任何設定，那兩個檔案只會讓人以為還有功課要做。拿掉了，需要時再說。<b>網站本身完全不受影響</b>——所有連外的東西（計數、字型、動漫臉部模型）都是自動的，沒有一項需要你去申請或架設。</li>
       </ul>
-      <p class="fine">建置標記更新為 v5.4.5。中英文版同步。</p>
+      <p class="fine">建置標記更新為 v5.5.0。中英文版同步。</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.4 <span class="chg-build">全站排行改用可靠的資料來源</span></div>
@@ -7173,7 +7224,7 @@ function compositionScore(opts) {
       modeLbl.textContent=tt('modelbl')+' · '+currentModes.map(function(m){return ({portrait:tt('mode_portrait'),fashion:tt('mode_fashion'),scene:tt('mode_scene'),collage:tt('mode_collage'),layout:tt('mode_layout')})[m];}).join(' + ');
       var lowColor=a.conf.color<60;
       palEl.innerHTML='<h3>'+tt('pal_title')+' <span class="tag ok">'+tt('pal_tag')+'</span></h3><p class="cond">'+tt('pal_desc')+'</p><div class="chk-sw">'+a.palette.map(function(o){var col=hex(o.r,o.g,o.b);return '<div><span style="background:'+col+'"></span><small>'+colorName(o.r,o.g,o.b)+'<br>'+col+'</small></div>';}).join('')+'</div>'+(lowColor?'<p class="fine">'+tt('pal_lowconf')+'</p>':'');
-      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.4.5</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
+      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.5.0</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
       hideProg();
       result.style.display='block';result.scrollIntoView({behavior:'smooth',block:'start'});
     }catch(err){
@@ -8572,6 +8623,24 @@ function compositionScore(opts) {
     return true;
   }
 
+  /* 交棒／加入／離開都會寫入資料庫再貼系統訊息。手機上很容易連點兩下，
+     結果就是同一則「離開輪替」被貼兩次。動作進行中先鎖住整組按鈕。 */
+  var turnBusy = false;
+  function turnAction(fn){
+    return async function(){
+      if(turnBusy) return;
+      turnBusy = true;
+      var p = $('boardTurnPanel');
+      if(p) p.classList.add('turn-busy');
+      try{ await fn(); }
+      finally{
+        turnBusy = false;
+        var q = $('boardTurnPanel');
+        if(q) q.classList.remove('turn-busy');
+      }
+    };
+  }
+
   async function paintTurnPanel(){
     var el = $('boardTurnPanel');
     if(!el) return;
@@ -8585,9 +8654,11 @@ function compositionScore(opts) {
     var holderName = (state.board.profiles && state.board.profiles.display_name)
       || (holder ? T.user : (zh ? '尚未指定' : 'Nobody yet'));
     var isMe = state.user && holder && state.user.id === holder;
-    var canControl = isAdmin() || (isMe && joined) || (!holder && joined); // 需在輪替名單內
     var members = await roomMembers();
     var joined = state.user ? await inQueue() : false;
+    // joined 必須先取得再判斷權限。原本這行寫在 joined 之前，因為 var 提升，
+    // 值永遠是 undefined，導致一般玩家就算加入輪替也拿不到交棒按鈕。
+    var canControl = isAdmin() || (isMe && joined) || (!holder && joined);
 
     var labelNow = zh ? '目前回合' : 'Current turn';
     var labelDice = zh ? '擲骰子' : 'Roll dice';
@@ -8610,8 +8681,8 @@ function compositionScore(opts) {
 
     var adminBlock = '';
     if(isAdmin()){
-      adminBlock = '<div class="turn-row">'
-        + '<span style="font-size:12.5px">'+labelAdmin+'</span>'
+      adminBlock = '<div class="turn-row turn-admin">'
+        + '<span class="ta-lbl">'+labelAdmin+'</span>'
         + '<select id="turnNext">'+opts+'</select>'
         + '<button type="button" id="turnPassAdmin">'+labelDo+'</button>'
         + '</div>';
@@ -8620,7 +8691,7 @@ function compositionScore(opts) {
     el.innerHTML =
       '<div>'+labelNow+'：<b class="'+(isMe?'turn-me':'')+'">'+esc(holderName)+'</b>'
       +(isMe ? (zh?'（輪到你）':'(your turn)') : '')+'</div>'
-      +'<div class="turn-row">'
+      +'<div class="turn-row turn-actions">'
       +'<button type="button" class="dice" id="turnDice">'+labelDice+'</button>'+(state.user && !joined ? '<button type="button" id="turnJoin">'+labelJoin+'</button>' : '')+(state.user && joined ? '<button type="button" id="turnLeave">'+labelLeave+'</button>' : '')
       +(!holder ? '<button type="button" id="turnClaim">'+labelClaim+'</button>' : '')
       +(canControl ? '<button type="button" id="turnNextSeq">'+labelNextSeq+'</button>' : '')
@@ -8628,7 +8699,9 @@ function compositionScore(opts) {
       +'</div>'
       +(canControl ? '<div class="turn-row"><label style="font-size:12px;color:var(--ink-soft)"><input type="checkbox" id="turnAutoPass" /> '+autoPass+'</label></div>' : '')
       + adminBlock
-      +'<div style="margin-top:6px;font-size:12px;color:var(--ink-soft)">'+diceHint+'</div>'+'<div style="margin-top:4px;font-size:12px;color:var(--ink-soft)">'+queueHint+'</div>'+'<div style="margin-top:4px;font-size:12px;color:var(--ink-soft)">'+(zh?'輪替中：':'In queue: ')+members.length+(zh?' 人':'')+'</div>';
+      +'<div class="turn-count">'+(zh?'輪替中：':'In queue: ')+members.length+(zh?' 人':'')+'</div>'
+      +'<details class="turn-help"><summary>'+(zh?'玩法說明':'How it works')+'</summary>'
+      +  '<p>'+diceHint+'</p><p>'+queueHint+'</p></details>';
 
     function nextInOrder(){
       if(!members.length) return null;
@@ -8652,7 +8725,7 @@ function compositionScore(opts) {
     }
 
     var diceBtn = $('turnDice');
-    if(diceBtn) diceBtn.onclick = async function(){
+    if(diceBtn) diceBtn.onclick = turnAction(async function(){
       if(!state.user){ err(T.need_login); return; }
       if(!isApproved()){ err(T.pending); return; }
       var n = 1 + Math.floor(Math.random()*6);
@@ -8662,24 +8735,24 @@ function compositionScore(opts) {
       if(auto && auto.checked && canControl){
         await passTo(nextInOrder(), zh?'依序':'order');
       }
-    };
+    });
     var claim = $('turnClaim');
-    if(claim) claim.onclick = async function(){
+    if(claim) claim.onclick = turnAction(async function(){
       if(!state.user){ err(T.need_login); return; }
       if(holder && !isAdmin()){ err(zh?'已有人開始，請等交棒':'Turn already taken'); return; }
       if(!(await inQueue())) await joinQueue();
       await setTurn(state.user.id, null);
       var name = (state.profile && state.profile.display_name) || T.user;
       await postSystem((zh?'▶️ 回合開始：':'▶️ Turn starts: ')+name);
-    };
+    });
     var joinBtn = $('turnJoin');
-    if(joinBtn) joinBtn.onclick = function(){ joinQueue(); };
+    if(joinBtn) joinBtn.onclick = turnAction(function(){ return joinQueue(); });
     var leaveBtn = $('turnLeave');
-    if(leaveBtn) leaveBtn.onclick = function(){ leaveQueue(); };
+    if(leaveBtn) leaveBtn.onclick = turnAction(function(){ return leaveQueue(); });
     var seq = $('turnNextSeq');
-    if(seq) seq.onclick = async function(){ await passTo(nextInOrder(), zh?'依序':'order'); };
+    if(seq) seq.onclick = turnAction(async function(){ await passTo(nextInOrder(), zh?'依序':'order'); });
     var rand = $('turnNextRand');
-    if(rand) rand.onclick = async function(){ await passTo(nextRandom(), zh?'隨機':'random'); };
+    if(rand) rand.onclick = turnAction(async function(){ await passTo(nextRandom(), zh?'隨機':'random'); });
     var adm = $('turnPassAdmin');
     if(adm) adm.onclick = async function(){
       if(!isAdmin()) return;
