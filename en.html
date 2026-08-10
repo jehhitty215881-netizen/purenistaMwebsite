@@ -920,6 +920,24 @@ body.card-open{overflow:hidden}
 .profile-card .pc-bio{font-size:13px;color:var(--ink-soft);margin-top:4px;white-space:pre-wrap}
 .report-box textarea{width:100%;min-height:64px;font:inherit;padding:8px;border-radius:10px;border:1.5px solid var(--line)}
 
+
+/* 華麗主題名片 */
+.pc-ornament{position:relative;width:min(100%,300px);margin:0 auto}
+.pc-ornament .orn-frame{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;overflow:visible}
+.pc-ornament .pc-wrap{position:relative;z-index:1;margin:22px 20px;padding:0}
+.pc-ornament .profile-card{background:rgba(255,255,255,.94)!important;border:none;box-shadow:0 4px 20px rgba(0,0,0,.15)}
+.pc-ornament .orn-spark{animation:pcTwinkle 2.2s ease-in-out infinite}
+.pc-ornament .orn-spark:nth-child(odd){animation-delay:.4s}
+.pc-ornament .orn-spark:nth-child(3n){animation-delay:1s}
+.pc-ornament.th-violet_butterfly{filter:drop-shadow(0 0 12px rgba(160,120,255,.45))}
+.pc-ornament.th-pink_rose{filter:drop-shadow(0 0 12px rgba(255,120,180,.4))}
+.pc-ornament.th-crystal_white{filter:drop-shadow(0 0 12px rgba(180,210,255,.45))}
+.pc-ornament.th-silver_bloom{filter:drop-shadow(0 0 12px rgba(220,210,240,.4))}
+#boardCardBox .pc-shell{width:min(100%,320px);background:transparent;box-shadow:none;overflow:visible}
+.board-theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.board-theme-grid button{border:1.5px solid var(--line);background:var(--panel);border-radius:12px;padding:10px 8px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center}
+.board-theme-grid button.on{border-color:var(--violet);background:var(--violet-soft);color:var(--violet)}
+
 </style>
 </head>
 <body>
@@ -2076,6 +2094,17 @@ body.card-open{overflow:hidden}
       <input id="boardBio" maxlength="200" placeholder="Bio (up to 200 characters)" />
       <input id="boardCardColors" maxlength="60" placeholder="Card colours (up to 4 hex codes)" />
       <div id="boardCardPreview" class="board-card-prev"></div>
+
+      <p class="cond" style="margin-top:8px">Card theme (ornate frames)</p>
+      <div class="board-theme-grid" id="boardThemeGrid">
+        <button type="button" data-theme="none">None</button>
+        <button type="button" data-theme="violet_butterfly">Violet butterfly</button>
+        <button type="button" data-theme="pink_rose">Pink roses</button>
+        <button type="button" data-theme="crystal_white">Crystal white</button>
+        <button type="button" data-theme="silver_bloom">Silver bloom</button>
+      </div>
+      <input type="hidden" id="boardCardTheme" value="none" />
+
       <div class="board-deco-row">
         <label>Frame
           <select id="boardCardFrame">
@@ -9866,6 +9895,8 @@ function compositionScore(opts) {
     if(fr) patch.card_frame = fr.value;
     var mo = $('boardCardMotif');
     if(mo) patch.card_motif = mo.value;
+    var th = $('boardCardTheme');
+    if(th) patch.card_theme = th.value || 'none';
     if(dn) patch.display_name = dn;
     var res = await sb.from('profiles').update(patch).eq('id', state.user.id);
     if(res.error){ err(translateAuthError(res.error.message)); return; }
@@ -10815,6 +10846,102 @@ function wfEndedHTML(){
     return ' style="transform:none;animation:none;--f1:'+c[0]+';--f2:'+c[1 % c.length]+';--f3:'+c[2 % c.length]+'"';
   }
 
+  
+  /* ===== 華麗名片框：整框 SVG，不靠容易壞的 class 拼接 ===== */
+  function cardThemeSVG(theme){
+    if(!theme || theme === 'none') return '';
+    /* 外框 200x260 視區，內容區約 inset 18 */
+    var sparkles = '';
+    for(var i=0;i<12;i++){
+      var x = 20 + (i*14)%160, y = 18 + (i*23)%220;
+      sparkles += '<circle class="orn-spark" cx="'+x+'" cy="'+y+'" r="'+(0.8+i%2)+'" fill="#fff" opacity=".7"/>';
+    }
+    if(theme === 'violet_butterfly'){
+      return '<svg class="orn-frame" viewBox="0 0 200 260" aria-hidden="true">'
+        + '<defs><linearGradient id="vb1" x1="0" y1="0" x2="1" y2="1">'
+        + '<stop offset="0%" stop-color="#7B6BFF"/><stop offset="100%" stop-color="#E4A6FF"/></linearGradient>'
+        + '<linearGradient id="vb2" x1="0" y1="1" x2="1" y2="0">'
+        + '<stop offset="0%" stop-color="#2a1848"/><stop offset="100%" stop-color="#1a1030"/></linearGradient></defs>'
+        + '<rect x="8" y="8" width="184" height="244" rx="14" fill="url(#vb2)" stroke="url(#vb1)" stroke-width="2.5"/>'
+        + '<rect x="16" y="16" width="168" height="228" rx="10" fill="none" stroke="#c9a0ff" stroke-width="1" opacity=".5"/>'
+        + sparkles
+        + '<g transform="translate(8,12) scale(1.1)">'+svgButterfly('#9B8CFF','#FFB8F0').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '<g transform="translate(150,200) scale(0.9)">'+svgButterfly('#E4A6FF','#9EE7FF').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '<g transform="translate(150,16) scale(0.55)">'+svgFlower('#E4A6FF','#fff').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '<g transform="translate(12,200) scale(0.55)">'+svgFlower('#B8A0FF','#fff').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '</svg>';
+    }
+    if(theme === 'pink_rose'){
+      return '<svg class="orn-frame" viewBox="0 0 200 260" aria-hidden="true">'
+        + '<defs><linearGradient id="pr1" x1="0" y1="0" x2="0" y2="1">'
+        + '<stop offset="0%" stop-color="#FFD0E8"/><stop offset="100%" stop-color="#2a1020"/></linearGradient></defs>'
+        + '<rect x="6" y="6" width="188" height="248" rx="12" fill="#1a0810" stroke="#FF9EC8" stroke-width="3"/>'
+        + '<rect x="14" y="14" width="172" height="232" rx="8" fill="none" stroke="#FFB8D8" stroke-width="1.2" opacity=".6"/>'
+        + sparkles
+        + '<g transform="translate(6,6) scale(0.7)">'+svgFlower('#FF8CB8','#FFE0F0').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '<g transform="translate(160,6) scale(0.65)">'+svgFlower('#FF6AA0','#fff').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '<g transform="translate(6,210) scale(0.75)">'+svgFlower('#FF9EC8','#fff').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '<g transform="translate(150,205) scale(0.8)">'+svgFlower('#FFB8D8','#FF6AA0').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '<path d="M40 20 Q100 40 160 20" fill="none" stroke="#FFD0E8" stroke-width="1" opacity=".5"/>'
+        + '</svg>';
+    }
+    if(theme === 'crystal_white'){
+      return '<svg class="orn-frame" viewBox="0 0 200 260" aria-hidden="true">'
+        + '<rect x="8" y="8" width="184" height="244" rx="12" fill="#0e1220" stroke="#E8F0FF" stroke-width="2.5"/>'
+        + '<rect x="16" y="16" width="168" height="228" rx="8" fill="none" stroke="#B8D0FF" stroke-width="1" opacity=".55"/>'
+        + sparkles
+        + '<g transform="translate(10,190) scale(0.85)">'+svgButterfly('#B8D4FF','#fff').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '<g transform="translate(145,18) scale(0.7)">'+svgButterfly('#E0ECFF','#C0D8FF').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '<g transform="translate(8,10) scale(0.55)">'+svgFlower('#F0F4FF','#C8D8FF').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '<g transform="translate(155,200) scale(0.55)">'+svgFlower('#fff','#B0C8FF').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '</svg>';
+    }
+    if(theme === 'silver_bloom'){
+      return '<svg class="orn-frame" viewBox="0 0 200 260" aria-hidden="true">'
+        + '<rect x="8" y="8" width="184" height="244" rx="14" fill="#121018" stroke="#E8E0F0" stroke-width="2.8"/>'
+        + '<rect x="16" y="16" width="168" height="228" rx="10" fill="none" stroke="#D0C8E0" stroke-width="1" opacity=".5"/>'
+        + sparkles
+        + '<g transform="translate(6,8) scale(0.65)">'+svgFlower('#F5EEFF','#D8D0E8').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '<g transform="translate(155,8) scale(0.6)">'+svgFlower('#fff','#E0D8F0').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '<g transform="translate(6,200) scale(0.7)">'+svgFlower('#F0E8F8','#C8C0D8').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '<g transform="translate(148,195) scale(0.75)">'+svgButterfly('#F0E8FF','#fff').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
+        + '</svg>';
+    }
+    return '';
+  }
+
+  function showCardHTML(p){
+    var mine = state.user && state.user.id === p.id;
+    var open = p.is_public_card !== false;
+    var body = (open || mine || isAdmin())
+      ? (p.bio ? '<div class="pc-bio">'+esc(p.bio)+'</div>' : '<div class="pc-bio">'+esc(T.card_none||'')+'</div>')
+      : '<div class="pc-bio">'+esc(T.card_hidden||'')+'</div>';
+    var cols = (p.card_colors || []).filter(function(c){ return /^#[0-9A-Fa-f]{6}$/.test(c); });
+    var theme = p.card_theme || 'none';
+    /* 若選了舊版 frame/motif 但沒 theme，仍顯示 motif */
+    var motif = p.card_motif || 'none';
+    var frame = p.card_frame || 'none';
+    var tint = cardTint(cols);
+    var frameSvg = cardThemeSVG(theme);
+    var deco = theme === 'none' ? cardDecoHTML(motif, cols) : '';
+    var wrapExtra = (theme === 'none' && frame !== 'none') ? (' f-'+frame) : '';
+    return '<div class="pc-shell">'
+      + '<div class="pc-ornament'+(theme !== 'none' ? ' th-'+theme : '')+'">'
+      + frameSvg
+      + '<div class="pc-wrap'+wrapExtra+'"'+cardFrameStyle(frame, cols)+'>'
+      + deco
+      + '<div class="profile-card"'+(tint ? ' style="background:'+tint+'"' : '')+'>'
+      + cardStripe(cols)
+      + '<div class="pc-name">'+esc(p.display_name || T.user)
+      +   (p.game_id ? ' <span class="bm-meta">'+esc(p.game_id)+'</span>' : '')
+      +   (p.role === 'admin' ? ' <span class="bc-tag">'+esc(T.admin||'Admin')+'</span>' : '')
+      + '</div>'
+      + body
+      + '<div class="board-actions" style="margin-top:8px">'
+      +   '<button type="button" id="boardCardClose" class="back">'+esc(T.close||'Close')+'</button>'
+      + '</div></div></div></div></div>';
+  }
+
   async function showCard(uid){
     var box = $('boardCardBox');
     if(!box || !uid) return;
@@ -10825,7 +10952,7 @@ function wfEndedHTML(){
     document.body.classList.add('card-open');
     box.innerHTML = '<div class="pc-shell"><p class="board-empty">'+esc(T.loading)+'</p></div>';
     var res = await sb.from('profiles')
-      .select('id,display_name,game_id,bio,is_public_card,role,card_colors,card_frame,card_motif')
+      .select('id,display_name,game_id,bio,is_public_card,role,card_colors,card_frame,card_motif,card_theme')
       .eq('id', uid).maybeSingle();
     if(res.error || !res.data){
       box.innerHTML = '<div class="pc-shell"><p class="board-err">'+esc(T.fail)+'</p>'
@@ -10991,6 +11118,22 @@ function wfEndedHTML(){
     var ccIn=$('boardCardColors'); if(ccIn) ccIn.oninput=function(){ paintCardPreview(); previewCardDeco(); };
     var frIn=$('boardCardFrame'); if(frIn) frIn.onchange=previewCardDeco;
     var moIn=$('boardCardMotif'); if(moIn) moIn.onchange=previewCardDeco;
+    var tg=$('boardThemeGrid');
+    if(tg) tg.addEventListener('click', function(e){
+      var b=e.target.closest('[data-theme]'); if(!b) return;
+      var v=b.getAttribute('data-theme');
+      var th=$('boardCardTheme'); if(th) th.value=v;
+      var bs=tg.querySelectorAll('[data-theme]');
+      for(var i=0;i<bs.length;i++) bs[i].classList.toggle('on', bs[i].getAttribute('data-theme')===v);
+      if(typeof previewCardDeco==='function'){
+        /* 預覽主題 */
+        var el=$('boardCardPreview'); if(!el) return;
+        el.innerHTML = showCardHTML({display_name:'預覽',game_id:'',bio:'',role:'user',
+          card_colors:parseColors((($('boardCardColors')||{}).value)||''), card_theme:v,
+          card_frame:'none',card_motif:'none',is_public_card:true});
+        var cl=el.querySelector('#boardCardClose'); if(cl) cl.remove();
+      }
+    });
     var cardBox=$('boardCardBox');
     if(cardBox) cardBox.addEventListener('click', function(e){
       if(e.target === cardBox) closeCard();      // 點旁邊的暗底就關掉
