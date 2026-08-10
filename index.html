@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- CARD_THEME_V3 -->
 <title>Purenista M 交換速查手冊</title>
 <meta name="description" content="Purenista M 國際服玩家自製的交換速查手冊：交換比例、品牌染色、抽卡花費、儲值 VIP，另有美學專欄與作品健檢工具。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10883,15 +10884,16 @@ function wfEndedHTML(){
   
   /* ===== 華麗名片框：整框 SVG，不靠容易壞的 class 拼接 ===== */
   
+  
   function svgFlower(c1, c2){
     var p = '';
     for(var i=0;i<6;i++){
       p += '<ellipse cx="12" cy="4.8" rx="3.2" ry="5.2" fill="'+c1+'" transform="rotate('+(i*60)+' 12 12)"/>';
     }
-    return '<svg viewBox="0 0 24 24" aria-hidden="true">'+p+'<circle cx="12" cy="12" r="3" fill="'+c2+'"/></svg>';
+    return '<svg width="52" height="52" viewBox="0 0 24 24" aria-hidden="true">'+p+'<circle cx="12" cy="12" r="3" fill="'+c2+'"/></svg>';
   }
   function svgButterfly(c1, c2){
-    return '<svg viewBox="0 0 28 24" aria-hidden="true">'
+    return '<svg width="56" height="48" viewBox="0 0 28 24" aria-hidden="true">'
       + '<g class="pc-wing">'
       + '<path d="M14 12C10 2 1.5 2.5 2 9c.4 4.2 5.5 5.8 12 3z" fill="'+c1+'"/>'
       + '<path d="M14 12C18 2 26.5 2.5 26 9c-.4 4.2-5.5 5.8-12 3z" fill="'+c1+'"/>'
@@ -10901,32 +10903,50 @@ function wfEndedHTML(){
       + '<ellipse cx="14" cy="12" rx="1.1" ry="6" fill="#1a1228"/>'
       + '</svg>';
   }
-  function themeSparkles(){
-    var h = '';
-    for(var i=0;i<14;i++){
-      h += '<i style="left:'+(8+(i*17)%84)+'%;top:'+(10+(i*19)%80)+'%;animation-delay:'+(i*.15)+'s"></i>';
-    }
-    return '<div class="pc-sparkles">'+h+'</div>';
+  function themePalette(theme){
+    if(theme==='violet_butterfly') return {
+      bg:'linear-gradient(160deg,#1a1035,#2a1850 40%,#120c28)',
+      ring:'#b49cff', glow:'rgba(140,100,255,.45)',
+      a:['#B8A0FF','#FFB8F0'], b:['#E4A6FF','#ffffff'],
+      c:['#9B8CFF','#E4A6FF'], d:['#E4A6FF','#9EE7FF'],
+      kind:['b','f','f','b']
+    };
+    if(theme==='pink_rose') return {
+      bg:'linear-gradient(160deg,#2a1018,#401028 45%,#1a0810)',
+      ring:'#ff9ec8', glow:'rgba(255,100,160,.4)',
+      a:['#FF8CB8','#FFE0F0'], b:['#FF6AA0','#ffffff'],
+      c:['#FFB8D8','#FF8CB8'], d:['#FF9EC8','#ffffff'],
+      kind:['f','f','f','f']
+    };
+    if(theme==='crystal_white') return {
+      bg:'linear-gradient(160deg,#101828,#1a2848 45%,#0c1220)',
+      ring:'#d0e4ff', glow:'rgba(160,200,255,.45)',
+      a:['#C8DCFF','#ffffff'], b:['#F0F4FF','#B8D0FF'],
+      c:['#E8F0FF','#ffffff'], d:['#E0ECFF','#A8C8FF'],
+      kind:['b','f','f','b']
+    };
+    if(theme==='silver_bloom') return {
+      bg:'linear-gradient(160deg,#18141f,#2a2435 45%,#100e16)',
+      ring:'#e8e0f0', glow:'rgba(200,190,230,.4)',
+      a:['#F5EEFF','#D8D0E8'], b:['#F0E8FF','#ffffff'],
+      c:['#E8E0F0','#D0C8E0'], d:['#ffffff','#C8C0D8'],
+      kind:['f','b','b','f']
+    };
+    return null;
   }
-  function themeCorners(theme){
-    var a,b,c,d;
-    if(theme==='violet_butterfly'){
-      a=svgButterfly('#B8A0FF','#FFB8F0'); b=svgFlower('#E4A6FF','#fff');
-      c=svgFlower('#9B8CFF','#E4A6FF'); d=svgButterfly('#E4A6FF','#9EE7FF');
-    }else if(theme==='pink_rose'){
-      a=svgFlower('#FF8CB8','#FFE0F0'); b=svgFlower('#FF6AA0','#fff');
-      c=svgFlower('#FFB8D8','#FF8CB8'); d=svgFlower('#FF9EC8','#fff');
-    }else if(theme==='crystal_white'){
-      a=svgButterfly('#C8DCFF','#fff'); b=svgFlower('#F0F4FF','#B8D0FF');
-      c=svgFlower('#E8F0FF','#fff'); d=svgButterfly('#E0ECFF','#A8C8FF');
-    }else if(theme==='silver_bloom'){
-      a=svgFlower('#F5EEFF','#D8D0E8'); b=svgButterfly('#F0E8FF','#fff');
-      c=svgButterfly('#E8E0F0','#D0C8E0'); d=svgFlower('#fff','#C8C0D8');
-    }else return '';
-    return '<span class="pc-corner c-tl">'+a+'</span>'
-      + '<span class="pc-corner c-tr">'+b+'</span>'
-      + '<span class="pc-corner c-bl">'+c+'</span>'
-      + '<span class="pc-corner c-br">'+d+'</span>';
+  function themeSparklesHTML(){
+    var h = '';
+    for(var i=0;i<16;i++){
+      h += '<i style="position:absolute;left:'+(6+(i*17)%88)+'%;top:'+(8+(i*19)%84)
+        +'%;width:3px;height:3px;border-radius:50%;background:#fff;'
+        +'box-shadow:0 0 6px #fff;opacity:.85;animation:pcTwinkle 2s ease-in-out infinite;'
+        +'animation-delay:'+(i*0.12)+'s"></i>';
+    }
+    return '<div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:18px;z-index:1">'+h+'</div>';
+  }
+  function cornerHTML(svg, pos){
+    var map = {tl:'left:4px;top:4px', tr:'right:4px;top:4px', bl:'left:4px;bottom:4px', br:'right:4px;bottom:6px'};
+    return '<span style="position:absolute;'+map[pos]+';z-index:3;pointer-events:none;filter:drop-shadow(0 0 6px rgba(255,220,255,.55))">'+svg+'</span>';
   }
   function showCardHTML(p, isPreview){
     var mine = state.user && state.user.id === p.id;
@@ -10937,12 +10957,32 @@ function wfEndedHTML(){
     var cols = (p.card_colors || []).filter(function(c){ return /^#[0-9A-Fa-f]{6}$/.test(c); });
     var theme = p.card_theme || 'none';
     var tint = (typeof cardTint==='function') ? cardTint(cols) : '';
-    var stageCls = 'pc-stage'+(theme!=='none' ? ' th-'+theme : '');
-    var h = '<div class="pc-shell"><div class="'+stageCls+'">';
-    if(theme!=='none'){
-      h += themeSparkles() + themeCorners(theme);
+    var pal = themePalette(theme);
+
+    var stageStyle = 'position:relative;width:100%;padding:40px 30px 34px;border-radius:18px;box-sizing:border-box;';
+    var extras = '';
+    if(pal){
+      stageStyle += 'background:'+pal.bg+';'
+        + 'box-shadow:0 0 0 2px '+pal.ring+',0 0 0 6px '+pal.glow+',0 12px 36px rgba(0,0,0,.35);';
+      var icons = [pal.a,pal.b,pal.c,pal.d];
+      var kinds = pal.kind;
+      var pos = ['tl','tr','bl','br'];
+      for(var i=0;i<4;i++){
+        var svg = kinds[i]==='b' ? svgButterfly(icons[i][0], icons[i][1]) : svgFlower(icons[i][0], icons[i][1]);
+        extras += cornerHTML(svg, pos[i]);
+      }
+      extras = themeSparklesHTML() + extras;
+    } else {
+      stageStyle += 'background:var(--panel,#fff);box-shadow:0 8px 28px rgba(0,0,0,.12);';
     }
-    h += '<div class="profile-card"'+(tint ? ' style="background:'+tint+'"' : '')+'>';
+
+    var cardStyle = 'position:relative;z-index:2;margin:0;border:none;border-radius:14px;padding:16px 14px;'
+      + 'background:'+(tint || 'rgba(255,255,255,.95)')+';box-shadow:0 6px 24px rgba(0,0,0,.18);';
+
+    var h = '<div class="pc-shell" style="width:min(92vw,300px);background:transparent;box-shadow:none">'
+      + '<div style="'+stageStyle+'">'
+      + extras
+      + '<div class="profile-card" style="'+cardStyle+'">';
     if(typeof cardStripe==='function') h += cardStripe(cols);
     h += '<div class="pc-name">'+esc(p.display_name || T.user)
       + (p.game_id ? ' <span class="bm-meta">'+esc(p.game_id)+'</span>' : '')
