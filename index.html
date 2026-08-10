@@ -1056,6 +1056,35 @@ body.card-open{overflow:hidden}
 #boardCardBox .pc-shell-frame{width:min(94vw,420px)}
 #boardCardPreview .pc-shell-frame{width:100%;max-width:360px}
 
+
+/* 華麗框內文：玻璃質感 + 置中排版 */
+.pc-shell-frame{position:relative;width:min(94vw,440px);aspect-ratio:1176/784;margin:0 auto;background:#0a0610;border-radius:12px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.55)}
+.pc-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:2;mix-blend-mode:screen}
+.pc-frame-content{position:absolute;left:15%;right:15%;top:22%;bottom:20%;z-index:1;display:flex;align-items:center;justify-content:center}
+.pc-glass{
+  width:100%;max-width:100%;text-align:center;
+  padding:16px 14px 14px;
+  border-radius:14px;
+  background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow:0 8px 32px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.2);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.pc-glass .pc-stripe{justify-content:center;margin:0 auto 10px;display:flex;gap:5px}
+.pc-glass .pc-stripe i{width:22px;height:8px;border-radius:4px;border:1px solid rgba(255,255,255,.4)}
+.pc-glass .pc-name{font-size:17px;font-weight:800;letter-spacing:.04em;line-height:1.35;margin:0 0 4px;text-shadow:0 2px 8px rgba(0,0,0,.75)}
+.pc-glass .bm-meta{font-size:12px;font-weight:600;opacity:.9;letter-spacing:.06em}
+.pc-glass .bc-tag{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700}
+.pc-glass .pc-line{width:42px;height:1px;margin:10px auto;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent)}
+.pc-glass .pc-bio{font-size:13.5px;line-height:1.7;margin:0;opacity:.95;text-shadow:0 1px 4px rgba(0,0,0,.7)}
+.pc-glass .board-actions{margin-top:12px;display:flex;justify-content:center}
+.pc-glass .back,#boardCardClose{
+  border-radius:999px!important;padding:7px 18px!important;font-size:12.5px!important;font-weight:700!important;
+}
+#boardCardBox .pc-shell-frame{width:min(94vw,440px)}
+#boardCardPreview .pc-shell-frame{width:100%;max-width:380px}
+#boardCardPreview .pc-glass .board-actions{display:none}
+
 </style>
 </head>
 <body>
@@ -11031,12 +11060,14 @@ function wfEndedHTML(){
   }
   
   
+  
+  
   function showCardHTML(p, isPreview){
     var mine = state.user && state.user.id === p.id;
     var open = p.is_public_card !== false;
-    var body = (open || mine || isAdmin())
-      ? (p.bio ? '<div class="pc-bio">'+esc(p.bio)+'</div>' : '<div class="pc-bio">'+esc(T.card_none||'')+'</div>')
-      : '<div class="pc-bio">'+esc(T.card_hidden||'')+'</div>';
+    var bioText = (open || mine || isAdmin())
+      ? (p.bio || (T.card_none || ''))
+      : (T.card_hidden || '');
     var cols = (p.card_colors || []).filter(function(c){ return /^#[0-9A-Fa-f]{6}$/.test(c); });
     var theme = p.card_theme || 'none';
     var frameSrc = {
@@ -11046,18 +11077,34 @@ function wfEndedHTML(){
       silver_bloom: 'card-frames/silver_bloom.jpg'
     }[theme];
 
+    var skin = {
+      crystal_white: { bg:'#070b14', name:'#F2F7FF', bio:'#C5D8F5', meta:'#9BB8E0', tagBg:'rgba(160,200,255,.35)', btn:'rgba(180,210,255,.22)', bd:'rgba(210,230,255,.55)' },
+      pink_rose:     { bg:'#12060c', name:'#FFF0F6', bio:'#F5C4D8', meta:'#E0A0B8', tagBg:'rgba(255,150,190,.35)', btn:'rgba(255,170,200,.25)', bd:'rgba(255,190,215,.55)' },
+      violet_butterfly:{ bg:'#0a0512', name:'#F6ECFF', bio:'#D2B8F5', meta:'#B898E0', tagBg:'rgba(180,120,255,.4)', btn:'rgba(190,140,255,.28)', bd:'rgba(210,170,255,.55)' },
+      silver_bloom:  { bg:'#0b0b0f', name:'#FAFAFC', bio:'#D8D6E0', meta:'#B8B6C0', tagBg:'rgba(220,220,230,.3)', btn:'rgba(240,240,250,.2)', bd:'rgba(245,245,255,.5)' }
+    }[theme] || { bg:'#0a0610', name:'#fff', bio:'#e8e0f4', meta:'#d0c4e8', tagBg:'rgba(180,140,255,.35)', btn:'rgba(255,255,255,.14)', bd:'rgba(255,255,255,.45)' };
+
+    var displayName = p.display_name || T.user;
+    if(isPreview && (displayName === '預覽' || displayName === 'Preview')){
+      displayName = (T.locale && T.locale.indexOf('zh')===0) ? '你的暱稱' : 'Your name';
+    }
+
     if(frameSrc){
-      var h = '<div class="pc-shell pc-shell-frame">'
+      var stripe = (typeof cardStripe==='function' && cols.length) ? cardStripe(cols) : '';
+      var h = '<div class="pc-shell pc-shell-frame" style="background:'+skin.bg+'">'
         + '<div class="pc-frame-content">'
-        + '<div class="profile-card">'
-        + (typeof cardStripe==='function' ? cardStripe(cols) : '')
-        + '<div class="pc-name">'+esc(p.display_name || T.user)
-        + (p.game_id ? ' <span class="bm-meta">'+esc(p.game_id)+'</span>' : '')
-        + (p.role==='admin' ? ' <span class="bc-tag">'+esc(T.admin||'Admin')+'</span>' : '')
-        + '</div>' + body;
+        + '<div class="pc-glass profile-card">'
+        + stripe
+        + '<div class="pc-name" style="color:'+skin.name+'">'+esc(displayName)
+        + (p.game_id ? '<br><span class="bm-meta" style="color:'+skin.meta+'">'+esc(p.game_id)+'</span>' : '')
+        + (p.role==='admin' ? ' <span class="bc-tag" style="background:'+skin.tagBg+';color:'+skin.name+';border:1px solid '+skin.bd+'">'+esc(T.admin||'Admin')+'</span>' : '')
+        + '</div>'
+        + '<div class="pc-line"></div>'
+        + '<div class="pc-bio" style="color:'+skin.bio+'">'+esc(bioText)+'</div>';
       if(!isPreview){
-        h += '<div class="board-actions" style="margin-top:8px">'
-          + '<button type="button" id="boardCardClose" class="back">'+esc(T.close||'Close')+'</button></div>';
+        h += '<div class="board-actions">'
+          + '<button type="button" id="boardCardClose" class="back" style="background:'+skin.btn+';color:'+skin.name+';border:1.5px solid '+skin.bd+'">'
+          + esc(T.close||'Close')+'</button></div>';
       }
       h += '</div></div>'
         + '<img class="pc-frame-img" src="'+frameSrc+'" alt="" />'
@@ -11071,8 +11118,7 @@ function wfEndedHTML(){
       + (typeof cardStripe==='function' ? cardStripe(cols) : '')
       + '<div class="pc-name">'+esc(p.display_name || T.user)
       + (p.game_id ? ' <span class="bm-meta">'+esc(p.game_id)+'</span>' : '')
-      + (p.role==='admin' ? ' <span class="bc-tag">'+esc(T.admin||'Admin')+'</span>' : '')
-      + '</div>' + body;
+      + '</div><div class="pc-bio">'+esc(bioText)+'</div>';
     if(!isPreview){
       h2 += '<div class="board-actions" style="margin-top:8px">'
         + '<button type="button" id="boardCardClose" class="back">'+esc(T.close||'Close')+'</button></div>';
@@ -11246,7 +11292,7 @@ function wfEndedHTML(){
       if(typeof previewCardDeco==='function'){
         /* 預覽主題 */
         var el=$('boardCardPreview'); if(!el) return;
-        el.innerHTML = showCardHTML({display_name:'Preview',game_id:'',bio:'',role:'user',card_colors:parseColors((($('boardCardColors')||{}).value)||''), card_theme:v,card_frame:'none',card_motif:'none',is_public_card:true}, true);
+        el.innerHTML = showCardHTML({display_name:'Your name',game_id:'ID',bio:'Your bio here',role:'user',card_colors:parseColors((($('boardCardColors')||{}).value)||''), card_theme:v,card_frame:'none',card_motif:'none',is_public_card:true}, true);
       }
     });
     var cardBox=$('boardCardBox');
