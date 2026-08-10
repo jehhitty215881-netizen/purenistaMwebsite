@@ -759,12 +759,36 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .board-inbox .ib-meta{font-size:12px;color:var(--ink-soft)}
 .board-card-pin{outline:2px solid var(--gold)}
 .bm-pin{font-size:11px;color:var(--gold);font-weight:800;margin-right:4px}
+
+/* ===== 名片彈窗修正：外框動畫只轉裝飾層，不轉整張卡 ===== */
+#boardCardBox{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(28,26,36,.48);backdrop-filter:blur(3px);-webkit-overflow-scrolling:touch}
+#boardCardBox[hidden]{display:none!important}
+#boardCardBox .pc-shell{width:min(100%,340px);max-height:min(80vh,560px);overflow:auto;border-radius:16px;background:transparent;box-shadow:none;padding:0}
+#boardCardBox .pc-wrap{position:relative;border-radius:18px;padding:4px;overflow:hidden;isolation:isolate;transform:none!important;animation:none!important}
+#boardCardBox .profile-card{position:relative;z-index:1;margin:0;transform:none!important;animation:none!important;overflow:hidden;border-radius:14px}
+/* 旋轉只加在偽元素，文字永遠正的 */
+.pc-wrap.f-sparkle{background:linear-gradient(145deg,#2a1f45,#1a1230);animation:none!important}
+.pc-wrap.f-sparkle::before{
+  content:"";position:absolute;inset:-40%;border-radius:50%;z-index:0;pointer-events:none;
+  background:conic-gradient(from 0deg,var(--f1,#c9a0ff),var(--f2,#ffb8e0),var(--f3,#9ee7ff),var(--f1,#c9a0ff));
+  animation:pcSpin 7s linear infinite;opacity:.85}
+.pc-wrap.f-sparkle::after{
+  content:"";position:absolute;inset:3px;border-radius:15px;z-index:0;pointer-events:none;
+  background:linear-gradient(160deg,#faf8ff,#fff);box-shadow:0 0 20px rgba(180,140,255,.25) inset}
+.pc-wrap.f-glow{background:linear-gradient(135deg,var(--f1,#c9a0ff),var(--f2,#ffb8e0));animation:none!important}
+.pc-wrap.f-glow::after{
+  content:"";position:absolute;inset:-6px;border-radius:22px;z-index:-1;pointer-events:none;
+  background:linear-gradient(135deg,var(--f1,#c9a0ff),var(--f2,#ffb8e0));filter:blur(14px);opacity:.45;
+  animation:pcBreathe 3.4s ease-in-out infinite}
+@keyframes pcSpin{to{transform:rotate(360deg)}}
+@keyframes pcBreathe{0%,100%{opacity:.28}50%{opacity:.55}}
+
 #boardCardBox{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(28,26,36,.45);backdrop-filter:blur(2px)}
 #boardCardBox[hidden]{display:none}
 .pc-wrap{position:relative;border-radius:16px;padding:3px}
 /* 閃亮外框：一圈漸層繞著卡片轉。用 padding + 內層底色做出邊框，
    比 border-image 相容性好，圓角也不會破。 */
-.pc-wrap.f-sparkle{background:conic-gradient(from 0deg,var(--f1),var(--f2),var(--f3),var(--f1));animation:pcSpin 6s linear infinite}
+.pc-wrap.f-sparkle{/* spin moved to ::before */background:linear-gradient(145deg,#2a1f45,#1a1230)}
 .pc-wrap.f-sparkle::after{content:"";position:absolute;inset:-6px;border-radius:20px;background:conic-gradient(from 0deg,var(--f1),var(--f2),var(--f3),var(--f1));filter:blur(10px);opacity:.45;z-index:-1;animation:pcSpin 6s linear infinite}
 .pc-wrap.f-glow{background:linear-gradient(135deg,var(--f1),var(--f2))}
 .pc-wrap.f-glow::after{content:"";position:absolute;inset:-5px;border-radius:20px;background:linear-gradient(135deg,var(--f1),var(--f2));filter:blur(12px);opacity:.4;z-index:-1;animation:pcBreathe 3.4s ease-in-out infinite}
@@ -790,6 +814,92 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 }
 #boardCardBox .pc-shell{width:100%;max-width:340px;max-height:80vh;overflow:auto;border-radius:16px;background:var(--panel);box-shadow:0 18px 44px rgba(28,26,36,.28);padding:4px}
 #boardCardBox .profile-card{margin:0;border:none;box-shadow:none}
+
+/* ===== 名片華麗版：星光／玫瑰／星座／燈串 + 動畫 ===== */
+.pc-wrap{position:relative;padding:14px;border-radius:18px}
+.pc-wrap .profile-card{position:relative;z-index:1;border-radius:14px}
+.pc-deco{position:absolute;inset:0;overflow:hidden;border-radius:18px;pointer-events:none;z-index:2}
+.pc-deco svg{position:absolute;filter:drop-shadow(0 0 4px rgba(200,160,255,.45))}
+.pc-deco .d0{left:4%;top:10%;animation:pcFloat 6.5s ease-in-out infinite}
+.pc-deco .d1{right:5%;top:18%;animation:pcFloat 8s ease-in-out infinite .6s}
+.pc-deco .d2{left:10%;bottom:10%;animation:pcFlit 7s ease-in-out infinite 1.2s}
+.pc-deco .d3{right:12%;bottom:16%;animation:pcFlit 6s ease-in-out infinite .3s}
+.pc-deco .d4{left:42%;top:4%;animation:pcFloat 9s ease-in-out infinite 1.8s}
+.pc-deco .star{animation:pcTwinkle 2.4s ease-in-out infinite}
+.pc-deco .star.s1{animation-delay:.3s}.pc-deco .star.s2{animation-delay:.9s}
+.pc-deco .star.s3{animation-delay:1.5s}
+@keyframes pcFloat{0%,100%{transform:translateY(0) rotate(-8deg) scale(1)}50%{transform:translateY(-11px) rotate(10deg) scale(1.05)}}
+@keyframes pcFlit{0%,100%{transform:translate(0,0) rotate(-12deg)}30%{transform:translate(10px,-12px) rotate(8deg)}70%{transform:translate(-8px,-6px) rotate(-6deg)}}
+@keyframes pcWing{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.55)}}
+@keyframes pcTwinkle{0%,100%{opacity:.35;transform:scale(.7) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(18deg)}}
+@keyframes pcSparkleSpin{to{transform:rotate(360deg)}}
+@keyframes pcBorderGlow{0%,100%{filter:drop-shadow(0 0 4px rgba(180,140,255,.4))}50%{filter:drop-shadow(0 0 12px rgba(255,200,255,.75))}}
+.pc-wing{transform-origin:center;animation:pcWing 1.05s ease-in-out infinite}
+
+/* 外框：閃亮粒子軌道 */
+.pc-wrap.f-sparkle{background:
+  radial-gradient(circle at 20% 30%, rgba(255,255,255,.5) 0 1px, transparent 2px),
+  radial-gradient(circle at 70% 20%, rgba(255,220,255,.6) 0 1.5px, transparent 3px),
+  radial-gradient(circle at 40% 80%, rgba(200,240,255,.5) 0 1px, transparent 2px),
+  linear-gradient(145deg,#2a1f45,#1a1230);
+  animation:pcBorderGlow 3s ease-in-out infinite}
+.pc-wrap.f-sparkle::before,.pc-wrap.f-sparkle::after{
+  content:"";position:absolute;inset:-2px;border-radius:20px;pointer-events:none;z-index:0;
+  background:conic-gradient(from 0deg, transparent 0 40%, rgba(255,200,255,.7), transparent 60% 100%);
+  animation:pcSparkleSpin 8s linear infinite;opacity:.55;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  padding:2px;-webkit-mask-composite:xor;mask-composite:exclude}
+.pc-wrap.f-sparkle::after{animation-direction:reverse;animation-duration:12s;opacity:.35}
+
+.pc-wrap.f-glow{background:linear-gradient(160deg,#efe8ff,#f8e8f4 40%,#e8f4ff);box-shadow:0 0 0 2px rgba(180,150,220,.45),0 0 24px rgba(180,150,220,.35) inset}
+
+/* 玫瑰邊框 */
+.pc-wrap.f-rose{background:linear-gradient(160deg,#e8f0ff,#f5f8ff);box-shadow:0 0 0 3px #7eb6e8,0 0 0 6px rgba(140,180,230,.35),0 8px 28px rgba(80,120,180,.2)}
+.pc-wrap.f-rose::before{
+  content:"";position:absolute;inset:4px;border-radius:14px;pointer-events:none;
+  border:2px solid rgba(120,170,230,.55);
+  box-shadow:0 0 12px rgba(150,190,255,.25) inset}
+
+/* 星座橢圓 */
+.pc-wrap.f-constellation{
+  background:radial-gradient(ellipse at 50% 40%, #3a4a8a 0%, #1a2048 55%, #0e1230 100%);
+  box-shadow:0 0 0 2px rgba(180,210,255,.5),0 0 30px rgba(100,140,255,.25) inset}
+.pc-wrap.f-constellation .profile-card{background:rgba(255,255,255,.88)!important}
+
+/* 金星華麗框 */
+.pc-wrap.f-goldstar{
+  background:linear-gradient(165deg,#f7f0ff 0%,#fff8f0 40%,#eef0ff 100%);
+  box-shadow:0 0 0 2px #d4b56a,0 0 0 5px rgba(212,181,106,.35),0 10px 32px rgba(120,90,40,.15)}
+.pc-wrap.f-goldstar::before{
+  content:"";position:absolute;inset:0;border-radius:18px;pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 10%, #f0d78a 0 2px, transparent 3px),
+    radial-gradient(circle at 88% 12%, #f0d78a 0 2.5px, transparent 3.5px),
+    radial-gradient(circle at 10% 88%, #e8c878 0 2px, transparent 3px),
+    radial-gradient(circle at 90% 86%, #f0d78a 0 2px, transparent 3px),
+    radial-gradient(circle at 50% 4%, #fff6c8 0 1.5px, transparent 2.5px);
+  animation:pcTwinkle 3s ease-in-out infinite}
+
+/* 燈串拱門 */
+.pc-wrap.f-lights{
+  background:linear-gradient(180deg,#1a1230 0%,#2a1848 40%,#1e2848 100%);
+  box-shadow:0 0 0 2px rgba(255,180,220,.4)}
+.pc-wrap.f-lights .profile-card{background:rgba(255,255,255,.9)!important}
+.pc-wrap.f-lights::before{
+  content:"";position:absolute;left:8%;right:8%;top:6px;height:18px;pointer-events:none;
+  background:repeating-linear-gradient(90deg,
+    transparent 0 8px,
+    rgba(255,200,230,.9) 8px 10px,
+    transparent 10px 18px);
+  filter:drop-shadow(0 0 4px rgba(255,180,220,.8));
+  animation:pcTwinkle 2s ease-in-out infinite}
+
+@media(prefers-reduced-motion:reduce){
+  .pc-wrap.f-sparkle,.pc-wrap.f-sparkle::before,.pc-wrap.f-sparkle::after,
+  .pc-wrap.f-goldstar::before,.pc-wrap.f-lights::before,
+  .pc-deco svg,.pc-wing,.pc-deco .star{animation:none!important}
+}
+
 body.card-open{overflow:hidden}
 @media(max-width:480px){#boardCardBox{padding:12px}}
 .board-card-prev{display:flex;align-items:center;gap:8px;border-radius:10px;padding:6px 8px;margin:4px 0;min-height:0;transition:background .2s}
@@ -1970,8 +2080,12 @@ body.card-open{overflow:hidden}
         <label>Frame
           <select id="boardCardFrame">
             <option value="none">None</option>
-            <option value="sparkle">Sparkle</option>
-            <option value="glow">Glow</option>
+            <option value="sparkle">Spinning sparkle</option>
+            <option value="glow">Soft glow</option>
+            <option value="rose">Blue rose frame</option>
+            <option value="constellation">Constellation</option>
+            <option value="goldstar">Golden stars</option>
+            <option value="lights">String lights</option>
           </select>
         </label>
         <label>Motif
@@ -1979,7 +2093,8 @@ body.card-open{overflow:hidden}
             <option value="none">None</option>
             <option value="flower">Flowers</option>
             <option value="butterfly">Butterflies</option>
-            <option value="both">Both</option>
+            <option value="both">Flowers + butterflies</option>
+            <option value="stars">Stars</option>
           </select>
         </label>
       </div>
@@ -10630,30 +10745,39 @@ function wfEndedHTML(){
 
   /* 花與蝴蝶用 SVG 直接畫，不外連圖片：省一次請求，而且顏色可以跟著
      使用者挑的名片配色走。都是裝飾，加 aria-hidden 讓螢幕閱讀器略過。 */
+  
   function svgFlower(c1, c2){
     var p = '';
-    for(var i=0;i<5;i++){
-      p += '<ellipse cx="12" cy="5.6" rx="3.1" ry="5" fill="'+c1+'" transform="rotate('+(i*72)+' 12 12)"/>';
+    for(var i=0;i<6;i++){
+      p += '<ellipse cx="12" cy="5.2" rx="3.4" ry="5.4" fill="'+c1+'" opacity=".9" transform="rotate('+(i*60)+' 12 12)"/>';
     }
-    return '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">'
-         + p + '<circle cx="12" cy="12" r="2.8" fill="'+c2+'"/></svg>';
+    return '<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">'
+         + p + '<circle cx="12" cy="12" r="3" fill="'+c2+'"/>'
+         + '<circle cx="12" cy="12" r="1.2" fill="#fff" opacity=".7"/></svg>';
   }
   function svgButterfly(c1, c2){
-    return '<svg width="24" height="20" viewBox="0 0 28 24" aria-hidden="true">'
+    return '<svg width="28" height="22" viewBox="0 0 28 24" aria-hidden="true">'
+      + '<defs><linearGradient id="bw" x1="0" y1="0" x2="1" y2="1">'
+      + '<stop offset="0%" stop-color="'+c1+'"/><stop offset="100%" stop-color="'+c2+'"/></linearGradient></defs>'
       + '<g class="pc-wing">'
-      +   '<path d="M14 12C10.5 3.5 2 3 2 8.5c0 4 5 5.5 12 3.5z" fill="'+c1+'"/>'
-      +   '<path d="M14 12C17.5 3.5 26 3 26 8.5c0 4-5 5.5-12 3.5z" fill="'+c1+'"/>'
-      +   '<path d="M14 12c-3 8-9.5 8.5-9.5 4 0-3.2 4-4.8 9.5-4z" fill="'+c2+'"/>'
-      +   '<path d="M14 12c3 8 9.5 8.5 9.5 4 0-3.2-4-4.8-9.5-4z" fill="'+c2+'"/>'
+      +   '<path d="M14 12C10 2 1.5 2.5 2 9c.4 4.2 5.5 5.8 12 3z" fill="url(#bw)" opacity=".95"/>'
+      +   '<path d="M14 12C18 2 26.5 2.5 26 9c-.4 4.2-5.5 5.8-12 3z" fill="url(#bw)" opacity=".95"/>'
+      +   '<path d="M14 12c-3.2 8.5-10 9-10 4.2 0-3.4 4.2-5 10-4.2z" fill="'+c2+'" opacity=".85"/>'
+      +   '<path d="M14 12c3.2 8.5 10 9 10 4.2 0-3.4-4.2-5-10-4.2z" fill="'+c2+'" opacity=".85"/>'
       + '</g>'
-      + '<ellipse cx="14" cy="12" rx="1.1" ry="6" fill="#3a3350"/>'
-      + '<path d="M14 6.6c-.6-2-2-3-3.2-3.2M14 6.6c.6-2 2-3 3.2-3.2" stroke="#3a3350" stroke-width="1" fill="none" stroke-linecap="round"/>'
+      + '<ellipse cx="14" cy="12" rx="1.15" ry="6.2" fill="#2a2138"/>'
+      + '<path d="M14 6.4c-.7-2.2-2.2-3.4-3.5-3.6M14 6.4c.7-2.2 2.2-3.4 3.5-3.6" stroke="#2a2138" stroke-width="1" fill="none" stroke-linecap="round"/>'
+      + '<circle cx="8" cy="8" r="1.2" fill="#fff" opacity=".55"/><circle cx="20" cy="8" r="1.2" fill="#fff" opacity=".55"/>'
       + '</svg>';
   }
-  /* 沒挑顏色就用站上的預設色，不然裝飾會是灰的 */
+  function svgStar(c1){
+    return '<svg class="star" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">'
+      + '<path fill="'+c1+'" d="M12 2l2.4 7.2H22l-6 4.4 2.3 7.2L12 16.8 5.7 20.8 8 13.6 2 9.2h7.6z"/>'
+      + '</svg>';
+  }
   function decoColors(cols){
-    var base = (cols && cols.length) ? cols.slice() : ['#8E7CC3','#E4A6C4','#F0C987'];
-    while(base.length < 3) base = base.concat(base);
+    var base = (cols && cols.length) ? cols.slice() : ['#B8A0FF','#FFB8E0','#9EE7FF','#FFE29A'];
+    while(base.length < 4) base = base.concat(base);
     return base;
   }
   function cardDecoHTML(motif, cols){
@@ -10661,19 +10785,20 @@ function wfEndedHTML(){
     var c = decoColors(cols), out = [], kinds;
     if(motif === 'flower')         kinds = ['f','f','f','f','f'];
     else if(motif === 'butterfly') kinds = ['b','b','b','b','b'];
-    else                           kinds = ['f','b','f','b','f'];
+    else if(motif === 'stars')     kinds = ['s','s','s','s','s'];
+    else                           kinds = ['f','b','s','b','f'];
     for(var i=0;i<kinds.length;i++){
       var a = c[i % c.length], b = c[(i+1) % c.length];
-      out.push('<span class="d'+i+'">'
-        + (kinds[i] === 'f' ? svgFlower(a, b) : svgButterfly(a, b))
-        + '</span>');
+      var node = kinds[i]==='f' ? svgFlower(a,b) : (kinds[i]==='b' ? svgButterfly(a,b) : svgStar(a));
+      out.push('<span class="d'+i+(kinds[i]==='s'?' star s'+(i%3):'')+'">'+node+'</span>');
     }
     return '<div class="pc-deco" aria-hidden="true">'+out.join('')+'</div>';
   }
+
   function cardFrameStyle(frame, cols){
-    if(!frame || frame === 'none') return '';
+    if(!frame || frame === 'none') return ' style="transform:none;animation:none"';
     var c = decoColors(cols);
-    return ' style="--f1:'+c[0]+';--f2:'+c[1 % c.length]+';--f3:'+c[2 % c.length]+'"';
+    return ' style="transform:none;animation:none;--f1:'+c[0]+';--f2:'+c[1 % c.length]+';--f3:'+c[2 % c.length]+'"';
   }
 
   async function showCard(uid){
@@ -10706,7 +10831,7 @@ function wfEndedHTML(){
     var frame = p.card_frame || 'none';
     var motif = p.card_motif || 'none';
     box.innerHTML = '<div class="pc-shell">'
-      + '<div class="pc-wrap'+(frame !== 'none' ? ' f-'+frame : '')+'"'+cardFrameStyle(frame, cols)+'>'
+      + '<div class="pc-wrap" style="transform:none"'+(frame !== 'none' ? ' f-'+frame : '')+'"'+cardFrameStyle(frame, cols)+'>'
       + cardDecoHTML(motif, cols)
       + '<div class="profile-card"'+(tint ? ' style="background:'+tint+'"' : '')+'>'
       + cardStripe(cols)
