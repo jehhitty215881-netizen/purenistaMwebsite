@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- CARD_THEME_V3 -->
+<!-- CARD_FRAME_LAND -->
 <title>Purenista M Trade Reference Guide</title>
 <meta name="description" content="A fan-made trade reference for Purenista M global server: trade ratios, BRAND dyeing, pull costs and VIP top-up, plus an aesthetics column and an artwork analyser.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -943,7 +944,7 @@ body.card-open{overflow:hidden}
 /* ===== 名片華麗框 v3：穩定版面 ===== */
 #boardCardBox{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(20,16,32,.55);backdrop-filter:blur(4px)}
 #boardCardBox[hidden]{display:none!important}
-#boardCardBox .pc-shell{width:min(92vw,300px);background:transparent;box-shadow:none;overflow:visible}
+#boardCardBox .pc-shell{width:min(94vw,420px);background:transparent;box-shadow:none;overflow:visible}
 .pc-stage{position:relative;width:100%;padding:36px 28px 32px;border-radius:18px;box-sizing:border-box}
 .pc-stage .profile-card{position:relative;z-index:2;margin:0;border:none;border-radius:14px;padding:16px 14px;background:rgba(255,255,255,.95)!important;box-shadow:0 6px 24px rgba(0,0,0,.18)}
 .pc-stage .pc-corner{position:absolute;z-index:3;pointer-events:none;width:56px;height:56px}
@@ -969,6 +970,17 @@ body.card-open{overflow:hidden}
 .board-theme-grid button{border:1.5px solid var(--line);background:var(--panel);border-radius:12px;padding:10px 8px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
 .board-theme-grid button.on{border-color:var(--violet);background:var(--violet-soft);color:var(--violet)}
 #boardCardPreview .pc-stage{transform:scale(.92);transform-origin:top center}
+
+
+/* 圖片外框名片 */
+.pc-shell-frame{position:relative;width:min(94vw,420px);aspect-ratio:1176/784;margin:0 auto;background:transparent;box-shadow:none}
+.pc-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;border-radius:8px;z-index:1}
+.pc-frame-content{position:absolute;left:12%;right:12%;top:18%;bottom:16%;z-index:2;overflow:auto;display:flex;flex-direction:column;justify-content:center}
+.pc-frame-content .profile-card{border-radius:12px}
+.pc-frame-content .pc-name{color:#1a1228}
+.pc-frame-content .pc-bio{color:#3a3350}
+#boardCardBox .pc-shell-frame{width:min(94vw,420px)}
+#boardCardPreview .pc-shell-frame{width:100%;max-width:360px}
 
 </style>
 </head>
@@ -10945,6 +10957,7 @@ function wfEndedHTML(){
     var map = {tl:'left:4px;top:4px', tr:'right:4px;top:4px', bl:'left:4px;bottom:4px', br:'right:4px;bottom:6px'};
     return '<span style="position:absolute;'+map[pos]+';z-index:3;pointer-events:none;filter:drop-shadow(0 0 6px rgba(255,220,255,.55))">'+svg+'</span>';
   }
+  
   function showCardHTML(p, isPreview){
     var mine = state.user && state.user.id === p.id;
     var open = p.is_public_card !== false;
@@ -10954,43 +10967,45 @@ function wfEndedHTML(){
     var cols = (p.card_colors || []).filter(function(c){ return /^#[0-9A-Fa-f]{6}$/.test(c); });
     var theme = p.card_theme || 'none';
     var tint = (typeof cardTint==='function') ? cardTint(cols) : '';
-    var pal = themePalette(theme);
+    var frameSrc = {
+      crystal_white: 'card-frames/crystal_white.jpg',
+      pink_rose: 'card-frames/pink_rose.jpg',
+      violet_butterfly: 'card-frames/violet_butterfly.jpg',
+      silver_bloom: 'card-frames/silver_bloom.jpg'
+    }[theme];
 
-    var stageStyle = 'position:relative;width:100%;padding:40px 30px 34px;border-radius:18px;box-sizing:border-box;';
-    var extras = '';
-    if(pal){
-      stageStyle += 'background:'+pal.bg+';'
-        + 'box-shadow:0 0 0 2px '+pal.ring+',0 0 0 6px '+pal.glow+',0 12px 36px rgba(0,0,0,.35);';
-      var icons = [pal.a,pal.b,pal.c,pal.d];
-      var kinds = pal.kind;
-      var pos = ['tl','tr','bl','br'];
-      for(var i=0;i<4;i++){
-        var svg = kinds[i]==='b' ? svgButterfly(icons[i][0], icons[i][1]) : svgFlower(icons[i][0], icons[i][1]);
-        extras += cornerHTML(svg, pos[i]);
+    if(frameSrc){
+      var h = '<div class="pc-shell pc-shell-frame">'
+        + '<img class="pc-frame-img" src="'+frameSrc+'" alt="" />'
+        + '<div class="pc-frame-content">'
+        + '<div class="profile-card" style="background:'+(tint || 'rgba(255,255,255,.92)')+';margin:0;border:none;box-shadow:none;padding:12px">'
+        + (typeof cardStripe==='function' ? cardStripe(cols) : '')
+        + '<div class="pc-name">'+esc(p.display_name || T.user)
+        + (p.game_id ? ' <span class="bm-meta">'+esc(p.game_id)+'</span>' : '')
+        + (p.role==='admin' ? ' <span class="bc-tag">'+esc(T.admin||'Admin')+'</span>' : '')
+        + '</div>' + body;
+      if(!isPreview){
+        h += '<div class="board-actions" style="margin-top:8px">'
+          + '<button type="button" id="boardCardClose" class="back">'+esc(T.close||'Close')+'</button></div>';
       }
-      extras = themeSparklesHTML() + extras;
-    } else {
-      stageStyle += 'background:var(--panel,#fff);box-shadow:0 8px 28px rgba(0,0,0,.12);';
+      h += '</div></div></div>';
+      return h;
     }
 
-    var cardStyle = 'position:relative;z-index:2;margin:0;border:none;border-radius:14px;padding:16px 14px;'
-      + 'background:'+(tint || 'rgba(255,255,255,.95)')+';box-shadow:0 6px 24px rgba(0,0,0,.18);';
-
-    var h = '<div class="pc-shell" style="width:min(92vw,300px);background:transparent;box-shadow:none">'
-      + '<div style="'+stageStyle+'">'
-      + extras
-      + '<div class="profile-card" style="'+cardStyle+'">';
-    if(typeof cardStripe==='function') h += cardStripe(cols);
-    h += '<div class="pc-name">'+esc(p.display_name || T.user)
+    /* 無主題：素色 */
+    var h2 = '<div class="pc-shell" style="width:min(94vw,420px)">'
+      + '<div class="profile-card" style="background:'+(tint || 'var(--panel,#fff)')+'">'
+      + (typeof cardStripe==='function' ? cardStripe(cols) : '')
+      + '<div class="pc-name">'+esc(p.display_name || T.user)
       + (p.game_id ? ' <span class="bm-meta">'+esc(p.game_id)+'</span>' : '')
       + (p.role==='admin' ? ' <span class="bc-tag">'+esc(T.admin||'Admin')+'</span>' : '')
       + '</div>' + body;
     if(!isPreview){
-      h += '<div class="board-actions" style="margin-top:8px">'
+      h2 += '<div class="board-actions" style="margin-top:8px">'
         + '<button type="button" id="boardCardClose" class="back">'+esc(T.close||'Close')+'</button></div>';
     }
-    h += '</div></div></div>';
-    return h;
+    h2 += '</div></div>';
+    return h2;
   }
 
   async function showCard(uid){
