@@ -978,12 +978,81 @@ body.card-open{overflow:hidden}
 
 
 /* 圖片外框名片 */
-.pc-shell-frame{position:relative;width:min(94vw,420px);aspect-ratio:1176/784;margin:0 auto;background:transparent;box-shadow:none}
+
 .pc-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;border-radius:8px;z-index:1}
 .pc-frame-content{position:absolute;left:12%;right:12%;top:18%;bottom:16%;z-index:2;overflow:auto;display:flex;flex-direction:column;justify-content:center}
 .pc-frame-content .profile-card{border-radius:12px}
 .pc-frame-content .pc-name{color:#1a1228}
 .pc-frame-content .pc-bio{color:#3a3350}
+#boardCardBox .pc-shell-frame{width:min(94vw,420px)}
+#boardCardPreview .pc-shell-frame{width:100%;max-width:360px}
+
+
+/* 橫式圖片框：框在上層、內容區同色黑底 */
+.pc-shell-frame{position:relative;width:min(94vw,420px);aspect-ratio:1176/784;margin:0 auto;background:#000;border-radius:10px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.45)}
+.pc-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:3}
+.pc-frame-content{position:absolute;left:14%;right:14%;top:20%;bottom:18%;z-index:2;overflow:auto;display:flex;flex-direction:column;justify-content:center;align-items:stretch}
+.pc-frame-content .profile-card{
+  margin:0;border:none;box-shadow:none;border-radius:10px;
+  background:transparent!important;padding:10px 8px;
+  color:#f4eefc;
+}
+.pc-frame-content .pc-name{color:#fff;font-weight:800;text-shadow:0 1px 4px rgba(0,0,0,.8)}
+.pc-frame-content .pc-bio{color:#e8e0f4;text-shadow:0 1px 3px rgba(0,0,0,.75)}
+.pc-frame-content .bm-meta{color:#d0c4e8}
+.pc-frame-content .bc-tag{background:rgba(180,140,255,.35);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.pc-frame-content .pc-stripe i{border-color:rgba(255,255,255,.35)}
+.pc-frame-content .back,
+.pc-frame-content #boardCardClose{
+  background:rgba(255,255,255,.12)!important;color:#fff!important;
+  border:1.5px solid rgba(255,255,255,.4)!important;
+}
+#boardCardBox .pc-shell-frame{width:min(94vw,420px)}
+#boardCardPreview .pc-shell-frame{width:100%;max-width:360px}
+
+
+/* 橫式圖片框：框在上層、內容區同色黑底 */
+.pc-shell-frame{position:relative;width:min(94vw,420px);aspect-ratio:1176/784;margin:0 auto;background:#000;border-radius:10px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.45)}
+.pc-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:3}
+.pc-frame-content{position:absolute;left:14%;right:14%;top:20%;bottom:18%;z-index:2;overflow:auto;display:flex;flex-direction:column;justify-content:center;align-items:stretch}
+.pc-frame-content .profile-card{
+  margin:0;border:none;box-shadow:none;border-radius:10px;
+  background:transparent!important;padding:10px 8px;
+  color:#f4eefc;
+}
+.pc-frame-content .pc-name{color:#fff;font-weight:800;text-shadow:0 1px 4px rgba(0,0,0,.8)}
+.pc-frame-content .pc-bio{color:#e8e0f4;text-shadow:0 1px 3px rgba(0,0,0,.75)}
+.pc-frame-content .bm-meta{color:#d0c4e8}
+.pc-frame-content .bc-tag{background:rgba(180,140,255,.35);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.pc-frame-content .pc-stripe i{border-color:rgba(255,255,255,.35)}
+.pc-frame-content .back,
+.pc-frame-content #boardCardClose{
+  background:rgba(255,255,255,.12)!important;color:#fff!important;
+  border:1.5px solid rgba(255,255,255,.4)!important;
+}
+#boardCardBox .pc-shell-frame{width:min(94vw,420px)}
+#boardCardPreview .pc-shell-frame{width:100%;max-width:360px}
+
+
+/* 橫式圖片框：黑心變透明、花邊在文字上層，內文與框同色 */
+.pc-shell-frame{position:relative;width:min(94vw,420px);aspect-ratio:1176/784;margin:0 auto;background:#0a0610;border-radius:10px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.pc-frame-content{position:absolute;left:14%;right:14%;top:20%;bottom:18%;z-index:1;overflow:auto;display:flex;flex-direction:column;justify-content:center}
+.pc-frame-content .profile-card{
+  margin:0;border:none;box-shadow:none;border-radius:10px;
+  background:transparent!important;padding:10px 8px;color:#f4eefc;
+}
+.pc-frame-content .pc-name{color:#fff;font-weight:800;text-shadow:0 1px 5px rgba(0,0,0,.9),0 0 12px rgba(0,0,0,.6)}
+.pc-frame-content .pc-bio{color:#ebe4f8;text-shadow:0 1px 4px rgba(0,0,0,.85)}
+.pc-frame-content .bm-meta{color:#d8cef0}
+.pc-frame-content .bc-tag{background:rgba(160,120,255,.4);color:#fff;border:1px solid rgba(255,255,255,.3)}
+.pc-frame-content .pc-stripe{filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+.pc-frame-content .back,
+.pc-frame-content #boardCardClose{
+  background:rgba(255,255,255,.14)!important;color:#fff!important;
+  border:1.5px solid rgba(255,255,255,.45)!important;
+}
+/* 框圖在最上層；黑色中心用 screen 混成「透明」，花邊留在文字前面 */
+.pc-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:2;mix-blend-mode:screen}
 #boardCardBox .pc-shell-frame{width:min(94vw,420px)}
 #boardCardPreview .pc-shell-frame{width:100%;max-width:360px}
 
@@ -10961,6 +11030,7 @@ function wfEndedHTML(){
     return '<span style="position:absolute;'+map[pos]+';z-index:3;pointer-events:none;filter:drop-shadow(0 0 6px rgba(255,220,255,.55))">'+svg+'</span>';
   }
   
+  
   function showCardHTML(p, isPreview){
     var mine = state.user && state.user.id === p.id;
     var open = p.is_public_card !== false;
@@ -10969,7 +11039,6 @@ function wfEndedHTML(){
       : '<div class="pc-bio">'+esc(T.card_hidden||'')+'</div>';
     var cols = (p.card_colors || []).filter(function(c){ return /^#[0-9A-Fa-f]{6}$/.test(c); });
     var theme = p.card_theme || 'none';
-    var tint = (typeof cardTint==='function') ? cardTint(cols) : '';
     var frameSrc = {
       crystal_white: 'card-frames/crystal_white.jpg',
       pink_rose: 'card-frames/pink_rose.jpg',
@@ -10979,9 +11048,8 @@ function wfEndedHTML(){
 
     if(frameSrc){
       var h = '<div class="pc-shell pc-shell-frame">'
-        + '<img class="pc-frame-img" src="'+frameSrc+'" alt="" />'
         + '<div class="pc-frame-content">'
-        + '<div class="profile-card" style="background:'+(tint || 'rgba(255,255,255,.92)')+';margin:0;border:none;box-shadow:none;padding:12px">'
+        + '<div class="profile-card">'
         + (typeof cardStripe==='function' ? cardStripe(cols) : '')
         + '<div class="pc-name">'+esc(p.display_name || T.user)
         + (p.game_id ? ' <span class="bm-meta">'+esc(p.game_id)+'</span>' : '')
@@ -10991,11 +11059,13 @@ function wfEndedHTML(){
         h += '<div class="board-actions" style="margin-top:8px">'
           + '<button type="button" id="boardCardClose" class="back">'+esc(T.close||'Close')+'</button></div>';
       }
-      h += '</div></div></div>';
+      h += '</div></div>'
+        + '<img class="pc-frame-img" src="'+frameSrc+'" alt="" />'
+        + '</div>';
       return h;
     }
 
-    /* 無主題：素色 */
+    var tint = (typeof cardTint==='function') ? cardTint(cols) : '';
     var h2 = '<div class="pc-shell" style="width:min(94vw,420px)">'
       + '<div class="profile-card" style="background:'+(tint || 'var(--panel,#fff)')+'">'
       + (typeof cardStripe==='function' ? cardStripe(cols) : '')
