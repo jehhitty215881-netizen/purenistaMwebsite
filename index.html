@@ -766,6 +766,33 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .bm-pin{font-size:11px;color:var(--gold);font-weight:800;margin-right:4px}
 #boardCardBox{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(28,26,36,.45);backdrop-filter:blur(2px)}
 #boardCardBox[hidden]{display:none}
+.pc-wrap{position:relative;border-radius:16px;padding:3px}
+/* 閃亮外框：一圈漸層繞著卡片轉。用 padding + 內層底色做出邊框，
+   比 border-image 相容性好，圓角也不會破。 */
+.pc-wrap.f-sparkle{background:conic-gradient(from 0deg,var(--f1),var(--f2),var(--f3),var(--f1));animation:pcSpin 6s linear infinite}
+.pc-wrap.f-sparkle::after{content:"";position:absolute;inset:-6px;border-radius:20px;background:conic-gradient(from 0deg,var(--f1),var(--f2),var(--f3),var(--f1));filter:blur(10px);opacity:.45;z-index:-1;animation:pcSpin 6s linear infinite}
+.pc-wrap.f-glow{background:linear-gradient(135deg,var(--f1),var(--f2))}
+.pc-wrap.f-glow::after{content:"";position:absolute;inset:-5px;border-radius:20px;background:linear-gradient(135deg,var(--f1),var(--f2));filter:blur(12px);opacity:.4;z-index:-1;animation:pcBreathe 3.4s ease-in-out infinite}
+@keyframes pcSpin{to{transform:rotate(1turn)}}
+@keyframes pcBreathe{0%,100%{opacity:.28}50%{opacity:.55}}
+.pc-wrap .profile-card{position:relative;z-index:1}
+/* 花與蝴蝶：飄在卡片上，不擋點擊 */
+.pc-deco{position:absolute;inset:0;overflow:hidden;border-radius:16px;pointer-events:none;z-index:2}
+.pc-deco svg{position:absolute;opacity:.75}
+.pc-deco .d0{left:6%;top:12%;animation:pcFloat 7s ease-in-out infinite}
+.pc-deco .d1{right:8%;top:22%;animation:pcFloat 9s ease-in-out infinite .8s}
+.pc-deco .d2{left:14%;bottom:12%;animation:pcFloat 8s ease-in-out infinite 1.6s}
+.pc-deco .d3{right:16%;bottom:20%;animation:pcFlit 6.5s ease-in-out infinite .4s}
+.pc-deco .d4{left:46%;top:6%;animation:pcFlit 7.5s ease-in-out infinite 1.2s}
+@keyframes pcFloat{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-9px) rotate(8deg)}}
+@keyframes pcFlit{0%,100%{transform:translate(0,0) rotate(-10deg)}33%{transform:translate(7px,-8px) rotate(6deg)}66%{transform:translate(-5px,-4px) rotate(-4deg)}}
+.pc-wing{transform-origin:center;animation:pcWing 1.1s ease-in-out infinite}
+@keyframes pcWing{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.62)}}
+/* 會動的東西一律尊重系統設定，有些人看了會不舒服 */
+@media(prefers-reduced-motion:reduce){
+  .pc-wrap.f-sparkle,.pc-wrap.f-sparkle::after,.pc-wrap.f-glow::after,
+  .pc-deco svg,.pc-wing{animation:none!important}
+}
 #boardCardBox .pc-shell{width:100%;max-width:340px;max-height:80vh;overflow:auto;border-radius:16px;background:var(--panel);box-shadow:0 18px 44px rgba(28,26,36,.28);padding:4px}
 #boardCardBox .profile-card{margin:0;border:none;box-shadow:none}
 body.card-open{overflow:hidden}
@@ -776,6 +803,9 @@ body.card-open{overflow:hidden}
 .pc-stripe{display:flex;gap:4px;margin:0 0 6px}
 .pc-stripe i{display:block;width:26px;height:10px;border-radius:4px;border:1px solid rgba(0,0,0,.12)}
 .board-card-prev .pc-stripe{margin:0}
+.board-deco-row{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0}
+.board-deco-row label{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink)}
+.board-deco-row select{padding:6px 9px;border:1.5px solid var(--line);border-radius:9px;font-family:inherit;font-size:12.5px;background:var(--bg);color:var(--ink)}
 .board-card-opt{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink);margin:6px 0;cursor:pointer}
 .board-card-opt input{width:16px;height:16px;accent-color:var(--violet)}
 .profile-card{margin:10px 0;padding:12px;border-radius:14px;border:1.5px solid var(--line);background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft))}
@@ -1941,6 +1971,23 @@ body.card-open{overflow:hidden}
       <input id="boardBio" maxlength="200" placeholder="簡介（名片，200 字以內）" />
       <input id="boardCardColors" maxlength="60" placeholder="名片配色（最多 4 個色碼，可從我的色票複製）" />
       <div id="boardCardPreview" class="board-card-prev"></div>
+      <div class="board-deco-row">
+        <label>外框
+          <select id="boardCardFrame">
+            <option value="none">無</option>
+            <option value="sparkle">閃亮</option>
+            <option value="glow">柔光</option>
+          </select>
+        </label>
+        <label>圖案
+          <select id="boardCardMotif">
+            <option value="none">無</option>
+            <option value="flower">花</option>
+            <option value="butterfly">蝴蝶</option>
+            <option value="both">花＋蝴蝶</option>
+          </select>
+        </label>
+      </div>
       <label class="board-card-opt"><input type="checkbox" id="boardCardPublic" checked /> 公開我的名片</label>
       <div class="board-actions">
         <button type="button" class="pri" id="boardSaveProfile">儲存</button>
@@ -2118,6 +2165,12 @@ body.card-open{overflow:hidden}
         <li>名片改成<b>彈出視窗</b>，並且移到頁面最外層。原本它被放在「專版列表」那一區裡面，而一進聊天室那整區就會被隱藏——視窗跟著一起消失，所以在聊天室裡點名片是完全沒有反應的，要退出聊天室才看得到。現在直接蓋在畫面中央，原本是內嵌在留言板上方的一塊，人在聊天室裡往下捲的時候根本看不到，得先退出聊天室才找得到。現在直接蓋在畫面中央，點旁邊的暗底或按 Esc 都能關掉，關掉後焦點會回到原本按的地方。</li>
         <li>名片的入口補了一顆<b>「名片」按鈕</b>，跟回覆、檢舉並排。原本只有點暱稱能開，但手機沒有滑鼠移入的效果，等於完全看不出來可以點。暱稱現在也一直帶著虛線底線，不用等 hover。</li>
         <li>顏色是<b>底色淡淡的一層加上完整的色條</b>，不是整張塗滿。原因是使用者挑的可能是純黑或亮黃，直接當底色會讓字看不清楚；現在底色只取 18% 的濃度，色條則呈現原本的顏色。三萬組隨機配色實測，文字對比度最低仍有 11:1，遠高於無障礙標準要求的 4.5:1——換句話說不管挑什麼顏色都不會變成看不懂的名片。</li>
+      </ul>
+      <p class="cond" style="margin:12px 0 4px"><b>新增：名片外框與圖案</b></p>
+      <ul class="tips">
+        <li>外框可以選<b>閃亮</b>（漸層繞著卡片轉）或<b>柔光</b>（呼吸般的暈開），圖案可以選<b>花</b>、<b>蝴蝶</b>或兩者混搭，蝴蝶的翅膀會拍動。外框和圖案是分開的兩個選項，可以自由搭配。</li>
+        <li>花和蝴蝶是用 SVG 直接畫的，不是外連圖片——少一次載入，而且顏色會跟著你挑的名片配色走。沒挑顏色的話用站上的預設色，不會變成灰灰的。</li>
+        <li>動畫尊重系統的「減少動態效果」設定：開了那個設定的人會看到靜止的版本。會動的東西對某些人是不舒服的，不該強迫。</li>
       </ul>
       <p class="fine">建置標記更新為 v5.5.0。中英文版同步。本版共通過 300 項自動測試：狼人殺的資料庫防作弊 29 項與介面 33 項、狼人頻道的資料庫防作弊 15 項與介面 16 項、留言板即時更新 14 項、新訊息通知 31 項、未讀提醒 15 項、智能導覽與排行 15 項、路徑涵蓋率 8 項、前後站導覽 12 項、浮動列捲動行為 12 項、權限修補 28 項、創作分享的資料庫權限 27 項與前端 23 項。所有權限與防作弊測試都是在本機真實資料庫上，開一局六人遊戲並以不同身分實際嘗試偷看；路徑涵蓋率會檢查每個分頁都被至少一條路徑收錄，這也是這次補上狼人殺的方式。</p>
     </div>
@@ -8754,7 +8807,7 @@ function compositionScore(opts) {
     state.profile = null;
     if(!state.user) return;
     var res = await sb.from('profiles')
-      .select('id,display_name,role,game_id,approval,is_banned,muted_until,bio,is_public_card,card_colors')
+      .select('id,display_name,role,game_id,approval,is_banned,muted_until,bio,is_public_card,card_colors,card_frame,card_motif')
       .eq('id', state.user.id).maybeSingle();
     if(res.error){
       // approval column may not exist yet
@@ -8779,6 +8832,10 @@ function compositionScore(opts) {
       ccEl.value = ((state.profile && state.profile.card_colors) || []).join(' ');
       paintCardPreview();
     }
+    var frEl = $('boardCardFrame');
+    if(frEl) frEl.value = (state.profile && state.profile.card_frame) || 'none';
+    var moEl = $('boardCardMotif');
+    if(moEl) moEl.value = (state.profile && state.profile.card_motif) || 'none';
   }
 
   function paintAuth(){
@@ -9693,6 +9750,10 @@ function compositionScore(opts) {
     if(cardOn) patch.is_public_card = !!cardOn.checked;
     var cc = $('boardCardColors');
     if(cc) patch.card_colors = parseColors(cc.value).slice(0,4);
+    var fr = $('boardCardFrame');
+    if(fr) patch.card_frame = fr.value;
+    var mo = $('boardCardMotif');
+    if(mo) patch.card_motif = mo.value;
     if(dn) patch.display_name = dn;
     var res = await sb.from('profiles').update(patch).eq('id', state.user.id);
     if(res.error){ err(translateAuthError(res.error.message)); return; }
@@ -10570,6 +10631,54 @@ function wfEndedHTML(){
     el.style.background = cardTint(cols) || '';
   }
 
+  /* 花與蝴蝶用 SVG 直接畫，不外連圖片：省一次請求，而且顏色可以跟著
+     使用者挑的名片配色走。都是裝飾，加 aria-hidden 讓螢幕閱讀器略過。 */
+  function svgFlower(c1, c2){
+    var p = '';
+    for(var i=0;i<5;i++){
+      p += '<ellipse cx="12" cy="5.6" rx="3.1" ry="5" fill="'+c1+'" transform="rotate('+(i*72)+' 12 12)"/>';
+    }
+    return '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">'
+         + p + '<circle cx="12" cy="12" r="2.8" fill="'+c2+'"/></svg>';
+  }
+  function svgButterfly(c1, c2){
+    return '<svg width="24" height="20" viewBox="0 0 28 24" aria-hidden="true">'
+      + '<g class="pc-wing">'
+      +   '<path d="M14 12C10.5 3.5 2 3 2 8.5c0 4 5 5.5 12 3.5z" fill="'+c1+'"/>'
+      +   '<path d="M14 12C17.5 3.5 26 3 26 8.5c0 4-5 5.5-12 3.5z" fill="'+c1+'"/>'
+      +   '<path d="M14 12c-3 8-9.5 8.5-9.5 4 0-3.2 4-4.8 9.5-4z" fill="'+c2+'"/>'
+      +   '<path d="M14 12c3 8 9.5 8.5 9.5 4 0-3.2-4-4.8-9.5-4z" fill="'+c2+'"/>'
+      + '</g>'
+      + '<ellipse cx="14" cy="12" rx="1.1" ry="6" fill="#3a3350"/>'
+      + '<path d="M14 6.6c-.6-2-2-3-3.2-3.2M14 6.6c.6-2 2-3 3.2-3.2" stroke="#3a3350" stroke-width="1" fill="none" stroke-linecap="round"/>'
+      + '</svg>';
+  }
+  /* 沒挑顏色就用站上的預設色，不然裝飾會是灰的 */
+  function decoColors(cols){
+    var base = (cols && cols.length) ? cols.slice() : ['#8E7CC3','#E4A6C4','#F0C987'];
+    while(base.length < 3) base = base.concat(base);
+    return base;
+  }
+  function cardDecoHTML(motif, cols){
+    if(!motif || motif === 'none') return '';
+    var c = decoColors(cols), out = [], kinds;
+    if(motif === 'flower')         kinds = ['f','f','f','f','f'];
+    else if(motif === 'butterfly') kinds = ['b','b','b','b','b'];
+    else                           kinds = ['f','b','f','b','f'];
+    for(var i=0;i<kinds.length;i++){
+      var a = c[i % c.length], b = c[(i+1) % c.length];
+      out.push('<span class="d'+i+'">'
+        + (kinds[i] === 'f' ? svgFlower(a, b) : svgButterfly(a, b))
+        + '</span>');
+    }
+    return '<div class="pc-deco" aria-hidden="true">'+out.join('')+'</div>';
+  }
+  function cardFrameStyle(frame, cols){
+    if(!frame || frame === 'none') return '';
+    var c = decoColors(cols);
+    return ' style="--f1:'+c[0]+';--f2:'+c[1 % c.length]+';--f3:'+c[2 % c.length]+'"';
+  }
+
   async function showCard(uid){
     var box = $('boardCardBox');
     if(!box || !uid) return;
@@ -10580,7 +10689,7 @@ function wfEndedHTML(){
     document.body.classList.add('card-open');
     box.innerHTML = '<div class="pc-shell"><p class="board-empty">'+esc(T.loading)+'</p></div>';
     var res = await sb.from('profiles')
-      .select('id,display_name,game_id,bio,is_public_card,role,card_colors')
+      .select('id,display_name,game_id,bio,is_public_card,role,card_colors,card_frame,card_motif')
       .eq('id', uid).maybeSingle();
     if(res.error || !res.data){
       box.innerHTML = '<div class="pc-shell"><p class="board-err">'+esc(T.fail)+'</p>'
@@ -10597,7 +10706,12 @@ function wfEndedHTML(){
       : '<div class="pc-bio">'+esc(T.card_hidden)+'</div>';
     var cols = (p.card_colors || []).filter(function(c){ return /^#[0-9A-Fa-f]{6}$/.test(c); });
     var tint = cardTint(cols);
-    box.innerHTML = '<div class="pc-shell"><div class="profile-card"'+(tint ? ' style="background:'+tint+'"' : '')+'>'
+    var frame = p.card_frame || 'none';
+    var motif = p.card_motif || 'none';
+    box.innerHTML = '<div class="pc-shell">'
+      + '<div class="pc-wrap'+(frame !== 'none' ? ' f-'+frame : '')+'"'+cardFrameStyle(frame, cols)+'>'
+      + cardDecoHTML(motif, cols)
+      + '<div class="profile-card"'+(tint ? ' style="background:'+tint+'"' : '')+'>'
       + cardStripe(cols)
       + '<div class="pc-name">'+esc(p.display_name || T.user)
       +   (p.game_id ? ' <span class="bm-meta">'+esc(p.game_id)+'</span>' : '')
@@ -10606,7 +10720,7 @@ function wfEndedHTML(){
       + body
       + '<div class="board-actions" style="margin-top:8px">'
       +   '<button type="button" id="boardCardClose" class="back">'+esc(T.close)+'</button>'
-      + '</div></div></div>';
+      + '</div></div></div></div>';
     bindCardClose();
   }
 
