@@ -8927,7 +8927,7 @@ function compositionScore(opts) {
       .eq('id', state.user.id).maybeSingle();
     if(res.error){
       // approval column may not exist yet
-      res = await sb.from('profiles').select('id,display_name,role,game_id,approval,is_banned,muted_until').eq('id', state.user.id).maybeSingle();
+      res = await sb.from('profiles').select('id,display_name,role,game_id,approval,is_banned,muted_until,bio,is_public_card,card_colors,card_frame,card_motif').eq('id', state.user.id).maybeSingle();
       if(res.error){ console.warn(res.error); return; }
       if(res.data) res.data.approval = 'approved';
     }
@@ -10733,6 +10733,20 @@ function wfEndedHTML(){
       return '<i style="background:'+esc(c)+'"></i>';
     }).join('')+'</div>';
   }
+  
+  function previewCardDeco(){
+    var fr = (($('boardCardFrame')||{}).value)||'none';
+    var mo = (($('boardCardMotif')||{}).value)||'none';
+    var cols = parseColors((($('boardCardColors')||{}).value)||'').slice(0,4);
+    var el = $('boardCardPreview');
+    if(!el) return;
+    el.innerHTML = '<div class="pc-wrap'+(fr !== 'none' ? ' f-'+fr : '')+'"'+cardFrameStyle(fr, cols)+' style="padding:8px;margin-top:6px;position:relative;min-height:72px">'
+      + cardDecoHTML(mo, cols)
+      + '<div class="profile-card" style="padding:10px;position:relative;z-index:1">'
+      + cardStripe(cols)
+      + '<div class="pc-name" style="font-size:13px">'+esc(T.card_preview||'預覽')+'</div></div></div>';
+  }
+
   function paintCardPreview(){
     var el = $('boardCardPreview'), inp = $('boardCardColors');
     if(!el || !inp) return;
@@ -10831,7 +10845,7 @@ function wfEndedHTML(){
     var frame = p.card_frame || 'none';
     var motif = p.card_motif || 'none';
     box.innerHTML = '<div class="pc-shell">'
-      + '<div class="pc-wrap" style="transform:none"'+(frame !== 'none' ? ' f-'+frame : '')+'"'+cardFrameStyle(frame, cols)+'>'
+      + '<div class="pc-wrap'+(frame && frame !== 'none' ? ' f-'+frame : '')+'"'+cardFrameStyle(frame, cols)+'>'
       + cardDecoHTML(motif, cols)
       + '<div class="profile-card"'+(tint ? ' style="background:'+tint+'"' : '')+'>'
       + cardStripe(cols)
@@ -10974,7 +10988,9 @@ function wfEndedHTML(){
     var rev = $('boardReviewList'); if(rev) rev.addEventListener('click', onReview);
     var mod = $('boardModList'); if(mod) mod.addEventListener('click', onMod);
     var ibr=$('boardInboxRead'); if(ibr) ibr.onclick=markInboxRead;
-    var ccIn=$('boardCardColors'); if(ccIn) ccIn.oninput=paintCardPreview;
+    var ccIn=$('boardCardColors'); if(ccIn) ccIn.oninput=function(){ paintCardPreview(); previewCardDeco(); };
+    var frIn=$('boardCardFrame'); if(frIn) frIn.onchange=previewCardDeco;
+    var moIn=$('boardCardMotif'); if(moIn) moIn.onchange=previewCardDeco;
     var cardBox=$('boardCardBox');
     if(cardBox) cardBox.addEventListener('click', function(e){
       if(e.target === cardBox) closeCard();      // 點旁邊的暗底就關掉
