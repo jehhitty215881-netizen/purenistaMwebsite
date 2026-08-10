@@ -1047,14 +1047,14 @@ body.card-open{overflow:hidden}
   border:1.5px solid rgba(255,255,255,.45)!important;
 }
 /* 框圖在最上層；黑色中心用 screen 混成「透明」，花邊留在文字前面 */
-.pc-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:2;mix-blend-mode:screen}
+.pc-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:2;/* no blend */}
 #boardCardBox .pc-shell-frame{width:min(94vw,420px)}
 #boardCardPreview .pc-shell-frame{width:100%;max-width:360px}
 
 
 /* 華麗框內文：玻璃質感 + 置中排版 */
 .pc-shell-frame{position:relative;width:min(94vw,440px);aspect-ratio:1176/784;margin:0 auto;background:#0a0610;border-radius:12px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.55)}
-.pc-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:2;mix-blend-mode:screen}
+.pc-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:2;/* no blend */}
 .pc-frame-content{position:absolute;left:15%;right:15%;top:22%;bottom:20%;z-index:1;display:flex;align-items:center;justify-content:center}
 .pc-glass{
   width:100%;max-width:100%;text-align:center;
@@ -1079,6 +1079,40 @@ body.card-open{overflow:hidden}
 #boardCardBox .pc-shell-frame{width:min(94vw,440px)}
 #boardCardPreview .pc-shell-frame{width:100%;max-width:380px}
 #boardCardPreview .pc-glass .board-actions{display:none}
+
+
+/* 淺色內底名片（不要黑底） */
+.pc-shell-frame{position:relative;width:min(94vw,440px);aspect-ratio:1176/784;margin:0 auto;background:#f7f2fa;border-radius:12px;overflow:hidden;box-shadow:0 16px 48px rgba(42,33,56,.28)}
+.pc-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:2}
+.pc-frame-content{position:absolute;left:13%;right:13%;top:18%;bottom:16%;z-index:1;display:flex;align-items:center;justify-content:center}
+.pc-glass{
+  width:100%;text-align:center;
+  padding:18px 16px 16px;
+  border-radius:16px;
+  background:#FFFBFE;
+  border:1px solid rgba(120,90,140,.12);
+  box-shadow:0 4px 20px rgba(42,33,56,.1);
+}
+.pc-glass .pc-stripe{justify-content:center;margin:0 auto 10px;display:flex;gap:5px}
+.pc-glass .pc-stripe i{width:22px;height:8px;border-radius:4px;border:1px solid rgba(0,0,0,.1)}
+.pc-glass .pc-name{font-size:17px;font-weight:800;letter-spacing:.03em;line-height:1.4;margin:0 0 2px;color:#2A2138}
+.pc-glass .bm-meta{font-size:12px;font-weight:600;color:#6B6180;letter-spacing:.04em}
+.pc-glass .bc-tag{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;background:#EDEAF7;color:#7B6BB5}
+.pc-glass .pc-line{width:40px;height:1px;margin:10px auto;background:linear-gradient(90deg,transparent,#C8B8D8,transparent)}
+.pc-glass .pc-bio{font-size:13.5px;line-height:1.7;margin:0;color:#5A5070}
+.pc-glass .board-actions{margin-top:12px;display:flex;justify-content:center}
+.pc-glass .back,#boardCardClose{
+  border-radius:999px!important;padding:7px 18px!important;font-size:12.5px!important;font-weight:700!important;
+  background:#fff!important;color:#6B5B8A!important;border:1.5px solid #DDD6E8!important;
+}
+#boardCardBox .pc-shell-frame{width:min(94vw,440px)}
+#boardCardPreview .pc-shell-frame{width:100%;max-width:380px}
+#boardCardPreview .pc-glass .board-actions{display:none}
+/* 主題微染內卡 */
+.pc-shell-frame.th-pink_rose .pc-glass{background:#FFF8FB;border-color:rgba(220,140,180,.18)}
+.pc-shell-frame.th-violet_butterfly .pc-glass{background:#FAF7FF;border-color:rgba(150,120,200,.18)}
+.pc-shell-frame.th-crystal_white .pc-glass{background:#F7FAFF;border-color:rgba(140,170,220,.18)}
+.pc-shell-frame.th-silver_bloom .pc-glass{background:#FAFAFC;border-color:rgba(160,160,180,.16)}
 
 </style>
 </head>
@@ -11059,6 +11093,7 @@ function wfEndedHTML(){
   
   
   
+  
   function showCardHTML(p, isPreview){
     var mine = state.user && state.user.id === p.id;
     var open = p.is_public_card !== false;
@@ -11075,32 +11110,32 @@ function wfEndedHTML(){
     }[theme];
 
     var skin = {
-      crystal_white: { bg:'#070b14', name:'#F2F7FF', bio:'#C5D8F5', meta:'#9BB8E0', tagBg:'rgba(160,200,255,.35)', btn:'rgba(180,210,255,.22)', bd:'rgba(210,230,255,.55)' },
-      pink_rose:     { bg:'#12060c', name:'#FFF0F6', bio:'#F5C4D8', meta:'#E0A0B8', tagBg:'rgba(255,150,190,.35)', btn:'rgba(255,170,200,.25)', bd:'rgba(255,190,215,.55)' },
-      violet_butterfly:{ bg:'#0a0512', name:'#F6ECFF', bio:'#D2B8F5', meta:'#B898E0', tagBg:'rgba(180,120,255,.4)', btn:'rgba(190,140,255,.28)', bd:'rgba(210,170,255,.55)' },
-      silver_bloom:  { bg:'#0b0b0f', name:'#FAFAFC', bio:'#D8D6E0', meta:'#B8B6C0', tagBg:'rgba(220,220,230,.3)', btn:'rgba(240,240,250,.2)', bd:'rgba(245,245,255,.5)' }
-    }[theme] || { bg:'#0a0610', name:'#fff', bio:'#e8e0f4', meta:'#d0c4e8', tagBg:'rgba(180,140,255,.35)', btn:'rgba(255,255,255,.14)', bd:'rgba(255,255,255,.45)' };
+      crystal_white: { name:'#2A3550', bio:'#5A6A88', meta:'#7A8AA8', btnBg:'#fff', btn:'#4A6080', bd:'#C8D8F0' },
+      pink_rose:     { name:'#5A2840', bio:'#8A5070', meta:'#A07090', btnBg:'#fff', btn:'#8A4060', bd:'#F0C8D8' },
+      violet_butterfly:{ name:'#3A2858', bio:'#6A5890', meta:'#8878A8', btnBg:'#fff', btn:'#6A50A0', bd:'#D8C8F0' },
+      silver_bloom:  { name:'#2A2830', bio:'#5A5860', meta:'#7A7880', btnBg:'#fff', btn:'#585868', bd:'#D8D8E0' }
+    }[theme] || { name:'#2A2138', bio:'#5A5070', meta:'#6B6180', btnBg:'#fff', btn:'#6B5B8A', bd:'#DDD6E8' };
 
     var displayName = p.display_name || T.user;
-    if(isPreview && (displayName === '預覽' || displayName === 'Preview')){
-      displayName = (T.locale && T.locale.indexOf('zh')===0) ? '你的暱稱' : 'Your name';
+    if(isPreview && (displayName === '預覽' || displayName === 'Preview' || displayName === '你的暱稱' || displayName === 'Your name')){
+      displayName = (T.locale && String(T.locale).indexOf('zh')===0) ? '你的暱稱' : 'Your name';
     }
 
     if(frameSrc){
       var stripe = (typeof cardStripe==='function' && cols.length) ? cardStripe(cols) : '';
-      var h = '<div class="pc-shell pc-shell-frame" style="background:'+skin.bg+'">'
+      var h = '<div class="pc-shell pc-shell-frame th-'+theme+'" style="background:#f7f2fa">'
         + '<div class="pc-frame-content">'
         + '<div class="pc-glass profile-card">'
         + stripe
         + '<div class="pc-name" style="color:'+skin.name+'">'+esc(displayName)
         + (p.game_id ? '<br><span class="bm-meta" style="color:'+skin.meta+'">'+esc(p.game_id)+'</span>' : '')
-        + (p.role==='admin' ? ' <span class="bc-tag" style="background:'+skin.tagBg+';color:'+skin.name+';border:1px solid '+skin.bd+'">'+esc(T.admin||'Admin')+'</span>' : '')
+        + (p.role==='admin' ? ' <span class="bc-tag">'+esc(T.admin||'Admin')+'</span>' : '')
         + '</div>'
         + '<div class="pc-line"></div>'
         + '<div class="pc-bio" style="color:'+skin.bio+'">'+esc(bioText)+'</div>';
       if(!isPreview){
         h += '<div class="board-actions">'
-          + '<button type="button" id="boardCardClose" class="back" style="background:'+skin.btn+';color:'+skin.name+';border:1.5px solid '+skin.bd+'">'
+          + '<button type="button" id="boardCardClose" class="back" style="background:'+skin.btnBg+';color:'+skin.btn+';border:1.5px solid '+skin.bd+'">'
           + esc(T.close||'Close')+'</button></div>';
       }
       h += '</div></div>'
@@ -11113,9 +11148,8 @@ function wfEndedHTML(){
     var h2 = '<div class="pc-shell" style="width:min(94vw,420px)">'
       + '<div class="profile-card" style="background:'+(tint || 'var(--panel,#fff)')+'">'
       + (typeof cardStripe==='function' ? cardStripe(cols) : '')
-      + '<div class="pc-name">'+esc(p.display_name || T.user)
-      + (p.game_id ? ' <span class="bm-meta">'+esc(p.game_id)+'</span>' : '')
-      + '</div><div class="pc-bio">'+esc(bioText)+'</div>';
+      + '<div class="pc-name">'+esc(p.display_name || T.user)+'</div>'
+      + '<div class="pc-bio">'+esc(bioText)+'</div>';
     if(!isPreview){
       h2 += '<div class="board-actions" style="margin-top:8px">'
         + '<button type="button" id="boardCardClose" class="back">'+esc(T.close||'Close')+'</button></div>';
