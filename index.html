@@ -68,6 +68,8 @@ nav .navgrp{flex:0 0 auto;display:flex;align-items:center;padding:0 4px 0 10px;f
 .to-guide-bar.tucked{transform:translateY(calc(100% + 28px));opacity:0;pointer-events:none}
 @media(prefers-reduced-motion:reduce){.to-guide-bar{transition:none}}
 .to-guide-bar[hidden]{display:none}
+.jump-tool{border:1.5px solid var(--violet);background:transparent;color:var(--violet);font-family:inherit;font-weight:800;font-size:12.5px;padding:7px 15px;border-radius:999px;cursor:pointer}
+.jump-tool:hover,.jump-tool:focus-visible{background:var(--violet);color:#fff}
 .to-guide-bar .to-guide{position:static;right:auto;bottom:auto;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .to-next{background:linear-gradient(135deg,var(--violet),var(--rose));border-color:transparent;color:#fff}
 .to-next:hover,.to-next:focus-visible{background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;filter:brightness(1.06)}
@@ -780,6 +782,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <button type="button" id="toGuide" class="to-guide" aria-label="回到智能導覽">
     <span class="tg-ico" aria-hidden="true">←</span>智能導覽
   </button>
+  <button type="button" id="toPrev" class="to-guide" hidden></button>
   <button type="button" id="toNext" class="to-guide to-next" hidden></button>
 </div>
 
@@ -1541,7 +1544,8 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
   <div class="card">
     <h3>彩虹市集底價 <span class="tag ok">底價</span></h3>
-    <p class="cond">表中數字為<b>底價</b>。只有<b>品牌</b>物品的價格不同，其餘物品一律以「<b>一般</b>」計算。價格調整<b>最小單位為 10 星</b>。<br>💸 彩虹市集交易收取 <b>30% 手續費</b>（賣方實收＝標價 ×70%），詳細換算請到「快速換算」分頁的<b>手續費換算</b>。</p>
+    <p class="cond">表中數字為<b>底價</b>。只有<b>品牌</b>物品的價格不同，其餘物品一律以「<b>一般</b>」計算。價格調整<b>最小單位為 10 星</b>。<br>💸 彩虹市集交易收取 <b>30% 手續費</b>（賣方實收＝標價 ×70%），詳細換算請按下面的按鈕。</p>
+<p style="margin:6px 0 0"><button type="button" class="jump-tool" data-jump-tool="calc:t-fee">開啟手續費換算 →</button></p>
     <table>
       <thead><tr><th>稀有度</th><th>一般</th><th>品牌</th></tr></thead>
       <tbody>
@@ -1882,6 +1886,11 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <p class="cond">這裡會列出每次網站更新的內容，讓大家知道網站一直有人在維護、修 bug、加新功能。</p>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.5.0 <span class="chg-build">目前版本・創作分享、未讀提醒與權限修補</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>新增：來自許願池的兩項</b></p>
+      <ul class="tips">
+        <li><b>上一站</b>：浮動列多一顆往回的按鈕，配合原本的下一站，整條路徑可以前後自由走，不用回導覽頁重點。第一站不顯示上一站、最後一站不顯示下一站。</li>
+        <li><b>彩虹市集 → 手續費換算的捷徑</b>：市集頁原本只用文字寫「請到快速換算分頁的手續費換算」，得自己切分頁再從一排小標籤裡找。現在直接給一顆按鈕，一按就切過去、開好對的工具並捲到位置。</li>
+      </ul>
       <p class="cond" style="margin:12px 0 4px"><b>新增：創作分享／我的色票</b></p>
       <ul class="tips">
         <li>新增「創作分享」分頁。可以存兩種東西：<b>色票</b>（一組色碼，可以手動輸入，也可以在配色靈感房抽完直接按「存到我的色票」）和<b>點子</b>（純文字，角色設定、命名、任何想法）。</li>
@@ -1966,7 +1975,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>這些判斷全部移到資料庫層強制執行。權限相關的欄位本人改不動，訊息只能自刪而不能改字、也不能解除隱藏，遊戲房的標題等欄位對一般人完全鎖死，交棒規則（只有輪到的人能交棒、只能傳給有加入輪替的人）也一併寫進資料庫。</li>
         <li>順帶補上「輪替名單」的資料表——之前那段建表指令沒有成功執行過，所以面板上的「輪替中」人數一直是 0。</li>
       </ul>
-      <p class="fine">建置標記更新為 v5.5.0。中英文版同步。本版共通過 155 項自動測試：留言板即時更新 14 項、未讀提醒 15 項、智能導覽與排行 15 項、路徑涵蓋率 7 項、返回與下一站 14 項、浮動列捲動行為 12 項、權限修補 28 項、創作分享的資料庫權限 27 項與前端 23 項。其中權限相關的測試是在本機真實資料庫上以四種身分實際嘗試繞過；路徑涵蓋率會檢查每個分頁都被至少一條路徑收錄，避免這次的遺漏再發生。</p>
+      <p class="fine">建置標記更新為 v5.5.0。中英文版同步。本版共通過 168 項自動測試：留言板即時更新 14 項、未讀提醒 15 項、智能導覽與排行 15 項、路徑涵蓋率 7 項、前後站導覽 12 項、浮動列捲動行為 12 項、權限修補 28 項、創作分享的資料庫權限 27 項與前端 23 項，另有工具捷徑與版面結構的靜態檢查。其中權限相關的測試是在本機真實資料庫上以四種身分實際嘗試繞過；路徑涵蓋率會檢查每個分頁都被至少一條路徑收錄。</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.5 <span class="chg-build">清掉叫你去用外部服務的殘留</span></div>
@@ -2869,29 +2878,35 @@ function goTab(name){
 function syncGuideBtn(name){
   const bar=document.getElementById("toGuideBar");
   if(bar){ bar.hidden=(name==="home"); bar.classList.remove("tucked"); }
-  const nx=document.getElementById("toNext");
-  if(!nx)return;
-  let info=null;
-  if(name!=="home"&&window.__pmNextStop){
-    try{ info=window.__pmNextStop(name); }catch(e){ info=null; }
-  }
-  if(info){
-    nx.hidden=false;
-    nx.textContent="下一站："+info.label+" →";
-    nx.setAttribute("data-go",info.id);
-  }else{
-    nx.hidden=true;
-    nx.removeAttribute("data-go");
-  }
+  const nx=document.getElementById("toNext"), pv=document.getElementById("toPrev");
+  const stop=function(fn){
+    if(name==="home"||!fn)return null;
+    try{ return fn(name); }catch(e){ return null; }
+  };
+  const fill=function(btn, info, prefix, suffix){
+    if(!btn)return;
+    if(info){
+      btn.hidden=false;
+      btn.textContent=prefix+info.label+suffix;
+      btn.setAttribute("data-go",info.id);
+    }else{
+      btn.hidden=true;
+      btn.removeAttribute("data-go");
+    }
+  };
+  fill(pv, stop(window.__pmPrevStop), "← ", "");
+  fill(nx, stop(window.__pmNextStop), "下一站：", " →");
 }
 tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
 (function(){
   const b=document.getElementById("toGuide");
   if(b)b.addEventListener("click",()=>goTab("home"));
-  const nx=document.getElementById("toNext");
-  if(nx)nx.addEventListener("click",function(){
-    const id=nx.getAttribute("data-go");
-    if(id)goTab(id);
+  ["toPrev","toNext"].forEach(function(id){
+    const el=document.getElementById(id);
+    if(el)el.addEventListener("click",function(){
+      const go=el.getAttribute("data-go");
+      if(go)goTab(go);
+    });
   });
   const cur=document.querySelector("nav button[data-tab].on");
   syncGuideBtn(cur?cur.dataset.tab:"home");
@@ -3135,15 +3150,19 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
   /* 照路徑逛的時候，真正想去的通常是下一站，而不是導覽頁本身。
      這裡回報「目前分頁在使用者選的那條路徑上的下一站」，讓浮動列
      能一鍵跳過去，省掉「回導覽 → 找路徑 → 點下一個」三步。 */
-  window.__pmNextStop=function(tab){
+  function stopAt(tab, delta){
     var role=null;
     try{ role=localStorage.getItem('pm_sg_role'); }catch(e){}
     if(!role||!PATHS[role])return null;
     var st=PATHS[role].steps, i=st.indexOf(tab);
-    if(i<0||i>=st.length-1)return null;
-    var id=st[i+1];
+    if(i<0)return null;
+    var j=i+delta;
+    if(j<0||j>=st.length)return null;
+    var id=st[j];
     return LABELS[id]?{id:id,label:LABELS[id]}:null;
-  };
+  }
+  window.__pmNextStop=function(tab){ return stopAt(tab, 1); };
+  window.__pmPrevStop=function(tab){ return stopAt(tab, -1); };
 
   function workerMode(){
     return !!(GLOBAL_RANK_ENDPOINT && String(GLOBAL_RANK_ENDPOINT).indexOf('http')===0);
@@ -3920,6 +3939,20 @@ document.querySelectorAll("#calcNav button").forEach(b=>b.addEventListener("clic
   document.getElementById(b.dataset.c).classList.add("show");
 }));
 
+
+/* 分頁裡的小工具捷徑：data-jump-tool="分頁:子工具id"。先切分頁，再點開對應的
+   子工具並捲到它，省掉「切分頁 → 找到那排小標籤 → 點對的那個」三步。 */
+document.addEventListener("click",function(e){
+  var b=e.target.closest && e.target.closest("[data-jump-tool]");
+  if(!b)return;
+  var parts=String(b.getAttribute("data-jump-tool")||"").split(":");
+  if(parts.length!==2)return;
+  goTab(parts[0]);
+  var seg=document.querySelector('#calcNav [data-c="'+parts[1]+'"]');
+  if(seg)seg.click();
+  var card=document.getElementById(parts[1]);
+  if(card)card.scrollIntoView({behavior:"smooth",block:"start"});
+});
 
 /* ---------- 品牌資料／科普子分頁（懶載入後才有 DOM，必須用事件委派） ---------- */
 document.addEventListener("click",function(e){

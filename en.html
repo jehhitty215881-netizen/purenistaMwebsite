@@ -68,6 +68,8 @@ nav .navgrp{flex:0 0 auto;display:flex;align-items:center;padding:0 4px 0 10px;f
 .to-guide-bar.tucked{transform:translateY(calc(100% + 28px));opacity:0;pointer-events:none}
 @media(prefers-reduced-motion:reduce){.to-guide-bar{transition:none}}
 .to-guide-bar[hidden]{display:none}
+.jump-tool{border:1.5px solid var(--violet);background:transparent;color:var(--violet);font-family:inherit;font-weight:800;font-size:12.5px;padding:7px 15px;border-radius:999px;cursor:pointer}
+.jump-tool:hover,.jump-tool:focus-visible{background:var(--violet);color:#fff}
 .to-guide-bar .to-guide{position:static;right:auto;bottom:auto;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .to-next{background:linear-gradient(135deg,var(--violet),var(--rose));border-color:transparent;color:#fff}
 .to-next:hover,.to-next:focus-visible{background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;filter:brightness(1.06)}
@@ -775,6 +777,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
   <button type="button" id="toGuide" class="to-guide" aria-label="Back to the smart guide">
     <span class="tg-ico" aria-hidden="true">←</span>Smart guide
   </button>
+  <button type="button" id="toPrev" class="to-guide" hidden></button>
   <button type="button" id="toNext" class="to-guide to-next" hidden></button>
 </div>
 
@@ -1536,7 +1539,8 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
   <div class="card">
     <h3>Rainbow Market floor prices <span class="tag ok">Floor prices</span></h3>
-    <p class="cond">The numbers below are <b>floor prices</b>. Only <b>BRAND</b> items are priced differently — everything else counts as "<b>General</b>". Price adjustments move in <b>minimum steps of 10 stars</b>.<br>💸 Rainbow Market charges a <b>30% transaction fee</b> (seller receives ＝ listing price ×70%) — see the <b>Fee converter</b> in the Quick Calc tab.</p>
+    <p class="cond">The numbers below are <b>floor prices</b>. Only <b>BRAND</b> items are priced differently — everything else counts as "<b>General</b>". Price adjustments move in <b>minimum steps of 10 stars</b>.<br>💸 Rainbow Market charges a <b>30% transaction fee</b> (seller receives ＝ listing price ×70%) — use the button below.</p>
+<p style="margin:6px 0 0"><button type="button" class="jump-tool" data-jump-tool="calc:t-fee">Open the fee converter →</button></p>
     <table>
       <thead><tr><th>Rarity</th><th>General</th><th>BRAND</th></tr></thead>
       <tbody>
@@ -1877,6 +1881,11 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.5.0 <span class="chg-build">current・shared work, unread badges and permission hardening</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>Added: two requests from the wish list</b></p>
+      <ul class="tips">
+        <li><b>Previous stop</b>: the floating bar gains a back button to pair with the existing next button, so a path can be walked in either direction without returning to the guide. The first stop hides the back button and the last hides the forward one.</li>
+        <li><b>Shortcut from Rainbow Market to the fee converter</b>: the market page used to just say in text that the converter lives in the Quick Calc tab, leaving you to switch tab and hunt through a row of small labels. There is now a button that switches tab, opens the right tool and scrolls to it.</li>
+      </ul>
       <p class="cond" style="margin:12px 0 4px"><b>Added: shared work and personal palettes</b></p>
       <ul class="tips">
         <li>A new "Shared work" tab. Two things can be saved: <b>palettes</b> (a set of hex codes, entered by hand or kept straight from a roll in the colour room with "Save to my palettes") and <b>ideas</b> (free text — character notes, names, anything).</li>
@@ -1961,7 +1970,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>All of these checks now run in the database itself. Permission columns cannot be altered by the account they belong to, messages can only be self-deleted rather than edited or un-hidden, room fields are locked to non-admins, and the hand-over rules (only the current player may pass, and only to someone who joined the queue) are enforced there too.</li>
         <li>The turn queue table has also been created properly — the original statement never ran successfully, which is why the panel always showed zero players in the queue.</li>
       </ul>
-      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. This release passes 155 automated tests: 14 for live board updates, 15 for unread badges, 15 for the smart guide and ranking, 7 for path coverage, 14 for the return and next-stop bar, 12 for its scroll behaviour, 28 for the permission hardening, and 27 database plus 23 front-end tests for shared work. The permission tests run against a real local database as four different kinds of account; the coverage tests assert that every tab is reachable from at least one path, so this release's omission cannot recur unnoticed.</p>
+      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. This release passes 168 automated tests: 14 for live board updates, 15 for unread badges, 15 for the smart guide and ranking, 7 for path coverage, 12 for the previous/next stop bar, 12 for its scroll behaviour, 28 for the permission hardening, and 27 database plus 23 front-end tests for shared work, alongside static checks on the tool shortcuts and page structure. The permission tests run against a real local database as four different kinds of account; the coverage tests assert that every tab is reachable from at least one path.</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.5 <span class="chg-build">removed leftovers pointing at an external service</span></div>
@@ -2867,29 +2876,35 @@ function goTab(name){
 function syncGuideBtn(name){
   const bar=document.getElementById("toGuideBar");
   if(bar){ bar.hidden=(name==="home"); bar.classList.remove("tucked"); }
-  const nx=document.getElementById("toNext");
-  if(!nx)return;
-  let info=null;
-  if(name!=="home"&&window.__pmNextStop){
-    try{ info=window.__pmNextStop(name); }catch(e){ info=null; }
-  }
-  if(info){
-    nx.hidden=false;
-    nx.textContent="Next: "+info.label+" →";
-    nx.setAttribute("data-go",info.id);
-  }else{
-    nx.hidden=true;
-    nx.removeAttribute("data-go");
-  }
+  const nx=document.getElementById("toNext"), pv=document.getElementById("toPrev");
+  const stop=function(fn){
+    if(name==="home"||!fn)return null;
+    try{ return fn(name); }catch(e){ return null; }
+  };
+  const fill=function(btn, info, prefix, suffix){
+    if(!btn)return;
+    if(info){
+      btn.hidden=false;
+      btn.textContent=prefix+info.label+suffix;
+      btn.setAttribute("data-go",info.id);
+    }else{
+      btn.hidden=true;
+      btn.removeAttribute("data-go");
+    }
+  };
+  fill(pv, stop(window.__pmPrevStop), "← ", "");
+  fill(nx, stop(window.__pmNextStop), "Next: ", " →");
 }
 tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
 (function(){
   const b=document.getElementById("toGuide");
   if(b)b.addEventListener("click",()=>goTab("home"));
-  const nx=document.getElementById("toNext");
-  if(nx)nx.addEventListener("click",function(){
-    const id=nx.getAttribute("data-go");
-    if(id)goTab(id);
+  ["toPrev","toNext"].forEach(function(id){
+    const el=document.getElementById(id);
+    if(el)el.addEventListener("click",function(){
+      const go=el.getAttribute("data-go");
+      if(go)goTab(go);
+    });
   });
   const cur=document.querySelector("nav button[data-tab].on");
   syncGuideBtn(cur?cur.dataset.tab:"home");
@@ -3134,15 +3149,19 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
   /* When following a path, the tab people actually want next is the next stop,
      not the guide itself. This reports the stop after the current tab on the
      chosen path so the floating bar can jump straight there. */
-  window.__pmNextStop=function(tab){
+  function stopAt(tab, delta){
     var role=null;
     try{ role=localStorage.getItem('pm_sg_role'); }catch(e){}
     if(!role||!PATHS[role])return null;
     var st=PATHS[role].steps, i=st.indexOf(tab);
-    if(i<0||i>=st.length-1)return null;
-    var id=st[i+1];
+    if(i<0)return null;
+    var j=i+delta;
+    if(j<0||j>=st.length)return null;
+    var id=st[j];
     return LABELS[id]?{id:id,label:LABELS[id]}:null;
-  };
+  }
+  window.__pmNextStop=function(tab){ return stopAt(tab, 1); };
+  window.__pmPrevStop=function(tab){ return stopAt(tab, -1); };
 
   function workerMode(){
     return !!(GLOBAL_RANK_ENDPOINT && String(GLOBAL_RANK_ENDPOINT).indexOf('http')===0);
@@ -3920,6 +3939,21 @@ document.querySelectorAll("#calcNav button").forEach(b=>b.addEventListener("clic
   document.getElementById(b.dataset.c).classList.add("show");
 }));
 
+
+/* Shortcut to a tool inside another tab: data-jump-tool="tab:toolId". Switches
+   tab, opens the right sub-tool and scrolls to it, saving the usual three steps
+   of switching tab, finding the row of small labels and picking the right one. */
+document.addEventListener("click",function(e){
+  var b=e.target.closest && e.target.closest("[data-jump-tool]");
+  if(!b)return;
+  var parts=String(b.getAttribute("data-jump-tool")||"").split(":");
+  if(parts.length!==2)return;
+  goTab(parts[0]);
+  var seg=document.querySelector('#calcNav [data-c="'+parts[1]+'"]');
+  if(seg)seg.click();
+  var card=document.getElementById(parts[1]);
+  if(card)card.scrollIntoView({behavior:"smooth",block:"start"});
+});
 
 /* ---------- Brand data / Trivia sub-tabs (lazy-loaded DOM — must use event delegation) ---------- */
 document.addEventListener("click",function(e){
