@@ -744,6 +744,12 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .board-ban-banner{margin:8px 0;padding:10px 12px;border-radius:12px;background:#fde8e8;border:1.5px solid #e0b4b4;color:#a33;font-size:13.5px;line-height:1.55}
 .board-mute-banner{margin:8px 0;padding:10px 12px;border-radius:12px;background:var(--gold-soft);border:1.5px solid var(--gold);font-size:13.5px;line-height:1.55}
 
+
+.wolf-timer{margin:8px 0;padding:10px 12px;border-radius:12px;border:1.5px solid var(--violet);background:var(--violet-soft);font-weight:800;font-size:15px;text-align:center}
+.wolf-timer.warn{border-color:var(--rose);background:var(--rose-soft);color:var(--rose)}
+.wolf-timer-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;justify-content:center}
+.wolf-timer-btns button{border:1.5px solid var(--line);background:var(--panel);font:inherit;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:999px;cursor:pointer}
+
 </style>
 </head>
 <body>
@@ -8381,7 +8387,7 @@ function compositionScore(opts) {
   var BOARD_LOCALE = 'en';
   var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
   var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
-  var T = {"signed": "Signed in as ", "gameid": "Game ID", "admin": "Admin", "logout": "Sign out", "email": "Email", "pass": "Password (min 6 characters)", "display": "Display name (for sign-up, optional)", "login": "Sign in", "signup": "Sign up", "signup_ok": "Signed up! You can post once approved. Please DM 棉花棠 (game ID 3728362) to get approved.", "loading": "Loading…", "fail": "Failed to load: ", "empty": "No messages in this board yet. Say hi!", "empty_boards": "No boards yet. Admins can create one below.", "user": "User", "hidden": "Hidden", "show": "Show", "hide": "Hide", "del": "Delete", "delmine": "Delete", "reply": "Reply", "replying": "Replying to", "cancel": "Cancel", "need_login": "Please sign in first", "need_body": "Please enter a message", "max": "Max 1000 characters", "saved": "Saved", "need_title": "Please enter a board title", "created": "Board created", "live_on": "Live", "live_off": "Offline (use Refresh)", "msgs": "messages", "pending": "Your account is pending approval. You can post once an admin approves you.", "rejected": "Your registration was not approved. Contact the site owner if needed.", "approve": "Approve", "reject": "Reject", "no_pending": "No pending registrations.", "locale": "en-US", "approve_note": "Approval is required before you can post", "approve_how": "Please DM", "approve_who": "棉花棠", "approve_gid": "game ID 3728362", "approve_tail": "— an admin will approve you shortly.", "unread": "new", "unread_toggle": "Show unread badges", "unread_hint": "Kept on this device only; nobody else can see what you have read", "gl_pub": "Shared", "gl_mine": "Mine", "gl_fav": "Favourites", "gl_new": "Add", "gl_kind": "Type", "gl_palette": "Palette", "gl_idea": "Idea", "gl_title": "Title (optional)", "gl_colors": "Hex codes, space or comma separated, up to 8", "gl_body": "Content: character notes, names, any idea", "gl_public": "Publish so others can favourite it", "gl_save": "Save", "gl_saved": "Saved", "gl_deleted": "Deleted", "gl_empty_pub": "Nothing shared yet — be the first.", "gl_empty_mine": "Nothing saved yet. Roll a palette you like and keep it.", "gl_empty_fav": "No favourites yet. Tap the heart on anything you like.", "gl_need_login": "Please sign in to save", "gl_need_colors": "Enter at least one hex code", "gl_need_body": "Enter some content", "gl_bad_color": "Codes should look like #11997B", "gl_del": "Delete", "gl_publish": "Publish", "gl_unpublish": "Unpublish", "gl_private_tag": "private", "gl_confirm_del": "Delete this? It cannot be undone.", "gl_by": "by", "gl_favs": "favs", "gl_copy": "Copy codes", "gl_copied": "Copied", "gl_save_swatch": "Save to my palettes", "gl_from_room": "from the colour room", "ntf_title": "New message alerts", "ntf_badge": "Show unread count in the tab title", "ntf_desk": "Browser notifications", "ntf_sound": "Sound", "ntf_hint": "Only works while the site is open — leaving the tab in the background is fine, but closing it entirely means nothing arrives. Settings are kept on this device only.", "ntf_more": "What are these three?", "ntf_m_badge": "Unread count in the tab title: the tab reads \"(3) purenistahub\". No sound, no pop-up — the least intrusive option.", "ntf_m_desk": "Browser notifications: a system notification. The first time you tick this, your browser asks whether to allow it; nothing happens until you do.", "ntf_m_sound": "Sound: one short chime. Ticking it plays the sound once so you can hear it before deciding to keep it.", "ntf_m_when": "Nothing alerts you while you are looking at the board, switching back clears it, and your own messages never notify you.", "ntf_blocked": "Browser notifications are blocked. Re-allow them from the padlock icon in the address bar.", "ntf_new": "new messages", "ntf_from": "in", "w_login": "Sign in to open or join a game.", "w_pending": "Your account needs approval first.", "w_create": "New game", "w_join": "Join", "w_code_ph": "Room code", "w_room": "Room", "w_host": "Host", "w_players": "Players", "w_you": "you", "w_leave": "Leave", "w_copy": "Copy code", "w_copied": "Copied", "w_cfg": "Roles", "w_wolves": "Wolves", "w_seer": "Seer", "w_witch": "Witch", "w_hunter": "Hunter", "w_deal": "Deal and start", "w_dealt": "Dealt", "w_myrole": "Your role", "w_mates": "Your fellow wolves", "w_alone": "You are the only wolf", "w_norole": "Not dealt yet", "w_check": "Check", "w_check_who": "Who do you check tonight?", "w_result": "Result", "w_is_wolf": "is a wolf", "w_is_good": "is not a wolf", "w_checked": "already checked", "w_round": "Night {n}", "w_next": "Next night", "w_out": "Mark out", "w_back": "Mark alive", "w_dead": "out", "w_end": "End and reveal", "w_ended": "This game has ended", "w_reveal": "Roles", "w_confirm_end": "End the game? Everyone's role becomes visible.", "w_confirm_deal": "Deal now? The setup cannot be changed afterwards.", "w_hosthint": "You are the host: dealing, marking players out, advancing nights and ending are yours.", "w_voicehint": "Start your voice call first. The site does not moderate or keep time.", "w_rules": "Optional rules (set before dealing)", "w_rule_self": "Witch may self-save", "w_rule_poison_shot": "Poisoned hunter may still shoot", "w_rule_tie": "Daytime tie", "w_tie_revote": "Revote", "w_tie_none": "Nobody out", "w_tie_random": "Random one out", "w_phase_night": "Night", "w_phase_day": "Day vote", "w_kill_vote": "Vote to kill", "w_kill_submit": "Confirm kill", "w_witch_save": "Use antidote (save tonight's victim)", "w_witch_poison": "Use poison", "w_poison_go": "Confirm poison", "w_resolve_night": "Resolve night → day", "w_day_vote": "Vote to exile", "w_vote_go": "Vote", "w_abstain": "Abstain", "w_resolve_day": "Tally votes", "w_waiting": "Waiting for {n}", "w_waiting_wolves": "Waiting for {n} wolf vote(s)", "w_waiting_voters": "Waiting for {n} vote(s)", "w_summary": "Announcement", "w_win_wolf": "Wolves win", "w_win_good": "Village wins", "w_hunter_shot": "Hunter shoots", "w_shot_go": "Take them", "w_no_manual": "Eliminations are resolved by the system; host need not mark out manually.", "w_tag": "rules", "w_min": "At least four players are needed.", "role_wolf": "Wolf", "role_seer": "Seer", "role_witch": "Witch", "role_hunter": "Hunter", "role_villager": "Villager", "w_night": "Wolf channel", "w_night_ph": "Wolves only…", "w_send": "Send", "w_night_hint": "Visible to wolves only. Once out you can read but not write. Everyone sees this thread after the game ends.", "w_night_empty": "Nothing said yet.", "w_night_dead": "You are out — reading only.", "w_night_after": "Night talk (post-mortem)"};
+  var T = {"signed": "Signed in as ", "gameid": "Game ID", "admin": "Admin", "logout": "Sign out", "email": "Email", "pass": "Password (min 6 characters)", "display": "Display name (for sign-up, optional)", "login": "Sign in", "signup": "Sign up", "signup_ok": "Signed up! You can post once approved. Please DM 棉花棠 (game ID 3728362) to get approved.", "loading": "Loading…", "fail": "Failed to load: ", "empty": "No messages in this board yet. Say hi!", "empty_boards": "No boards yet. Admins can create one below.", "user": "User", "hidden": "Hidden", "show": "Show", "hide": "Hide", "del": "Delete", "delmine": "Delete", "reply": "Reply", "replying": "Replying to", "cancel": "Cancel", "need_login": "Please sign in first", "need_body": "Please enter a message", "max": "Max 1000 characters", "saved": "Saved", "need_title": "Please enter a board title", "created": "Board created", "live_on": "Live", "live_off": "Offline (use Refresh)", "msgs": "messages", "pending": "Your account is pending approval. You can post once an admin approves you.", "rejected": "Your registration was not approved. Contact the site owner if needed.", "approve": "Approve", "reject": "Reject", "no_pending": "No pending registrations.", "locale": "en-US", "approve_note": "Approval is required before you can post", "approve_how": "Please DM", "approve_who": "棉花棠", "approve_gid": "game ID 3728362", "approve_tail": "— an admin will approve you shortly.", "unread": "new", "unread_toggle": "Show unread badges", "unread_hint": "Kept on this device only; nobody else can see what you have read", "gl_pub": "Shared", "gl_mine": "Mine", "gl_fav": "Favourites", "gl_new": "Add", "gl_kind": "Type", "gl_palette": "Palette", "gl_idea": "Idea", "gl_title": "Title (optional)", "gl_colors": "Hex codes, space or comma separated, up to 8", "gl_body": "Content: character notes, names, any idea", "gl_public": "Publish so others can favourite it", "gl_save": "Save", "gl_saved": "Saved", "gl_deleted": "Deleted", "gl_empty_pub": "Nothing shared yet — be the first.", "gl_empty_mine": "Nothing saved yet. Roll a palette you like and keep it.", "gl_empty_fav": "No favourites yet. Tap the heart on anything you like.", "gl_need_login": "Please sign in to save", "gl_need_colors": "Enter at least one hex code", "gl_need_body": "Enter some content", "gl_bad_color": "Codes should look like #11997B", "gl_del": "Delete", "gl_publish": "Publish", "gl_unpublish": "Unpublish", "gl_private_tag": "private", "gl_confirm_del": "Delete this? It cannot be undone.", "gl_by": "by", "gl_favs": "favs", "gl_copy": "Copy codes", "gl_copied": "Copied", "gl_save_swatch": "Save to my palettes", "gl_from_room": "from the colour room", "ntf_title": "New message alerts", "ntf_badge": "Show unread count in the tab title", "ntf_desk": "Browser notifications", "ntf_sound": "Sound", "ntf_hint": "Only works while the site is open — leaving the tab in the background is fine, but closing it entirely means nothing arrives. Settings are kept on this device only.", "ntf_more": "What are these three?", "ntf_m_badge": "Unread count in the tab title: the tab reads \"(3) purenistahub\". No sound, no pop-up — the least intrusive option.", "ntf_m_desk": "Browser notifications: a system notification. The first time you tick this, your browser asks whether to allow it; nothing happens until you do.", "ntf_m_sound": "Sound: one short chime. Ticking it plays the sound once so you can hear it before deciding to keep it.", "ntf_m_when": "Nothing alerts you while you are looking at the board, switching back clears it, and your own messages never notify you.", "ntf_blocked": "Browser notifications are blocked. Re-allow them from the padlock icon in the address bar.", "ntf_new": "new messages", "ntf_from": "in", "w_login": "Sign in to open or join a game.", "w_pending": "Your account needs approval first.", "w_create": "New game", "w_join": "Join", "w_code_ph": "Room code", "w_room": "Room", "w_host": "Host", "w_players": "Players", "w_you": "you", "w_leave": "Leave", "w_copy": "Copy code", "w_copied": "Copied", "w_cfg": "Roles", "w_wolves": "Wolves", "w_seer": "Seer", "w_witch": "Witch", "w_hunter": "Hunter", "w_deal": "Deal and start", "w_dealt": "Dealt", "w_myrole": "Your role", "w_mates": "Your fellow wolves", "w_alone": "You are the only wolf", "w_norole": "Not dealt yet", "w_check": "Check", "w_check_who": "Who do you check tonight?", "w_result": "Result", "w_is_wolf": "is a wolf", "w_is_good": "is not a wolf", "w_checked": "already checked", "w_round": "Night {n}", "w_next": "Next night", "w_out": "Mark out", "w_back": "Mark alive", "w_dead": "out", "w_end": "End and reveal", "w_ended": "This game has ended", "w_reveal": "Roles", "w_confirm_end": "End the game? Everyone's role becomes visible.", "w_confirm_deal": "Deal now? The setup cannot be changed afterwards.", "w_hosthint": "You are the host: dealing, marking players out, advancing nights and ending are yours.", "w_voicehint": "Start your voice call first. The site does not moderate or keep time.", "w_timer": "Timer", "w_timer_30": "30s", "w_timer_60": "60s", "w_timer_90": "90s", "w_timer_clear": "Clear timer", "w_timer_left": "{n}s left", "w_timer_up": "Time's up", "w_timer_hint": "Host can start a timer; when it hits zero and the host tab is open, night/day may auto-resolve.", "w_rules": "Optional rules (set before dealing)", "w_rule_self": "Witch may self-save", "w_rule_poison_shot": "Poisoned hunter may still shoot", "w_rule_tie": "Daytime tie", "w_tie_revote": "Revote", "w_tie_none": "Nobody out", "w_tie_random": "Random one out", "w_phase_night": "Night", "w_phase_day": "Day vote", "w_kill_vote": "Vote to kill", "w_kill_submit": "Confirm kill", "w_witch_save": "Use antidote (save tonight's victim)", "w_witch_poison": "Use poison", "w_poison_go": "Confirm poison", "w_resolve_night": "Resolve night → day", "w_day_vote": "Vote to exile", "w_vote_go": "Vote", "w_abstain": "Abstain", "w_resolve_day": "Tally votes", "w_waiting": "Waiting for {n}", "w_waiting_wolves": "Waiting for {n} wolf vote(s)", "w_waiting_voters": "Waiting for {n} vote(s)", "w_summary": "Announcement", "w_win_wolf": "Wolves win", "w_win_good": "Village wins", "w_hunter_shot": "Hunter shoots", "w_shot_go": "Take them", "w_no_manual": "Eliminations are resolved by the system; host need not mark out manually.", "w_tag": "rules", "w_min": "At least four players are needed.", "role_wolf": "Wolf", "role_seer": "Seer", "role_witch": "Witch", "role_hunter": "Hunter", "role_villager": "Villager", "w_night": "Wolf channel", "w_night_ph": "Wolves only…", "w_send": "Send", "w_night_hint": "Visible to wolves only. Once out you can read but not write. Everyone sees this thread after the game ends.", "w_night_empty": "Nothing said yet.", "w_night_dead": "You are out — reading only.", "w_night_after": "Night talk (post-mortem)"};
   if(!window.supabase){
     var list = document.getElementById('boardCardList');
     if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
@@ -10027,6 +10033,30 @@ function compositionScore(opts) {
     return h + '</div>';
   }
 
+  
+  function wfTimerSec(){
+    if(!wf.game || !wf.game.phase_deadline) return null;
+    var t = new Date(wf.game.phase_deadline).getTime() - Date.now();
+    return Math.ceil(t/1000);
+  }
+  function wfTimerHTML(){
+    var sec = wfTimerSec();
+    var h = '';
+    if(sec != null){
+      if(sec <= 0) h += '<div class="wolf-timer warn">'+esc(T.w_timer_up)+'</div>';
+      else h += '<div class="wolf-timer'+(sec<=10?' warn':'')+'">'+esc(T.w_timer_left.replace('{n}', sec))+'</div>';
+    }
+    if(wfIsHost() && wf.game && wf.game.status==='playing' && (wf.game.phase==='night'||wf.game.phase==='day')){
+      h += '<div class="wolf-timer-btns">'
+        + '<button type="button" data-wf="timer" data-sec="30">'+esc(T.w_timer_30)+'</button>'
+        + '<button type="button" data-wf="timer" data-sec="60">'+esc(T.w_timer_60)+'</button>'
+        + '<button type="button" data-wf="timer" data-sec="90">'+esc(T.w_timer_90)+'</button>'
+        + (wf.game.phase_deadline?'<button type="button" data-wf="timerClear">'+esc(T.w_timer_clear)+'</button>':'')
+        + '</div><p class="wolf-note">'+esc(T.w_timer_hint)+'</p>';
+    }
+    return h;
+  }
+
   function wfPlayingHTML(){
     var phase = wf.game.phase || 'night';
     var h = '<div class="wolf-code"><span class="wolf-note">'+esc(T.w_room)+'</span>'
@@ -10049,6 +10079,7 @@ function compositionScore(opts) {
         return '<p class="wolf-note">'+esc(msg.replace('{n}', w.left_count))+'</p>';
       }).join('');
     }
+    h += wfTimerHTML();
     h += wfRoleCardHTML();
     h += wfNightHTML();
     h += wfSeerHTML();
@@ -10277,6 +10308,14 @@ function wfEndedHTML(){
           if(s) alert(s);
         }
         await wfLoad();
+      }else if(act === 'timer'){
+        var sec = parseInt(b.getAttribute('data-sec')||'60',10)||60;
+        await wfRpc('wolf_set_timer', { p_game: wf.game.id, p_seconds: sec });
+        await wfLoad();
+        wfStartTick();
+      }else if(act === 'timerClear'){
+        await wfRpc('wolf_clear_timer', { p_game: wf.game.id });
+        await wfLoad();
       }else if(act === 'end'){
         if(!confirm(T.w_confirm_end)) return;
         await wfRpc('wolf_end', { p_game: wf.game.id });
@@ -10301,9 +10340,49 @@ function wfEndedHTML(){
 
   /* 這裡用輪詢而不是 Realtime：一局頂多二十人，五秒一次的成本很低，
      而且身分變化本來就得重新問一次函式，訂閱也省不掉那一趟。 */
+  
+  var wfTickTimer = null;
+  var wfAutoOnce = false;
+  function wfTimerTick(){
+    if(!wf.game || !wf.game.phase_deadline) return;
+    var sec = wfTimerSec();
+    var el = document.querySelector('.wolf-timer');
+    if(el){
+      if(sec == null) return;
+      if(sec <= 0){
+        el.className = 'wolf-timer warn';
+        el.textContent = T.w_timer_up;
+        if(wfIsHost() && !wfAutoOnce && !wf.busy){
+          wfAutoOnce = true;
+          (async function(){
+            try{
+              if(wf.game.phase === 'night'){
+                var s = await wfRpc('wolf_resolve_night', { p_game: wf.game.id });
+                if(s) alert(s);
+              }else if(wf.game.phase === 'day'){
+                var s2 = await wfRpc('wolf_resolve_day', { p_game: wf.game.id });
+                if(s2) alert(s2);
+              }
+            }catch(e){}
+            await wfLoad();
+            wfAutoOnce = false;
+          })();
+        }
+      }else{
+        el.className = 'wolf-timer'+(sec<=10?' warn':'');
+        el.textContent = T.w_timer_left.replace('{n}', sec);
+      }
+    }
+  }
+  function wfStartTick(){
+    if(wfTickTimer) clearInterval(wfTickTimer);
+    wfTickTimer = setInterval(wfTimerTick, 1000);
+  }
+
   function wfStartPoll(){
     wfStopPoll();
     wf.timer = setInterval(function(){ if(wf.game) wfLoad(); }, 5000);
+    wfStartTick();
   }
   function wfStopPoll(){
     if(wf.timer){ clearInterval(wf.timer); wf.timer = null; }
