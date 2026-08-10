@@ -840,6 +840,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <button type="button" data-role="brand">Brands</button>
       <button type="button" data-role="create">Creating</button>
       <button type="button" data-role="publish">Publishing</button>
+      <button type="button" data-role="social">Together</button>
       <button type="button" data-role="browse">Browsing</button>
     </div>
     <div class="sg-path" id="sgPath" hidden></div>
@@ -1934,7 +1935,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <h3>Changelog <span class="tag ok">actively maintained</span></h3>
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.5.0 <span class="chg-build">current・shared work, unread badges and permission hardening</span></div>
+      <div class="chg-ver">Version 5.5.0 <span class="chg-build">current・Werewolf, shared work, alerts and permission hardening</span></div>
       <p class="cond" style="margin:12px 0 4px"><b>Added: Werewolf (dealing only)</b></p>
       <ul class="tips">
         <li>The site handles only <b>the part that has to stay hidden</b>: dealing roles, letting wolves recognise each other, and the seer's private check. Discussion and voting happen over voice — this is the deck of cards, not the moderator.</li>
@@ -1942,6 +1943,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>Roles cannot be peeked at, and this is guaranteed by the database rather than hidden in the page: <b>the column holding each role is not readable by anyone</b>. Opening developer tools and querying the database directly gets the query rejected; all that is available is what the functions choose to return — your own card, plus your fellow wolves if you are one. Dealing happens in the database too, since shuffling in the browser would put the full role list on the dealer's own device.</li>
         <li>Other safeguards: only the host can deal or mark players out; the seer gets one check per night and asking again returns the original answer rather than allowing a second target; checking yourself or a dead player is refused; non-seers calling the check are refused; nobody can obtain the full role list before the game ends; and nobody can join once play has started. Setups where wolves reach parity, or where roles outnumber players, are rejected.</li>
         <li>A <b>wolf channel</b>: night-time text discussion between the wolves, visible to them alone, so a game still works when someone cannot use voice. Enforced in the database as before — a villager running the query simply gets nothing back, rather than the page hiding it. Wolves who are out can read but not write, messages cannot be edited or deleted, and once the game ends the whole table can read the thread for the post-mortem.</li>
+        <li>The smart guide keeps up: a new <b>Together</b> role suggests board → Werewolf → shared work, and Werewolf has been added to the feature ranking list.</li>
         <li>The menu gains a "Together" group, with the board moved out of "About" to sit alongside it — a message board was never really documentation about the site.</li>
       </ul>
       <p class="cond" style="margin:12px 0 4px"><b>Added: new message alerts</b></p>
@@ -2041,7 +2043,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>All of these checks now run in the database itself. Permission columns cannot be altered by the account they belong to, messages can only be self-deleted rather than edited or un-hidden, room fields are locked to non-admins, and the hand-over rules (only the current player may pass, and only to someone who joined the queue) are enforced there too.</li>
         <li>The turn queue table has also been created properly — the original statement never ran successfully, which is why the panel always showed zero players in the queue.</li>
       </ul>
-      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. This release passes 292 automated tests: 29 database anti-cheat and 33 interface tests for Werewolf, 15 database and 16 interface tests for the wolf channel, 14 for live board updates, 31 for new message alerts, 15 for unread badges, 15 for the smart guide and ranking, 7 for path coverage, 12 for the previous/next stop bar, 12 for its scroll behaviour, 28 for the permission hardening, and 27 database plus 23 front-end tests for shared work. Every permission and anti-cheat test runs a real six-player game against a real local database and actually attempts the peek as each kind of player.</p>
+      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. This release passes 300 automated tests: 29 database anti-cheat and 33 interface tests for Werewolf, 15 database and 16 interface tests for the wolf channel, 14 for live board updates, 31 for new message alerts, 15 for unread badges, 15 for the smart guide and ranking, 8 for path coverage, 12 for the previous/next stop bar, 12 for its scroll behaviour, 28 for the permission hardening, and 27 database plus 23 front-end tests for shared work. Every permission and anti-cheat test runs a real six-player game against a real local database and actually attempts the peek as each kind of player; the coverage tests assert every tab is reachable from a path, which is how Werewolf's omission was caught here.</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.5 <span class="chg-build">removed leftovers pointing at an external service</span></div>
@@ -3110,7 +3112,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     check:'Art check',workspace:'Challenges',colorinspire:'Idea bank',naming:'Naming',
     charcheck:'Character generator',flow:'Workflow',aes:'Aesthetics',lore:'Trivia',qa:'Q&A',
     board:'Board',feedback:'Feedback',notes:'Notes',changelog:'Changelog',
-    swatch:'Swatches',symbols:'Symbols',hexconv:'Colour convert',gallery:'Shared work'
+    swatch:'Swatches',symbols:'Symbols',hexconv:'Colour convert',gallery:'Shared work',wolf:'Werewolf'
   };
   var PATHS={
     newbie:{
@@ -3142,6 +3144,11 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
       title:'Publishing path',
       blurb:'The part after the drawing: tidy the palette, write a title and tags, add a few symbols, then save it to Shared work for others to favourite.',
       steps:['swatch','hexconv','naming','symbols','gallery']
+    },
+    social:{
+      title:'Playing together',
+      blurb:'When you want company: see who is around on the board, start a game of Werewolf once you have people, and browse what everyone has shared.',
+      steps:['board','wolf','gallery']
     },
     browse:{
       title:'Just browsing',
