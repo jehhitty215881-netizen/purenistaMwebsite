@@ -1158,6 +1158,45 @@ body.card-open{overflow:hidden}
 #boardCardPreview .pc-shell-frame{width:100%;max-width:380px}
 #boardCardPreview .pc-glass .board-actions{display:none}
 
+
+/* 全白底名片 */
+.pc-shell-frame{
+  position:relative;width:min(94vw,440px);aspect-ratio:1176/784;margin:0 auto;
+  background:#ffffff;border-radius:12px;overflow:hidden;
+  box-shadow:0 16px 48px rgba(42,33,56,.25);
+}
+.pc-frame-img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:fill;
+  pointer-events:none;z-index:1;
+}
+.pc-frame-content{
+  position:absolute;left:12%;right:12%;top:17%;bottom:15%;
+  z-index:2;display:flex;align-items:center;justify-content:center;
+}
+.pc-glass{
+  width:100%;height:100%;text-align:center;
+  padding:18px 16px;border-radius:14px;
+  background:#ffffff !important;
+  border:none;box-shadow:none;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-sizing:border-box;
+}
+.pc-glass .pc-stripe{justify-content:center;margin:0 auto 10px;display:flex;gap:5px}
+.pc-glass .pc-stripe i{width:22px;height:8px;border-radius:4px;border:1px solid rgba(0,0,0,.12)}
+.pc-glass .pc-name{font-size:17px;font-weight:800;letter-spacing:.03em;line-height:1.4;margin:0;color:#2A2138 !important}
+.pc-glass .bm-meta{font-size:12px;font-weight:600;color:#6B6180 !important}
+.pc-glass .bc-tag{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;background:#EDEAF7;color:#7B6BB5}
+.pc-glass .pc-line{width:40px;height:1px;margin:10px auto;background:linear-gradient(90deg,transparent,#C8B8D8,transparent)}
+.pc-glass .pc-bio{font-size:13.5px;line-height:1.7;margin:0;color:#5A5070 !important}
+.pc-glass .board-actions{margin-top:12px;display:flex;justify-content:center}
+.pc-glass .back,#boardCardClose{
+  border-radius:999px!important;padding:7px 18px!important;font-size:12.5px!important;font-weight:700!important;
+  background:#fff!important;color:#6B5B8A!important;border:1.5px solid #DDD6E8!important;
+}
+#boardCardBox .pc-shell-frame{width:min(94vw,440px)}
+#boardCardPreview .pc-shell-frame{width:100%;max-width:380px}
+#boardCardPreview .pc-glass .board-actions{display:none}
+
 </style>
 </head>
 <body>
@@ -11139,6 +11178,7 @@ function wfEndedHTML(){
   
   
   
+  
   function showCardHTML(p, isPreview){
     var mine = state.user && state.user.id === p.id;
     var open = p.is_public_card !== false;
@@ -11154,29 +11194,21 @@ function wfEndedHTML(){
       silver_bloom: 'card-frames/silver_bloom.jpg'
     }[theme];
 
-    var skin = {
-      crystal_white: { name:'#2A3550', bio:'#5A6A88', meta:'#7A8AA8' },
-      pink_rose:     { name:'#5A2840', bio:'#8A5070', meta:'#A07090' },
-      violet_butterfly:{ name:'#3A2858', bio:'#6A5890', meta:'#8878A8' },
-      silver_bloom:  { name:'#2A2830', bio:'#5A5860', meta:'#7A7880' }
-    }[theme] || { name:'#2A2138', bio:'#5A5070', meta:'#6B6180' };
-
     var displayName = p.display_name || T.user;
 
     if(frameSrc){
       var stripe = (typeof cardStripe==='function' && cols.length) ? cardStripe(cols) : '';
-      /* 先畫框（下層），再畫淺色內容（上層蓋住黑心） */
       var h = '<div class="pc-shell pc-shell-frame th-'+theme+'">'
         + '<img class="pc-frame-img" src="'+frameSrc+'" alt="" />'
         + '<div class="pc-frame-content">'
         + '<div class="pc-glass profile-card">'
         + stripe
-        + '<div class="pc-name" style="color:'+skin.name+'">'+esc(displayName)
-        + (p.game_id ? '<br><span class="bm-meta" style="color:'+skin.meta+'">'+esc(p.game_id)+'</span>' : '')
+        + '<div class="pc-name">'+esc(displayName)
+        + (p.game_id ? '<br><span class="bm-meta">'+esc(p.game_id)+'</span>' : '')
         + (p.role==='admin' ? ' <span class="bc-tag">'+esc(T.admin||'Admin')+'</span>' : '')
         + '</div>'
         + '<div class="pc-line"></div>'
-        + '<div class="pc-bio" style="color:'+skin.bio+'">'+esc(bioText)+'</div>';
+        + '<div class="pc-bio">'+esc(bioText)+'</div>';
       if(!isPreview){
         h += '<div class="board-actions">'
           + '<button type="button" id="boardCardClose" class="back">'+esc(T.close||'Close')+'</button></div>';
@@ -11185,9 +11217,8 @@ function wfEndedHTML(){
       return h;
     }
 
-    var tint = (typeof cardTint==='function') ? cardTint(cols) : '';
     var h2 = '<div class="pc-shell" style="width:min(94vw,420px)">'
-      + '<div class="profile-card" style="background:'+(tint || 'var(--panel,#fff)')+'">'
+      + '<div class="profile-card" style="background:#fff">'
       + (typeof cardStripe==='function' ? cardStripe(cols) : '')
       + '<div class="pc-name">'+esc(displayName)+'</div>'
       + '<div class="pc-bio">'+esc(bioText)+'</div>';
