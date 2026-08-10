@@ -1914,8 +1914,8 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
 <section id="wolf">
   <div class="card">
-    <h3>狼人殺 <span class="tag ok">發牌用</span></h3>
-    <p class="cond">網站只負責「不能被偷看的部分」：發身分牌、狼人互認、預言家查驗。討論、投票、開票請自己開語音，就像實體桌遊的牌堆一樣。</p>
+    <h3>狼人殺 <span class="tag ok">可選規則</span></h3>
+    <p class="cond">發身分、夜間刀人／女巫／查驗、白天投票與勝負判定都在系統裡；可選規則（女巫自救、毒死獵人能否開槍、平票處理）開局前選定。語音仍建議開著討論。</p>
     <div id="wolfBox" class="wolf-wrap"><p class="board-empty">載入中…</p></div>
   </div>
 </section>
@@ -8380,7 +8380,7 @@ function compositionScore(opts) {
   var BOARD_LOCALE = 'zh';
   var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
   var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
-  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功！審核通過後才能發言。請私訊 棉花棠（遊戲 ID 3728362）通過審核。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "pending": "你的帳號尚在審核中，通過後才能進入專版發言。", "rejected": "你的註冊未通過審核，如有疑問請聯絡站長。", "approve": "通過", "reject": "拒絕", "no_pending": "目前沒有待審核的註冊。", "locale": "zh-TW", "approve_note": "註冊後需經審核通過才能發言", "approve_how": "請私訊", "approve_who": "棉花棠", "approve_gid": "遊戲 ID 3728362", "approve_tail": "，管理員會盡快為你開通。", "unread": "新", "unread_toggle": "顯示未讀提醒", "unread_hint": "只記在這台裝置上，不會讓別人看到你讀了什麼", "gl_pub": "公開分享", "gl_mine": "我的創作", "gl_fav": "我的收藏", "gl_new": "新增", "gl_kind": "類型", "gl_palette": "色票", "gl_idea": "點子", "gl_title": "標題（選填）", "gl_colors": "色碼，用空白或逗號分隔，最多 8 個", "gl_body": "內容：角色設定、命名、任何想法", "gl_public": "公開分享，讓別人可以收藏", "gl_save": "儲存", "gl_saved": "已儲存", "gl_deleted": "已刪除", "gl_empty_pub": "還沒有人公開分享，來當第一個吧。", "gl_empty_mine": "還沒有存過東西。抽到喜歡的配色就存起來吧。", "gl_empty_fav": "還沒有收藏。看到喜歡的按愛心就會出現在這裡。", "gl_need_login": "請先登入才能儲存", "gl_need_colors": "請至少輸入一個色碼", "gl_need_body": "請輸入內容", "gl_bad_color": "色碼格式要像 #11997B", "gl_del": "刪除", "gl_publish": "公開", "gl_unpublish": "取消公開", "gl_private_tag": "未公開", "gl_confirm_del": "確定要刪除嗎？刪掉就找不回來了。", "gl_by": "by", "gl_favs": "收藏", "gl_copy": "複製色碼", "gl_copied": "已複製", "gl_save_swatch": "存到我的色票", "gl_from_room": "來自配色靈感房", "ntf_title": "新訊息通知", "ntf_badge": "分頁標題顯示未讀數", "ntf_desk": "瀏覽器通知", "ntf_sound": "提示音", "ntf_hint": "只在網站開著的時候有效——分頁丟在背景沒關係，完全關掉就收不到了。設定只記在這台裝置上。", "ntf_more": "這三個分別是什麼？", "ntf_m_badge": "分頁標題顯示未讀數：頁籤會變成「(3) purenistahub」，不會發出任何聲音或彈窗，最不打擾的一種。", "ntf_m_desk": "瀏覽器通知：跳系統通知。第一次勾選時瀏覽器會問你要不要允許，允許之後才會生效。", "ntf_m_sound": "提示音：一聲短音。勾起來的當下會先試聽，聽了不喜歡再取消就好。", "ntf_m_when": "你正在看留言板的時候不會提醒，切回分頁就自動清掉，自己發的訊息也不會通知自己。", "ntf_blocked": "瀏覽器通知被封鎖了，請到網址列旁的鎖頭圖示重新允許。", "ntf_new": "則新訊息", "ntf_from": "來自", "w_login": "請先登入才能開局或加入。", "w_pending": "帳號審核通過後才能玩。", "w_create": "開一局", "w_join": "加入", "w_code_ph": "輸入房號", "w_room": "房號", "w_host": "房主", "w_players": "玩家", "w_you": "你", "w_leave": "離開", "w_copy": "複製房號", "w_copied": "已複製", "w_cfg": "角色配置", "w_wolves": "狼人", "w_seer": "預言家", "w_witch": "女巫", "w_hunter": "獵人", "w_deal": "發牌開始", "w_dealt": "已發牌", "w_myrole": "你的身分", "w_mates": "你的狼同伴", "w_alone": "這局只有你一隻狼", "w_norole": "還沒發牌", "w_check": "查驗", "w_check_who": "今晚要查誰？", "w_result": "查驗結果", "w_is_wolf": "是狼人", "w_is_good": "是好人", "w_checked": "查過了", "w_round": "第 {n} 晚", "w_next": "進入下一晚", "w_out": "標記出局", "w_back": "標記存活", "w_dead": "出局", "w_end": "結束並公開身分", "w_ended": "這局已結束", "w_reveal": "身分表", "w_confirm_end": "確定結束？結束後所有人的身分都會公開。", "w_confirm_deal": "確定發牌？發下去就不能改配置了。", "w_hosthint": "你是房主：發牌、標記出局、推進回合、結束都由你操作。", "w_voicehint": "記得先開語音。網站不會主持流程，也不會計時。", "w_min": "至少要 4 個人才能發牌。", "role_wolf": "狼人", "role_seer": "預言家", "role_witch": "女巫", "role_hunter": "獵人", "role_villager": "平民", "w_night": "狼人頻道", "w_night_ph": "只有狼人看得到…", "w_send": "送出", "w_night_hint": "只有狼人看得到。出局後只能看，不能發言。遊戲結束後全桌都會看到這段對話。", "w_night_empty": "還沒有人說話。", "w_night_dead": "你已經出局了，只能看。", "w_night_after": "夜間對話（復盤）"};
+  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功！審核通過後才能發言。請私訊 棉花棠（遊戲 ID 3728362）通過審核。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "pending": "你的帳號尚在審核中，通過後才能進入專版發言。", "rejected": "你的註冊未通過審核，如有疑問請聯絡站長。", "approve": "通過", "reject": "拒絕", "no_pending": "目前沒有待審核的註冊。", "locale": "zh-TW", "approve_note": "註冊後需經審核通過才能發言", "approve_how": "請私訊", "approve_who": "棉花棠", "approve_gid": "遊戲 ID 3728362", "approve_tail": "，管理員會盡快為你開通。", "unread": "新", "unread_toggle": "顯示未讀提醒", "unread_hint": "只記在這台裝置上，不會讓別人看到你讀了什麼", "gl_pub": "公開分享", "gl_mine": "我的創作", "gl_fav": "我的收藏", "gl_new": "新增", "gl_kind": "類型", "gl_palette": "色票", "gl_idea": "點子", "gl_title": "標題（選填）", "gl_colors": "色碼，用空白或逗號分隔，最多 8 個", "gl_body": "內容：角色設定、命名、任何想法", "gl_public": "公開分享，讓別人可以收藏", "gl_save": "儲存", "gl_saved": "已儲存", "gl_deleted": "已刪除", "gl_empty_pub": "還沒有人公開分享，來當第一個吧。", "gl_empty_mine": "還沒有存過東西。抽到喜歡的配色就存起來吧。", "gl_empty_fav": "還沒有收藏。看到喜歡的按愛心就會出現在這裡。", "gl_need_login": "請先登入才能儲存", "gl_need_colors": "請至少輸入一個色碼", "gl_need_body": "請輸入內容", "gl_bad_color": "色碼格式要像 #11997B", "gl_del": "刪除", "gl_publish": "公開", "gl_unpublish": "取消公開", "gl_private_tag": "未公開", "gl_confirm_del": "確定要刪除嗎？刪掉就找不回來了。", "gl_by": "by", "gl_favs": "收藏", "gl_copy": "複製色碼", "gl_copied": "已複製", "gl_save_swatch": "存到我的色票", "gl_from_room": "來自配色靈感房", "ntf_title": "新訊息通知", "ntf_badge": "分頁標題顯示未讀數", "ntf_desk": "瀏覽器通知", "ntf_sound": "提示音", "ntf_hint": "只在網站開著的時候有效——分頁丟在背景沒關係，完全關掉就收不到了。設定只記在這台裝置上。", "ntf_more": "這三個分別是什麼？", "ntf_m_badge": "分頁標題顯示未讀數：頁籤會變成「(3) purenistahub」，不會發出任何聲音或彈窗，最不打擾的一種。", "ntf_m_desk": "瀏覽器通知：跳系統通知。第一次勾選時瀏覽器會問你要不要允許，允許之後才會生效。", "ntf_m_sound": "提示音：一聲短音。勾起來的當下會先試聽，聽了不喜歡再取消就好。", "ntf_m_when": "你正在看留言板的時候不會提醒，切回分頁就自動清掉，自己發的訊息也不會通知自己。", "ntf_blocked": "瀏覽器通知被封鎖了，請到網址列旁的鎖頭圖示重新允許。", "ntf_new": "則新訊息", "ntf_from": "來自", "w_login": "請先登入才能開局或加入。", "w_pending": "帳號審核通過後才能玩。", "w_create": "開一局", "w_join": "加入", "w_code_ph": "輸入房號", "w_room": "房號", "w_host": "房主", "w_players": "玩家", "w_you": "你", "w_leave": "離開", "w_copy": "複製房號", "w_copied": "已複製", "w_cfg": "角色配置", "w_wolves": "狼人", "w_seer": "預言家", "w_witch": "女巫", "w_hunter": "獵人", "w_deal": "發牌開始", "w_dealt": "已發牌", "w_myrole": "你的身分", "w_mates": "你的狼同伴", "w_alone": "這局只有你一隻狼", "w_norole": "還沒發牌", "w_check": "查驗", "w_check_who": "今晚要查誰？", "w_result": "查驗結果", "w_is_wolf": "是狼人", "w_is_good": "是好人", "w_checked": "查過了", "w_round": "第 {n} 晚", "w_next": "進入下一晚", "w_out": "標記出局", "w_back": "標記存活", "w_dead": "出局", "w_end": "結束並公開身分", "w_ended": "這局已結束", "w_reveal": "身分表", "w_confirm_end": "確定結束？結束後所有人的身分都會公開。", "w_confirm_deal": "確定發牌？發下去就不能改配置了。", "w_hosthint": "你是房主：發牌、結算夜晚／開票、結束。出局由系統結算。", "w_voicehint": "記得先開語音。網站不會主持流程，也不會計時。", "w_rules": "可選規則（開局前選定）", "w_rule_self": "女巫可自救", "w_rule_poison_shot": "被毒死的獵人仍可開槍", "w_rule_tie": "白天平票", "w_tie_revote": "重投", "w_tie_none": "無人出局", "w_tie_random": "隨機一人出局", "w_phase_night": "夜晚", "w_phase_day": "白天投票", "w_kill_vote": "投票刀人", "w_kill_submit": "確認刀他", "w_witch_save": "使用解藥（救今晚被刀的人）", "w_witch_poison": "使用毒藥", "w_poison_go": "確認毒他", "w_resolve_night": "結算夜晚→天亮", "w_day_vote": "投票放逐", "w_vote_go": "投他", "w_abstain": "棄票", "w_resolve_day": "開票", "w_waiting": "還在等 {n} 人", "w_waiting_wolves": "還在等 {n} 隻狼投票", "w_waiting_voters": "還在等 {n} 人投票", "w_summary": "公告", "w_win_wolf": "狼人獲勝", "w_win_good": "好人獲勝", "w_hunter_shot": "獵人開槍帶走", "w_shot_go": "帶走他", "w_no_manual": "出局由系統結算，房主不用手動標記。", "w_tag": "可選規則", "w_min": "至少要 4 個人才能發牌。", "role_wolf": "狼人", "role_seer": "預言家", "role_witch": "女巫", "role_hunter": "獵人", "role_villager": "平民", "w_night": "狼人頻道", "w_night_ph": "只有狼人看得到…", "w_send": "送出", "w_night_hint": "只有狼人看得到。出局後只能看，不能發言。遊戲結束後全桌都會看到這段對話。", "w_night_empty": "還沒有人說話。", "w_night_dead": "你已經出局了，只能看。", "w_night_after": "夜間對話（復盤）"};
   if(!window.supabase){
     var list = document.getElementById('boardCardList');
     if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
@@ -9891,7 +9891,7 @@ function compositionScore(opts) {
      wolf_players.role 這一欄沒有對任何人開放 select 權限，所以就算有人
      打開開發者工具直接查資料庫，也拿不到別人的牌；能拿到的只有
      wolf_my_role() 願意回給他的東西。 */
-  var wf = { game:null, players:[], me:null, mates:[], checks:[], night:[], busy:false, timer:null };
+  var wf = { game:null, players:[], me:null, mates:[], checks:[], night:[], waiting:[], busy:false, timer:null };
 
   function wfRoleName(r){ return T['role_'+r] || r; }
 
@@ -9923,6 +9923,10 @@ function compositionScore(opts) {
       if(wf.game.status === 'ended'){
         wf.reveal = (await wfRpc('wolf_reveal', { p_game: wf.game.id })) || [];
       }
+      try{
+        var w = await wfRpc('wolf_waiting', { p_game: wf.game.id });
+        wf.waiting = w || [];
+      }catch(e){ wf.waiting = []; }
       var nm = await sb.from('wolf_msgs')
         .select('id,user_id,round,body,created_at, profiles:user_id(display_name)')
         .eq('game_id', wf.game.id).order('id').limit(200);
@@ -9962,6 +9966,16 @@ function compositionScore(opts) {
         +   '<label><input type="checkbox" id="wfSeer" checked /> '+esc(T.w_seer)+'</label>'
         +   '<label><input type="checkbox" id="wfWitch" /> '+esc(T.w_witch)+'</label>'
         +   '<label><input type="checkbox" id="wfHunter" /> '+esc(T.w_hunter)+'</label>'
+        + '</div>'
+        + '<div class="wolf-cfg">'
+        +   '<span class="wolf-note">'+esc(T.w_rules)+'</span>'
+        +   '<label><input type="checkbox" id="wfRuleSelf" /> '+esc(T.w_rule_self)+'</label>'
+        +   '<label><input type="checkbox" id="wfRulePoisonShot" /> '+esc(T.w_rule_poison_shot)+'</label>'
+        +   '<label>'+esc(T.w_rule_tie)+' <select id="wfRuleTie">'
+        +     '<option value="revote">'+esc(T.w_tie_revote)+'</option>'
+        +     '<option value="none">'+esc(T.w_tie_none)+'</option>'
+        +     '<option value="random">'+esc(T.w_tie_random)+'</option>'
+        +   '</select></label>'
         + '</div>'
         + '<div><button type="button" class="wf-go" data-wf="deal">'+esc(T.w_deal)+'</button></div>'
         + '<p class="wolf-note">'+esc(T.w_hosthint)+'</p>';
@@ -10017,22 +10031,105 @@ function compositionScore(opts) {
   }
 
   function wfPlayingHTML(){
+    var phase = wf.game.phase || 'night';
     var h = '<div class="wolf-code"><span class="wolf-note">'+esc(T.w_room)+'</span>'
           + '<b>'+esc(wf.game.code)+'</b>'
-          + '<span class="wolf-note">'+esc(T.w_round.replace('{n}', wf.game.round))+'</span></div>'
-      + wfRoleCardHTML()
-      + wfNightHTML()
-      + wfSeerHTML()
-      + '<div class="wolf-seats">'+wf.players.map(wfSeatHTML).join('')+'</div>';
+          + '<span class="wolf-note">'+esc(T.w_round.replace('{n}', wf.game.round))+'</span>'
+          + '<span class="wolf-note">'+(phase==='day'?esc(T.w_phase_day):esc(T.w_phase_night))+'</span></div>';
+    if(wf.game.win_side){
+      h += '<div class="wolf-card"><div class="wc-role">'
+        + esc(wf.game.win_side==='wolf'?T.w_win_wolf:T.w_win_good)+'</div></div>';
+    }
+    if(wf.game.last_night_summary){
+      h += '<p class="wolf-note"><b>'+esc(T.w_summary)+'</b> '+esc(wf.game.last_night_summary)+'</p>';
+    }
+    if(wf.game.last_day_summary){
+      h += '<p class="wolf-note"><b>'+esc(T.w_summary)+'</b> '+esc(wf.game.last_day_summary)+'</p>';
+    }
+    if(wf.waiting && wf.waiting.length){
+      h += wf.waiting.map(function(w){
+        var msg = w.kind==='wolves' ? T.w_waiting_wolves : T.w_waiting_voters;
+        return '<p class="wolf-note">'+esc(msg.replace('{n}', w.left_count))+'</p>';
+      }).join('');
+    }
+    h += wfRoleCardHTML();
+    h += wfNightHTML();
+    h += wfSeerHTML();
+    h += wfNightActHTML();
+    h += wfDayVoteHTML();
+    h += wfHunterHTML();
+    h += '<div class="wolf-seats">'+wf.players.map(wfSeatHTML).join('')+'</div>';
     if(wfIsHost()){
-      h += '<div class="wolf-join">'
-        +  '<button type="button" class="ghost" data-wf="next">'+esc(T.w_next)+'</button>'
-        +  '<button type="button" class="ghost" data-wf="end">'+esc(T.w_end)+'</button></div>';
+      h += '<div class="wolf-join">';
+      if(phase==='night'){
+        h += '<button type="button" class="wf-go" data-wf="resNight">'+esc(T.w_resolve_night)+'</button>';
+      }
+      if(phase==='day'){
+        h += '<button type="button" class="wf-go" data-wf="resDay">'+esc(T.w_resolve_day)+'</button>';
+      }
+      h += '<button type="button" class="ghost" data-wf="end">'+esc(T.w_end)+'</button></div>';
+      h += '<p class="wolf-note">'+esc(T.w_no_manual)+'</p>';
     }
     return h;
   }
 
-  function wfEndedHTML(){
+  function wfAliveOpts(excludeSelf){
+    return wfAlive().filter(function(p){
+      return !(excludeSelf && state.user && p.user_id === state.user.id);
+    }).map(function(p){
+      var nm = (p.profiles && p.profiles.display_name) || T.user;
+      return '<option value="'+p.user_id+'">'+esc(nm)+'</option>';
+    }).join('');
+  }
+
+  function wfNightActHTML(){
+    if((wf.game.phase||'') !== 'night') return '';
+    var h = '';
+    if(wf.me === 'wolf'){
+      h += '<div class="wolf-card"><div class="wc-lab">'+esc(T.w_kill_vote)+'</div>'
+        + '<div class="wolf-join"><select id="wfKillTarget">'+wfAliveOpts(true)+'</select>'
+        + '<button type="button" data-wf="killVote">'+esc(T.w_kill_submit)+'</button></div></div>';
+    }
+    if(wf.me === 'witch'){
+      h += '<div class="wolf-card"><div class="wc-lab">'+esc(T.w_witch)+'</div>';
+      if(wf.game.witch_save_left){
+        h += '<button type="button" data-wf="witchSave">'+esc(T.w_witch_save)+'</button> ';
+      }
+      if(wf.game.witch_poison_left){
+        h += '<div class="wolf-join" style="margin-top:8px"><select id="wfPoisonTarget">'+wfAliveOpts(true)+'</select>'
+          + '<button type="button" data-wf="witchPoison">'+esc(T.w_poison_go)+'</button></div>';
+      }
+      h += '</div>';
+    }
+    return h;
+  }
+
+  function wfDayVoteHTML(){
+    if((wf.game.phase||'') !== 'day') return '';
+    var meAlive = false;
+    for(var i=0;i<wf.players.length;i++){
+      if(state.user && wf.players[i].user_id===state.user.id) meAlive = wf.players[i].alive;
+    }
+    if(!meAlive) return '';
+    return '<div class="wolf-card"><div class="wc-lab">'+esc(T.w_day_vote)+'</div>'
+      + '<div class="wolf-join"><select id="wfDayTarget"><option value="">'+esc(T.w_abstain)+'</option>'
+      + wfAliveOpts(true)+'</select>'
+      + '<button type="button" data-wf="dayVote">'+esc(T.w_vote_go)+'</button></div></div>';
+  }
+
+  function wfHunterHTML(){
+    if(wf.me !== 'hunter') return '';
+    var meAlive = true;
+    for(var i=0;i<wf.players.length;i++){
+      if(state.user && wf.players[i].user_id===state.user.id) meAlive = wf.players[i].alive;
+    }
+    if(meAlive) return '';
+    return '<div class="wolf-card"><div class="wc-lab">'+esc(T.w_hunter_shot)+'</div>'
+      + '<div class="wolf-join"><select id="wfShotTarget">'+wfAliveOpts(true)+'</select>'
+      + '<button type="button" data-wf="hunterShot">'+esc(T.w_shot_go)+'</button></div></div>';
+  }
+
+function wfEndedHTML(){
     var rows = (wf.reveal || []).map(function(r){
       return '<div class="wolf-seat'+(r.alive?'':' dead')+'"><span class="ws-n">'+(r.seat||'')+'</span>'
         + '<span>'+esc(r.name || T.user)+'</span>'
@@ -10122,7 +10219,10 @@ function compositionScore(opts) {
           p_wolves: parseInt((($('wfWolves')||{}).value||'1'), 10) || 1,
           p_seer: !!(($('wfSeer')||{}).checked),
           p_witch: !!(($('wfWitch')||{}).checked),
-          p_hunter: !!(($('wfHunter')||{}).checked)
+          p_hunter: !!(($('wfHunter')||{}).checked),
+          p_witch_self_save: !!(($('wfRuleSelf')||{}).checked),
+          p_hunter_poison_shoot: !!(($('wfRulePoisonShot')||{}).checked),
+          p_day_tie: (($('wfRuleTie')||{}).value||'revote')
         });
         if(ok !== null) await wfLoad();
       }else if(act === 'check'){
@@ -10149,6 +10249,36 @@ function compositionScore(opts) {
         await wfLoad();
       }else if(act === 'next'){
         await wfRpc('wolf_next_round', { p_game: wf.game.id });
+        await wfLoad();
+      }else if(act === 'killVote'){
+        var t = (($('wfKillTarget')||{}).value||'');
+        if(t) await wfRpc('wolf_night_kill_vote', { p_game: wf.game.id, p_target: t });
+        await wfLoad();
+      }else if(act === 'witchSave'){
+        await wfRpc('wolf_witch_save', { p_game: wf.game.id });
+        await wfLoad();
+      }else if(act === 'witchPoison'){
+        var t = (($('wfPoisonTarget')||{}).value||'');
+        if(t) await wfRpc('wolf_witch_poison', { p_game: wf.game.id, p_target: t });
+        await wfLoad();
+      }else if(act === 'resNight'){
+        var s = await wfRpc('wolf_resolve_night', { p_game: wf.game.id });
+        if(s) alert(s);
+        await wfLoad();
+      }else if(act === 'dayVote'){
+        var t = (($('wfDayTarget')||{}).value||'');
+        await wfRpc('wolf_day_vote', { p_game: wf.game.id, p_target: t || null });
+        await wfLoad();
+      }else if(act === 'resDay'){
+        var s = await wfRpc('wolf_resolve_day', { p_game: wf.game.id });
+        if(s) alert(s);
+        await wfLoad();
+      }else if(act === 'hunterShot'){
+        var t = (($('wfShotTarget')||{}).value||'');
+        if(t){
+          var s = await wfRpc('wolf_hunter_shot', { p_game: wf.game.id, p_target: t });
+          if(s) alert(s);
+        }
         await wfLoad();
       }else if(act === 'end'){
         if(!confirm(T.w_confirm_end)) return;
