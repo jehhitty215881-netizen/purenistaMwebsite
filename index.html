@@ -943,6 +943,37 @@ body.card-open{overflow:hidden}
 .board-theme-grid button{border:1.5px solid var(--line);background:var(--panel);border-radius:12px;padding:10px 8px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center}
 .board-theme-grid button.on{border-color:var(--violet);background:var(--violet-soft);color:var(--violet)}
 
+
+/* ===== 名片華麗框 v3：穩定版面 ===== */
+#boardCardBox{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(20,16,32,.55);backdrop-filter:blur(4px)}
+#boardCardBox[hidden]{display:none!important}
+#boardCardBox .pc-shell{width:min(92vw,300px);background:transparent;box-shadow:none;overflow:visible}
+.pc-stage{position:relative;width:100%;padding:36px 28px 32px;border-radius:18px;box-sizing:border-box}
+.pc-stage .profile-card{position:relative;z-index:2;margin:0;border:none;border-radius:14px;padding:16px 14px;background:rgba(255,255,255,.95)!important;box-shadow:0 6px 24px rgba(0,0,0,.18)}
+.pc-stage .pc-corner{position:absolute;z-index:3;pointer-events:none;width:56px;height:56px}
+.pc-stage .pc-corner svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 6px rgba(255,200,255,.55))}
+.pc-stage .c-tl{left:2px;top:2px}
+.pc-stage .c-tr{right:2px;top:2px}
+.pc-stage .c-bl{left:2px;bottom:2px}
+.pc-stage .c-br{right:2px;bottom:8px}
+.pc-stage .pc-sparkles{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;border-radius:18px}
+.pc-stage .pc-sparkles i{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;box-shadow:0 0 6px #fff;animation:pcTwinkle 2s ease-in-out infinite}
+@keyframes pcTwinkle{0%,100%{opacity:.25;transform:scale(.6)}50%{opacity:1;transform:scale(1.3)}}
+@keyframes pcWing{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.58)}}
+.pc-stage .pc-wing{transform-origin:center;animation:pcWing 1.1s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){.pc-stage .pc-sparkles i,.pc-stage .pc-wing{animation:none!important}}
+
+/* 主題底與邊 */
+.pc-stage.th-violet_butterfly{background:linear-gradient(160deg,#1a1035,#2a1850 40%,#120c28);box-shadow:0 0 0 2px #b49cff,0 0 0 5px rgba(140,100,255,.35),0 0 28px rgba(140,100,255,.35)}
+.pc-stage.th-pink_rose{background:linear-gradient(160deg,#2a1018,#401028 45%,#1a0810);box-shadow:0 0 0 2px #ff9ec8,0 0 0 5px rgba(255,120,180,.35),0 0 28px rgba(255,100,160,.3)}
+.pc-stage.th-crystal_white{background:linear-gradient(160deg,#101828,#1a2848 45%,#0c1220);box-shadow:0 0 0 2px #d0e4ff,0 0 0 5px rgba(180,210,255,.35),0 0 28px rgba(160,200,255,.3)}
+.pc-stage.th-silver_bloom{background:linear-gradient(160deg,#18141f,#2a2435 45%,#100e16);box-shadow:0 0 0 2px #e8e0f0,0 0 0 5px rgba(220,210,240,.3),0 0 28px rgba(200,190,230,.28)}
+
+.board-theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.board-theme-grid button{border:1.5px solid var(--line);background:var(--panel);border-radius:12px;padding:10px 8px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
+.board-theme-grid button.on{border-color:var(--violet);background:var(--violet-soft);color:var(--violet)}
+#boardCardPreview .pc-stage{transform:scale(.92);transform-origin:top center}
+
 </style>
 </head>
 <body>
@@ -10851,69 +10882,53 @@ function wfEndedHTML(){
 
   
   /* ===== 華麗名片框：整框 SVG，不靠容易壞的 class 拼接 ===== */
-  function cardThemeSVG(theme){
-    if(!theme || theme === 'none') return '';
-    /* 外框 200x260 視區，內容區約 inset 18 */
-    var sparkles = '';
-    for(var i=0;i<12;i++){
-      var x = 20 + (i*14)%160, y = 18 + (i*23)%220;
-      sparkles += '<circle class="orn-spark" cx="'+x+'" cy="'+y+'" r="'+(0.8+i%2)+'" fill="#fff" opacity=".7"/>';
+  
+  function svgFlower(c1, c2){
+    var p = '';
+    for(var i=0;i<6;i++){
+      p += '<ellipse cx="12" cy="4.8" rx="3.2" ry="5.2" fill="'+c1+'" transform="rotate('+(i*60)+' 12 12)"/>';
     }
-    if(theme === 'violet_butterfly'){
-      return '<svg class="orn-frame" viewBox="0 0 200 260" aria-hidden="true">'
-        + '<defs><linearGradient id="vb1" x1="0" y1="0" x2="1" y2="1">'
-        + '<stop offset="0%" stop-color="#7B6BFF"/><stop offset="100%" stop-color="#E4A6FF"/></linearGradient>'
-        + '<linearGradient id="vb2" x1="0" y1="1" x2="1" y2="0">'
-        + '<stop offset="0%" stop-color="#2a1848"/><stop offset="100%" stop-color="#1a1030"/></linearGradient></defs>'
-        + '<rect x="8" y="8" width="184" height="244" rx="14" fill="url(#vb2)" stroke="url(#vb1)" stroke-width="2.5"/>'
-        + '<rect x="16" y="16" width="168" height="228" rx="10" fill="none" stroke="#c9a0ff" stroke-width="1" opacity=".5"/>'
-        + sparkles
-        + '<g transform="translate(8,12) scale(1.1)">'+svgButterfly('#9B8CFF','#FFB8F0').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '<g transform="translate(150,200) scale(0.9)">'+svgButterfly('#E4A6FF','#9EE7FF').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '<g transform="translate(150,16) scale(0.55)">'+svgFlower('#E4A6FF','#fff').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '<g transform="translate(12,200) scale(0.55)">'+svgFlower('#B8A0FF','#fff').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '</svg>';
-    }
-    if(theme === 'pink_rose'){
-      return '<svg class="orn-frame" viewBox="0 0 200 260" aria-hidden="true">'
-        + '<defs><linearGradient id="pr1" x1="0" y1="0" x2="0" y2="1">'
-        + '<stop offset="0%" stop-color="#FFD0E8"/><stop offset="100%" stop-color="#2a1020"/></linearGradient></defs>'
-        + '<rect x="6" y="6" width="188" height="248" rx="12" fill="#1a0810" stroke="#FF9EC8" stroke-width="3"/>'
-        + '<rect x="14" y="14" width="172" height="232" rx="8" fill="none" stroke="#FFB8D8" stroke-width="1.2" opacity=".6"/>'
-        + sparkles
-        + '<g transform="translate(6,6) scale(0.7)">'+svgFlower('#FF8CB8','#FFE0F0').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '<g transform="translate(160,6) scale(0.65)">'+svgFlower('#FF6AA0','#fff').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '<g transform="translate(6,210) scale(0.75)">'+svgFlower('#FF9EC8','#fff').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '<g transform="translate(150,205) scale(0.8)">'+svgFlower('#FFB8D8','#FF6AA0').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '<path d="M40 20 Q100 40 160 20" fill="none" stroke="#FFD0E8" stroke-width="1" opacity=".5"/>'
-        + '</svg>';
-    }
-    if(theme === 'crystal_white'){
-      return '<svg class="orn-frame" viewBox="0 0 200 260" aria-hidden="true">'
-        + '<rect x="8" y="8" width="184" height="244" rx="12" fill="#0e1220" stroke="#E8F0FF" stroke-width="2.5"/>'
-        + '<rect x="16" y="16" width="168" height="228" rx="8" fill="none" stroke="#B8D0FF" stroke-width="1" opacity=".55"/>'
-        + sparkles
-        + '<g transform="translate(10,190) scale(0.85)">'+svgButterfly('#B8D4FF','#fff').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '<g transform="translate(145,18) scale(0.7)">'+svgButterfly('#E0ECFF','#C0D8FF').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '<g transform="translate(8,10) scale(0.55)">'+svgFlower('#F0F4FF','#C8D8FF').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '<g transform="translate(155,200) scale(0.55)">'+svgFlower('#fff','#B0C8FF').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '</svg>';
-    }
-    if(theme === 'silver_bloom'){
-      return '<svg class="orn-frame" viewBox="0 0 200 260" aria-hidden="true">'
-        + '<rect x="8" y="8" width="184" height="244" rx="14" fill="#121018" stroke="#E8E0F0" stroke-width="2.8"/>'
-        + '<rect x="16" y="16" width="168" height="228" rx="10" fill="none" stroke="#D0C8E0" stroke-width="1" opacity=".5"/>'
-        + sparkles
-        + '<g transform="translate(6,8) scale(0.65)">'+svgFlower('#F5EEFF','#D8D0E8').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '<g transform="translate(155,8) scale(0.6)">'+svgFlower('#fff','#E0D8F0').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '<g transform="translate(6,200) scale(0.7)">'+svgFlower('#F0E8F8','#C8C0D8').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '<g transform="translate(148,195) scale(0.75)">'+svgButterfly('#F0E8FF','#fff').replace(/<svg[^>]*>/,'').replace('</svg>','')+'</g>'
-        + '</svg>';
-    }
-    return '';
+    return '<svg viewBox="0 0 24 24" aria-hidden="true">'+p+'<circle cx="12" cy="12" r="3" fill="'+c2+'"/></svg>';
   }
-
-  function showCardHTML(p){
+  function svgButterfly(c1, c2){
+    return '<svg viewBox="0 0 28 24" aria-hidden="true">'
+      + '<g class="pc-wing">'
+      + '<path d="M14 12C10 2 1.5 2.5 2 9c.4 4.2 5.5 5.8 12 3z" fill="'+c1+'"/>'
+      + '<path d="M14 12C18 2 26.5 2.5 26 9c-.4 4.2-5.5 5.8-12 3z" fill="'+c1+'"/>'
+      + '<path d="M14 12c-3.2 8.5-10 9-10 4.2 0-3.4 4.2-5 10-4.2z" fill="'+c2+'"/>'
+      + '<path d="M14 12c3.2 8.5 10 9 10 4.2 0-3.4-4.2-5-10-4.2z" fill="'+c2+'"/>'
+      + '</g>'
+      + '<ellipse cx="14" cy="12" rx="1.1" ry="6" fill="#1a1228"/>'
+      + '</svg>';
+  }
+  function themeSparkles(){
+    var h = '';
+    for(var i=0;i<14;i++){
+      h += '<i style="left:'+(8+(i*17)%84)+'%;top:'+(10+(i*19)%80)+'%;animation-delay:'+(i*.15)+'s"></i>';
+    }
+    return '<div class="pc-sparkles">'+h+'</div>';
+  }
+  function themeCorners(theme){
+    var a,b,c,d;
+    if(theme==='violet_butterfly'){
+      a=svgButterfly('#B8A0FF','#FFB8F0'); b=svgFlower('#E4A6FF','#fff');
+      c=svgFlower('#9B8CFF','#E4A6FF'); d=svgButterfly('#E4A6FF','#9EE7FF');
+    }else if(theme==='pink_rose'){
+      a=svgFlower('#FF8CB8','#FFE0F0'); b=svgFlower('#FF6AA0','#fff');
+      c=svgFlower('#FFB8D8','#FF8CB8'); d=svgFlower('#FF9EC8','#fff');
+    }else if(theme==='crystal_white'){
+      a=svgButterfly('#C8DCFF','#fff'); b=svgFlower('#F0F4FF','#B8D0FF');
+      c=svgFlower('#E8F0FF','#fff'); d=svgButterfly('#E0ECFF','#A8C8FF');
+    }else if(theme==='silver_bloom'){
+      a=svgFlower('#F5EEFF','#D8D0E8'); b=svgButterfly('#F0E8FF','#fff');
+      c=svgButterfly('#E8E0F0','#D0C8E0'); d=svgFlower('#fff','#C8C0D8');
+    }else return '';
+    return '<span class="pc-corner c-tl">'+a+'</span>'
+      + '<span class="pc-corner c-tr">'+b+'</span>'
+      + '<span class="pc-corner c-bl">'+c+'</span>'
+      + '<span class="pc-corner c-br">'+d+'</span>';
+  }
+  function showCardHTML(p, isPreview){
     var mine = state.user && state.user.id === p.id;
     var open = p.is_public_card !== false;
     var body = (open || mine || isAdmin())
@@ -10921,28 +10936,24 @@ function wfEndedHTML(){
       : '<div class="pc-bio">'+esc(T.card_hidden||'')+'</div>';
     var cols = (p.card_colors || []).filter(function(c){ return /^#[0-9A-Fa-f]{6}$/.test(c); });
     var theme = p.card_theme || 'none';
-    /* 若選了舊版 frame/motif 但沒 theme，仍顯示 motif */
-    var motif = p.card_motif || 'none';
-    var frame = p.card_frame || 'none';
-    var tint = cardTint(cols);
-    var frameSvg = cardThemeSVG(theme);
-    var deco = theme === 'none' ? cardDecoHTML(motif, cols) : '';
-    var wrapExtra = (theme === 'none' && frame !== 'none') ? (' f-'+frame) : '';
-    return '<div class="pc-shell">'
-      + '<div class="pc-ornament'+(theme !== 'none' ? ' th-'+theme : '')+'">'
-      + frameSvg
-      + '<div class="pc-wrap'+wrapExtra+'"'+cardFrameStyle(frame, cols)+'>'
-      + deco
-      + '<div class="profile-card"'+(tint ? ' style="background:'+tint+'"' : '')+'>'
-      + cardStripe(cols)
-      + '<div class="pc-name">'+esc(p.display_name || T.user)
-      +   (p.game_id ? ' <span class="bm-meta">'+esc(p.game_id)+'</span>' : '')
-      +   (p.role === 'admin' ? ' <span class="bc-tag">'+esc(T.admin||'Admin')+'</span>' : '')
-      + '</div>'
-      + body
-      + '<div class="board-actions" style="margin-top:8px">'
-      +   '<button type="button" id="boardCardClose" class="back">'+esc(T.close||'Close')+'</button>'
-      + '</div></div></div></div></div>';
+    var tint = (typeof cardTint==='function') ? cardTint(cols) : '';
+    var stageCls = 'pc-stage'+(theme!=='none' ? ' th-'+theme : '');
+    var h = '<div class="pc-shell"><div class="'+stageCls+'">';
+    if(theme!=='none'){
+      h += themeSparkles() + themeCorners(theme);
+    }
+    h += '<div class="profile-card"'+(tint ? ' style="background:'+tint+'"' : '')+'>';
+    if(typeof cardStripe==='function') h += cardStripe(cols);
+    h += '<div class="pc-name">'+esc(p.display_name || T.user)
+      + (p.game_id ? ' <span class="bm-meta">'+esc(p.game_id)+'</span>' : '')
+      + (p.role==='admin' ? ' <span class="bc-tag">'+esc(T.admin||'Admin')+'</span>' : '')
+      + '</div>' + body;
+    if(!isPreview){
+      h += '<div class="board-actions" style="margin-top:8px">'
+        + '<button type="button" id="boardCardClose" class="back">'+esc(T.close||'Close')+'</button></div>';
+    }
+    h += '</div></div></div>';
+    return h;
   }
 
   async function showCard(uid){
@@ -10965,28 +10976,7 @@ function wfEndedHTML(){
       return;
     }
     var p = res.data;
-    var mine = state.user && state.user.id === p.id;
-    var open = p.is_public_card !== false;
-    var body = (open || mine || isAdmin())
-      ? (p.bio ? '<div class="pc-bio">'+esc(p.bio)+'</div>' : '<div class="pc-bio">'+esc(T.card_none)+'</div>')
-      : '<div class="pc-bio">'+esc(T.card_hidden)+'</div>';
-    var cols = (p.card_colors || []).filter(function(c){ return /^#[0-9A-Fa-f]{6}$/.test(c); });
-    var tint = cardTint(cols);
-    var frame = p.card_frame || 'none';
-    var motif = p.card_motif || 'none';
-    box.innerHTML = '<div class="pc-shell">'
-      + '<div class="pc-wrap'+(frame && frame !== 'none' ? ' f-'+frame : '')+'"'+cardFrameStyle(frame, cols)+'>'
-      + cardDecoHTML(motif, cols)
-      + '<div class="profile-card"'+(tint ? ' style="background:'+tint+'"' : '')+'>'
-      + cardStripe(cols)
-      + '<div class="pc-name">'+esc(p.display_name || T.user)
-      +   (p.game_id ? ' <span class="bm-meta">'+esc(p.game_id)+'</span>' : '')
-      +   (p.role === 'admin' ? ' <span class="bc-tag">'+esc(T.admin)+'</span>' : '')
-      + '</div>'
-      + body
-      + '<div class="board-actions" style="margin-top:8px">'
-      +   '<button type="button" id="boardCardClose" class="back">'+esc(T.close)+'</button>'
-      + '</div></div></div></div>';
+    box.innerHTML = showCardHTML(p);
     bindCardClose();
   }
 
@@ -11131,10 +11121,7 @@ function wfEndedHTML(){
       if(typeof previewCardDeco==='function'){
         /* 預覽主題 */
         var el=$('boardCardPreview'); if(!el) return;
-        el.innerHTML = showCardHTML({display_name:'預覽',game_id:'',bio:'',role:'user',
-          card_colors:parseColors((($('boardCardColors')||{}).value)||''), card_theme:v,
-          card_frame:'none',card_motif:'none',is_public_card:true});
-        var cl=el.querySelector('#boardCardClose'); if(cl) cl.remove();
+        el.innerHTML = showCardHTML({display_name:'Preview',game_id:'',bio:'',role:'user',card_colors:parseColors((($('boardCardColors')||{}).value)||''), card_theme:v,card_frame:'none',card_motif:'none',is_public_card:true}, true);
       }
     });
     var cardBox=$('boardCardBox');
