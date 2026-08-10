@@ -1202,6 +1202,51 @@ body.card-open{overflow:hidden}
 #boardCardPreview .pc-shell-frame{width:100%;max-width:380px}
 #boardCardPreview .pc-glass .board-actions{display:none}
 
+
+/* 中間資訊區縮小：不蓋住花邊、色票不被裁 */
+.pc-shell-frame{
+  position:relative;width:min(94vw,440px);aspect-ratio:1176/784;margin:0 auto;
+  background:#fff;border-radius:12px;overflow:hidden;
+  box-shadow:0 12px 36px rgba(42,33,56,.2);
+}
+.pc-frame-img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:fill;
+  pointer-events:none;z-index:1;
+}
+.pc-frame-content{
+  position:absolute;left:0;right:0;top:0;bottom:0;
+  z-index:2;display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+}
+.pc-glass{
+  pointer-events:auto;
+  width:auto;max-width:58%;
+  height:auto !important;
+  text-align:center;
+  padding:10px 14px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.92) !important;
+  border:1px solid rgba(120,90,140,.1);
+  box-shadow:0 2px 12px rgba(42,33,56,.08);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-sizing:border-box;
+}
+.pc-glass .pc-stripe{justify-content:center;margin:0 auto 6px;display:flex;gap:4px;flex-shrink:0}
+.pc-glass .pc-stripe i{width:18px;height:7px;border-radius:3px;border:1px solid rgba(0,0,0,.1)}
+.pc-glass .pc-name{font-size:15px;font-weight:800;letter-spacing:.02em;line-height:1.35;margin:0;color:#2A2138 !important}
+.pc-glass .bm-meta{font-size:11.5px;font-weight:600;color:#6B6180 !important}
+.pc-glass .bc-tag{display:inline-block;margin-left:5px;padding:1px 7px;border-radius:999px;font-size:10.5px;font-weight:700;background:#EDEAF7;color:#7B6BB5}
+.pc-glass .pc-line{width:28px;height:1px;margin:6px auto;background:linear-gradient(90deg,transparent,#C8B8D8,transparent)}
+.pc-glass .pc-bio{font-size:12.5px;line-height:1.55;margin:0;color:#5A5070 !important;max-width:16em}
+.pc-glass .board-actions{margin-top:8px;display:flex;justify-content:center}
+.pc-glass .back,#boardCardClose{
+  border-radius:999px!important;padding:5px 14px!important;font-size:12px!important;font-weight:700!important;
+  background:#fff!important;color:#6B5B8A!important;border:1.5px solid #DDD6E8!important;
+}
+#boardCardBox .pc-shell-frame{width:min(94vw,440px)}
+#boardCardPreview .pc-shell-frame{width:100%;max-width:380px}
+#boardCardPreview .pc-glass .board-actions{display:none}
+
 </style>
 </head>
 <body>
