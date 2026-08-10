@@ -750,6 +750,20 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .wolf-timer-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;justify-content:center}
 .wolf-timer-btns button{border:1.5px solid var(--line);background:var(--panel);font:inherit;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:999px;cursor:pointer}
 
+
+.board-inbox{margin:10px 0;padding:12px;border:1.5px solid var(--line);border-radius:14px;background:var(--panel)}
+.board-inbox h4{margin:0 0 8px;font-size:14.5px}
+.board-inbox .ib-item{padding:8px 0;border-bottom:1px dashed var(--line);font-size:13.5px;line-height:1.5}
+.board-inbox .ib-item:last-child{border-bottom:0}
+.board-inbox .ib-item.unread{background:var(--violet-soft);margin:0 -8px;padding:8px;border-radius:10px}
+.board-inbox .ib-meta{font-size:12px;color:var(--ink-soft)}
+.board-card-pin{outline:2px solid var(--gold)}
+.bm-pin{font-size:11px;color:var(--gold);font-weight:800;margin-right:4px}
+.profile-card{margin:10px 0;padding:12px;border-radius:14px;border:1.5px solid var(--line);background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft))}
+.profile-card .pc-name{font-weight:800;font-size:15px}
+.profile-card .pc-bio{font-size:13px;color:var(--ink-soft);margin-top:4px;white-space:pre-wrap}
+.report-box textarea{width:100%;min-height:64px;font:inherit;padding:8px;border-radius:10px;border:1.5px solid var(--line)}
+
 </style>
 </head>
 <body>
@@ -1824,6 +1838,20 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <div id="boardUser" class="board-user" hidden></div>
     <div id="boardErr" class="board-err" hidden></div>
 
+    
+    <div id="boardInbox" class="board-inbox" hidden>
+      <h4>Notifications <button type="button" id="boardInboxRead" class="back" style="float:right">Mark all read</button></h4>
+      <div id="boardInboxList"><p class="board-empty">Loading…</p></div>
+    </div>
+    <div id="boardReports" class="board-inbox" hidden>
+      <h4>Reports</h4>
+      <div id="boardReportList"><p class="board-empty">Loading…</p></div>
+    </div>
+    <div id="boardBlocks" class="board-inbox" hidden>
+      <h4>Muted users</h4>
+      <div id="boardBlockList"><p class="board-empty">Loading…</p></div>
+    </div>
+
     <div id="boardPending" class="board-pending" hidden></div>
     
     <div id="boardBanBanner" class="board-ban-banner" hidden></div>
@@ -1890,7 +1918,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <input id="boardDisplayEdit" maxlength="30" placeholder="Display name" />
       <input id="boardGameId" maxlength="40" placeholder="Game ID (optional)" />
       <div class="board-actions">
-        <button type="button" class="pri" id="boardSaveProfile">Save</button>
+        <button type="button" class="pri" id="boardBio" maxlength="200" placeholder="Bio" style="width:100%;margin:6px 0;padding:8px;border-radius:10px;border:1.5px solid var(--line);font:inherit" /><button type="button" id="boardSaveProfile">Save</button>
       </div>
     </div>
   </div>
@@ -8690,7 +8718,7 @@ function compositionScore(opts) {
     state.profile = null;
     if(!state.user) return;
     var res = await sb.from('profiles')
-      .select('id,display_name,role,game_id,approval,is_banned,muted_until')
+      .select('id,display_name,role,game_id,approval,is_banned,muted_until,bio,is_public_card')
       .eq('id', state.user.id).maybeSingle();
     if(res.error){
       // approval column may not exist yet
@@ -9371,6 +9399,10 @@ function compositionScore(opts) {
     }
     var acts = '';
     if(state.user && isApproved()) acts += '<button type="button" data-act="reply" data-id="'+m.id+'">'+T.reply+'</button>';
+      if(state.user && isApproved() && m.user_id !== uid){
+        acts += '<button type="button" data-act="report" data-id="'+m.id+'" data-uid="'+m.user_id+'">'+(T.locale&&T.locale.indexOf('zh')===0?'檢舉':'Report')+'</button>';
+        acts += '<button type="button" data-act="block" data-uid="'+m.user_id+'">'+(T.locale&&T.locale.indexOf('zh')===0?'黑名單':'Mute')+'</button>';
+      }
     if(admin){
       if(hidden) acts += '<button type="button" data-act="show" data-id="'+m.id+'">'+T.show+'</button>';
       else acts += '<button type="button" data-act="hide" data-id="'+m.id+'">'+T.hide+'</button>';
@@ -9383,7 +9415,7 @@ function compositionScore(opts) {
       acts += '<button type="button" data-act="del" data-id="'+m.id+'">'+T.delmine+'</button>';
     }
     return '<div class="board-bubble'+(mine?' mine':'')+(hidden?' hidden-msg':'')+'" data-id="'+m.id+'">'
-      + '<div class="bm-top"><span class="bm-name">'+esc(name)+'</span>'
+      + '<div class="bm-top">'+(m.is_pinned?'<span class="bm-pin">PIN</span>':'')+'<span class="bm-name">'+esc(name)+'</span>'
       + '<span class="bm-meta">'+esc(fmtTime(m.created_at))+esc(gid)+(hidden?' \u00b7 '+T.hidden:'')+'</span></div>'
       + replyBlock
       + '<div class="bm-body">'+colorize(esc(m.body))+'</div>'
@@ -9532,6 +9564,34 @@ function compositionScore(opts) {
     var id = b.getAttribute('data-id');
     var act = b.getAttribute('data-act');
     if(act === 'reply'){ setReply(id); return; }
+    if(act === 'report'){
+      var reason = prompt(T.locale&&T.locale.indexOf('zh')===0?'請簡述檢舉原因':'Report reason');
+      if(!reason||!reason.trim()) return;
+      var uidr = b.getAttribute('data-uid');
+      var ins = await sb.from('reports').insert({
+        reporter_id: state.user.id, message_id: id, target_user_id: uidr,
+        board_id: state.board && state.board.id, reason: reason.trim().slice(0,500)
+      });
+      if(ins.error){ err(translateAuthError?translateAuthError(ins.error.message):ins.error.message); return; }
+      alert(T.locale&&T.locale.indexOf('zh')===0?'已送出檢舉':'Report submitted');
+      return;
+    }
+    if(act === 'block'){
+      var ub = b.getAttribute('data-uid');
+      if(!ub) return;
+      var bi = await sb.from('user_blocks').insert({ user_id: state.user.id, blocked_id: ub });
+      if(bi.error){ err(bi.error.message); return; }
+      await loadBlocks(); await loadBlockList(); await loadMessages();
+      return;
+    }
+    if(act === 'pin'){
+      if(!isAdmin()) return;
+      var cur = findRow(id);
+      var res = await sb.from('messages').update({ is_pinned: !(cur && cur.is_pinned) }).eq('id', id);
+      if(res.error){ err(res.error.message); return; }
+      await loadMessages();
+      return;
+    }
 
     if(act === 'mute' || act === 'ban'){
       var uid2 = b.getAttribute('data-uid');
@@ -9561,7 +9621,8 @@ function compositionScore(opts) {
     if(!state.user){ err(T.need_login); return; }
     var gid = (($('boardGameId')||{}).value||'').trim();
     var dn = (($('boardDisplayEdit')||{}).value||'').trim();
-    var patch = { game_id: gid || null };
+    var bio = (($('boardBio')||{}).value||'').trim();
+    var patch = { game_id: gid || null, bio: bio || null };
     if(dn) patch.display_name = dn;
     var res = await sb.from('profiles').update(patch).eq('id', state.user.id);
     if(res.error){ err(translateAuthError(res.error.message)); return; }
@@ -10394,6 +10455,81 @@ function wfEndedHTML(){
     wfPaint();
   }
 
+  
+  /* ===== community: inbox / report / block / pin / card ===== */
+  var blockedIds = {};
+  async function loadBlocks(){
+    blockedIds = {};
+    if(!state.user) return;
+    var res = await sb.from('user_blocks').select('blocked_id').eq('user_id', state.user.id);
+    if(res.data) res.data.forEach(function(r){ blockedIds[r.blocked_id]=1; });
+  }
+  async function loadInbox(){
+    var wrap = $('boardInbox'), list = $('boardInboxList');
+    if(!wrap||!list) return;
+    if(!state.user){ wrap.hidden = true; return; }
+    wrap.hidden = false;
+    var res = await sb.from('notifications').select('*').eq('user_id', state.user.id)
+      .order('created_at',{ascending:false}).limit(30);
+    if(res.error){ list.innerHTML = '<p class="board-err">'+esc(res.error.message)+'</p>'; return; }
+    var rows = res.data||[];
+    if(!rows.length){ list.innerHTML = '<p class="board-empty">'+(T.locale&&T.locale.indexOf('zh')===0?'目前沒有通知':'No notifications')+'</p>'; return; }
+    list.innerHTML = rows.map(function(n){
+      return '<div class="ib-item'+(n.read_at?'':' unread')+'"><b>'+esc(n.title)+'</b><div>'+esc(n.body)+'</div>'
+        +'<div class="ib-meta">'+esc(fmtTime(n.created_at))+'</div></div>';
+    }).join('');
+  }
+  async function markInboxRead(){
+    if(!state.user) return;
+    await sb.from('notifications').update({read_at: new Date().toISOString()})
+      .eq('user_id', state.user.id).is('read_at', null);
+    await loadInbox();
+  }
+  async function loadReportsAdmin(){
+    var wrap=$('boardReports'), list=$('boardReportList');
+    if(!wrap||!list) return;
+    if(!isAdmin()){ wrap.hidden=true; return; }
+    wrap.hidden=false;
+    var res = await sb.from('reports').select('id,reason,status,created_at,reporter_id,target_user_id,message_id')
+      .eq('status','open').order('created_at',{ascending:false}).limit(40);
+    if(res.error){ list.innerHTML='<p class="board-err">'+esc(res.error.message)+'</p>'; return; }
+    var rows=res.data||[];
+    if(!rows.length){ list.innerHTML='<p class="board-empty">'+(T.locale&&T.locale.indexOf('zh')===0?'沒有待處理檢舉':'No open reports')+'</p>'; return; }
+    list.innerHTML = rows.map(function(r){
+      return '<div class="ib-item" data-rid="'+r.id+'"><div>'+esc(r.reason)+'</div>'
+        +'<div class="ib-meta">'+esc(fmtTime(r.created_at))+' · msg '+(r.message_id||'-')+'</div>'
+        +'<span class="ri-acts"><button type="button" data-rep="done" data-rid="'+r.id+'">'+(T.locale&&T.locale.indexOf('zh')===0?'結案':'Done')+'</button>'
+        +'<button type="button" data-rep="dismiss" data-rid="'+r.id+'">'+(T.locale&&T.locale.indexOf('zh')===0?'駁回':'Dismiss')+'</button></span></div>';
+    }).join('');
+  }
+  async function onReportAdmin(ev){
+    var b=ev.target.closest('button[data-rep]'); if(!b||!isAdmin()) return;
+    await sb.from('reports').update({status:b.getAttribute('data-rep')==='done'?'done':'dismissed'})
+      .eq('id', b.getAttribute('data-rid'));
+    await loadReportsAdmin();
+  }
+  async function loadBlockList(){
+    var wrap=$('boardBlocks'), list=$('boardBlockList');
+    if(!wrap||!list) return;
+    if(!state.user){ wrap.hidden=true; return; }
+    wrap.hidden=false;
+    var res = await sb.from('user_blocks').select('blocked_id, created_at, profiles:blocked_id(display_name)')
+      .eq('user_id', state.user.id);
+    if(res.error){ list.innerHTML='<p class="board-err">'+esc(res.error.message)+'</p>'; return; }
+    var rows=res.data||[];
+    if(!rows.length){ list.innerHTML='<p class="board-empty">'+(T.locale&&T.locale.indexOf('zh')===0?'黑名單是空的':'No muted users')+'</p>'; return; }
+    list.innerHTML = rows.map(function(r){
+      var nm=(r.profiles&&r.profiles.display_name)||T.user;
+      return '<div class="ib-item">'+esc(nm)
+        +' <button type="button" data-unblock="'+r.blocked_id+'">'+(T.locale&&T.locale.indexOf('zh')===0?'解除':'Unmute')+'</button></div>';
+    }).join('');
+  }
+  async function onBlockList(ev){
+    var b=ev.target.closest('[data-unblock]'); if(!b) return;
+    await sb.from('user_blocks').delete().eq('user_id',state.user.id).eq('blocked_id',b.getAttribute('data-unblock'));
+    await loadBlocks(); await loadBlockList(); if(state.board) await loadMessages();
+  }
+
   async function boot(){
     var sess = await sb.auth.getSession();
     state.user = sess.data && sess.data.session ? sess.data.session.user : null;
@@ -10423,6 +10559,9 @@ function wfEndedHTML(){
     var create = $('boardNewCreate'); if(create) create.onclick = createBoard;
     var rev = $('boardReviewList'); if(rev) rev.addEventListener('click', onReview);
     var mod = $('boardModList'); if(mod) mod.addEventListener('click', onMod);
+    var ibr=$('boardInboxRead'); if(ibr) ibr.onclick=markInboxRead;
+    var brl=$('boardReportList'); if(brl) brl.addEventListener('click', onReportAdmin);
+    var bbl=$('boardBlockList'); if(bbl) bbl.addEventListener('click', onBlockList);
     initGallery();
     initWolf();
     ntfPaintOpt();
