@@ -1888,7 +1888,6 @@ body.card-open{overflow:hidden}
         <h4>Boards</h4>
         <button type="button" id="boardHomeRefresh" class="back">Refresh</button>
       </div>
-      <div id="boardCardBox" hidden></div>
       <div id="boardNtfOpt" class="board-ntf"></div>
       <div id="boardUnreadOpt" class="board-unread-opt"></div>
       <div id="boardCardList" class="board-card-list"><p class="board-empty">Loading…</p></div>
@@ -2111,7 +2110,7 @@ body.card-open{overflow:hidden}
       <p class="cond" style="margin:12px 0 4px"><b>Added: card colours</b></p>
       <ul class="tips">
         <li>A card can carry one to four colours, and the codes can be pasted straight from your saved palettes. The settings panel previews it live as you type.</li>
-        <li>The card is now a <b>popup</b>. It used to be a panel inlined above the board, which meant that once you were scrolled down inside a room you could not see it at all and had to leave the room to find it. It now appears centred over the page; tapping the dimmed backdrop or pressing Escape closes it, and focus returns to whatever opened it.</li>
+        <li>The card is now a <b>popup</b>, and lives at the top level of the page. It had been placed inside the board-list panel, which is hidden the moment you enter a room — so the popup was hidden with it and tapping a card button inside a room did nothing at all until you left the room. It used to be a panel inlined above the board, which meant that once you were scrolled down inside a room you could not see it at all and had to leave the room to find it. It now appears centred over the page; tapping the dimmed backdrop or pressing Escape closes it, and focus returns to whatever opened it.</li>
         <li>A <b>Card</b> button now sits alongside Reply and Report. Previously the only way in was tapping the name, which on a phone gives no hover and therefore no hint that it is tappable at all. The name also carries a dotted underline at all times now rather than only on hover.</li>
         <li>The colour appears as <b>a light wash behind the card plus a full-strength stripe</b>, rather than flooding the whole card. People will pick pure black or bright yellow, and using those directly as a background makes the text unreadable; the wash is held at 18% strength while the stripe shows the colours as chosen. Across thirty thousand random palettes the worst text contrast was still 11:1, well above the 4.5:1 accessibility threshold — so no colour choice can produce an unreadable card.</li>
       </ul>
@@ -10793,5 +10792,8 @@ function wfEndedHTML(){
 })();
 
 </script>
+<!-- 名片彈窗：必須放在最外層。原本放在 #boardHome 裡，
+     一進聊天室那整塊會被隱藏，視窗跟著消失，點了等於沒反應。 -->
+<div id="boardCardBox" hidden></div>
 </body>
 </html>

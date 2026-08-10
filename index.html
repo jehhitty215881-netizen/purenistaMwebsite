@@ -1893,7 +1893,6 @@ body.card-open{overflow:hidden}
         <h4>專版列表</h4>
         <button type="button" id="boardHomeRefresh" class="back">重新整理</button>
       </div>
-      <div id="boardCardBox" hidden></div>
       <div id="boardNtfOpt" class="board-ntf"></div>
       <div id="boardUnreadOpt" class="board-unread-opt"></div>
       <div id="boardCardList" class="board-card-list"><p class="board-empty">載入中…</p></div>
@@ -2116,7 +2115,7 @@ body.card-open{overflow:hidden}
       <p class="cond" style="margin:12px 0 4px"><b>新增：名片配色</b></p>
       <ul class="tips">
         <li>名片可以挑 1～4 個顏色，色碼可以直接從「我的色票」複製過來貼上。設定區有即時預覽，打字的同時就看得到效果。</li>
-        <li>名片改成<b>彈出視窗</b>。原本是內嵌在留言板上方的一塊，人在聊天室裡往下捲的時候根本看不到，得先退出聊天室才找得到。現在直接蓋在畫面中央，點旁邊的暗底或按 Esc 都能關掉，關掉後焦點會回到原本按的地方。</li>
+        <li>名片改成<b>彈出視窗</b>，並且移到頁面最外層。原本它被放在「專版列表」那一區裡面，而一進聊天室那整區就會被隱藏——視窗跟著一起消失，所以在聊天室裡點名片是完全沒有反應的，要退出聊天室才看得到。現在直接蓋在畫面中央，原本是內嵌在留言板上方的一塊，人在聊天室裡往下捲的時候根本看不到，得先退出聊天室才找得到。現在直接蓋在畫面中央，點旁邊的暗底或按 Esc 都能關掉，關掉後焦點會回到原本按的地方。</li>
         <li>名片的入口補了一顆<b>「名片」按鈕</b>，跟回覆、檢舉並排。原本只有點暱稱能開，但手機沒有滑鼠移入的效果，等於完全看不出來可以點。暱稱現在也一直帶著虛線底線，不用等 hover。</li>
         <li>顏色是<b>底色淡淡的一層加上完整的色條</b>，不是整張塗滿。原因是使用者挑的可能是純黑或亮黃，直接當底色會讓字看不清楚；現在底色只取 18% 的濃度，色條則呈現原本的顏色。三萬組隨機配色實測，文字對比度最低仍有 11:1，遠高於無障礙標準要求的 4.5:1——換句話說不管挑什麼顏色都不會變成看不懂的名片。</li>
       </ul>
@@ -10796,5 +10795,8 @@ function wfEndedHTML(){
 })();
 
 </script>
+<!-- 名片彈窗：必須放在最外層。原本放在 #boardHome 裡，
+     一進聊天室那整塊會被隱藏，視窗跟著消失，點了等於沒反應。 -->
+<div id="boardCardBox" hidden></div>
 </body>
 </html>
