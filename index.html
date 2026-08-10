@@ -764,6 +764,12 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .board-inbox .ib-meta{font-size:12px;color:var(--ink-soft)}
 .board-card-pin{outline:2px solid var(--gold)}
 .bm-pin{font-size:11px;color:var(--gold);font-weight:800;margin-right:4px}
+#boardCardBox{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(28,26,36,.45);backdrop-filter:blur(2px)}
+#boardCardBox[hidden]{display:none}
+#boardCardBox .pc-shell{width:100%;max-width:340px;max-height:80vh;overflow:auto;border-radius:16px;background:var(--panel);box-shadow:0 18px 44px rgba(28,26,36,.28);padding:4px}
+#boardCardBox .profile-card{margin:0;border:none;box-shadow:none}
+body.card-open{overflow:hidden}
+@media(max-width:480px){#boardCardBox{padding:12px}}
 .board-card-prev{display:flex;align-items:center;gap:8px;border-radius:10px;padding:6px 8px;margin:4px 0;min-height:0;transition:background .2s}
 .board-card-prev:empty{padding:0;margin:0}
 .board-card-prev .cp-lab{font-size:11.5px;color:var(--ink-soft);font-weight:700}
@@ -2110,6 +2116,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
       <p class="cond" style="margin:12px 0 4px"><b>新增：名片配色</b></p>
       <ul class="tips">
         <li>名片可以挑 1～4 個顏色，色碼可以直接從「我的色票」複製過來貼上。設定區有即時預覽，打字的同時就看得到效果。</li>
+        <li>名片改成<b>彈出視窗</b>。原本是內嵌在留言板上方的一塊，人在聊天室裡往下捲的時候根本看不到，得先退出聊天室才找得到。現在直接蓋在畫面中央，點旁邊的暗底或按 Esc 都能關掉，關掉後焦點會回到原本按的地方。</li>
         <li>名片的入口補了一顆<b>「名片」按鈕</b>，跟回覆、檢舉並排。原本只有點暱稱能開，但手機沒有滑鼠移入的效果，等於完全看不出來可以點。暱稱現在也一直帶著虛線底線，不用等 hover。</li>
         <li>顏色是<b>底色淡淡的一層加上完整的色條</b>，不是整張塗滿。原因是使用者挑的可能是純黑或亮黃，直接當底色會讓字看不清楚；現在底色只取 18% 的濃度，色條則呈現原本的顏色。三萬組隨機配色實測，文字對比度最低仍有 11:1，遠高於無障礙標準要求的 4.5:1——換句話說不管挑什麼顏色都不會變成看不懂的名片。</li>
       </ul>
@@ -10567,13 +10574,20 @@ function wfEndedHTML(){
   async function showCard(uid){
     var box = $('boardCardBox');
     if(!box || !uid) return;
+    /* 原本是內嵌在留言板上方的一塊，人在聊天室裡往下捲的時候根本看不到，
+       得先退出去才找得到。改成蓋在畫面中央的彈出視窗。 */
+    cardOpener = document.activeElement;
     box.hidden = false;
-    box.innerHTML = '<p class="board-empty">'+esc(T.loading)+'</p>';
+    document.body.classList.add('card-open');
+    box.innerHTML = '<div class="pc-shell"><p class="board-empty">'+esc(T.loading)+'</p></div>';
     var res = await sb.from('profiles')
       .select('id,display_name,game_id,bio,is_public_card,role,card_colors')
       .eq('id', uid).maybeSingle();
     if(res.error || !res.data){
-      box.innerHTML = '<p class="board-err">'+esc(T.fail)+'</p>';
+      box.innerHTML = '<div class="pc-shell"><p class="board-err">'+esc(T.fail)+'</p>'
+        + '<div class="board-actions" style="margin-top:8px">'
+        + '<button type="button" id="boardCardClose" class="back">'+esc(T.close)+'</button></div></div>';
+      bindCardClose();
       return;
     }
     var p = res.data;
@@ -10584,7 +10598,7 @@ function wfEndedHTML(){
       : '<div class="pc-bio">'+esc(T.card_hidden)+'</div>';
     var cols = (p.card_colors || []).filter(function(c){ return /^#[0-9A-Fa-f]{6}$/.test(c); });
     var tint = cardTint(cols);
-    box.innerHTML = '<div class="profile-card"'+(tint ? ' style="background:'+tint+'"' : '')+'>'
+    box.innerHTML = '<div class="pc-shell"><div class="profile-card"'+(tint ? ' style="background:'+tint+'"' : '')+'>'
       + cardStripe(cols)
       + '<div class="pc-name">'+esc(p.display_name || T.user)
       +   (p.game_id ? ' <span class="bm-meta">'+esc(p.game_id)+'</span>' : '')
@@ -10593,10 +10607,23 @@ function wfEndedHTML(){
       + body
       + '<div class="board-actions" style="margin-top:8px">'
       +   '<button type="button" id="boardCardClose" class="back">'+esc(T.close)+'</button>'
-      + '</div></div>';
+      + '</div></div></div>';
+    bindCardClose();
+  }
+
+  var cardOpener = null;
+  function closeCard(){
+    var box = $('boardCardBox');
+    if(!box || box.hidden) return;
+    box.hidden = true;
+    box.innerHTML = '';
+    document.body.classList.remove('card-open');
+    if(cardOpener && cardOpener.focus){ try{ cardOpener.focus(); }catch(e){} }
+    cardOpener = null;
+  }
+  function bindCardClose(){
     var c = $('boardCardClose');
-    if(c) c.onclick = function(){ box.hidden = true; box.innerHTML = ''; };
-    box.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    if(c){ c.onclick = closeCard; try{ c.focus(); }catch(e){} }
   }
 
   async function loadCommunity(){
@@ -10713,6 +10740,13 @@ function wfEndedHTML(){
     var mod = $('boardModList'); if(mod) mod.addEventListener('click', onMod);
     var ibr=$('boardInboxRead'); if(ibr) ibr.onclick=markInboxRead;
     var ccIn=$('boardCardColors'); if(ccIn) ccIn.oninput=paintCardPreview;
+    var cardBox=$('boardCardBox');
+    if(cardBox) cardBox.addEventListener('click', function(e){
+      if(e.target === cardBox) closeCard();      // 點旁邊的暗底就關掉
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeCard();
+    });
     var brl=$('boardReportList'); if(brl) brl.addEventListener('click', onReportAdmin);
     var bbl=$('boardBlockList'); if(bbl) bbl.addEventListener('click', onBlockList);
     initGallery();
