@@ -647,6 +647,16 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .board-unread-opt label{display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:700;color:var(--ink)}
 .board-unread-opt input{width:16px;height:16px;accent-color:var(--violet);cursor:pointer}
 .board-unread-opt .uo-hint{flex:1 1 100%;font-size:11.5px;line-height:1.6}
+.board-ntf{margin:0 0 10px;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--panel)}
+.board-ntf .nf-head{font-size:12.5px;font-weight:800;color:var(--ink);margin:0 0 6px}
+.board-ntf .nf-row{display:flex;flex-wrap:wrap;gap:10px 16px}
+.board-ntf label{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink);cursor:pointer}
+.board-ntf input{width:16px;height:16px;accent-color:var(--violet);cursor:pointer}
+.board-ntf .nf-hint{margin:6px 0 0;font-size:11.5px;line-height:1.6;color:var(--ink-soft)}
+.board-ntf .nf-warn{margin:6px 0 0;font-size:11.5px;line-height:1.6;color:var(--rose);font-weight:700}
+.board-ntf .nf-more{margin:6px 0 0;font-size:11.5px;color:var(--ink-soft)}
+.board-ntf .nf-more summary{cursor:pointer;font-weight:700;color:var(--violet);padding:3px 0}
+.board-ntf .nf-more p{margin:6px 0 0;line-height:1.7}
 .board-card.game-card{border-color:#e0c4d8;background:linear-gradient(135deg,#fff,var(--rose-soft))}
 .board-game-panel{margin:0 0 10px;padding:12px;border:1.5px solid var(--line);border-radius:14px;background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft))}
 .board-game-panel h4{margin:0 0 6px;font-size:14.5px}
@@ -1797,6 +1807,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <h4>專版列表</h4>
         <button type="button" id="boardHomeRefresh" class="back">重新整理</button>
       </div>
+      <div id="boardNtfOpt" class="board-ntf"></div>
       <div id="boardUnreadOpt" class="board-unread-opt"></div>
       <div id="boardCardList" class="board-card-list"><p class="board-empty">載入中…</p></div>
       <div id="boardNewWrap" class="board-new" hidden>
@@ -1886,6 +1897,14 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <p class="cond">這裡會列出每次網站更新的內容，讓大家知道網站一直有人在維護、修 bug、加新功能。</p>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.5.0 <span class="chg-build">目前版本・創作分享、未讀提醒與權限修補</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>新增：新訊息通知</b></p>
+      <ul class="tips">
+        <li>留言板上方多了三個開關：<b>分頁標題顯示未讀數</b>（標題會變成「(3) purenistahub」）、<b>瀏覽器通知</b>、<b>提示音</b>。三個都<b>預設關閉</b>，要用的人自己開，設定只記在這台裝置上。</li>
+        <li>只有在分頁切到背景時才會提醒——你正在看著留言板的時候不會被自己打擾。切回分頁就自動清掉，不用手動已讀。自己發的訊息永遠不算。</li>
+        <li>三個開關下面附了說明：最關鍵的一句「完全關掉網站就收不到」直接顯示，其餘每個開關的差別收在可展開的「這三個分別是什麼？」裡，不想看的人不會被一大段字擋住。</li>
+        <li>瀏覽器通知的權限是<b>你按下開關的當下才詢問</b>，不是一進站就跳出來。同一則通知會覆蓋前一則而不是疊成一長串，音效也由開關單獨控制，不會響兩聲。權限被封鎖時會顯示怎麼重新允許。</li>
+        <li>限制講清楚：這些<b>只在網站開著的時候有效</b>。要做到關掉網站也收得到，需要 service worker 與推播伺服器，而且 iPhone 必須先把網站加到主畫面才收得到——那是另一件規模大得多的工程，這版刻意沒做。</li>
+      </ul>
       <p class="cond" style="margin:12px 0 4px"><b>新增：來自許願池的兩項</b></p>
       <ul class="tips">
         <li><b>上一站</b>：浮動列多一顆往回的按鈕，配合原本的下一站，整條路徑可以前後自由走，不用回導覽頁重點。第一站不顯示上一站、最後一站不顯示下一站。</li>
@@ -1975,7 +1994,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>這些判斷全部移到資料庫層強制執行。權限相關的欄位本人改不動，訊息只能自刪而不能改字、也不能解除隱藏，遊戲房的標題等欄位對一般人完全鎖死，交棒規則（只有輪到的人能交棒、只能傳給有加入輪替的人）也一併寫進資料庫。</li>
         <li>順帶補上「輪替名單」的資料表——之前那段建表指令沒有成功執行過，所以面板上的「輪替中」人數一直是 0。</li>
       </ul>
-      <p class="fine">建置標記更新為 v5.5.0。中英文版同步。本版共通過 168 項自動測試：留言板即時更新 14 項、未讀提醒 15 項、智能導覽與排行 15 項、路徑涵蓋率 7 項、前後站導覽 12 項、浮動列捲動行為 12 項、權限修補 28 項、創作分享的資料庫權限 27 項與前端 23 項，另有工具捷徑與版面結構的靜態檢查。其中權限相關的測試是在本機真實資料庫上以四種身分實際嘗試繞過；路徑涵蓋率會檢查每個分頁都被至少一條路徑收錄。</p>
+      <p class="fine">建置標記更新為 v5.5.0。中英文版同步。本版共通過 199 項自動測試：留言板即時更新 14 項、新訊息通知 31 項、未讀提醒 15 項、智能導覽與排行 15 項、路徑涵蓋率 7 項、前後站導覽 12 項、浮動列捲動行為 12 項、權限修補 28 項、創作分享的資料庫權限 27 項與前端 23 項，另有工具捷徑與版面結構的靜態檢查。權限相關的測試是在本機真實資料庫上以四種身分實際嘗試繞過。</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.5 <span class="chg-build">清掉叫你去用外部服務的殘留</span></div>
@@ -8302,7 +8321,7 @@ function compositionScore(opts) {
   var BOARD_LOCALE = 'zh';
   var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
   var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
-  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功！審核通過後才能發言。請私訊 棉花棠（遊戲 ID 3728362）通過審核。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "pending": "你的帳號尚在審核中，通過後才能進入專版發言。", "rejected": "你的註冊未通過審核，如有疑問請聯絡站長。", "approve": "通過", "reject": "拒絕", "no_pending": "目前沒有待審核的註冊。", "locale": "zh-TW", "approve_note": "註冊後需經審核通過才能發言", "approve_how": "請私訊", "approve_who": "棉花棠", "approve_gid": "遊戲 ID 3728362", "approve_tail": "，管理員會盡快為你開通。", "unread": "新", "unread_toggle": "顯示未讀提醒", "unread_hint": "只記在這台裝置上，不會讓別人看到你讀了什麼", "gl_pub": "公開分享", "gl_mine": "我的創作", "gl_fav": "我的收藏", "gl_new": "新增", "gl_kind": "類型", "gl_palette": "色票", "gl_idea": "點子", "gl_title": "標題（選填）", "gl_colors": "色碼，用空白或逗號分隔，最多 8 個", "gl_body": "內容：角色設定、命名、任何想法", "gl_public": "公開分享，讓別人可以收藏", "gl_save": "儲存", "gl_saved": "已儲存", "gl_deleted": "已刪除", "gl_empty_pub": "還沒有人公開分享，來當第一個吧。", "gl_empty_mine": "還沒有存過東西。抽到喜歡的配色就存起來吧。", "gl_empty_fav": "還沒有收藏。看到喜歡的按愛心就會出現在這裡。", "gl_need_login": "請先登入才能儲存", "gl_need_colors": "請至少輸入一個色碼", "gl_need_body": "請輸入內容", "gl_bad_color": "色碼格式要像 #11997B", "gl_del": "刪除", "gl_publish": "公開", "gl_unpublish": "取消公開", "gl_private_tag": "未公開", "gl_confirm_del": "確定要刪除嗎？刪掉就找不回來了。", "gl_by": "by", "gl_favs": "收藏", "gl_copy": "複製色碼", "gl_copied": "已複製", "gl_save_swatch": "存到我的色票", "gl_from_room": "來自配色靈感房"};
+  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功！審核通過後才能發言。請私訊 棉花棠（遊戲 ID 3728362）通過審核。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "pending": "你的帳號尚在審核中，通過後才能進入專版發言。", "rejected": "你的註冊未通過審核，如有疑問請聯絡站長。", "approve": "通過", "reject": "拒絕", "no_pending": "目前沒有待審核的註冊。", "locale": "zh-TW", "approve_note": "註冊後需經審核通過才能發言", "approve_how": "請私訊", "approve_who": "棉花棠", "approve_gid": "遊戲 ID 3728362", "approve_tail": "，管理員會盡快為你開通。", "unread": "新", "unread_toggle": "顯示未讀提醒", "unread_hint": "只記在這台裝置上，不會讓別人看到你讀了什麼", "gl_pub": "公開分享", "gl_mine": "我的創作", "gl_fav": "我的收藏", "gl_new": "新增", "gl_kind": "類型", "gl_palette": "色票", "gl_idea": "點子", "gl_title": "標題（選填）", "gl_colors": "色碼，用空白或逗號分隔，最多 8 個", "gl_body": "內容：角色設定、命名、任何想法", "gl_public": "公開分享，讓別人可以收藏", "gl_save": "儲存", "gl_saved": "已儲存", "gl_deleted": "已刪除", "gl_empty_pub": "還沒有人公開分享，來當第一個吧。", "gl_empty_mine": "還沒有存過東西。抽到喜歡的配色就存起來吧。", "gl_empty_fav": "還沒有收藏。看到喜歡的按愛心就會出現在這裡。", "gl_need_login": "請先登入才能儲存", "gl_need_colors": "請至少輸入一個色碼", "gl_need_body": "請輸入內容", "gl_bad_color": "色碼格式要像 #11997B", "gl_del": "刪除", "gl_publish": "公開", "gl_unpublish": "取消公開", "gl_private_tag": "未公開", "gl_confirm_del": "確定要刪除嗎？刪掉就找不回來了。", "gl_by": "by", "gl_favs": "收藏", "gl_copy": "複製色碼", "gl_copied": "已複製", "gl_save_swatch": "存到我的色票", "gl_from_room": "來自配色靈感房", "ntf_title": "新訊息通知", "ntf_badge": "分頁標題顯示未讀數", "ntf_desk": "瀏覽器通知", "ntf_sound": "提示音", "ntf_hint": "只在網站開著的時候有效——分頁丟在背景沒關係，完全關掉就收不到了。設定只記在這台裝置上。", "ntf_more": "這三個分別是什麼？", "ntf_m_badge": "分頁標題顯示未讀數：頁籤會變成「(3) purenistahub」，不會發出任何聲音或彈窗，最不打擾的一種。", "ntf_m_desk": "瀏覽器通知：跳系統通知。第一次勾選時瀏覽器會問你要不要允許，允許之後才會生效。", "ntf_m_sound": "提示音：一聲短音。勾起來的當下會先試聽，聽了不喜歡再取消就好。", "ntf_m_when": "你正在看留言板的時候不會提醒，切回分頁就自動清掉，自己發的訊息也不會通知自己。", "ntf_blocked": "瀏覽器通知被封鎖了，請到網址列旁的鎖頭圖示重新允許。", "ntf_new": "則新訊息", "ntf_from": "來自"};
   if(!window.supabase){
     var list = document.getElementById('boardCardList');
     if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
@@ -9037,6 +9056,107 @@ function compositionScore(opts) {
 
   /* 未讀提醒。整份「讀到哪裡」只存在這台裝置的 localStorage，不會寫進資料庫，
      所以別人看不到你讀了什麼，換裝置也不會互相影響。不想看紅點的人可以關掉。 */
+  /* ---- 新訊息通知 ----------------------------------------------------
+     只在網站開著的時候有效：分頁在背景時累計未讀，標題顯示數字，
+     可另外開瀏覽器通知與提示音。全部預設關閉，設定只存在本機。
+     要做到「網站關掉也收得到」需要 service worker 與推播伺服器，
+     那是另一件事，這裡刻意不碰。 */
+  var NTF_KEYS = { badge:'pnb_ntf_badge', desk:'pnb_ntf_desk', sound:'pnb_ntf_sound' };
+  var ntf = { pending:0, baseTitle:document.title, audio:null };
+
+  function ntfOn(k){
+    try{ return localStorage.getItem(NTF_KEYS[k]) === '1'; }catch(e){ return false; }
+  }
+  function ntfSet(k, on){
+    try{
+      if(on) localStorage.setItem(NTF_KEYS[k],'1');
+      else localStorage.removeItem(NTF_KEYS[k]);
+    }catch(e){}
+  }
+  function ntfHidden(){
+    return typeof document.visibilityState === 'string' && document.visibilityState === 'hidden';
+  }
+  function ntfPaintTitle(){
+    if(!ntf.pending || !ntfOn('badge')){ document.title = ntf.baseTitle; return; }
+    document.title = '('+(ntf.pending > 99 ? '99+' : ntf.pending)+') '+ntf.baseTitle;
+  }
+  function ntfClear(){
+    ntf.pending = 0;
+    ntfPaintTitle();
+  }
+  /* 短促的一聲，用 WebAudio 合成，不必附帶音檔 */
+  function ntfBeep(){
+    if(!ntfOn('sound')) return;
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      if(!ntf.audio) ntf.audio = new Ctx();
+      if(ntf.audio.state === 'suspended') ntf.audio.resume();
+      var o = ntf.audio.createOscillator(), g = ntf.audio.createGain(), t = ntf.audio.currentTime;
+      o.type = 'sine'; o.frequency.setValueAtTime(880, t);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.12, t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.25);
+      o.connect(g); g.connect(ntf.audio.destination);
+      o.start(t); o.stop(t + 0.26);
+    }catch(e){}
+  }
+  function ntfDesktop(count){
+    if(!ntfOn('desk')) return;
+    if(typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+    try{
+      var where = state.board ? state.board.title : '';
+      new Notification(count+' '+T.ntf_new, {
+        body: where ? (T.ntf_from+' '+where) : '',
+        tag: 'pnb-board',       // 同一個 tag 會覆蓋前一則，不會疊成一長串
+        silent: true            // 音效由我們自己控制，避免響兩聲
+      });
+    }catch(e){}
+  }
+  /* 有新訊息進來時呼叫。只有分頁在背景、而且不是自己發的，才算一則通知。 */
+  function ntfNotify(n){
+    if(!n || !ntfHidden()) return;
+    ntf.pending += n;
+    ntfPaintTitle();
+    ntfBeep();
+    ntfDesktop(ntf.pending);
+  }
+  function ntfPaintOpt(){
+    var el = $('boardNtfOpt');
+    if(!el) return;
+    var blocked = (typeof Notification !== 'undefined' && Notification.permission === 'denied');
+    el.innerHTML = '<div class="nf-head">'+esc(T.ntf_title)+'</div>'
+      + '<div class="nf-row">'
+      +   '<label><input type="checkbox" data-ntf="badge"'+(ntfOn('badge')?' checked':'')+' /> '+esc(T.ntf_badge)+'</label>'
+      +   '<label><input type="checkbox" data-ntf="desk"'+(ntfOn('desk')?' checked':'')+' /> '+esc(T.ntf_desk)+'</label>'
+      +   '<label><input type="checkbox" data-ntf="sound"'+(ntfOn('sound')?' checked':'')+' /> '+esc(T.ntf_sound)+'</label>'
+      + '</div>'
+      + '<p class="nf-hint">'+esc(T.ntf_hint)+'</p>'
+      + (blocked && ntfOn('desk') ? '<p class="nf-warn">'+esc(T.ntf_blocked)+'</p>' : '')
+      + '<details class="nf-more"><summary>'+esc(T.ntf_more)+'</summary>'
+      +   '<p>'+esc(T.ntf_m_badge)+'</p>'
+      +   '<p>'+esc(T.ntf_m_desk)+'</p>'
+      +   '<p>'+esc(T.ntf_m_sound)+'</p>'
+      +   '<p>'+esc(T.ntf_m_when)+'</p>'
+      + '</details>';
+    var boxes = el.querySelectorAll('[data-ntf]');
+    for(var i=0;i<boxes.length;i++){
+      boxes[i].onchange = function(){
+        var k = this.getAttribute('data-ntf');
+        var want = this.checked;
+        if(k === 'desk' && want && typeof Notification !== 'undefined' && Notification.permission === 'default'){
+          // 只在使用者主動打開時才詢問權限，不在進站時就跳出來
+          Notification.requestPermission().then(function(){ ntfSet('desk', true); ntfPaintOpt(); });
+          return;
+        }
+        if(k === 'sound' && want) ntfBeep();   // 打開時先試聽一聲
+        ntfSet(k, want);
+        ntfPaintOpt();
+        ntfPaintTitle();
+      };
+    }
+  }
+
   function unreadKey(bid){ return 'pnb_read_'+BOARD_LOCALE+'_'+bid; }
   function getLastRead(bid){
     try{ return localStorage.getItem(unreadKey(bid)); }catch(e){ return null; }
@@ -9307,8 +9427,19 @@ function compositionScore(opts) {
       }
       return;
     }
-    state.rows = res.data || [];
+    var before = {}, i;
+    for(i=0;i<state.rows.length;i++) before[state.rows[i].id] = 1;
+    var fresh = res.data || [];
+    var added = 0;
+    for(i=0;i<fresh.length;i++){
+      if(before[fresh[i].id]) continue;
+      if(state.user && fresh[i].user_id === state.user.id) continue;   // 自己發的不通知
+      added++;
+    }
+    var first = !state.rows.length;
+    state.rows = fresh;
     paintMessages();
+    if(!first) ntfNotify(added);   // 第一次載入整批訊息不算「新訊息」
     markBoardRead();
   }
 
@@ -9726,6 +9857,11 @@ function compositionScore(opts) {
     var rev = $('boardReviewList'); if(rev) rev.addEventListener('click', onReview);
     var mod = $('boardModList'); if(mod) mod.addEventListener('click', onMod);
     initGallery();
+    ntfPaintOpt();
+    document.addEventListener('visibilitychange', function(){
+      if(!ntfHidden()) ntfClear();
+    });
+    window.addEventListener('focus', ntfClear);
     var cards = $('boardCardList');
     if(cards) cards.addEventListener('click', function(e){
       var btn = e.target.closest('[data-bid]');

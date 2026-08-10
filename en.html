@@ -642,6 +642,16 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .board-unread-opt label{display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:700;color:var(--ink)}
 .board-unread-opt input{width:16px;height:16px;accent-color:var(--violet);cursor:pointer}
 .board-unread-opt .uo-hint{flex:1 1 100%;font-size:11.5px;line-height:1.6}
+.board-ntf{margin:0 0 10px;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--panel)}
+.board-ntf .nf-head{font-size:12.5px;font-weight:800;color:var(--ink);margin:0 0 6px}
+.board-ntf .nf-row{display:flex;flex-wrap:wrap;gap:10px 16px}
+.board-ntf label{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink);cursor:pointer}
+.board-ntf input{width:16px;height:16px;accent-color:var(--violet);cursor:pointer}
+.board-ntf .nf-hint{margin:6px 0 0;font-size:11.5px;line-height:1.6;color:var(--ink-soft)}
+.board-ntf .nf-warn{margin:6px 0 0;font-size:11.5px;line-height:1.6;color:var(--rose);font-weight:700}
+.board-ntf .nf-more{margin:6px 0 0;font-size:11.5px;color:var(--ink-soft)}
+.board-ntf .nf-more summary{cursor:pointer;font-weight:700;color:var(--violet);padding:3px 0}
+.board-ntf .nf-more p{margin:6px 0 0;line-height:1.7}
 .board-card.game-card{border-color:#e0c4d8;background:linear-gradient(135deg,#fff,var(--rose-soft))}
 .board-game-panel{margin:0 0 10px;padding:12px;border:1.5px solid var(--line);border-radius:14px;background:linear-gradient(135deg,var(--violet-soft),var(--rose-soft))}
 .board-game-panel h4{margin:0 0 6px;font-size:14.5px}
@@ -1792,6 +1802,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <h4>Boards</h4>
         <button type="button" id="boardHomeRefresh" class="back">Refresh</button>
       </div>
+      <div id="boardNtfOpt" class="board-ntf"></div>
       <div id="boardUnreadOpt" class="board-unread-opt"></div>
       <div id="boardCardList" class="board-card-list"><p class="board-empty">Loading…</p></div>
       <div id="boardNewWrap" class="board-new" hidden>
@@ -1881,6 +1892,14 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.5.0 <span class="chg-build">current・shared work, unread badges and permission hardening</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>Added: new message alerts</b></p>
+      <ul class="tips">
+        <li>Three switches now sit above the board: <b>unread count in the tab title</b> (it becomes "(3) purenistahub"), <b>browser notifications</b> and <b>sound</b>. All three are <b>off by default</b>; turn on what you want and the choice is kept on your device only.</li>
+        <li>Alerts only fire while the tab is in the background, so the board never interrupts you while you are reading it. Switching back clears them automatically, and your own messages never count.</li>
+        <li>An explanation sits under the switches: the one line that matters most — that closing the site means nothing arrives — is always visible, while the differences between the three are tucked into an expandable "What are these three?" so nobody is faced with a wall of text they did not ask for.</li>
+        <li>Notification permission is requested <b>at the moment you flip the switch</b>, not on arrival. Each alert replaces the previous one instead of stacking up, and the sound is controlled separately so nothing chimes twice. If permission has been blocked, the panel explains how to restore it.</li>
+        <li>To be clear about the limit: these only work <b>while the site is open</b>. Receiving alerts with the site closed would need a service worker and a push server, and on iPhone the site would have to be added to the home screen first — a much larger piece of work, deliberately not attempted here.</li>
+      </ul>
       <p class="cond" style="margin:12px 0 4px"><b>Added: two requests from the wish list</b></p>
       <ul class="tips">
         <li><b>Previous stop</b>: the floating bar gains a back button to pair with the existing next button, so a path can be walked in either direction without returning to the guide. The first stop hides the back button and the last hides the forward one.</li>
@@ -1970,7 +1989,7 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
         <li>All of these checks now run in the database itself. Permission columns cannot be altered by the account they belong to, messages can only be self-deleted rather than edited or un-hidden, room fields are locked to non-admins, and the hand-over rules (only the current player may pass, and only to someone who joined the queue) are enforced there too.</li>
         <li>The turn queue table has also been created properly — the original statement never ran successfully, which is why the panel always showed zero players in the queue.</li>
       </ul>
-      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. This release passes 168 automated tests: 14 for live board updates, 15 for unread badges, 15 for the smart guide and ranking, 7 for path coverage, 12 for the previous/next stop bar, 12 for its scroll behaviour, 28 for the permission hardening, and 27 database plus 23 front-end tests for shared work, alongside static checks on the tool shortcuts and page structure. The permission tests run against a real local database as four different kinds of account; the coverage tests assert that every tab is reachable from at least one path.</p>
+      <p class="fine">Build tag updated to v5.5.0. Chinese and English versions in sync. This release passes 199 automated tests: 14 for live board updates, 31 for the new message alerts, 15 for unread badges, 15 for the smart guide and ranking, 7 for path coverage, 12 for the previous/next stop bar, 12 for its scroll behaviour, 28 for the permission hardening, and 27 database plus 23 front-end tests for shared work, alongside static checks on the tool shortcuts and page structure. The permission tests run against a real local database as four different kinds of account.</p>
     </div>
     <div class="chg-entry">
       <div class="chg-ver">Version 5.4.5 <span class="chg-build">removed leftovers pointing at an external service</span></div>
@@ -8303,7 +8322,7 @@ function compositionScore(opts) {
   var BOARD_LOCALE = 'en';
   var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
   var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
-  var T = {"signed": "Signed in as ", "gameid": "Game ID", "admin": "Admin", "logout": "Sign out", "email": "Email", "pass": "Password (min 6 characters)", "display": "Display name (for sign-up, optional)", "login": "Sign in", "signup": "Sign up", "signup_ok": "Signed up! You can post once approved. Please DM 棉花棠 (game ID 3728362) to get approved.", "loading": "Loading…", "fail": "Failed to load: ", "empty": "No messages in this board yet. Say hi!", "empty_boards": "No boards yet. Admins can create one below.", "user": "User", "hidden": "Hidden", "show": "Show", "hide": "Hide", "del": "Delete", "delmine": "Delete", "reply": "Reply", "replying": "Replying to", "cancel": "Cancel", "need_login": "Please sign in first", "need_body": "Please enter a message", "max": "Max 1000 characters", "saved": "Saved", "need_title": "Please enter a board title", "created": "Board created", "live_on": "Live", "live_off": "Offline (use Refresh)", "msgs": "messages", "pending": "Your account is pending approval. You can post once an admin approves you.", "rejected": "Your registration was not approved. Contact the site owner if needed.", "approve": "Approve", "reject": "Reject", "no_pending": "No pending registrations.", "locale": "en-US", "approve_note": "Approval is required before you can post", "approve_how": "Please DM", "approve_who": "棉花棠", "approve_gid": "game ID 3728362", "approve_tail": "— an admin will approve you shortly.", "unread": "new", "unread_toggle": "Show unread badges", "unread_hint": "Kept on this device only; nobody else can see what you have read", "gl_pub": "Shared", "gl_mine": "Mine", "gl_fav": "Favourites", "gl_new": "Add", "gl_kind": "Type", "gl_palette": "Palette", "gl_idea": "Idea", "gl_title": "Title (optional)", "gl_colors": "Hex codes, space or comma separated, up to 8", "gl_body": "Content: character notes, names, any idea", "gl_public": "Publish so others can favourite it", "gl_save": "Save", "gl_saved": "Saved", "gl_deleted": "Deleted", "gl_empty_pub": "Nothing shared yet — be the first.", "gl_empty_mine": "Nothing saved yet. Roll a palette you like and keep it.", "gl_empty_fav": "No favourites yet. Tap the heart on anything you like.", "gl_need_login": "Please sign in to save", "gl_need_colors": "Enter at least one hex code", "gl_need_body": "Enter some content", "gl_bad_color": "Codes should look like #11997B", "gl_del": "Delete", "gl_publish": "Publish", "gl_unpublish": "Unpublish", "gl_private_tag": "private", "gl_confirm_del": "Delete this? It cannot be undone.", "gl_by": "by", "gl_favs": "favs", "gl_copy": "Copy codes", "gl_copied": "Copied", "gl_save_swatch": "Save to my palettes", "gl_from_room": "from the colour room"};
+  var T = {"signed": "Signed in as ", "gameid": "Game ID", "admin": "Admin", "logout": "Sign out", "email": "Email", "pass": "Password (min 6 characters)", "display": "Display name (for sign-up, optional)", "login": "Sign in", "signup": "Sign up", "signup_ok": "Signed up! You can post once approved. Please DM 棉花棠 (game ID 3728362) to get approved.", "loading": "Loading…", "fail": "Failed to load: ", "empty": "No messages in this board yet. Say hi!", "empty_boards": "No boards yet. Admins can create one below.", "user": "User", "hidden": "Hidden", "show": "Show", "hide": "Hide", "del": "Delete", "delmine": "Delete", "reply": "Reply", "replying": "Replying to", "cancel": "Cancel", "need_login": "Please sign in first", "need_body": "Please enter a message", "max": "Max 1000 characters", "saved": "Saved", "need_title": "Please enter a board title", "created": "Board created", "live_on": "Live", "live_off": "Offline (use Refresh)", "msgs": "messages", "pending": "Your account is pending approval. You can post once an admin approves you.", "rejected": "Your registration was not approved. Contact the site owner if needed.", "approve": "Approve", "reject": "Reject", "no_pending": "No pending registrations.", "locale": "en-US", "approve_note": "Approval is required before you can post", "approve_how": "Please DM", "approve_who": "棉花棠", "approve_gid": "game ID 3728362", "approve_tail": "— an admin will approve you shortly.", "unread": "new", "unread_toggle": "Show unread badges", "unread_hint": "Kept on this device only; nobody else can see what you have read", "gl_pub": "Shared", "gl_mine": "Mine", "gl_fav": "Favourites", "gl_new": "Add", "gl_kind": "Type", "gl_palette": "Palette", "gl_idea": "Idea", "gl_title": "Title (optional)", "gl_colors": "Hex codes, space or comma separated, up to 8", "gl_body": "Content: character notes, names, any idea", "gl_public": "Publish so others can favourite it", "gl_save": "Save", "gl_saved": "Saved", "gl_deleted": "Deleted", "gl_empty_pub": "Nothing shared yet — be the first.", "gl_empty_mine": "Nothing saved yet. Roll a palette you like and keep it.", "gl_empty_fav": "No favourites yet. Tap the heart on anything you like.", "gl_need_login": "Please sign in to save", "gl_need_colors": "Enter at least one hex code", "gl_need_body": "Enter some content", "gl_bad_color": "Codes should look like #11997B", "gl_del": "Delete", "gl_publish": "Publish", "gl_unpublish": "Unpublish", "gl_private_tag": "private", "gl_confirm_del": "Delete this? It cannot be undone.", "gl_by": "by", "gl_favs": "favs", "gl_copy": "Copy codes", "gl_copied": "Copied", "gl_save_swatch": "Save to my palettes", "gl_from_room": "from the colour room", "ntf_title": "New message alerts", "ntf_badge": "Show unread count in the tab title", "ntf_desk": "Browser notifications", "ntf_sound": "Sound", "ntf_hint": "Only works while the site is open — leaving the tab in the background is fine, but closing it entirely means nothing arrives. Settings are kept on this device only.", "ntf_more": "What are these three?", "ntf_m_badge": "Unread count in the tab title: the tab reads \"(3) purenistahub\". No sound, no pop-up — the least intrusive option.", "ntf_m_desk": "Browser notifications: a system notification. The first time you tick this, your browser asks whether to allow it; nothing happens until you do.", "ntf_m_sound": "Sound: one short chime. Ticking it plays the sound once so you can hear it before deciding to keep it.", "ntf_m_when": "Nothing alerts you while you are looking at the board, switching back clears it, and your own messages never notify you.", "ntf_blocked": "Browser notifications are blocked. Re-allow them from the padlock icon in the address bar.", "ntf_new": "new messages", "ntf_from": "in"};
   if(!window.supabase){
     var list = document.getElementById('boardCardList');
     if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
@@ -9034,6 +9053,107 @@ function compositionScore(opts) {
 
   /* 未讀提醒。整份「讀到哪裡」只存在這台裝置的 localStorage，不會寫進資料庫，
      所以別人看不到你讀了什麼，換裝置也不會互相影響。不想看紅點的人可以關掉。 */
+  /* ---- 新訊息通知 ----------------------------------------------------
+     只在網站開著的時候有效：分頁在背景時累計未讀，標題顯示數字，
+     可另外開瀏覽器通知與提示音。全部預設關閉，設定只存在本機。
+     要做到「網站關掉也收得到」需要 service worker 與推播伺服器，
+     那是另一件事，這裡刻意不碰。 */
+  var NTF_KEYS = { badge:'pnb_ntf_badge', desk:'pnb_ntf_desk', sound:'pnb_ntf_sound' };
+  var ntf = { pending:0, baseTitle:document.title, audio:null };
+
+  function ntfOn(k){
+    try{ return localStorage.getItem(NTF_KEYS[k]) === '1'; }catch(e){ return false; }
+  }
+  function ntfSet(k, on){
+    try{
+      if(on) localStorage.setItem(NTF_KEYS[k],'1');
+      else localStorage.removeItem(NTF_KEYS[k]);
+    }catch(e){}
+  }
+  function ntfHidden(){
+    return typeof document.visibilityState === 'string' && document.visibilityState === 'hidden';
+  }
+  function ntfPaintTitle(){
+    if(!ntf.pending || !ntfOn('badge')){ document.title = ntf.baseTitle; return; }
+    document.title = '('+(ntf.pending > 99 ? '99+' : ntf.pending)+') '+ntf.baseTitle;
+  }
+  function ntfClear(){
+    ntf.pending = 0;
+    ntfPaintTitle();
+  }
+  /* 短促的一聲，用 WebAudio 合成，不必附帶音檔 */
+  function ntfBeep(){
+    if(!ntfOn('sound')) return;
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      if(!ntf.audio) ntf.audio = new Ctx();
+      if(ntf.audio.state === 'suspended') ntf.audio.resume();
+      var o = ntf.audio.createOscillator(), g = ntf.audio.createGain(), t = ntf.audio.currentTime;
+      o.type = 'sine'; o.frequency.setValueAtTime(880, t);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.12, t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.25);
+      o.connect(g); g.connect(ntf.audio.destination);
+      o.start(t); o.stop(t + 0.26);
+    }catch(e){}
+  }
+  function ntfDesktop(count){
+    if(!ntfOn('desk')) return;
+    if(typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+    try{
+      var where = state.board ? state.board.title : '';
+      new Notification(count+' '+T.ntf_new, {
+        body: where ? (T.ntf_from+' '+where) : '',
+        tag: 'pnb-board',       // 同一個 tag 會覆蓋前一則，不會疊成一長串
+        silent: true            // 音效由我們自己控制，避免響兩聲
+      });
+    }catch(e){}
+  }
+  /* 有新訊息進來時呼叫。只有分頁在背景、而且不是自己發的，才算一則通知。 */
+  function ntfNotify(n){
+    if(!n || !ntfHidden()) return;
+    ntf.pending += n;
+    ntfPaintTitle();
+    ntfBeep();
+    ntfDesktop(ntf.pending);
+  }
+  function ntfPaintOpt(){
+    var el = $('boardNtfOpt');
+    if(!el) return;
+    var blocked = (typeof Notification !== 'undefined' && Notification.permission === 'denied');
+    el.innerHTML = '<div class="nf-head">'+esc(T.ntf_title)+'</div>'
+      + '<div class="nf-row">'
+      +   '<label><input type="checkbox" data-ntf="badge"'+(ntfOn('badge')?' checked':'')+' /> '+esc(T.ntf_badge)+'</label>'
+      +   '<label><input type="checkbox" data-ntf="desk"'+(ntfOn('desk')?' checked':'')+' /> '+esc(T.ntf_desk)+'</label>'
+      +   '<label><input type="checkbox" data-ntf="sound"'+(ntfOn('sound')?' checked':'')+' /> '+esc(T.ntf_sound)+'</label>'
+      + '</div>'
+      + '<p class="nf-hint">'+esc(T.ntf_hint)+'</p>'
+      + (blocked && ntfOn('desk') ? '<p class="nf-warn">'+esc(T.ntf_blocked)+'</p>' : '')
+      + '<details class="nf-more"><summary>'+esc(T.ntf_more)+'</summary>'
+      +   '<p>'+esc(T.ntf_m_badge)+'</p>'
+      +   '<p>'+esc(T.ntf_m_desk)+'</p>'
+      +   '<p>'+esc(T.ntf_m_sound)+'</p>'
+      +   '<p>'+esc(T.ntf_m_when)+'</p>'
+      + '</details>';
+    var boxes = el.querySelectorAll('[data-ntf]');
+    for(var i=0;i<boxes.length;i++){
+      boxes[i].onchange = function(){
+        var k = this.getAttribute('data-ntf');
+        var want = this.checked;
+        if(k === 'desk' && want && typeof Notification !== 'undefined' && Notification.permission === 'default'){
+          // 只在使用者主動打開時才詢問權限，不在進站時就跳出來
+          Notification.requestPermission().then(function(){ ntfSet('desk', true); ntfPaintOpt(); });
+          return;
+        }
+        if(k === 'sound' && want) ntfBeep();   // 打開時先試聽一聲
+        ntfSet(k, want);
+        ntfPaintOpt();
+        ntfPaintTitle();
+      };
+    }
+  }
+
   function unreadKey(bid){ return 'pnb_read_'+BOARD_LOCALE+'_'+bid; }
   function getLastRead(bid){
     try{ return localStorage.getItem(unreadKey(bid)); }catch(e){ return null; }
@@ -9304,8 +9424,19 @@ function compositionScore(opts) {
       }
       return;
     }
-    state.rows = res.data || [];
+    var before = {}, i;
+    for(i=0;i<state.rows.length;i++) before[state.rows[i].id] = 1;
+    var fresh = res.data || [];
+    var added = 0;
+    for(i=0;i<fresh.length;i++){
+      if(before[fresh[i].id]) continue;
+      if(state.user && fresh[i].user_id === state.user.id) continue;   // 自己發的不通知
+      added++;
+    }
+    var first = !state.rows.length;
+    state.rows = fresh;
     paintMessages();
+    if(!first) ntfNotify(added);   // 第一次載入整批訊息不算「新訊息」
     markBoardRead();
   }
 
@@ -9723,6 +9854,11 @@ function compositionScore(opts) {
     var rev = $('boardReviewList'); if(rev) rev.addEventListener('click', onReview);
     var mod = $('boardModList'); if(mod) mod.addEventListener('click', onMod);
     initGallery();
+    ntfPaintOpt();
+    document.addEventListener('visibilitychange', function(){
+      if(!ntfHidden()) ntfClear();
+    });
+    window.addEventListener('focus', ntfClear);
     var cards = $('boardCardList');
     if(cards) cards.addEventListener('click', function(e){
       var btn = e.target.closest('[data-bid]');
