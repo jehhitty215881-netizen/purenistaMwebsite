@@ -924,10 +924,21 @@ body.card-open{overflow:hidden}
 /* 文字底襯：深色框配暗襯白字，淺色框配亮襯深字。
    有了底襯，明暗判斷落在邊界的圖也不會看不清楚。 */
 .pc-frame-content .pc-glass{backdrop-filter:blur(2px)}
-.pc-shell-frame.fr-dark .pc-glass{background:rgba(16,12,32,.52);border-color:rgba(255,255,255,.28);color:#f6f3ff}
-.pc-shell-frame.fr-dark .pc-glass .bm-meta{color:#d8d2ef}
-.pc-shell-frame.fr-light .pc-glass{background:rgba(255,255,255,.62);border-color:rgba(0,0,0,.10);color:#241f36}
+/* 名字與簡介在後面的規則裡被寫死成深色，所以這裡要一併指定，
+   否則深色外框上的白字會被蓋回去，變成深字疊深底看不見。 */
+.pc-shell-frame.fr-dark .pc-glass{background:rgba(16,12,32,.65);border-color:rgba(255,255,255,.30);color:#f6f3ff}
+.pc-shell-frame.fr-dark .pc-glass .pc-name,
+.pc-shell-frame.fr-dark .pc-glass .pc-bio{color:#f6f3ff;text-shadow:0 2px 8px rgba(0,0,0,.75)}
+.pc-shell-frame.fr-dark .pc-glass .bm-meta{color:#ddd7f2}
+.pc-shell-frame.fr-dark .pc-glass .pc-line{background:rgba(255,255,255,.45)}
+.pc-shell-frame.fr-light .pc-glass{background:rgba(255,255,255,.72);border-color:rgba(0,0,0,.10);color:#241f36}
+.pc-shell-frame.fr-light .pc-glass .pc-name,
+.pc-shell-frame.fr-light .pc-glass .pc-bio{color:#241f36;text-shadow:0 1px 4px rgba(255,255,255,.8)}
 .pc-shell-frame.fr-light .pc-glass .bm-meta{color:#5b5470}
+.pc-shell-frame.fr-light .pc-glass .pc-line{background:rgba(0,0,0,.28)}
+/* 設定區的預覽必須跟著欄寬縮，不然 420px 會把版面撐破 */
+#boardCardPreview .pc-shell-frame,#boardCardPreview .pc-shell,#boardCardPreview .pc-css{width:100%;max-width:100%}
+#boardCardPreview{overflow:hidden}
 .board-card-prev{display:flex;align-items:center;gap:8px;border-radius:10px;padding:6px 8px;margin:4px 0;min-height:0;transition:background .2s}
 .board-card-prev:empty{padding:0;margin:0}
 .board-card-prev .cp-lab{font-size:11.5px;color:var(--ink-soft);font-weight:700}
