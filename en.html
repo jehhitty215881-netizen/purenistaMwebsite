@@ -904,6 +904,30 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 
 body.card-open{overflow:hidden}
 @media(max-width:480px){#boardCardBox{padding:12px}}
+.theme-picker{margin:6px 0 10px}
+.tp-cat{margin:0 0 8px}
+.tp-cat-label{display:block;font-size:11.5px;font-weight:800;color:var(--ink-soft);margin:0 0 4px}
+/* 橫向捲動，而不是換行成一大片：外框只會越來越多，
+   直式堆疊會把設定區推得很長。 */
+.tp-row{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;padding:2px 2px 6px;
+  scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.tp-row::-webkit-scrollbar{height:6px}
+.tp-row::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px}
+.tp-item{flex:0 0 auto;scroll-snap-align:start;width:108px;border:2px solid transparent;
+  border-radius:10px;padding:0;background:none;cursor:pointer;line-height:0;overflow:hidden;position:relative}
+.tp-item img{width:108px;height:34px;object-fit:cover;display:block;border-radius:8px}
+.tp-item .tp-css{width:108px;height:34px;border-radius:8px;display:block}
+.tp-item .tp-none{width:108px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  background:var(--panel);border:1.5px dashed var(--line);font-size:11px;color:var(--ink-soft);line-height:1}
+.tp-item.on{border-color:var(--violet);box-shadow:0 0 0 2px color-mix(in srgb,var(--violet) 35%,transparent)}
+.tp-item:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+/* 文字底襯：深色框配暗襯白字，淺色框配亮襯深字。
+   有了底襯，明暗判斷落在邊界的圖也不會看不清楚。 */
+.pc-frame-content .pc-glass{backdrop-filter:blur(2px)}
+.pc-shell-frame.fr-dark .pc-glass{background:rgba(16,12,32,.52);border-color:rgba(255,255,255,.28);color:#f6f3ff}
+.pc-shell-frame.fr-dark .pc-glass .bm-meta{color:#d8d2ef}
+.pc-shell-frame.fr-light .pc-glass{background:rgba(255,255,255,.62);border-color:rgba(0,0,0,.10);color:#241f36}
+.pc-shell-frame.fr-light .pc-glass .bm-meta{color:#5b5470}
 .board-card-prev{display:flex;align-items:center;gap:8px;border-radius:10px;padding:6px 8px;margin:4px 0;min-height:0;transition:background .2s}
 .board-card-prev:empty{padding:0;margin:0}
 .board-card-prev .cp-lab{font-size:11.5px;color:var(--ink-soft);font-weight:700}
@@ -936,9 +960,6 @@ body.card-open{overflow:hidden}
 .pc-ornament.th-crystal_white{filter:drop-shadow(0 0 12px rgba(180,210,255,.45))}
 .pc-ornament.th-silver_bloom{filter:drop-shadow(0 0 12px rgba(220,210,240,.4))}
 #boardCardBox .pc-shell{width:min(100%,320px);background:transparent;box-shadow:none;overflow:visible}
-.board-theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
-.board-theme-grid button{border:1.5px solid var(--line);background:var(--panel);border-radius:12px;padding:10px 8px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center}
-.board-theme-grid button.on{border-color:var(--violet);background:var(--violet-soft);color:var(--violet)}
 
 
 /* ===== 名片華麗框 v3：穩定版面 ===== */
@@ -966,9 +987,6 @@ body.card-open{overflow:hidden}
 .pc-stage.th-crystal_white{background:linear-gradient(160deg,#101828,#1a2848 45%,#0c1220);box-shadow:0 0 0 2px #d0e4ff,0 0 0 5px rgba(180,210,255,.35),0 0 28px rgba(160,200,255,.3)}
 .pc-stage.th-silver_bloom{background:linear-gradient(160deg,#18141f,#2a2435 45%,#100e16);box-shadow:0 0 0 2px #e8e0f0,0 0 0 5px rgba(220,210,240,.3),0 0 28px rgba(200,190,230,.28)}
 
-.board-theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
-.board-theme-grid button{border:1.5px solid var(--line);background:var(--panel);border-radius:12px;padding:10px 8px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
-.board-theme-grid button.on{border-color:var(--violet);background:var(--violet-soft);color:var(--violet)}
 #boardCardPreview .pc-stage{transform:scale(.92);transform-origin:top center}
 
 
@@ -2498,42 +2516,16 @@ body.card-open{overflow:hidden}
       <input id="boardCardColors" maxlength="60" placeholder="Card colours (up to 4 hex codes)" />
       <div id="boardCardPreview" class="board-card-prev"></div>
 
-      <p class="cond" style="margin-top:8px">Card theme (ornate frames)</p>
-      <div class="board-theme-grid" id="boardThemeGrid">
-        <button type="button" data-theme="none">None</button>
-        <button type="button" data-theme="violet_butterfly">Violet butterfly</button>
-        <button type="button" data-theme="pink_rose">Pink roses</button>
-        <button type="button" data-theme="crystal_white">Crystal white</button>
-        <button type="button" data-theme="silver_bloom">Silver bloom</button>
-        <button type="button" data-theme="neon_cyber">Neon</button>
-        <button type="button" data-theme="holo">Holographic</button>
-        <button type="button" data-theme="starfield">Starfield</button>
-        <button type="button" data-theme="aurora">Aurora</button>
+      <p class="cond" style="margin-top:8px">Card frame (scroll sideways)</p>
+      <div class="theme-picker" id="boardThemeGrid">
+        <div class="tp-cat"><span class="tp-cat-label">Night sky</span><div class="tp-row" data-cat="night"></div></div>
+        <div class="tp-cat"><span class="tp-cat-label">Purple</span><div class="tp-row" data-cat="purple"></div></div>
+        <div class="tp-cat"><span class="tp-cat-label">Light</span><div class="tp-row" data-cat="light"></div></div>
+        <div class="tp-cat"><span class="tp-cat-label">Classic</span><div class="tp-row" data-cat="classic"></div></div>
+        <div class="tp-cat"><span class="tp-cat-label">Animated</span><div class="tp-row" data-cat="css"></div></div>
       </div>
       <input type="hidden" id="boardCardTheme" value="none" />
 
-      <div class="board-deco-row">
-        <label>Frame
-          <select id="boardCardFrame">
-            <option value="none">None</option>
-            <option value="sparkle">Spinning sparkle</option>
-            <option value="glow">Soft glow</option>
-            <option value="rose">Blue rose frame</option>
-            <option value="constellation">Constellation</option>
-            <option value="goldstar">Golden stars</option>
-            <option value="lights">String lights</option>
-          </select>
-        </label>
-        <label>Motif
-          <select id="boardCardMotif">
-            <option value="none">None</option>
-            <option value="flower">Flowers</option>
-            <option value="butterfly">Butterflies</option>
-            <option value="both">Flowers + butterflies</option>
-            <option value="stars">Stars</option>
-          </select>
-        </label>
-      </div>
       <label class="board-card-opt"><input type="checkbox" id="boardCardPublic" checked /> Show my card to others</label>
       <div class="board-actions">
         <button type="button" class="pri" id="boardSaveProfile">Save</button>
@@ -9395,13 +9387,7 @@ function compositionScore(opts) {
       var themeVal = (state.profile && state.profile.card_theme) || 'none';
       thEl.value = themeVal;
       // 隱藏欄位對了還不夠，按鈕格也要跟著標示，否則看起來像沒選過
-      var tgEl = $('boardThemeGrid');
-      if(tgEl){
-        var tbs = tgEl.querySelectorAll('[data-theme]');
-        for(var ti=0; ti<tbs.length; ti++){
-          tbs[ti].classList.toggle('on', tbs[ti].getAttribute('data-theme') === themeVal);
-        }
-      }
+      markThemeChoice(themeVal);
     }
   }
 
@@ -11350,12 +11336,7 @@ function wfEndedHTML(){
       : (T.card_hidden || '');
     var cols = (p.card_colors || []).filter(function(c){ return /^#[0-9A-Fa-f]{6}$/.test(c); });
     var theme = p.card_theme || 'none';
-    var frameSrc = {
-      crystal_white: 'card-frames/crystal_white.jpg',
-      pink_rose: 'card-frames/pink_rose.jpg',
-      violet_butterfly: 'card-frames/violet_butterfly.jpg',
-      silver_bloom: 'card-frames/silver_bloom.jpg'
-    }[theme];
+    var frameSrc = frameInfo(theme) ? framePath(theme) : null;
 
     var displayName = p.display_name || T.user;
 
@@ -11379,7 +11360,7 @@ function wfEndedHTML(){
     }
     if(frameSrc){
       var stripe = (typeof cardStripe==='function' && cols.length) ? cardStripe(cols) : '';
-      var h = '<div class="pc-shell pc-shell-frame th-'+theme+'">'
+      var h = '<div class="pc-shell pc-shell-frame th-'+theme+' '+(frameIsDark(theme)?'fr-dark':'fr-light')+'">'
         + '<img class="pc-frame-img" src="'+frameSrc+'" alt="" loading="lazy" decoding="async" width="840" height="564"'
         + ' onerror="this.style.display=\'none\';this.parentNode.classList.add(\'pc-noimg\')" />'
         + '<div class="pc-shine" aria-hidden="true"></div>'
@@ -11431,6 +11412,59 @@ function wfEndedHTML(){
   /* 純 CSS 主題清單。圖片款走 <img>，這幾款只靠樣式，
      所以永遠不會因為檔案沒上傳而破圖。 */
   var CSS_THEMES = { neon_cyber:1, holo:1, starfield:1, aurora:1 };
+  var CSS_THEME_IDS = ['neon_cyber','holo','starfield','aurora'];
+  /* 外框清單。要再加新圖只要往這個表加一行、圖片丟進 card-frames/，
+     不必改資料庫也不必改選單程式：分類與深淺都寫在資料裡。 */
+  var FRAMES = {"h1_11":{"c":"night","d":1},"h1_12":{"c":"light","d":0},"h1_21":{"c":"night","d":1},"h1_22":{"c":"night","d":1},"h1_31":{"c":"light","d":0},"h1_32":{"c":"night","d":1},"h1_41":{"c":"light","d":0},"h1_42":{"c":"purple","d":1},"h1_51":{"c":"light","d":0},"h1_52":{"c":"night","d":1},"h2_11":{"c":"purple","d":1},"h2_12":{"c":"night","d":1},"h2_21":{"c":"purple","d":1},"h2_22":{"c":"night","d":1},"h2_31":{"c":"light","d":0},"h2_32":{"c":"night","d":1},"h2_41":{"c":"light","d":0},"h2_42":{"c":"purple","d":1},"h2_51":{"c":"light","d":0},"h2_52":{"c":"night","d":1},"h3_11":{"c":"night","d":1},"h3_12":{"c":"night","d":1},"h3_21":{"c":"night","d":1},"h3_22":{"c":"night","d":1},"h3_31":{"c":"night","d":1},"h3_32":{"c":"purple","d":1},"h3_41":{"c":"light","d":0},"h3_42":{"c":"light","d":0},"h3_51":{"c":"light","d":0},"h3_52":{"c":"night","d":1},"crystal_white":{"c":"classic","d":0},"pink_rose":{"c":"classic","d":0},"violet_butterfly":{"c":"classic","d":0},"silver_bloom":{"c":"classic","d":0}};
+  var FRAME_LABEL = {"neon_cyber":"Neon","holo":"Holo","starfield":"Starfield","aurora":"Aurora","none":"None"};
+  function frameInfo(id){ return FRAMES[id] || null; }
+  function frameIsDark(id){
+    if(CSS_THEMES[id]) return (id === 'neon_cyber' || id === 'starfield');
+    var f = frameInfo(id);
+    return !!(f && f.d);
+  }
+  function framePath(id){ return 'card-frames/'+id+'.jpg'; }
+  function frameThumb(id){ return 'card-frames/thumbs/'+id+'.jpg'; }
+
+  function themeItemHTML(id, kind){
+    var inner;
+    if(kind === 'none')      inner = '<span class="tp-none">'+esc(FRAME_LABEL.none)+'</span>';
+    else if(kind === 'css')  inner = '<span class="tp-css t-'+id+'" style="'+cardCssVars([])+'"></span>';
+    else                     inner = '<img src="'+frameThumb(id)+'" alt="" loading="lazy" decoding="async" '
+                                   + 'onerror="this.closest(\'.tp-item\').remove()" />';
+    return '<button type="button" class="tp-item" data-theme="'+id+'" title="'+esc(id)+'">'+inner+'</button>';
+  }
+
+  function paintThemePicker(){
+    var wrap = $('boardThemeGrid');
+    if(!wrap) return;
+    var rows = wrap.querySelectorAll('.tp-row');
+    for(var i=0;i<rows.length;i++){
+      var cat = rows[i].getAttribute('data-cat'), html = '';
+      if(i === 0) html += themeItemHTML('none','none');
+      if(cat === 'css'){
+        for(var k=0;k<CSS_THEME_IDS.length;k++) html += themeItemHTML(CSS_THEME_IDS[k],'css');
+      }else{
+        for(var id in FRAMES){
+          if(FRAMES[id].c === cat) html += themeItemHTML(id,'img');
+        }
+      }
+      rows[i].innerHTML = html;
+    }
+    markThemeChoice((($('boardCardTheme')||{}).value) || 'none');
+  }
+
+  function markThemeChoice(v){
+    var wrap = $('boardThemeGrid');
+    if(!wrap) return;
+    var bs = wrap.querySelectorAll('[data-theme]');
+    for(var i=0;i<bs.length;i++){
+      var on = bs[i].getAttribute('data-theme') === v;
+      bs[i].classList.toggle('on', on);
+      if(on && bs[i].scrollIntoView) bs[i].scrollIntoView({block:'nearest', inline:'nearest'});
+    }
+  }
+
   function cardCssVars(cols){
     var c = (typeof decoColors === 'function') ? decoColors(cols) : ['#8E7CC3','#E4A6C4','#F0C987'];
     return '--c1:'+c[0]+';--c2:'+c[1 % c.length]+';--c3:'+c[2 % c.length]+';';
@@ -11593,17 +11627,16 @@ function wfEndedHTML(){
     var moIn=$('boardCardMotif'); if(moIn) moIn.onchange=previewCardDeco;
     var tg=$('boardThemeGrid');
     if(tg) tg.addEventListener('click', function(e){
-      var b=e.target.closest('[data-theme]'); if(!b) return;
+      var b=e.target.closest('[data-theme]');
+      if(!b) return;
       var v=b.getAttribute('data-theme');
-      var th=$('boardCardTheme'); if(th) th.value=v;
-      var bs=tg.querySelectorAll('[data-theme]');
-      for(var i=0;i<bs.length;i++) bs[i].classList.toggle('on', bs[i].getAttribute('data-theme')===v);
-      if(typeof previewCardDeco==='function'){
-        /* 預覽主題 */
-        var el=$('boardCardPreview'); if(!el) return;
-        el.innerHTML = showCardHTML({display_name:'Your name',game_id:'ID',bio:'Your bio here',role:'user',card_colors:parseColors((($('boardCardColors')||{}).value)||''), card_theme:v,card_frame:'none',card_motif:'none',is_public_card:true}, true);
-      }
+      var th=$('boardCardTheme');
+      if(th) th.value=v;
+      markThemeChoice(v);
+      var el=$('boardCardPreview');
+      if(el) el.innerHTML = showCardHTML({display_name:'Your name',game_id:'ID',bio:'Your bio here',role:'user',card_colors:parseColors((($('boardCardColors')||{}).value)||''),card_theme:v,card_frame:'none',card_motif:'none',is_public_card:true}, true);
     });
+    paintThemePicker();
     var cardBox=$('boardCardBox');
     if(cardBox) cardBox.addEventListener('click', function(e){
       if(e.target === cardBox) closeCard();      // 點旁邊的暗底就關掉
