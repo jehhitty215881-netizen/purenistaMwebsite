@@ -9256,11 +9256,11 @@ function compositionScore(opts) {
     state.profile = null;
     if(!state.user) return;
     var res = await sb.from('profiles')
-      .select('id,display_name,role,game_id,approval,is_banned,muted_until,bio,is_public_card,card_colors,card_frame,card_motif')
+      .select('id,display_name,role,game_id,approval,is_banned,muted_until,bio,is_public_card,card_colors,card_frame,card_motif,card_theme')
       .eq('id', state.user.id).maybeSingle();
     if(res.error){
       // approval column may not exist yet
-      res = await sb.from('profiles').select('id,display_name,role,game_id,approval,is_banned,muted_until,bio,is_public_card,card_colors,card_frame,card_motif').eq('id', state.user.id).maybeSingle();
+      res = await sb.from('profiles').select('id,display_name,role,game_id,approval,is_banned,muted_until,bio,is_public_card,card_colors,card_frame,card_motif,card_theme').eq('id', state.user.id).maybeSingle();
       if(res.error){ console.warn(res.error); return; }
       if(res.data) res.data.approval = 'approved';
     }
@@ -9285,6 +9285,21 @@ function compositionScore(opts) {
     if(frEl) frEl.value = (state.profile && state.profile.card_frame) || 'none';
     var moEl = $('boardCardMotif');
     if(moEl) moEl.value = (state.profile && state.profile.card_motif) || 'none';
+    /* 主題外框原本只寫不讀：打開設定永遠顯示「無」，接著按儲存就把已選的
+       主題洗掉了。這裡把已存的值帶回選單。 */
+    var thEl = $('boardCardTheme');
+    if(thEl){
+      var themeVal = (state.profile && state.profile.card_theme) || 'none';
+      thEl.value = themeVal;
+      // 隱藏欄位對了還不夠，按鈕格也要跟著標示，否則看起來像沒選過
+      var tgEl = $('boardThemeGrid');
+      if(tgEl){
+        var tbs = tgEl.querySelectorAll('[data-theme]');
+        for(var ti=0; ti<tbs.length; ti++){
+          tbs[ti].classList.toggle('on', tbs[ti].getAttribute('data-theme') === themeVal);
+        }
+      }
+    }
   }
 
   function paintAuth(){
@@ -11244,7 +11259,7 @@ function wfEndedHTML(){
     if(frameSrc){
       var stripe = (typeof cardStripe==='function' && cols.length) ? cardStripe(cols) : '';
       var h = '<div class="pc-shell pc-shell-frame th-'+theme+'">'
-        + '<img class="pc-frame-img" src="'+frameSrc+'" alt="" />'
+        + '<img class="pc-frame-img" src="'+frameSrc+'" alt="" loading="lazy" decoding="async" width="840" height="564" />'
         + '<div class="pc-frame-content">'
         + '<div class="pc-glass profile-card">'
         + stripe
