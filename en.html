@@ -975,6 +975,44 @@ body.card-open{overflow:hidden}
 /* 圖片外框名片 */
 
 .pc-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;border-radius:8px;z-index:1}
+/* 圖片外框本身是靜態 JPG，靠三層動態讓它「活」起來：
+   底圖極慢地推移、一道斜光掃過、幾顆星在閃。全部是 CSS／SVG，不用額外檔案。 */
+.pc-shell-frame{position:relative;overflow:hidden;border-radius:12px}
+.pc-shell-frame .pc-frame-img{animation:pcDrift 24s ease-in-out infinite alternate;will-change:transform}
+@keyframes pcDrift{
+  0%{transform:scale(1.06) translate3d(-1.2%,-0.8%,0)}
+  100%{transform:scale(1.12) translate3d(1.2%,0.8%,0)}
+}
+.pc-shine{position:absolute;inset:0;z-index:3;pointer-events:none;border-radius:12px;overflow:hidden}
+.pc-shine::before{
+  content:"";position:absolute;top:-60%;bottom:-60%;left:-40%;width:28%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:rotate(14deg);animation:pcSweep 5.5s ease-in-out infinite;
+}
+@keyframes pcSweep{
+  0%{left:-40%;opacity:0}
+  12%{opacity:1}
+  55%{opacity:1}
+  70%,100%{left:120%;opacity:0}
+}
+.pc-twinkle{position:absolute;inset:0;z-index:4;pointer-events:none}
+.pc-twinkle svg{position:absolute;opacity:0;animation:pcTwinkle 3.6s ease-in-out infinite}
+.pc-twinkle .t0{left:9%;top:14%;animation-delay:0s}
+.pc-twinkle .t1{right:12%;top:22%;animation-delay:.7s}
+.pc-twinkle .t2{left:18%;bottom:17%;animation-delay:1.4s}
+.pc-twinkle .t3{right:16%;bottom:24%;animation-delay:2.1s}
+.pc-twinkle .t4{left:48%;top:8%;animation-delay:2.8s}
+.pc-twinkle .t5{right:30%;bottom:9%;animation-delay:1.05s}
+@keyframes pcTwinkle{
+  0%,100%{opacity:0;transform:scale(.5) rotate(0deg)}
+  45%{opacity:.95;transform:scale(1) rotate(45deg)}
+  70%{opacity:.25;transform:scale(.8) rotate(70deg)}
+}
+@media(prefers-reduced-motion:reduce){
+  .pc-shell-frame .pc-frame-img,.pc-shine::before,.pc-twinkle svg{animation:none!important}
+  .pc-shine{display:none}
+  .pc-twinkle svg{opacity:.7}
+}
 .pc-frame-content{position:absolute;left:12%;right:12%;top:18%;bottom:16%;z-index:2;overflow:auto;display:flex;flex-direction:column;justify-content:center}
 .pc-frame-content .profile-card{border-radius:12px}
 .pc-frame-content .pc-name{color:#1a1228}
@@ -11260,6 +11298,8 @@ function wfEndedHTML(){
       var stripe = (typeof cardStripe==='function' && cols.length) ? cardStripe(cols) : '';
       var h = '<div class="pc-shell pc-shell-frame th-'+theme+'">'
         + '<img class="pc-frame-img" src="'+frameSrc+'" alt="" loading="lazy" decoding="async" width="840" height="564" />'
+        + '<div class="pc-shine" aria-hidden="true"></div>'
+        + cardTwinkleHTML(cols)
         + '<div class="pc-frame-content">'
         + '<div class="pc-glass profile-card">'
         + stripe
@@ -11288,6 +11328,20 @@ function wfEndedHTML(){
     }
     h2 += '</div></div>';
     return h2;
+  }
+
+  /* 星點：四角星，越小越像光。用 SVG 直接畫，顏色跟著名片配色走。 */
+  function cardTwinkleHTML(cols){
+    var c = (typeof decoColors === 'function') ? decoColors(cols) : ['#FFFFFF','#FFF3C4','#FFD9EC'];
+    var sizes = [13, 9, 11, 8, 10, 12], out = [];
+    for(var i=0;i<6;i++){
+      var s = sizes[i], col = c[i % c.length];
+      out.push('<span class="t'+i+'">'
+        + '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" aria-hidden="true">'
+        + '<path d="M12 0c1 7.5 3.5 10 12 12-8.5 2-11 4.5-12 12-1-7.5-3.5-10-12-12 8.5-2 11-4.5 12-12z" fill="'+col+'"/>'
+        + '</svg></span>');
+    }
+    return '<div class="pc-twinkle" aria-hidden="true">'+out.join('')+'</div>';
   }
 
   async function showCard(uid){
