@@ -982,7 +982,68 @@ body.card-open{overflow:hidden}
 .pc-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;border-radius:8px;z-index:1}
 /* 圖片外框本身是靜態 JPG，靠三層動態讓它「活」起來：
    底圖極慢地推移、一道斜光掃過、幾顆星在閃。全部是 CSS／SVG，不用額外檔案。 */
+.pc-shell-frame.pc-noimg{background:linear-gradient(150deg,var(--c1,#8E7CC3),var(--c2,#E4A6C4));min-height:230px}
 .pc-shell-frame{position:relative;overflow:hidden;border-radius:12px}
+/* 純 CSS 主題：不需要圖檔，所以不會有檔案沒上傳或載不到的問題，
+   也不會增加載入量。四款都吃使用者挑的配色（--c1~--c3）。 */
+.pc-css{position:relative;width:min(94vw,420px);border-radius:18px;padding:14px;overflow:hidden;isolation:isolate}
+.pc-css .pc-inner{position:relative;z-index:3;text-align:center;padding:16px 14px}
+.pc-css .pc-name{font-weight:800;font-size:17px;letter-spacing:.5px}
+.pc-css .pc-bio{font-size:13px;line-height:1.7;margin-top:6px;opacity:.92}
+.pc-css .pc-line{height:1px;margin:9px auto;width:60%;background:currentColor;opacity:.28}
+.pc-css .pc-stripe{justify-content:center}
+.pc-css .board-actions{margin-top:10px;display:flex;justify-content:center}
+.pc-css .board-actions button{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);color:inherit}
+
+/* 霓虹賽博：暗底 + 兩色霓虹邊 + 掃描線 */
+.t-neon_cyber{background:#0d0a1a;color:#eaf6ff;border:1.5px solid var(--c1);
+  box-shadow:0 0 12px var(--c1),0 0 36px color-mix(in srgb,var(--c2) 55%,transparent),inset 0 0 22px rgba(0,0,0,.6)}
+.t-neon_cyber::before{content:"";position:absolute;inset:0;z-index:1;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.055) 0 1px,transparent 1px 3px)}
+.t-neon_cyber::after{content:"";position:absolute;left:0;right:0;height:30%;z-index:2;
+  background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--c2) 26%,transparent),transparent);
+  animation:pcScan 3.6s linear infinite}
+@keyframes pcScan{0%{top:-30%}100%{top:100%}}
+
+/* 全息：虹彩流動 */
+.t-holo{color:#241f36;
+  background:linear-gradient(115deg,var(--c1),var(--c2),var(--c3),var(--c1));
+  background-size:300% 300%;animation:pcHolo 9s ease infinite;
+  box-shadow:0 10px 30px rgba(40,30,70,.25)}
+.t-holo::before{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.55) 48%,transparent 62%);
+  background-size:220% 220%;animation:pcHoloShine 6s ease-in-out infinite;mix-blend-mode:overlay}
+@keyframes pcHolo{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes pcHoloShine{0%,100%{background-position:120% 0}50%{background-position:-20% 0}}
+
+/* 星空：深夜漸層，星點由既有的 twinkle 層提供 */
+.t-starfield{color:#f2f0ff;
+  background:radial-gradient(120% 90% at 20% 8%,color-mix(in srgb,var(--c1) 55%,#0b0a1f),#07061a 70%);
+  box-shadow:inset 0 0 40px rgba(0,0,0,.55),0 10px 28px rgba(10,8,30,.4)}
+.t-starfield::before{content:"";position:absolute;inset:-40%;z-index:1;
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--c2) 45%,transparent),transparent 70%);
+  animation:pcNebula 16s ease-in-out infinite alternate}
+@keyframes pcNebula{0%{transform:translate3d(-6%,-4%,0) scale(1)}100%{transform:translate3d(6%,5%,0) scale(1.18)}}
+
+/* 極光：柔和光帶緩慢流動 */
+.t-aurora{color:#10202a;
+  background:linear-gradient(160deg,#eaf7ff,#f6ecff);box-shadow:0 10px 28px rgba(60,90,120,.2)}
+.t-aurora::before{content:"";position:absolute;inset:-30%;z-index:1;filter:blur(26px);opacity:.85;
+  background:
+    radial-gradient(closest-side,color-mix(in srgb,var(--c1) 75%,transparent),transparent 70%) 20% 30%/60% 60% no-repeat,
+    radial-gradient(closest-side,color-mix(in srgb,var(--c2) 70%,transparent),transparent 70%) 70% 55%/62% 62% no-repeat,
+    radial-gradient(closest-side,color-mix(in srgb,var(--c3) 65%,transparent),transparent 70%) 45% 80%/58% 58% no-repeat;
+  animation:pcAurora 14s ease-in-out infinite alternate}
+@keyframes pcAurora{0%{transform:translate3d(-4%,-3%,0) rotate(-3deg)}100%{transform:translate3d(5%,4%,0) rotate(4deg)}}
+
+/* 舊瀏覽器沒有 color-mix 也不會壞，只是少了那層柔光 */
+@supports not (color:color-mix(in srgb,#000 50%,#fff)){
+  .t-neon_cyber{box-shadow:0 0 12px var(--c1),inset 0 0 22px rgba(0,0,0,.6)}
+  .t-starfield::before,.t-aurora::before{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .t-neon_cyber::after,.t-holo,.t-holo::before,.t-starfield::before,.t-aurora::before{animation:none!important}
+}
 .pc-shell-frame .pc-frame-img{animation:pcDrift 24s ease-in-out infinite alternate;will-change:transform}
 @keyframes pcDrift{
   0%{transform:scale(1.06) translate3d(-1.2%,-0.8%,0)}
@@ -2449,6 +2510,10 @@ body.card-open{overflow:hidden}
         <button type="button" data-theme="pink_rose">粉玫瑰</button>
         <button type="button" data-theme="crystal_white">水晶白蝶</button>
         <button type="button" data-theme="silver_bloom">銀白花蝶</button>
+        <button type="button" data-theme="neon_cyber">霓虹賽博</button>
+        <button type="button" data-theme="holo">全息虹彩</button>
+        <button type="button" data-theme="starfield">深空星海</button>
+        <button type="button" data-theme="aurora">極光</button>
       </div>
       <input type="hidden" id="boardCardTheme" value="none" />
 
@@ -11297,10 +11362,29 @@ function wfEndedHTML(){
 
     var displayName = p.display_name || T.user;
 
+    if(CSS_THEMES[theme]){
+      var st = (typeof cardStripe === 'function' && cols.length) ? cardStripe(cols) : '';
+      var hc = '<div class="pc-shell pc-css t-'+theme+'" style="'+cardCssVars(cols)+'">'
+        + (theme === 'starfield' ? cardTwinkleHTML(cols) : '')
+        + '<div class="pc-inner">'
+        +   st
+        +   '<div class="pc-name">'+esc(displayName)
+        +     (p.game_id ? '<br><span class="bm-meta" style="color:inherit;opacity:.75">'+esc(p.game_id)+'</span>' : '')
+        +     (p.role === 'admin' ? ' <span class="bc-tag">'+esc(T.admin||'Admin')+'</span>' : '')
+        +   '</div>'
+        +   '<div class="pc-line"></div>'
+        +   '<div class="pc-bio">'+esc(bioText)+'</div>';
+      if(!isPreview){
+        hc += '<div class="board-actions">'
+           +  '<button type="button" id="boardCardClose" class="back">'+esc(T.close||'Close')+'</button></div>';
+      }
+      return hc + '</div></div>';
+    }
     if(frameSrc){
       var stripe = (typeof cardStripe==='function' && cols.length) ? cardStripe(cols) : '';
       var h = '<div class="pc-shell pc-shell-frame th-'+theme+'">'
-        + '<img class="pc-frame-img" src="'+frameSrc+'" alt="" loading="lazy" decoding="async" width="840" height="564" />'
+        + '<img class="pc-frame-img" src="'+frameSrc+'" alt="" loading="lazy" decoding="async" width="840" height="564"'
+        + ' onerror="this.style.display=\'none\';this.parentNode.classList.add(\'pc-noimg\')" />'
         + '<div class="pc-shine" aria-hidden="true"></div>'
         + cardTwinkleHTML(cols)
         + '<div class="pc-frame-content">'
@@ -11345,6 +11429,14 @@ function wfEndedHTML(){
         + '</svg></span>');
     }
     return '<div class="pc-twinkle" aria-hidden="true">'+out.join('')+'</div>';
+  }
+
+  /* 純 CSS 主題清單。圖片款走 <img>，這幾款只靠樣式，
+     所以永遠不會因為檔案沒上傳而破圖。 */
+  var CSS_THEMES = { neon_cyber:1, holo:1, starfield:1, aurora:1 };
+  function cardCssVars(cols){
+    var c = (typeof decoColors === 'function') ? decoColors(cols) : ['#8E7CC3','#E4A6C4','#F0C987'];
+    return '--c1:'+c[0]+';--c2:'+c[1 % c.length]+';--c3:'+c[2 % c.length]+';';
   }
 
   async function showCard(uid){
