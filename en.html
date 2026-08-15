@@ -1370,6 +1370,33 @@ body.card-open{overflow:hidden}
 #boardCardPreview .pc-shell-frame{width:100%;max-width:380px}
 #boardCardPreview .pc-glass .board-actions{display:none}
 
+
+/* 這個選擇器先前被重複定義了十幾次，最後生效的一條只設了寬度。
+   圖片是絕對定位的，容器沒有高度就等於整張圖不見。這裡把比例定回來，
+   放在樣式表最後，確保不會再被前面任何一條蓋掉。 */
+.pc-shell-frame{position:relative;aspect-ratio:1176/784;margin:0 auto;overflow:hidden;border-radius:12px}
+#boardCardBox .pc-shell-frame{width:min(94vw,440px)}
+#boardCardPreview .pc-shell-frame{width:100%;max-width:100%}
+.pc-shell-frame .pc-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+@supports not (aspect-ratio:1/1){
+  .pc-shell-frame{height:0;padding-bottom:66.67%}
+  .pc-shell-frame .pc-frame-content{top:20%;bottom:18%}
+}
+
+/* 選單裡的縮圖必須固定小尺寸。.pc-css 有一條 width:min(94vw,420px) 排在後面，
+   會把動態那四款的預覽方塊撐成整張名片的寬度，整排選單因此橫向爆開。
+   這裡明確限定選單內的尺寸，並且只讓完整名片吃那個寬度。 */
+.tp-item .tp-css,.tp-item .tp-none,.tp-item img{width:108px!important;height:34px!important;
+  max-width:108px;padding:0;border-radius:8px;overflow:hidden}
+.tp-item{width:108px;max-width:108px;overflow:hidden}
+.tp-row{max-width:100%}
+.theme-picker{max-width:100%;overflow:hidden}
+
+/* <picture> 在 img 外多包一層，那一層預設是 inline，會讓絕對定位的圖失去
+   參考框。這裡讓它跟著容器一起撐滿。 */
+.pc-shell-frame picture{position:absolute;inset:0;display:block}
+.tp-item picture{display:block;line-height:0}
+.tp-item picture img{width:108px!important;height:34px!important;object-fit:cover;border-radius:8px}
 </style>
 </head>
 <body>
@@ -11372,8 +11399,11 @@ function wfEndedHTML(){
     if(frameSrc){
       var stripe = (typeof cardStripe==='function' && cols.length) ? cardStripe(cols) : '';
       var h = '<div class="pc-shell pc-shell-frame th-'+theme+' '+(frameIsDark(theme)?'fr-dark':'fr-light')+'">'
-        + '<img class="pc-frame-img" src="'+frameSrc+'" alt="" loading="lazy" decoding="async" width="840" height="564"'
-        + ' onerror="this.style.display=\'none\';this.parentNode.classList.add(\'pc-noimg\')" />'
+        + '<picture>'
+        +   '<source srcset="'+frameSrc.replace(/\.jpg$/,'.webp')+'" type="image/webp" />'
+        +   '<img class="pc-frame-img" src="'+frameSrc+'" alt="" loading="lazy" decoding="async"'
+        +   ' onerror="this.style.display=\'none\';this.closest(\'.pc-shell-frame\').classList.add(\'pc-noimg\')" />'
+        + '</picture>'
         + '<div class="pc-shine" aria-hidden="true"></div>'
         + cardTwinkleHTML(cols)
         + '<div class="pc-frame-content">'
@@ -11441,8 +11471,10 @@ function wfEndedHTML(){
     var inner;
     if(kind === 'none')      inner = '<span class="tp-none">'+esc(FRAME_LABEL.none)+'</span>';
     else if(kind === 'css')  inner = '<span class="tp-css t-'+id+'" style="'+cardCssVars([])+'"></span>';
-    else                     inner = '<img src="'+frameThumb(id)+'" alt="" loading="lazy" decoding="async" '
-                                   + 'onerror="this.closest(\'.tp-item\').remove()" />';
+    else                     inner = '<picture>'
+                            + '<source srcset="'+frameThumb(id).replace(/\.jpg$/,'.webp')+'" type="image/webp" />'
+                            + '<img src="'+frameThumb(id)+'" alt="" loading="lazy" decoding="async" '
+                            + 'onerror="this.closest(\'.tp-item\').remove()" /></picture>';
     return '<button type="button" class="tp-item" data-theme="'+id+'" title="'+esc(id)+'">'+inner+'</button>';
   }
 
