@@ -9212,6 +9212,7 @@ function compositionScore(opts) {
     a: ['霧','星','璃','絮','澄','臨','澈','拾','未','暮','白','青'],
     b: ['野','川','燈','巷','信','海','夢','時','聲','色','階','橋']
   };
+  var NAME_PARTS_EN = { a: ['Mist','Star','Glass','Down','Clear','Dusk','Pale','Quiet','Slow','Bright','Grey','Green'], b: ['field','river','lamp','lane','letter','sea','dream','hour','voice','hue','stair','bridge'] };
   var WORK_PROMPTS = [
     '用三個詞形容今天的角色情緒',
     '只准用「生活物品」當武器設定',
@@ -9220,6 +9221,18 @@ function compositionScore(opts) {
     '這張圖的故事必須有「來不及」',
     '角色的秘密藏在口袋裡的某樣東西'
   ];
+  var WORK_PROMPTS_EN = [
+    "Describe today's character in three words",
+    'Weapons may only be everyday household objects',
+    'Set it in a convenience store after closing time',
+    'Colour limit: two main colours plus one accent',
+    'The story has to involve being too late',
+    "The character's secret is an object in their pocket"
+  ];
+
+  /* 這些素材原本只有中文一份，英文版產生出來的結果也是中文。
+     改成兩份，依語言取用。 */
+  function locTable(zh, en){ return (T.locale||'').indexOf('zh') === 0 ? zh : en; }
 
   function paintGamePanel(){
     var el = $('boardGamePanel');
@@ -9276,16 +9289,20 @@ function compositionScore(opts) {
         var text = head+'\n'+colors.join(' · ');
         return { text: text, colors: colors };
       }
-      if(key === 'naming'){
-        var n1 = randPick(NAME_PARTS.a)+randPick(NAME_PARTS.b);
-        var n2 = randPick(NAME_PARTS.a)+randPick(NAME_PARTS.b)+randPick(NAME_PARTS.a);
-        var tags = ['#柔霧','#對比','#日常奇幻','#低飽和','#角色特寫','#遠景說故事'];
-        var text = '命名與標籤\n・名：'+n1+' ／ '+n2
-          +'\n・標籤：'+randPick(tags)+' '+randPick(tags)+' '+randPick(tags);
+if(key === 'naming'){
+        var NP = locTable(NAME_PARTS, NAME_PARTS_EN);
+        var n1 = randPick(NP.a)+randPick(NP.b);
+        var n2 = randPick(NP.a)+randPick(NP.b)+randPick(NP.a);
+        var tags = locTable(['#柔霧','#對比','#日常奇幻','#低飽和','#角色特寫','#遠景說故事'],
+                            ['#softfocus','#contrast','#everydayfantasy','#desaturated','#characterportrait','#widescene']);
+        var text = locTable('命名與標籤','Names & tags')
+                 + '\n' + locTable('・名：','- Names: ') + n1 + ' / ' + n2
+                 + '\n' + locTable('・標籤：','- Tags: ') + randPick(tags)+' '+randPick(tags)+' '+randPick(tags);
         return { text: text, colors: null };
       }
       // workspace
-      var text = '創作挑戰・靈感卡\n'+randPick(WORK_PROMPTS);
+      var text = locTable('創作挑戰・靈感卡', 'Challenge card')
+               + '\n' + randPick(locTable(WORK_PROMPTS, WORK_PROMPTS_EN));
       return { text: text, colors: null };
     }
     function show(res){
