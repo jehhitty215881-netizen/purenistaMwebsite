@@ -2062,7 +2062,7 @@ body.card-open{overflow:hidden}
           <button class="chk-component-btn" id="animeSegInstall" type="button">Download precise anime analysis component</button>
           <button class="chk-component-btn danger" id="animeSegRemove" type="button" hidden>Remove component</button>
         </div>
-        <p class="chk-component-note" id="animeSegNote">The first click downloads model_int8.onnx from the public Hugging Face source into this device's browser cache. Later analyses run locally without downloading it again or using a paid AI API.</p>
+        <p class="chk-component-note" id="animeSegNote">The first click downloads model_int8.onnx from the public Hugging Face source with percentage, speed and remaining size shown; failed downloads can be retried. Once complete, it stays in this browser cache and later analyses run locally without downloading it again or using a paid AI API.</p>
         <div class="chk-component-prg" id="animeSegPrg" hidden>
           <div class="chk-component-track" id="animeSegTrack"><i id="animeSegFill"></i></div>
           <div class="chk-component-plbl"><span id="animeSegPrgLbl"></span><b id="animeSegPct"></b></div>
@@ -5021,12 +5021,13 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
     }catch(e){return null;}
   }
   async function animeSegModelCached(){return modelCacheSupported()&&!!(await cachedAnimeSegResponse());}
-  function setAnimeSegComponentProgress(frac,label,loaded,total){
+  function setAnimeSegComponentProgress(frac,label,loaded,total,speed){
     var box=document.getElementById('animeSegPrg'),track=document.getElementById('animeSegTrack'),fill=document.getElementById('animeSegFill'),lbl=document.getElementById('animeSegPrgLbl'),pct=document.getElementById('animeSegPct');
     if(!box)return;box.hidden=false;
     if(lbl)lbl.textContent=label||'';
-    if(frac<0){if(track)track.classList.add('ind');if(fill)fill.style.width='';if(pct)pct.textContent=loaded?fmtBytes(loaded):'';}
-    else{if(track)track.classList.remove('ind');if(fill)fill.style.width=Math.round(clamp(frac,0,1)*100)+'%';if(pct)pct.textContent=total?(Math.round(frac*100)+'% · '+fmtBytes(loaded)+' / '+fmtBytes(total)):(Math.round(frac*100)+'%');}
+    if(frac<0){if(track)track.classList.add('ind');if(fill)fill.style.width='';}
+    else{if(track)track.classList.remove('ind');if(fill)fill.style.width=Math.round(clamp(frac,0,1)*100)+'%';}
+    if(pct){var bits=[];if(frac>=0)bits.push(Math.round(clamp(frac,0,1)*100)+'%');if(loaded)bits.push(fmtBytes(loaded)+(total?' / '+fmtBytes(total):''));if(total&&loaded<=total)bits.push(lx('剩餘 ','Remaining ')+fmtBytes(total-loaded));if(speed>0)bits.push(fmtBytes(speed)+'/s');pct.textContent=bits.join(' · ');}
   }
   function hideAnimeSegComponentProgress(){var b=document.getElementById('animeSegPrg');if(b)b.hidden=true;}
   async function refreshAnimeSegComponentUI(){
@@ -5036,7 +5037,7 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
     animeSegInstalled=await animeSegModelCached();
     cb.disabled=!animeSegInstalled||animeSegBusy;if(!animeSegInstalled)cb.checked=false;
     st.textContent=animeSegInstalled?lx('✓ 已安裝在此裝置','✓ Installed on this device'):lx('未安裝','Not installed');
-    if(ins){ins.hidden=animeSegInstalled;ins.disabled=animeSegBusy;}if(rem){rem.hidden=!animeSegInstalled;rem.disabled=animeSegBusy;}
+    if(ins){ins.hidden=animeSegInstalled;ins.disabled=animeSegBusy;if(!animeSegBusy&&!animeSegInstalled)ins.textContent=lx('下載精細動漫分析元件','Download precise anime analysis component');}if(rem){rem.hidden=!animeSegInstalled;rem.disabled=animeSegBusy;}
     return animeSegInstalled;
   }
   async function cacheAnimeSegModelWithProgress(label){
@@ -5044,18 +5045,27 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
     var abs=modelCacheKey(ANIME_SEG_MODEL_URL),res=await fetch(ANIME_SEG_MODEL_URL,{mode:'cors',cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status+' '+ANIME_SEG_MODEL_URL);
     var total=parseInt(res.headers.get('content-length')||'0',10)||0;
     if(total&&total!==ANIME_SEG_MODEL_SIZE)throw new Error('unexpected model size');
-    // Let Cache Storage consume the network response directly. Reading a second tee branch only
-    // for progress can make some browsers buffer the 44 MB model twice and crash the tab.
-    setAnimeSegComponentProgress(-1,label,0,total);
-    await c.put(abs,res);
+    // Count bytes in the one stream Cache Storage consumes. This preserves game-style progress
+    // without teeing the 44 MB response or buffering a second copy in memory.
+    var loaded=0,speed=0,clock=function(){return typeof performance!=='undefined'&&performance.now?performance.now():Date.now();},lastAt=clock(),lastLoaded=0,cacheResponse=res;
+    if(res.body&&typeof TransformStream!=='undefined'){
+      var monitor=new TransformStream({transform:function(chunk,controller){
+        loaded+=chunk.byteLength;var now=clock(),elapsed=now-lastAt;
+        if(elapsed>=250){var instant=(loaded-lastLoaded)*1000/elapsed;speed=speed?speed*.7+instant*.3:instant;lastAt=now;lastLoaded=loaded;setAnimeSegComponentProgress(total?loaded/total:-1,label,loaded,total,speed);}
+        controller.enqueue(chunk);
+      },flush:function(){var now=clock(),elapsed=Math.max(1,now-lastAt),instant=(loaded-lastLoaded)*1000/elapsed;speed=speed?speed*.7+instant*.3:instant;setAnimeSegComponentProgress(total?loaded/total:-1,label,loaded,total,speed);}});
+      cacheResponse=new Response(res.body.pipeThrough(monitor),{status:res.status,statusText:res.statusText,headers:res.headers});
+      setAnimeSegComponentProgress(total?0:-1,label,0,total,0);
+    }else setAnimeSegComponentProgress(-1,label,0,total,0);
+    await c.put(abs,cacheResponse);
     var saved=await c.match(abs,{ignoreVary:true});if(!saved)throw new Error('model cache write failed');
-    var savedSize=parseInt(saved.headers.get('content-length')||'0',10)||total||ANIME_SEG_MODEL_SIZE;
+    var savedSize=loaded||parseInt(saved.headers.get('content-length')||'0',10)||total||ANIME_SEG_MODEL_SIZE;
     if(savedSize!==ANIME_SEG_MODEL_SIZE){await c.delete(abs,{ignoreVary:true});throw new Error('unexpected cached model size');}
     setAnimeSegComponentProgress(1,label,savedSize,savedSize);return savedSize;
   }
   async function installAnimeSegComponent(){
     if(animeSegBusy)return;animeSegBusy=true;
-    var ins=document.getElementById('animeSegInstall'),rem=document.getElementById('animeSegRemove'),st=document.getElementById('animeSegStatus');if(ins)ins.disabled=true;if(rem)rem.disabled=true;if(st)st.textContent=lx('下載中…','Downloading…');
+    var ins=document.getElementById('animeSegInstall'),rem=document.getElementById('animeSegRemove'),st=document.getElementById('animeSegStatus');if(ins){ins.disabled=true;ins.textContent=lx('下載中…','Downloading…');}if(rem)rem.disabled=true;if(st)st.textContent=lx('下載中…','Downloading…');
     var failed=false;
     try{
       try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist();}catch(e){}
@@ -5067,8 +5077,8 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
       var c=await openArtModelCache();if(c)try{await c.delete(modelCacheKey(ANIME_SEG_MODEL_URL),{ignoreVary:true});}catch(_e){}
     }
     animeSegBusy=false;await refreshAnimeSegComponentUI();
-    if(failed&&st)st.textContent=lx('下載失敗；已安全改用原有分析，可稍後重試','Download failed; existing analysis remains available — try again later');
-    setTimeout(hideAnimeSegComponentProgress,900);
+    if(failed){if(st)st.textContent=lx('下載失敗；已安全改用原有分析','Download failed; existing analysis remains available');if(ins)ins.textContent=lx('重試下載精細動漫分析元件','Retry precise anime component download');setAnimeSegComponentProgress(0,lx('下載中斷，可按重試','Download interrupted — you can retry'),0,ANIME_SEG_MODEL_SIZE,0);}
+    else setTimeout(hideAnimeSegComponentProgress,900);
   }
   async function removeAnimeSegComponent(){
     if(animeSegBusy)return;animeSegBusy=true;
