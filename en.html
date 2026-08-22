@@ -5014,7 +5014,10 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
     var c=await openArtModelCache();if(!c)return null;
     try{
       var r=await c.match(modelCacheKey(ANIME_SEG_MODEL_URL),{ignoreVary:true});
-      return r&&r.headers.get('x-purenista-model-version')===ANIME_SEG_COMPONENT_VERSION?r:null;
+      if(!r)return null;
+      var size=parseInt(r.headers.get('content-length')||'0',10)||0;
+      if(size&&size!==ANIME_SEG_MODEL_SIZE){await c.delete(modelCacheKey(ANIME_SEG_MODEL_URL),{ignoreVary:true});return null;}
+      return r;
     }catch(e){return null;}
   }
   async function animeSegModelCached(){return modelCacheSupported()&&!!(await cachedAnimeSegResponse());}
@@ -5039,19 +5042,16 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
   async function cacheAnimeSegModelWithProgress(label){
     var c=await openArtModelCache();if(!c)throw new Error('Cache Storage unavailable');
     var abs=modelCacheKey(ANIME_SEG_MODEL_URL),res=await fetch(ANIME_SEG_MODEL_URL,{mode:'cors',cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status+' '+ANIME_SEG_MODEL_URL);
-    var total=parseInt(res.headers.get('content-length')||'0',10)||0,loaded=0;
-    if(!res.body||!res.body.getReader){
-      var ab=await res.arrayBuffer();loaded=ab.byteLength;if(loaded!==ANIME_SEG_MODEL_SIZE)throw new Error('unexpected model size');
-      setAnimeSegComponentProgress(1,label,loaded,loaded);
-      await c.put(abs,new Response(ab,{status:200,headers:{'content-type':'application/octet-stream','x-purenista-model-version':ANIME_SEG_COMPONENT_VERSION}}));return loaded;
-    }
-    var branches=res.body.tee(),reader=branches[0].getReader(),headers=new Headers();headers.set('content-type','application/octet-stream');headers.set('x-purenista-model-version',ANIME_SEG_COMPONENT_VERSION);
-    var cacheWrite=c.put(abs,new Response(branches[1],{status:200,headers:headers}));
-    setAnimeSegComponentProgress(total?0:-1,label,0,total);
-    for(;;){var r=await reader.read();if(r.done)break;loaded+=r.value.byteLength;setAnimeSegComponentProgress(total?loaded/total:-1,label,loaded,total);}
-    await cacheWrite;
-    if(loaded!==ANIME_SEG_MODEL_SIZE){await c.delete(abs,{ignoreVary:true});throw new Error('unexpected model size');}
-    setAnimeSegComponentProgress(1,label,loaded,total||loaded);return loaded;
+    var total=parseInt(res.headers.get('content-length')||'0',10)||0;
+    if(total&&total!==ANIME_SEG_MODEL_SIZE)throw new Error('unexpected model size');
+    // Let Cache Storage consume the network response directly. Reading a second tee branch only
+    // for progress can make some browsers buffer the 44 MB model twice and crash the tab.
+    setAnimeSegComponentProgress(-1,label,0,total);
+    await c.put(abs,res);
+    var saved=await c.match(abs,{ignoreVary:true});if(!saved)throw new Error('model cache write failed');
+    var savedSize=parseInt(saved.headers.get('content-length')||'0',10)||total||ANIME_SEG_MODEL_SIZE;
+    if(savedSize!==ANIME_SEG_MODEL_SIZE){await c.delete(abs,{ignoreVary:true});throw new Error('unexpected cached model size');}
+    setAnimeSegComponentProgress(1,label,savedSize,savedSize);return savedSize;
   }
   async function installAnimeSegComponent(){
     if(animeSegBusy)return;animeSegBusy=true;
