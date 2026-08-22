@@ -2054,7 +2054,7 @@ body.card-open{overflow:hidden}
       </div>
       <p class="chk-opts-head">④ Advanced:</p>
       <label class="chk-cb"><input type="checkbox" id="chkAnime" checked><span>Enable enhanced anime / hand-drawn detection<small>A browser-local YOLOX detector finds anime characters first, then the existing LBP anime-face detector adds face cues. Failures fall back automatically; images are not uploaded.</small></span></label>
-      <label class="chk-cb"><input type="checkbox" id="chkAnimePrecise" disabled><span>Precise anime subject segmentation (optional)<small>Use this only when you want a tighter character silhouette. Download the ~44 MB offline component first; once installed, the model is kept in this browser so it does not need to be downloaded again next time.</small></span></label>
+      <label class="chk-cb"><input type="checkbox" id="chkAnimePrecise" disabled><span>Precise anime subject segmentation (optional)<small>Use this only when you want a tighter character silhouette. Download the ~44 MB offline component first (served by this site as 2 static files); once installed, the model is kept in this browser so it does not need to be downloaded again next time.</small></span></label>
       <div class="chk-component" id="animeSegComponent">
         <div class="chk-component-row">
           <b>Precise anime analysis component · ~44 MB</b>
@@ -2062,7 +2062,7 @@ body.card-open{overflow:hidden}
           <button class="chk-component-btn" id="animeSegInstall" type="button">Download component</button>
           <button class="chk-component-btn danger" id="animeSegRemove" type="button" hidden>Remove component</button>
         </div>
-        <p class="chk-component-note" id="animeSegNote">The model is stored in this device's site storage. Each image still runs locally, but the 44 MB model is not downloaded again. Clearing this site's browser data removes the component.</p>
+        <p class="chk-component-note" id="animeSegNote">The model is stored in this device's site storage. It is served by this site as 2 static files and uses no paid AI API. Each image still runs locally, but the 44 MB model is not downloaded again.</p>
         <div class="chk-component-prg" id="animeSegPrg" hidden>
           <div class="chk-component-track" id="animeSegTrack"><i id="animeSegFill"></i></div>
           <div class="chk-component-plbl"><span id="animeSegPrgLbl"></span><b id="animeSegPct"></b></div>
@@ -4993,8 +4993,9 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
     'https://raw.githubusercontent.com/ksasao/anime-character-detector/main/docs/character.onnx',
     'https://ksasao.github.io/anime-character-detector/character.onnx'
   ];
-  var ANIME_SEG_MODEL_URLS=[
-    'https://huggingface.co/onnx-community/anime-seg-ONNX/resolve/main/onnx/model_int8.onnx'
+  var ANIME_SEG_MODEL_PART_URLS=[
+    './models/anime-seg-int8-v1.part01.bin',
+    './models/anime-seg-int8-v1.part02.bin'
   ];
   function localZh(){return /^zh/i.test(document.documentElement.lang||'');}
   function lx(zh,en){return localZh()?zh:en;}
@@ -5002,16 +5003,24 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
   function animePreciseEnabled(){var cb=document.getElementById('chkAnimePrecise');return !!(cb&&cb.checked)&&animeEnhancedEnabled();}
   function cvEnabled(){var cb=document.getElementById('chkOpenCV');return !!(cb&&cb.checked);}
 
-  /* ---------- offline model component manager ---------- */
-  var ART_MODEL_CACHE='purenista-art-models-v1';
-  var ANIME_SEG_COMPONENT_VERSION='anime-seg-int8-v1';
+  /* ---------- offline model component manager: Cloudflare Pages static parts ----------
+     No Service Worker is required. The two model parts are ordinary same-origin static files,
+     each below Cloudflare Pages' 25 MiB per-file limit. The visitor explicitly installs them
+     once into Cache Storage; later sessions reconstruct the ONNX bytes locally. */
+  var ART_MODEL_CACHE='purenista-art-models-v2';
+  var ANIME_SEG_COMPONENT_VERSION='anime-seg-int8-v1-pages2';
   var animeSegInstalled=false,animeSegBusy=false;
   function modelCacheSupported(){return typeof window!=='undefined'&&'caches' in window&&window.isSecureContext!==false;}
+  function modelPartKey(url){try{return new URL(url,location.href).href;}catch(e){return url;}}
   async function openArtModelCache(){if(!modelCacheSupported())return null;try{return await caches.open(ART_MODEL_CACHE);}catch(e){return null;}}
-  async function matchCachedModel(urls){
+  async function cachedPartResponse(url){
     var c=await openArtModelCache();if(!c)return null;
-    for(var i=0;i<urls.length;i++){try{var r=await c.match(urls[i],{ignoreVary:true});if(r)return {url:urls[i],response:r};}catch(e){}}
-    return null;
+    try{return await c.match(modelPartKey(url),{ignoreVary:true});}catch(e){return null;}
+  }
+  async function allAnimeSegPartsCached(){
+    if(!modelCacheSupported())return false;
+    for(var i=0;i<ANIME_SEG_MODEL_PART_URLS.length;i++)if(!(await cachedPartResponse(ANIME_SEG_MODEL_PART_URLS[i])))return false;
+    return true;
   }
   function setAnimeSegComponentProgress(frac,label,loaded,total){
     var box=document.getElementById('animeSegPrg'),track=document.getElementById('animeSegTrack'),fill=document.getElementById('animeSegFill'),lbl=document.getElementById('animeSegPrgLbl'),pct=document.getElementById('animeSegPct');
@@ -5025,53 +5034,65 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
     var cb=document.getElementById('chkAnimePrecise'),st=document.getElementById('animeSegStatus'),ins=document.getElementById('animeSegInstall'),rem=document.getElementById('animeSegRemove'),note=document.getElementById('animeSegNote');
     if(!cb||!st)return;
     if(!modelCacheSupported()){animeSegInstalled=false;cb.checked=false;cb.disabled=true;st.textContent=lx('此瀏覽器不支援離線元件','Offline components are not supported by this browser');if(ins)ins.hidden=true;if(rem)rem.hidden=true;if(note)note.textContent=lx('請使用 HTTPS 網站與較新的 Safari、Chrome、Edge 或 Firefox。','Use the HTTPS site in a recent Safari, Chrome, Edge or Firefox.');return false;}
-    var hit=await matchCachedModel(ANIME_SEG_MODEL_URLS);animeSegInstalled=!!hit;
+    animeSegInstalled=await allAnimeSegPartsCached();
     cb.disabled=!animeSegInstalled||animeSegBusy;if(!animeSegInstalled)cb.checked=false;
     st.textContent=animeSegInstalled?lx('✓ 已安裝在此裝置','✓ Installed on this device'):lx('未安裝','Not installed');
     if(ins){ins.hidden=animeSegInstalled;ins.disabled=animeSegBusy;}if(rem){rem.hidden=!animeSegInstalled;rem.disabled=animeSegBusy;}
     return animeSegInstalled;
   }
-  async function cacheResponseWithProgress(url,label){
+  async function cachePartWithProgress(url,label){
     var c=await openArtModelCache();if(!c)throw new Error('Cache Storage unavailable');
-    var res=await fetch(url,{mode:'cors',cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status);
+    var abs=modelPartKey(url),res=await fetch(url,{cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status+' '+url);
     var total=parseInt(res.headers.get('content-length')||'0',10)||0,loaded=0;
-    if(!res.body||!res.body.getReader){var ab=await res.arrayBuffer();loaded=ab.byteLength;setAnimeSegComponentProgress(1,label,loaded,loaded);var rr=new Response(ab,{status:200,headers:{'content-type':res.headers.get('content-type')||'application/octet-stream','x-purenista-model-version':ANIME_SEG_COMPONENT_VERSION}});await c.put(url,rr);return loaded;}
-    var branches=res.body.tee(),reader=branches[0].getReader();
-    var cacheHeaders=new Headers();cacheHeaders.set('content-type',res.headers.get('content-type')||'application/octet-stream');cacheHeaders.set('x-purenista-model-version',ANIME_SEG_COMPONENT_VERSION);
-    var cacheWrite=c.put(url,new Response(branches[1],{status:200,headers:cacheHeaders}));
+    if(!res.body||!res.body.getReader){
+      var ab=await res.arrayBuffer();loaded=ab.byteLength;if(loaded<1024*1024)throw new Error('model part too small');
+      setAnimeSegComponentProgress(1,label,loaded,loaded);
+      await c.put(abs,new Response(ab,{status:200,headers:{'content-type':'application/octet-stream','x-purenista-model-version':ANIME_SEG_COMPONENT_VERSION}}));return loaded;
+    }
+    var branches=res.body.tee(),reader=branches[0].getReader(),headers=new Headers();headers.set('content-type','application/octet-stream');headers.set('x-purenista-model-version',ANIME_SEG_COMPONENT_VERSION);
+    var cacheWrite=c.put(abs,new Response(branches[1],{status:200,headers:headers}));
     setAnimeSegComponentProgress(total?0:-1,label,0,total);
     for(;;){var r=await reader.read();if(r.done)break;loaded+=r.value.byteLength;setAnimeSegComponentProgress(total?loaded/total:-1,label,loaded,total);}
     await cacheWrite;
-    if(loaded<1024*1024){await c.delete(url,{ignoreVary:true});throw new Error('download too small');}
+    if(loaded<1024*1024){await c.delete(abs,{ignoreVary:true});throw new Error('model part too small');}
     setAnimeSegComponentProgress(1,label,loaded,total||loaded);return loaded;
   }
   async function installAnimeSegComponent(){
-    if(animeSegBusy)return;animeSegBusy=true;var ins=document.getElementById('animeSegInstall'),rem=document.getElementById('animeSegRemove'),st=document.getElementById('animeSegStatus');if(ins)ins.disabled=true;if(rem)rem.disabled=true;if(st)st.textContent=lx('下載中…','Downloading…');
+    if(animeSegBusy)return;animeSegBusy=true;
+    var ins=document.getElementById('animeSegInstall'),rem=document.getElementById('animeSegRemove'),st=document.getElementById('animeSegStatus');if(ins)ins.disabled=true;if(rem)rem.disabled=true;if(st)st.textContent=lx('下載中…','Downloading…');
     try{
       try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist();}catch(e){}
-      var last=null,ok=false;
-      for(var i=0;i<ANIME_SEG_MODEL_URLS.length;i++){try{await cacheResponseWithProgress(ANIME_SEG_MODEL_URLS[i],lx('下載精細動漫分析元件…','Downloading precise anime analysis component…'));ok=true;break;}catch(e){last=e;console.warn('component source failed',ANIME_SEG_MODEL_URLS[i],e);}}
-      if(!ok)throw last||new Error('download failed');
+      for(var i=0;i<ANIME_SEG_MODEL_PART_URLS.length;i++){
+        var label=lx('下載精細動漫分析元件 '+(i+1)+'/'+ANIME_SEG_MODEL_PART_URLS.length+'…','Downloading precise anime component '+(i+1)+'/'+ANIME_SEG_MODEL_PART_URLS.length+'…');
+        await cachePartWithProgress(ANIME_SEG_MODEL_PART_URLS[i],label);
+      }
       localStorage.setItem('purenistaAnimeSegVersion',ANIME_SEG_COMPONENT_VERSION);animeSegSessionPromise=null;
       if(st)st.textContent=lx('✓ 已安裝在此裝置','✓ Installed on this device');
-    }catch(e){console.warn('component install failed',e);if(st)st.textContent=lx('下載失敗，可稍後重試','Download failed — try again later');}
+    }catch(e){
+      console.warn('component install failed',e);
+      if(st)st.textContent=lx('元件檔案無法下載，請稍後重試','Component files unavailable — try again later');
+      var c=await openArtModelCache();if(c){for(var j=0;j<ANIME_SEG_MODEL_PART_URLS.length;j++)try{await c.delete(modelPartKey(ANIME_SEG_MODEL_PART_URLS[j]),{ignoreVary:true});}catch(_e){}}
+    }
     animeSegBusy=false;await refreshAnimeSegComponentUI();setTimeout(hideAnimeSegComponentProgress,900);
   }
   async function removeAnimeSegComponent(){
     if(animeSegBusy)return;animeSegBusy=true;
-    try{var c=await openArtModelCache();if(c){for(var i=0;i<ANIME_SEG_MODEL_URLS.length;i++)try{await c.delete(ANIME_SEG_MODEL_URLS[i],{ignoreVary:true});}catch(e){}}localStorage.removeItem('purenistaAnimeSegVersion');animeSegSessionPromise=null;}catch(e){console.warn('component removal failed',e);}
+    try{var c=await openArtModelCache();if(c){for(var i=0;i<ANIME_SEG_MODEL_PART_URLS.length;i++)try{await c.delete(modelPartKey(ANIME_SEG_MODEL_PART_URLS[i]),{ignoreVary:true});}catch(e){}}localStorage.removeItem('purenistaAnimeSegVersion');animeSegSessionPromise=null;}catch(e){console.warn('component removal failed',e);}
     animeSegBusy=false;await refreshAnimeSegComponentUI();
   }
-  async function cachedModelBytes(urls){
-    var hit=await matchCachedModel(urls);if(!hit)return null;
-    try{var ab=await hit.response.arrayBuffer();if(ab.byteLength<1024*1024)return null;return new Uint8Array(ab);}catch(e){return null;}
-  }
-  function registerArtCheckServiceWorker(){
-    if(!('serviceWorker' in navigator)||!window.isSecureContext)return;
-    navigator.serviceWorker.register('./service-worker.js').catch(function(e){console.warn('service worker unavailable',e);});
+  async function cachedAnimeSegBytes(){
+    var parts=[],total=0;
+    for(var i=0;i<ANIME_SEG_MODEL_PART_URLS.length;i++){
+      var r=await cachedPartResponse(ANIME_SEG_MODEL_PART_URLS[i]);if(!r)return null;
+      try{var ab=await r.arrayBuffer();if(ab.byteLength<1024*1024)return null;var u=new Uint8Array(ab);parts.push(u);total+=u.byteLength;}catch(e){return null;}
+    }
+    if(total<30*1024*1024)return null;
+    var joined=new Uint8Array(total),off=0;for(var j=0;j<parts.length;j++){joined.set(parts[j],off);off+=parts[j].byteLength;}
+    return joined;
   }
   function initAnimeSegComponentManager(){
-    var ins=document.getElementById('animeSegInstall'),rem=document.getElementById('animeSegRemove');if(ins)ins.addEventListener('click',installAnimeSegComponent);if(rem)rem.addEventListener('click',removeAnimeSegComponent);refreshAnimeSegComponentUI();registerArtCheckServiceWorker();
+    var ins=document.getElementById('animeSegInstall'),rem=document.getElementById('animeSegRemove');
+    if(ins)ins.addEventListener('click',installAnimeSegComponent);if(rem)rem.addEventListener('click',removeAnimeSegComponent);refreshAnimeSegComponentUI();
   }
 
   async function firstBytes(urls,label){
@@ -5193,7 +5214,7 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
     if(animeSegSessionPromise)return animeSegSessionPromise;
     animeSegSessionPromise=(async function(){
       try{
-        var b=await cachedModelBytes(ANIME_SEG_MODEL_URLS);
+        var b=await cachedAnimeSegBytes();
         if(!b){animeSegInstalled=false;await refreshAnimeSegComponentUI();return null;}
         return await createOrtSession(b);
       }catch(e){console.warn('anime segmentation unavailable',e);return null;}
