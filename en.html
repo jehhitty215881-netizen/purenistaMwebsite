@@ -1412,6 +1412,14 @@ body.card-open{overflow:hidden}
 .bm-more-menu button.danger:hover{border-color:var(--rose)}
 /* 靠右的訊息選單往另一邊開，免得超出畫面 */
 .board-bubble.mine .bm-more-menu{right:auto;left:0}
+
+.bm-tr{margin-top:6px;padding:7px 10px;border-radius:10px;background:var(--violet-soft);
+  border-left:3px solid var(--violet);font-size:13px;line-height:1.7;color:var(--ink);
+  white-space:pre-wrap;overflow-wrap:anywhere}
+.bm-tr .bm-tr-tag{display:block;font-size:10.5px;font-weight:800;color:var(--violet);
+  margin:0 0 3px;letter-spacing:.02em}
+.bm-tr.is-wait{opacity:.7;font-style:italic}
+.board-bubble.mine .bm-tr{background:rgba(255,255,255,.55)}
 </style>
 </head>
 <body>
@@ -2520,6 +2528,7 @@ body.card-open{overflow:hidden}
         <h4>Boards</h4>
         <button type="button" id="boardHomeRefresh" class="back">Refresh</button>
       </div>
+      <p class="cond" style="font-size:11.5px;margin:0 0 8px">Translations come from a third-party service and may be wrong. Once translated, the result is shared with everyone.</p>
       <div id="boardNtfOpt" class="board-ntf"></div>
       <div id="boardUnreadOpt" class="board-unread-opt"></div>
       <div id="boardCardList" class="board-card-list"><p class="board-empty">Loading…</p></div>
@@ -9101,7 +9110,7 @@ function compositionScore(opts) {
   var BOARD_LOCALE = 'en';
   var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
   var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
-  var T = {"signed": "Signed in as ", "gameid": "Game ID", "admin": "Admin", "logout": "Sign out", "email": "Email", "pass": "Password (min 6 characters)", "display": "Display name (for sign-up, optional)", "login": "Sign in", "signup": "Sign up", "signup_ok": "Signed up! You can post once approved. Please DM 棉花棠 (game ID 3728362) to get approved.", "loading": "Loading…", "fail": "Failed to load: ", "empty": "No messages in this board yet. Say hi!", "empty_boards": "No boards yet. Admins can create one below.", "user": "User", "hidden": "Hidden", "show": "Show", "hide": "Hide", "del": "Delete", "delmine": "Delete", "reply": "Reply", "replying": "Replying to", "cancel": "Cancel", "need_login": "Please sign in first", "need_body": "Please enter a message", "max": "Max 1000 characters", "saved": "Saved", "need_title": "Please enter a board title", "created": "Board created", "live_on": "Live", "live_off": "Offline (use Refresh)", "msgs": "messages", "pending": "Your account is pending approval. You can post once an admin approves you.", "rejected": "Your registration was not approved. Contact the site owner if needed.", "approve": "Approve", "reject": "Reject", "no_pending": "No pending registrations.", "locale": "en-US", "approve_note": "Approval is required before you can post", "approve_how": "Please DM", "approve_who": "棉花棠", "approve_gid": "game ID 3728362", "approve_tail": "— an admin will approve you shortly.", "unread": "new", "unread_toggle": "Show unread badges", "unread_hint": "Kept on this device only; nobody else can see what you have read", "gl_pub": "Shared", "gl_mine": "Mine", "gl_fav": "Favourites", "gl_new": "Add", "gl_kind": "Type", "gl_palette": "Palette", "gl_idea": "Idea", "gl_title": "Title (optional)", "gl_colors": "Hex codes, space or comma separated, up to 8", "gl_body": "Content: character notes, names, any idea", "gl_public": "Publish so others can favourite it", "gl_save": "Save", "gl_saved": "Saved", "gl_deleted": "Deleted", "gl_empty_pub": "Nothing shared yet — be the first.", "gl_empty_mine": "Nothing saved yet. Roll a palette you like and keep it.", "gl_empty_fav": "No favourites yet. Tap the heart on anything you like.", "gl_need_login": "Please sign in to save", "gl_need_colors": "Enter at least one hex code", "gl_need_body": "Enter some content", "gl_bad_color": "Codes should look like #11997B", "gl_del": "Delete", "gl_publish": "Publish", "gl_unpublish": "Unpublish", "gl_private_tag": "private", "gl_confirm_del": "Delete this? It cannot be undone.", "gl_by": "by", "gl_favs": "favs", "gl_copy": "Copy codes", "gl_copied": "Copied", "gl_save_swatch": "Save to my palettes", "gl_from_room": "from the colour room", "ntf_title": "New message alerts", "ntf_badge": "Show unread count in the tab title", "ntf_desk": "Browser notifications", "ntf_sound": "Sound", "ntf_hint": "Only works while the site is open — leaving the tab in the background is fine, but closing it entirely means nothing arrives. Settings are kept on this device only.", "ntf_more": "What are these three?", "ntf_m_badge": "Unread count in the tab title: the tab reads \"(3) purenistahub\". No sound, no pop-up — the least intrusive option.", "ntf_m_desk": "Browser notifications: a system notification. The first time you tick this, your browser asks whether to allow it; nothing happens until you do.", "ntf_m_sound": "Sound: one short chime. Ticking it plays the sound once so you can hear it before deciding to keep it.", "ntf_m_when": "Nothing alerts you while you are looking at the board, switching back clears it, and your own messages never notify you.", "ntf_blocked": "Browser notifications are blocked. Re-allow them from the padlock icon in the address bar.", "ntf_new": "new messages", "ntf_from": "in", "w_login": "Sign in to open or join a game.", "w_pending": "Your account needs approval first.", "w_create": "New game", "w_join": "Join", "w_code_ph": "Room code", "w_room": "Room", "w_host": "Host", "w_players": "Players", "w_you": "you", "w_leave": "Leave", "w_copy": "Copy code", "w_copied": "Copied", "w_cfg": "Roles", "w_wolves": "Wolves", "w_seer": "Seer", "w_witch": "Witch", "w_hunter": "Hunter", "w_deal": "Deal and start", "w_dealt": "Dealt", "w_myrole": "Your role", "w_mates": "Your fellow wolves", "w_alone": "You are the only wolf", "w_norole": "Not dealt yet", "w_check": "Check", "w_check_who": "Who do you check tonight?", "w_result": "Result", "w_is_wolf": "is a wolf", "w_is_good": "is not a wolf", "w_checked": "already checked", "w_round": "Night {n}", "w_next": "Next night", "w_out": "Mark out", "w_back": "Mark alive", "w_dead": "out", "w_end": "End and reveal", "w_ended": "This game has ended", "w_reveal": "Roles", "w_confirm_end": "End the game? Everyone's role becomes visible.", "w_confirm_deal": "Deal now? The setup cannot be changed afterwards.", "w_hosthint": "You are the host: dealing, marking players out, advancing nights and ending are yours.", "w_voicehint": "Start your voice call first. The site does not moderate or keep time.", "w_timer": "Timer", "w_timer_30": "30s", "w_timer_60": "60s", "w_timer_90": "90s", "w_timer_clear": "Clear timer", "w_timer_left": "{n}s left", "w_timer_up": "Time's up", "w_timer_hint": "Host can start a timer; when it hits zero and the host tab is open, night/day may auto-resolve.", "w_rules": "Optional rules (set before dealing)", "w_rule_self": "Witch may self-save", "w_rule_poison_shot": "Poisoned hunter may still shoot", "w_rule_tie": "Daytime tie", "w_tie_revote": "Revote", "w_tie_none": "Nobody out", "w_tie_random": "Random one out", "w_phase_night": "Night", "w_phase_day": "Day vote", "w_kill_vote": "Vote to kill", "w_kill_submit": "Confirm kill", "w_witch_save": "Use antidote (save tonight's victim)", "w_witch_poison": "Use poison", "w_poison_go": "Confirm poison", "w_resolve_night": "Resolve night → day", "w_day_vote": "Vote to exile", "w_vote_go": "Vote", "w_abstain": "Abstain", "w_resolve_day": "Tally votes", "w_waiting": "Waiting for {n}", "w_waiting_wolves": "Waiting for {n} wolf vote(s)", "w_waiting_voters": "Waiting for {n} vote(s)", "w_summary": "Announcement", "w_win_wolf": "Wolves win", "w_win_good": "Village wins", "w_hunter_shot": "Hunter shoots", "w_shot_go": "Take them", "w_no_manual": "Eliminations are resolved by the system; host need not mark out manually.", "w_tag": "rules", "w_min": "At least four players are needed.", "role_wolf": "Wolf", "role_seer": "Seer", "role_witch": "Witch", "role_hunter": "Hunter", "role_villager": "Villager", "w_night": "Wolf channel", "w_night_ph": "Wolves only…", "w_send": "Send", "w_night_hint": "Visible to wolves only. Once out you can read but not write. Everyone sees this thread after the game ends.", "w_night_empty": "Nothing said yet.", "w_night_dead": "You are out — reading only.", "w_night_after": "Night talk (post-mortem)", "pin": "Pin", "unpin": "Unpin", "block_btn": "Hide", "blocked_name": "(hidden)", "card_public": "Show my card to others", "card_none": "No bio yet.", "card_hidden": "This person's card is private.", "close": "Close", "card_preview": "Preview", "card_btn": "Card", "more_actions": "More actions"};
+  var T = {"signed": "Signed in as ", "gameid": "Game ID", "admin": "Admin", "logout": "Sign out", "email": "Email", "pass": "Password (min 6 characters)", "display": "Display name (for sign-up, optional)", "login": "Sign in", "signup": "Sign up", "signup_ok": "Signed up! You can post once approved. Please DM 棉花棠 (game ID 3728362) to get approved.", "loading": "Loading…", "fail": "Failed to load: ", "empty": "No messages in this board yet. Say hi!", "empty_boards": "No boards yet. Admins can create one below.", "user": "User", "hidden": "Hidden", "show": "Show", "hide": "Hide", "del": "Delete", "delmine": "Delete", "reply": "Reply", "replying": "Replying to", "cancel": "Cancel", "need_login": "Please sign in first", "need_body": "Please enter a message", "max": "Max 1000 characters", "saved": "Saved", "need_title": "Please enter a board title", "created": "Board created", "live_on": "Live", "live_off": "Offline (use Refresh)", "msgs": "messages", "pending": "Your account is pending approval. You can post once an admin approves you.", "rejected": "Your registration was not approved. Contact the site owner if needed.", "approve": "Approve", "reject": "Reject", "no_pending": "No pending registrations.", "locale": "en-US", "approve_note": "Approval is required before you can post", "approve_how": "Please DM", "approve_who": "棉花棠", "approve_gid": "game ID 3728362", "approve_tail": "— an admin will approve you shortly.", "unread": "new", "unread_toggle": "Show unread badges", "unread_hint": "Kept on this device only; nobody else can see what you have read", "gl_pub": "Shared", "gl_mine": "Mine", "gl_fav": "Favourites", "gl_new": "Add", "gl_kind": "Type", "gl_palette": "Palette", "gl_idea": "Idea", "gl_title": "Title (optional)", "gl_colors": "Hex codes, space or comma separated, up to 8", "gl_body": "Content: character notes, names, any idea", "gl_public": "Publish so others can favourite it", "gl_save": "Save", "gl_saved": "Saved", "gl_deleted": "Deleted", "gl_empty_pub": "Nothing shared yet — be the first.", "gl_empty_mine": "Nothing saved yet. Roll a palette you like and keep it.", "gl_empty_fav": "No favourites yet. Tap the heart on anything you like.", "gl_need_login": "Please sign in to save", "gl_need_colors": "Enter at least one hex code", "gl_need_body": "Enter some content", "gl_bad_color": "Codes should look like #11997B", "gl_del": "Delete", "gl_publish": "Publish", "gl_unpublish": "Unpublish", "gl_private_tag": "private", "gl_confirm_del": "Delete this? It cannot be undone.", "gl_by": "by", "gl_favs": "favs", "gl_copy": "Copy codes", "gl_copied": "Copied", "gl_save_swatch": "Save to my palettes", "gl_from_room": "from the colour room", "ntf_title": "New message alerts", "ntf_badge": "Show unread count in the tab title", "ntf_desk": "Browser notifications", "ntf_sound": "Sound", "ntf_hint": "Only works while the site is open — leaving the tab in the background is fine, but closing it entirely means nothing arrives. Settings are kept on this device only.", "ntf_more": "What are these three?", "ntf_m_badge": "Unread count in the tab title: the tab reads \"(3) purenistahub\". No sound, no pop-up — the least intrusive option.", "ntf_m_desk": "Browser notifications: a system notification. The first time you tick this, your browser asks whether to allow it; nothing happens until you do.", "ntf_m_sound": "Sound: one short chime. Ticking it plays the sound once so you can hear it before deciding to keep it.", "ntf_m_when": "Nothing alerts you while you are looking at the board, switching back clears it, and your own messages never notify you.", "ntf_blocked": "Browser notifications are blocked. Re-allow them from the padlock icon in the address bar.", "ntf_new": "new messages", "ntf_from": "in", "w_login": "Sign in to open or join a game.", "w_pending": "Your account needs approval first.", "w_create": "New game", "w_join": "Join", "w_code_ph": "Room code", "w_room": "Room", "w_host": "Host", "w_players": "Players", "w_you": "you", "w_leave": "Leave", "w_copy": "Copy code", "w_copied": "Copied", "w_cfg": "Roles", "w_wolves": "Wolves", "w_seer": "Seer", "w_witch": "Witch", "w_hunter": "Hunter", "w_deal": "Deal and start", "w_dealt": "Dealt", "w_myrole": "Your role", "w_mates": "Your fellow wolves", "w_alone": "You are the only wolf", "w_norole": "Not dealt yet", "w_check": "Check", "w_check_who": "Who do you check tonight?", "w_result": "Result", "w_is_wolf": "is a wolf", "w_is_good": "is not a wolf", "w_checked": "already checked", "w_round": "Night {n}", "w_next": "Next night", "w_out": "Mark out", "w_back": "Mark alive", "w_dead": "out", "w_end": "End and reveal", "w_ended": "This game has ended", "w_reveal": "Roles", "w_confirm_end": "End the game? Everyone's role becomes visible.", "w_confirm_deal": "Deal now? The setup cannot be changed afterwards.", "w_hosthint": "You are the host: dealing, marking players out, advancing nights and ending are yours.", "w_voicehint": "Start your voice call first. The site does not moderate or keep time.", "w_timer": "Timer", "w_timer_30": "30s", "w_timer_60": "60s", "w_timer_90": "90s", "w_timer_clear": "Clear timer", "w_timer_left": "{n}s left", "w_timer_up": "Time's up", "w_timer_hint": "Host can start a timer; when it hits zero and the host tab is open, night/day may auto-resolve.", "w_rules": "Optional rules (set before dealing)", "w_rule_self": "Witch may self-save", "w_rule_poison_shot": "Poisoned hunter may still shoot", "w_rule_tie": "Daytime tie", "w_tie_revote": "Revote", "w_tie_none": "Nobody out", "w_tie_random": "Random one out", "w_phase_night": "Night", "w_phase_day": "Day vote", "w_kill_vote": "Vote to kill", "w_kill_submit": "Confirm kill", "w_witch_save": "Use antidote (save tonight's victim)", "w_witch_poison": "Use poison", "w_poison_go": "Confirm poison", "w_resolve_night": "Resolve night → day", "w_day_vote": "Vote to exile", "w_vote_go": "Vote", "w_abstain": "Abstain", "w_resolve_day": "Tally votes", "w_waiting": "Waiting for {n}", "w_waiting_wolves": "Waiting for {n} wolf vote(s)", "w_waiting_voters": "Waiting for {n} vote(s)", "w_summary": "Announcement", "w_win_wolf": "Wolves win", "w_win_good": "Village wins", "w_hunter_shot": "Hunter shoots", "w_shot_go": "Take them", "w_no_manual": "Eliminations are resolved by the system; host need not mark out manually.", "w_tag": "rules", "w_min": "At least four players are needed.", "role_wolf": "Wolf", "role_seer": "Seer", "role_witch": "Witch", "role_hunter": "Hunter", "role_villager": "Villager", "w_night": "Wolf channel", "w_night_ph": "Wolves only…", "w_send": "Send", "w_night_hint": "Visible to wolves only. Once out you can read but not write. Everyone sees this thread after the game ends.", "w_night_empty": "Nothing said yet.", "w_night_dead": "You are out — reading only.", "w_night_after": "Night talk (post-mortem)", "pin": "Pin", "unpin": "Unpin", "block_btn": "Hide", "blocked_name": "(hidden)", "card_public": "Show my card to others", "card_none": "No bio yet.", "card_hidden": "This person's card is private.", "close": "Close", "card_preview": "Preview", "card_btn": "Card", "more_actions": "More actions", "tr_btn": "Translate", "tr_show": "Show original", "tr_wait": "Translating...", "tr_by": "Machine translation", "tr_cached": "Already translated", "tr_same": "This message is already in your language.", "tr_long": "This message exceeds the 500-character limit of the translation service.", "tr_quota": "Today's translation quota is used up; it resets tomorrow.", "tr_fail": "Translation failed, please try again later.", "tr_note": "Translations come from a third-party service and may be wrong. Once translated, the result is shared with everyone."};
   if(!window.supabase){
     var list = document.getElementById('boardCardList');
     if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
@@ -10131,6 +10140,8 @@ if(key === 'naming'){
     var acts = '', more = '';
     if(state.user && isApproved()) acts += '<button type="button" data-act="reply" data-id="'+m.id+'">'+T.reply+'</button>';
     acts += '<button type="button" data-act="card" data-uid="'+m.user_id+'">'+esc(T.card_btn)+'</button>';
+    // 只有看起來不是自己語言的訊息才給翻譯鈕，免得整排都是用不到的按鈕
+    if(trNeeded(m.body)) acts += '<button type="button" data-act="tr" data-id="'+m.id+'">'+esc(T.tr_btn)+'</button>';
 
     if(state.user && isApproved() && m.user_id !== uid){
       more += '<button type="button" data-act="report" data-id="'+m.id+'" data-uid="'+m.user_id+'">'+(T.locale&&T.locale.indexOf('zh')===0?'檢舉':'Report')+'</button>';
@@ -10244,6 +10255,10 @@ if(key === 'naming'){
     }
 
     if(stick) scrollBottom();
+    // 列表重畫後把已經取得的譯文補回去，否則有人發言就會把譯文洗掉
+    for(var tid in trCache){
+      if(document.querySelector('.board-bubble[data-id="'+tid+'"]')) trPaint(tid, trCache[tid]);
+    }
   }
 
   async function loadMessages(){
@@ -10279,6 +10294,7 @@ if(key === 'naming'){
     }
     var first = !state.rows.length;
     state.rows = fresh;
+    await trLoadCached();
     paintMessages();
     if(!first) ntfNotify(added);   // 第一次載入整批訊息不算「新訊息」
     markBoardRead();
@@ -10321,6 +10337,119 @@ if(key === 'naming'){
     if(e.key === 'Escape') closeMoreMenus();
   });
 
+  /* ---- 訊息翻譯 ------------------------------------------------------
+     核心設計是「一個人翻，大家共用」：譯文寫進 msg_translations，
+     之後任何人看同一則都直接讀資料庫，不再打翻譯服務。十個人在房裡的話，
+     用量從十次降到一次，而且付出額度的是第一個按的人。
+
+     後端目前是 MyMemory（免申請、可跨網域、按 IP 每天 5000 字）。
+     要換成自己的 Cloudflare Worker 時只要改 trFetch 一個函式。 */
+  var TR_LIMIT = 500;                 // 翻譯服務的單則上限
+  var trCache = {};                   // message_id -> 譯文，省掉重複查詢
+  var trBusy = {};
+
+  function trLang(){
+    return (T.locale||'').indexOf('zh') === 0 ? 'zh' : 'en';
+  }
+  /* 粗略判斷語種：只要用來決定「這則需不需要翻」，不必精準。
+     有中日韓字就當作非英文，反之當英文。 */
+  function trGuessLang(text){
+    var s = String(text||'');
+    if(/[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]/.test(s)) return 'zh';
+    if(/[A-Za-z]/.test(s)) return 'en';
+    return '';
+  }
+  function trNeeded(text){
+    var g = trGuessLang(text);
+    return g && g !== trLang();
+  }
+
+  /* 唯一對外的翻譯呼叫。換後端只要改這裡。 */
+  async function trFetch(text, from, to){
+    var url = 'https://api.mymemory.translated.net/get?q='
+            + encodeURIComponent(text)
+            + '&langpair=' + encodeURIComponent(from + '|' + to);
+    var res = await fetch(url);
+    if(!res.ok) throw new Error('http ' + res.status);
+    var data = await res.json();
+    // 額度用完時它回 200 但夾帶警告，所以要看內容而不是只看狀態碼
+    var detail = String(data.responseDetails || '');
+    if(/MYMEMORY WARNING|QUOTA/i.test(detail)) throw new Error('quota');
+    if(data.responseStatus !== 200 || !data.responseData || !data.responseData.translatedText){
+      throw new Error(detail || 'failed');
+    }
+    return String(data.responseData.translatedText);
+  }
+
+  function trPaint(id, text, waiting){
+    var bubble = document.querySelector('.board-bubble[data-id="'+id+'"]');
+    if(!bubble) return;
+    var box = bubble.querySelector('.bm-tr');
+    if(!text){ if(box) box.remove(); return; }
+    if(!box){
+      box = document.createElement('div');
+      box.className = 'bm-tr';
+      var body = bubble.querySelector('.bm-body');
+      if(body && body.parentNode) body.parentNode.insertBefore(box, body.nextSibling);
+      else bubble.appendChild(box);
+    }
+    box.classList.toggle('is-wait', !!waiting);
+    box.innerHTML = '<span class="bm-tr-tag">'+esc(waiting ? T.tr_wait : T.tr_by)+'</span>'
+                  + esc(text);
+  }
+
+  /* 進到房間時，把已經有人翻過的一次撈回來，省掉每則各問一次 */
+  async function trLoadCached(){
+    if(!state.rows || !state.rows.length) return;
+    var ids = state.rows.map(function(m){ return m.id; });
+    try{
+      var res = await sb.from('msg_translations')
+        .select('message_id,body').eq('lang', trLang()).in('message_id', ids);
+      (res.data||[]).forEach(function(r){ trCache[r.message_id] = r.body; });
+    }catch(e){}
+  }
+
+  async function trToggle(id){
+    var bubble = document.querySelector('.board-bubble[data-id="'+id+'"]');
+    if(bubble && bubble.querySelector('.bm-tr')){ trPaint(id, null); return; }  // 再按一次收起
+    if(trBusy[id]) return;
+
+    var row = null;
+    for(var i=0;i<state.rows.length;i++) if(String(state.rows[i].id) === String(id)) row = state.rows[i];
+    if(!row) return;
+
+    if(trCache[id]){ trPaint(id, trCache[id]); return; }
+
+    if(!trNeeded(row.body)){ alert(T.tr_same); return; }
+    if(String(row.body||'').length > TR_LIMIT){ alert(T.tr_long); return; }
+
+    trBusy[id] = 1;
+    trPaint(id, ' ', true);
+    try{
+      // 有人可能剛剛翻過，先問資料庫再打外部服務
+      var hit = await sb.from('msg_translations')
+        .select('body').eq('message_id', id).eq('lang', trLang()).maybeSingle();
+      var out = hit.data && hit.data.body;
+      if(!out){
+        out = await trFetch(row.body, trGuessLang(row.body), trLang());
+        if(state.user && isApproved()){
+          // 存起來給其他人用。撞號代表別人剛好同時翻了，忽略即可。
+          try{
+            await sb.from('msg_translations').insert({
+              message_id: id, lang: trLang(), body: out.slice(0,2000),
+              engine: 'mymemory', created_by: state.user.id
+            });
+          }catch(e){}
+        }
+      }
+      trCache[id] = out;
+      trPaint(id, out);
+    }catch(err){
+      trPaint(id, null);
+      alert(/quota/i.test(String(err && err.message)) ? T.tr_quota : T.tr_fail);
+    } finally { delete trBusy[id]; }
+  }
+
   async function onAct(ev){
     var b = ev.target.closest('button[data-act]');
     if(!b) return;
@@ -10336,6 +10465,7 @@ if(key === 'naming'){
       return;
     }
     closeMoreMenus();   // 選了任何動作就把選單收起來
+    if(act === 'tr'){ await trToggle(id); return; }
     if(act === 'reply'){ setReply(id); return; }
     if(act === 'card'){ await showCard(b.getAttribute('data-uid')); return; }
     if(act === 'report'){

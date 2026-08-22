@@ -1417,6 +1417,14 @@ body.card-open{overflow:hidden}
 .bm-more-menu button.danger:hover{border-color:var(--rose)}
 /* 靠右的訊息選單往另一邊開，免得超出畫面 */
 .board-bubble.mine .bm-more-menu{right:auto;left:0}
+
+.bm-tr{margin-top:6px;padding:7px 10px;border-radius:10px;background:var(--violet-soft);
+  border-left:3px solid var(--violet);font-size:13px;line-height:1.7;color:var(--ink);
+  white-space:pre-wrap;overflow-wrap:anywhere}
+.bm-tr .bm-tr-tag{display:block;font-size:10.5px;font-weight:800;color:var(--violet);
+  margin:0 0 3px;letter-spacing:.02em}
+.bm-tr.is-wait{opacity:.7;font-style:italic}
+.board-bubble.mine .bm-tr{background:rgba(255,255,255,.55)}
 </style>
 </head>
 <body>
@@ -2525,6 +2533,7 @@ body.card-open{overflow:hidden}
         <h4>專版列表</h4>
         <button type="button" id="boardHomeRefresh" class="back">重新整理</button>
       </div>
+      <p class="cond" style="font-size:11.5px;margin:0 0 8px">譯文由第三方服務產生，可能不準確；譯過的會存起來，同一則大家共用。</p>
       <div id="boardNtfOpt" class="board-ntf"></div>
       <div id="boardUnreadOpt" class="board-unread-opt"></div>
       <div id="boardCardList" class="board-card-list"><p class="board-empty">載入中…</p></div>
@@ -9100,7 +9109,7 @@ function compositionScore(opts) {
   var BOARD_LOCALE = 'zh';
   var SUPABASE_URL = "https://wlsutpwmpnzmyxakqnfp.supabase.co";
   var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsc3V0cHdtcG56bXl4YWtxbmZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTk2OTksImV4cCI6MjEwMTU5NTY5OX0.jhSF_ghfh3sJTH8SrrYxMx5n9lOB3Hxg8LszM17aYq0";
-  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功！審核通過後才能發言。請私訊 棉花棠（遊戲 ID 3728362）通過審核。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "pending": "你的帳號尚在審核中，通過後才能進入專版發言。", "rejected": "你的註冊未通過審核，如有疑問請聯絡站長。", "approve": "通過", "reject": "拒絕", "no_pending": "目前沒有待審核的註冊。", "locale": "zh-TW", "approve_note": "註冊後需經審核通過才能發言", "approve_how": "請私訊", "approve_who": "棉花棠", "approve_gid": "遊戲 ID 3728362", "approve_tail": "，管理員會盡快為你開通。", "unread": "新", "unread_toggle": "顯示未讀提醒", "unread_hint": "只記在這台裝置上，不會讓別人看到你讀了什麼", "gl_pub": "公開分享", "gl_mine": "我的創作", "gl_fav": "我的收藏", "gl_new": "新增", "gl_kind": "類型", "gl_palette": "色票", "gl_idea": "點子", "gl_title": "標題（選填）", "gl_colors": "色碼，用空白或逗號分隔，最多 8 個", "gl_body": "內容：角色設定、命名、任何想法", "gl_public": "公開分享，讓別人可以收藏", "gl_save": "儲存", "gl_saved": "已儲存", "gl_deleted": "已刪除", "gl_empty_pub": "還沒有人公開分享，來當第一個吧。", "gl_empty_mine": "還沒有存過東西。抽到喜歡的配色就存起來吧。", "gl_empty_fav": "還沒有收藏。看到喜歡的按愛心就會出現在這裡。", "gl_need_login": "請先登入才能儲存", "gl_need_colors": "請至少輸入一個色碼", "gl_need_body": "請輸入內容", "gl_bad_color": "色碼格式要像 #11997B", "gl_del": "刪除", "gl_publish": "公開", "gl_unpublish": "取消公開", "gl_private_tag": "未公開", "gl_confirm_del": "確定要刪除嗎？刪掉就找不回來了。", "gl_by": "by", "gl_favs": "收藏", "gl_copy": "複製色碼", "gl_copied": "已複製", "gl_save_swatch": "存到我的色票", "gl_from_room": "來自配色靈感房", "ntf_title": "新訊息通知", "ntf_badge": "分頁標題顯示未讀數", "ntf_desk": "瀏覽器通知", "ntf_sound": "提示音", "ntf_hint": "只在網站開著的時候有效——分頁丟在背景沒關係，完全關掉就收不到了。設定只記在這台裝置上。", "ntf_more": "這三個分別是什麼？", "ntf_m_badge": "分頁標題顯示未讀數：頁籤會變成「(3) purenistahub」，不會發出任何聲音或彈窗，最不打擾的一種。", "ntf_m_desk": "瀏覽器通知：跳系統通知。第一次勾選時瀏覽器會問你要不要允許，允許之後才會生效。", "ntf_m_sound": "提示音：一聲短音。勾起來的當下會先試聽，聽了不喜歡再取消就好。", "ntf_m_when": "你正在看留言板的時候不會提醒，切回分頁就自動清掉，自己發的訊息也不會通知自己。", "ntf_blocked": "瀏覽器通知被封鎖了，請到網址列旁的鎖頭圖示重新允許。", "ntf_new": "則新訊息", "ntf_from": "來自", "w_login": "請先登入才能開局或加入。", "w_pending": "帳號審核通過後才能玩。", "w_create": "開一局", "w_join": "加入", "w_code_ph": "輸入房號", "w_room": "房號", "w_host": "房主", "w_players": "玩家", "w_you": "你", "w_leave": "離開", "w_copy": "複製房號", "w_copied": "已複製", "w_cfg": "角色配置", "w_wolves": "狼人", "w_seer": "預言家", "w_witch": "女巫", "w_hunter": "獵人", "w_deal": "發牌開始", "w_dealt": "已發牌", "w_myrole": "你的身分", "w_mates": "你的狼同伴", "w_alone": "這局只有你一隻狼", "w_norole": "還沒發牌", "w_check": "查驗", "w_check_who": "今晚要查誰？", "w_result": "查驗結果", "w_is_wolf": "是狼人", "w_is_good": "是好人", "w_checked": "查過了", "w_round": "第 {n} 晚", "w_next": "進入下一晚", "w_out": "標記出局", "w_back": "標記存活", "w_dead": "出局", "w_end": "結束並公開身分", "w_ended": "這局已結束", "w_reveal": "身分表", "w_confirm_end": "確定結束？結束後所有人的身分都會公開。", "w_confirm_deal": "確定發牌？發下去就不能改配置了。", "w_hosthint": "你是房主：發牌、結算夜晚／開票、結束。出局由系統結算。", "w_voicehint": "記得先開語音。房主可開計時；時間到且房主分頁開著時可自動結算／開票。", "w_timer": "計時", "w_timer_30": "30秒", "w_timer_60": "60秒", "w_timer_90": "90秒", "w_timer_clear": "取消計時", "w_timer_left": "剩餘 {n} 秒", "w_timer_up": "時間到", "w_timer_hint": "房主可開計時；時間到且房主分頁開著時會嘗試自動結算／開票。", "w_rules": "可選規則（開局前選定）", "w_rule_self": "女巫可自救", "w_rule_poison_shot": "被毒死的獵人仍可開槍", "w_rule_tie": "白天平票", "w_tie_revote": "重投", "w_tie_none": "無人出局", "w_tie_random": "隨機一人出局", "w_phase_night": "夜晚", "w_phase_day": "白天投票", "w_kill_vote": "投票刀人", "w_kill_submit": "確認刀他", "w_witch_save": "使用解藥（救今晚被刀的人）", "w_witch_poison": "使用毒藥", "w_poison_go": "確認毒他", "w_resolve_night": "結算夜晚→天亮", "w_day_vote": "投票放逐", "w_vote_go": "投他", "w_abstain": "棄票", "w_resolve_day": "開票", "w_waiting": "還在等 {n} 人", "w_waiting_wolves": "還在等 {n} 隻狼投票", "w_waiting_voters": "還在等 {n} 人投票", "w_summary": "公告", "w_win_wolf": "狼人獲勝", "w_win_good": "好人獲勝", "w_hunter_shot": "獵人開槍帶走", "w_shot_go": "帶走他", "w_no_manual": "出局由系統結算，房主不用手動標記。", "w_tag": "可選規則", "w_min": "至少要 4 個人才能發牌。", "role_wolf": "狼人", "role_seer": "預言家", "role_witch": "女巫", "role_hunter": "獵人", "role_villager": "平民", "w_night": "狼人頻道", "w_night_ph": "只有狼人看得到…", "w_send": "送出", "w_night_hint": "只有狼人看得到。出局後只能看，不能發言。遊戲結束後全桌都會看到這段對話。", "w_night_empty": "還沒有人說話。", "w_night_dead": "你已經出局了，只能看。", "w_night_after": "夜間對話（復盤）", "pin": "置頂", "unpin": "取消置頂", "block_btn": "黑名單", "blocked_name": "（已封鎖）", "card_public": "公開我的名片", "card_none": "這個人還沒寫簡介。", "card_hidden": "這個人不公開名片。", "close": "關閉", "card_preview": "預覽", "card_btn": "名片", "more_actions": "更多動作"};
+  var T = {"signed": "已登入：", "gameid": "遊戲 ID", "admin": "管理員", "logout": "登出", "email": "Email", "pass": "密碼（至少 6 碼）", "display": "顯示名稱（註冊用，可留空）", "login": "登入", "signup": "註冊", "signup_ok": "註冊成功！審核通過後才能發言。請私訊 棉花棠（遊戲 ID 3728362）通過審核。", "loading": "載入中…", "fail": "讀取失敗：", "empty": "這個專版還沒有訊息，打個招呼吧。", "empty_boards": "還沒有專版。管理員可在下方新增。", "user": "使用者", "hidden": "已隱藏", "show": "顯示", "hide": "隱藏", "del": "刪除", "delmine": "刪除", "reply": "回覆", "replying": "回覆", "cancel": "取消", "need_login": "請先登入", "need_body": "請輸入內容", "max": "最多 1000 字", "saved": "已儲存", "need_title": "請填專版名稱", "created": "專版已建立", "live_on": "即時連線中", "live_off": "離線（仍可手動重新整理）", "msgs": "則訊息", "pending": "你的帳號尚在審核中，通過後才能進入專版發言。", "rejected": "你的註冊未通過審核，如有疑問請聯絡站長。", "approve": "通過", "reject": "拒絕", "no_pending": "目前沒有待審核的註冊。", "locale": "zh-TW", "approve_note": "註冊後需經審核通過才能發言", "approve_how": "請私訊", "approve_who": "棉花棠", "approve_gid": "遊戲 ID 3728362", "approve_tail": "，管理員會盡快為你開通。", "unread": "新", "unread_toggle": "顯示未讀提醒", "unread_hint": "只記在這台裝置上，不會讓別人看到你讀了什麼", "gl_pub": "公開分享", "gl_mine": "我的創作", "gl_fav": "我的收藏", "gl_new": "新增", "gl_kind": "類型", "gl_palette": "色票", "gl_idea": "點子", "gl_title": "標題（選填）", "gl_colors": "色碼，用空白或逗號分隔，最多 8 個", "gl_body": "內容：角色設定、命名、任何想法", "gl_public": "公開分享，讓別人可以收藏", "gl_save": "儲存", "gl_saved": "已儲存", "gl_deleted": "已刪除", "gl_empty_pub": "還沒有人公開分享，來當第一個吧。", "gl_empty_mine": "還沒有存過東西。抽到喜歡的配色就存起來吧。", "gl_empty_fav": "還沒有收藏。看到喜歡的按愛心就會出現在這裡。", "gl_need_login": "請先登入才能儲存", "gl_need_colors": "請至少輸入一個色碼", "gl_need_body": "請輸入內容", "gl_bad_color": "色碼格式要像 #11997B", "gl_del": "刪除", "gl_publish": "公開", "gl_unpublish": "取消公開", "gl_private_tag": "未公開", "gl_confirm_del": "確定要刪除嗎？刪掉就找不回來了。", "gl_by": "by", "gl_favs": "收藏", "gl_copy": "複製色碼", "gl_copied": "已複製", "gl_save_swatch": "存到我的色票", "gl_from_room": "來自配色靈感房", "ntf_title": "新訊息通知", "ntf_badge": "分頁標題顯示未讀數", "ntf_desk": "瀏覽器通知", "ntf_sound": "提示音", "ntf_hint": "只在網站開著的時候有效——分頁丟在背景沒關係，完全關掉就收不到了。設定只記在這台裝置上。", "ntf_more": "這三個分別是什麼？", "ntf_m_badge": "分頁標題顯示未讀數：頁籤會變成「(3) purenistahub」，不會發出任何聲音或彈窗，最不打擾的一種。", "ntf_m_desk": "瀏覽器通知：跳系統通知。第一次勾選時瀏覽器會問你要不要允許，允許之後才會生效。", "ntf_m_sound": "提示音：一聲短音。勾起來的當下會先試聽，聽了不喜歡再取消就好。", "ntf_m_when": "你正在看留言板的時候不會提醒，切回分頁就自動清掉，自己發的訊息也不會通知自己。", "ntf_blocked": "瀏覽器通知被封鎖了，請到網址列旁的鎖頭圖示重新允許。", "ntf_new": "則新訊息", "ntf_from": "來自", "w_login": "請先登入才能開局或加入。", "w_pending": "帳號審核通過後才能玩。", "w_create": "開一局", "w_join": "加入", "w_code_ph": "輸入房號", "w_room": "房號", "w_host": "房主", "w_players": "玩家", "w_you": "你", "w_leave": "離開", "w_copy": "複製房號", "w_copied": "已複製", "w_cfg": "角色配置", "w_wolves": "狼人", "w_seer": "預言家", "w_witch": "女巫", "w_hunter": "獵人", "w_deal": "發牌開始", "w_dealt": "已發牌", "w_myrole": "你的身分", "w_mates": "你的狼同伴", "w_alone": "這局只有你一隻狼", "w_norole": "還沒發牌", "w_check": "查驗", "w_check_who": "今晚要查誰？", "w_result": "查驗結果", "w_is_wolf": "是狼人", "w_is_good": "是好人", "w_checked": "查過了", "w_round": "第 {n} 晚", "w_next": "進入下一晚", "w_out": "標記出局", "w_back": "標記存活", "w_dead": "出局", "w_end": "結束並公開身分", "w_ended": "這局已結束", "w_reveal": "身分表", "w_confirm_end": "確定結束？結束後所有人的身分都會公開。", "w_confirm_deal": "確定發牌？發下去就不能改配置了。", "w_hosthint": "你是房主：發牌、結算夜晚／開票、結束。出局由系統結算。", "w_voicehint": "記得先開語音。房主可開計時；時間到且房主分頁開著時可自動結算／開票。", "w_timer": "計時", "w_timer_30": "30秒", "w_timer_60": "60秒", "w_timer_90": "90秒", "w_timer_clear": "取消計時", "w_timer_left": "剩餘 {n} 秒", "w_timer_up": "時間到", "w_timer_hint": "房主可開計時；時間到且房主分頁開著時會嘗試自動結算／開票。", "w_rules": "可選規則（開局前選定）", "w_rule_self": "女巫可自救", "w_rule_poison_shot": "被毒死的獵人仍可開槍", "w_rule_tie": "白天平票", "w_tie_revote": "重投", "w_tie_none": "無人出局", "w_tie_random": "隨機一人出局", "w_phase_night": "夜晚", "w_phase_day": "白天投票", "w_kill_vote": "投票刀人", "w_kill_submit": "確認刀他", "w_witch_save": "使用解藥（救今晚被刀的人）", "w_witch_poison": "使用毒藥", "w_poison_go": "確認毒他", "w_resolve_night": "結算夜晚→天亮", "w_day_vote": "投票放逐", "w_vote_go": "投他", "w_abstain": "棄票", "w_resolve_day": "開票", "w_waiting": "還在等 {n} 人", "w_waiting_wolves": "還在等 {n} 隻狼投票", "w_waiting_voters": "還在等 {n} 人投票", "w_summary": "公告", "w_win_wolf": "狼人獲勝", "w_win_good": "好人獲勝", "w_hunter_shot": "獵人開槍帶走", "w_shot_go": "帶走他", "w_no_manual": "出局由系統結算，房主不用手動標記。", "w_tag": "可選規則", "w_min": "至少要 4 個人才能發牌。", "role_wolf": "狼人", "role_seer": "預言家", "role_witch": "女巫", "role_hunter": "獵人", "role_villager": "平民", "w_night": "狼人頻道", "w_night_ph": "只有狼人看得到…", "w_send": "送出", "w_night_hint": "只有狼人看得到。出局後只能看，不能發言。遊戲結束後全桌都會看到這段對話。", "w_night_empty": "還沒有人說話。", "w_night_dead": "你已經出局了，只能看。", "w_night_after": "夜間對話（復盤）", "pin": "置頂", "unpin": "取消置頂", "block_btn": "黑名單", "blocked_name": "（已封鎖）", "card_public": "公開我的名片", "card_none": "這個人還沒寫簡介。", "card_hidden": "這個人不公開名片。", "close": "關閉", "card_preview": "預覽", "card_btn": "名片", "more_actions": "更多動作", "tr_btn": "翻譯", "tr_show": "看原文", "tr_wait": "翻譯中…", "tr_by": "機器翻譯", "tr_cached": "已有譯文", "tr_same": "這則訊息已經是你的語言了。", "tr_long": "這則訊息太長，超過翻譯服務的 500 字上限。", "tr_quota": "今天的翻譯額度用完了，明天會重置。", "tr_fail": "翻譯失敗，請稍後再試。", "tr_note": "譯文由第三方服務產生，可能不準確；譯過的會存起來，同一則大家共用。"};
   if(!window.supabase){
     var list = document.getElementById('boardCardList');
     if(list) list.innerHTML = '<p class="board-err">Supabase client failed to load.</p>';
@@ -10117,6 +10126,8 @@ function compositionScore(opts) {
     var acts = '', more = '';
     if(state.user && isApproved()) acts += '<button type="button" data-act="reply" data-id="'+m.id+'">'+T.reply+'</button>';
     acts += '<button type="button" data-act="card" data-uid="'+m.user_id+'">'+esc(T.card_btn)+'</button>';
+    // 只有看起來不是自己語言的訊息才給翻譯鈕，免得整排都是用不到的按鈕
+    if(trNeeded(m.body)) acts += '<button type="button" data-act="tr" data-id="'+m.id+'">'+esc(T.tr_btn)+'</button>';
 
     if(state.user && isApproved() && m.user_id !== uid){
       more += '<button type="button" data-act="report" data-id="'+m.id+'" data-uid="'+m.user_id+'">'+(T.locale&&T.locale.indexOf('zh')===0?'檢舉':'Report')+'</button>';
@@ -10230,6 +10241,10 @@ function compositionScore(opts) {
     }
 
     if(stick) scrollBottom();
+    // 列表重畫後把已經取得的譯文補回去，否則有人發言就會把譯文洗掉
+    for(var tid in trCache){
+      if(document.querySelector('.board-bubble[data-id="'+tid+'"]')) trPaint(tid, trCache[tid]);
+    }
   }
 
   async function loadMessages(){
@@ -10265,6 +10280,7 @@ function compositionScore(opts) {
     }
     var first = !state.rows.length;
     state.rows = fresh;
+    await trLoadCached();
     paintMessages();
     if(!first) ntfNotify(added);   // 第一次載入整批訊息不算「新訊息」
     markBoardRead();
@@ -10307,6 +10323,119 @@ function compositionScore(opts) {
     if(e.key === 'Escape') closeMoreMenus();
   });
 
+  /* ---- 訊息翻譯 ------------------------------------------------------
+     核心設計是「一個人翻，大家共用」：譯文寫進 msg_translations，
+     之後任何人看同一則都直接讀資料庫，不再打翻譯服務。十個人在房裡的話，
+     用量從十次降到一次，而且付出額度的是第一個按的人。
+
+     後端目前是 MyMemory（免申請、可跨網域、按 IP 每天 5000 字）。
+     要換成自己的 Cloudflare Worker 時只要改 trFetch 一個函式。 */
+  var TR_LIMIT = 500;                 // 翻譯服務的單則上限
+  var trCache = {};                   // message_id -> 譯文，省掉重複查詢
+  var trBusy = {};
+
+  function trLang(){
+    return (T.locale||'').indexOf('zh') === 0 ? 'zh' : 'en';
+  }
+  /* 粗略判斷語種：只要用來決定「這則需不需要翻」，不必精準。
+     有中日韓字就當作非英文，反之當英文。 */
+  function trGuessLang(text){
+    var s = String(text||'');
+    if(/[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]/.test(s)) return 'zh';
+    if(/[A-Za-z]/.test(s)) return 'en';
+    return '';
+  }
+  function trNeeded(text){
+    var g = trGuessLang(text);
+    return g && g !== trLang();
+  }
+
+  /* 唯一對外的翻譯呼叫。換後端只要改這裡。 */
+  async function trFetch(text, from, to){
+    var url = 'https://api.mymemory.translated.net/get?q='
+            + encodeURIComponent(text)
+            + '&langpair=' + encodeURIComponent(from + '|' + to);
+    var res = await fetch(url);
+    if(!res.ok) throw new Error('http ' + res.status);
+    var data = await res.json();
+    // 額度用完時它回 200 但夾帶警告，所以要看內容而不是只看狀態碼
+    var detail = String(data.responseDetails || '');
+    if(/MYMEMORY WARNING|QUOTA/i.test(detail)) throw new Error('quota');
+    if(data.responseStatus !== 200 || !data.responseData || !data.responseData.translatedText){
+      throw new Error(detail || 'failed');
+    }
+    return String(data.responseData.translatedText);
+  }
+
+  function trPaint(id, text, waiting){
+    var bubble = document.querySelector('.board-bubble[data-id="'+id+'"]');
+    if(!bubble) return;
+    var box = bubble.querySelector('.bm-tr');
+    if(!text){ if(box) box.remove(); return; }
+    if(!box){
+      box = document.createElement('div');
+      box.className = 'bm-tr';
+      var body = bubble.querySelector('.bm-body');
+      if(body && body.parentNode) body.parentNode.insertBefore(box, body.nextSibling);
+      else bubble.appendChild(box);
+    }
+    box.classList.toggle('is-wait', !!waiting);
+    box.innerHTML = '<span class="bm-tr-tag">'+esc(waiting ? T.tr_wait : T.tr_by)+'</span>'
+                  + esc(text);
+  }
+
+  /* 進到房間時，把已經有人翻過的一次撈回來，省掉每則各問一次 */
+  async function trLoadCached(){
+    if(!state.rows || !state.rows.length) return;
+    var ids = state.rows.map(function(m){ return m.id; });
+    try{
+      var res = await sb.from('msg_translations')
+        .select('message_id,body').eq('lang', trLang()).in('message_id', ids);
+      (res.data||[]).forEach(function(r){ trCache[r.message_id] = r.body; });
+    }catch(e){}
+  }
+
+  async function trToggle(id){
+    var bubble = document.querySelector('.board-bubble[data-id="'+id+'"]');
+    if(bubble && bubble.querySelector('.bm-tr')){ trPaint(id, null); return; }  // 再按一次收起
+    if(trBusy[id]) return;
+
+    var row = null;
+    for(var i=0;i<state.rows.length;i++) if(String(state.rows[i].id) === String(id)) row = state.rows[i];
+    if(!row) return;
+
+    if(trCache[id]){ trPaint(id, trCache[id]); return; }
+
+    if(!trNeeded(row.body)){ alert(T.tr_same); return; }
+    if(String(row.body||'').length > TR_LIMIT){ alert(T.tr_long); return; }
+
+    trBusy[id] = 1;
+    trPaint(id, ' ', true);
+    try{
+      // 有人可能剛剛翻過，先問資料庫再打外部服務
+      var hit = await sb.from('msg_translations')
+        .select('body').eq('message_id', id).eq('lang', trLang()).maybeSingle();
+      var out = hit.data && hit.data.body;
+      if(!out){
+        out = await trFetch(row.body, trGuessLang(row.body), trLang());
+        if(state.user && isApproved()){
+          // 存起來給其他人用。撞號代表別人剛好同時翻了，忽略即可。
+          try{
+            await sb.from('msg_translations').insert({
+              message_id: id, lang: trLang(), body: out.slice(0,2000),
+              engine: 'mymemory', created_by: state.user.id
+            });
+          }catch(e){}
+        }
+      }
+      trCache[id] = out;
+      trPaint(id, out);
+    }catch(err){
+      trPaint(id, null);
+      alert(/quota/i.test(String(err && err.message)) ? T.tr_quota : T.tr_fail);
+    } finally { delete trBusy[id]; }
+  }
+
   async function onAct(ev){
     var b = ev.target.closest('button[data-act]');
     if(!b) return;
@@ -10322,6 +10451,7 @@ function compositionScore(opts) {
       return;
     }
     closeMoreMenus();   // 選了任何動作就把選單收起來
+    if(act === 'tr'){ await trToggle(id); return; }
     if(act === 'reply'){ setReply(id); return; }
     if(act === 'card'){ await showCard(b.getAttribute('data-uid')); return; }
     if(act === 'report'){
