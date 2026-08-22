@@ -292,6 +292,22 @@ footer{margin-top:26px;font-size:12px;color:var(--ink-soft);text-align:center}
 .chk-cb{display:flex;align-items:center;gap:8px;padding:9px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font-size:13.5px;color:var(--ink);cursor:pointer;margin-bottom:12px}
 .chk-cb input{width:17px;height:17px;accent-color:var(--violet);cursor:pointer;flex:none}
 .chk-cb small{color:var(--ink-soft);font-size:11.5px;display:block;margin-top:2px}
+.chk-cb input:disabled{opacity:.45;cursor:not-allowed}
+.chk-component{margin:-4px 0 12px;padding:12px 14px;border:1.5px dashed var(--line);border-radius:12px;background:var(--violet-soft)}
+.chk-component-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.chk-component-row b{font-size:13px}
+.chk-component-status{font-size:12px;color:var(--ink-soft);margin-right:auto}
+.chk-component-btn{border:1.5px solid var(--violet);background:var(--panel);color:var(--violet);font-family:inherit;font-size:12px;font-weight:800;padding:7px 11px;border-radius:999px;cursor:pointer}
+.chk-component-btn:hover,.chk-component-btn:focus-visible{background:var(--violet);color:#fff}
+.chk-component-btn.danger{border-color:#A74A64;color:#A74A64}
+.chk-component-btn.danger:hover,.chk-component-btn.danger:focus-visible{background:#A74A64;color:#fff}
+.chk-component-note{font-size:11.5px;color:var(--ink-soft);margin-top:7px;line-height:1.6}
+.chk-component-prg{margin-top:9px}
+.chk-component-prg[hidden]{display:none}
+.chk-component-track{height:7px;border-radius:99px;background:rgba(123,107,181,.18);overflow:hidden}
+.chk-component-track>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--rose),var(--violet));transition:width .15s ease}
+.chk-component-track.ind>i{width:35%;animation:chkPrgSlide 1.1s ease-in-out infinite}
+.chk-component-plbl{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:11px;color:var(--ink-soft)}
 .chk-run{width:100%;border:0;background:linear-gradient(135deg,var(--rose),var(--violet));color:#fff;border-radius:14px;padding:14px;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:.02em}.chk-prg{margin:10px 0 0}
 .chk-prg-track{height:8px;border-radius:99px;background:var(--line);overflow:hidden;position:relative}
 .chk-prg-track>i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--rose),var(--violet));transition:width .18s ease}
@@ -2019,6 +2035,8 @@ body.card-open{overflow:hidden}
         <button data-m="scene" type="button">Scene / still-life</button>
         <button data-m="collage" type="button">Collage / multi-panel</button>
         <button data-m="layout" type="button">Typography / layout</button>
+        <button data-m="objects" type="button">Object / artifact layout</button>
+        <button data-m="colorblocks" type="button">Color-block layout</button>
       </div>
       <p class="chk-opts-head">② How was this made? (photos and drawings are judged differently):</p>
       <div class="chk-modes" id="chkView">
@@ -2035,9 +2053,25 @@ body.card-open{overflow:hidden}
         <button data-s="none" type="button">No person</button>
       </div>
       <p class="chk-opts-head">④ Advanced:</p>
-      <label class="chk-cb"><input type="checkbox" id="chkAnime" checked><span>Enable anime / illustration face detection<small>Only used for illustrations and 2D work. The model is about 1MB and runs on a background thread. Leaving it off still gives you a full analysis; illustrations just lose one input to the people count and shot size.</small></span></label>
+      <label class="chk-cb"><input type="checkbox" id="chkAnime" checked><span>Enable enhanced anime / hand-drawn detection<small>A browser-local YOLOX detector finds anime characters first, then the existing LBP anime-face detector adds face cues. Failures fall back automatically; images are not uploaded.</small></span></label>
+      <label class="chk-cb"><input type="checkbox" id="chkAnimePrecise" disabled><span>Precise anime subject segmentation (optional)<small>Use this only when you want a tighter character silhouette. Download the ~44 MB offline component first; once installed, the model is kept in this browser so it does not need to be downloaded again next time.</small></span></label>
+      <div class="chk-component" id="animeSegComponent">
+        <div class="chk-component-row">
+          <b>Precise anime analysis component · ~44 MB</b>
+          <span class="chk-component-status" id="animeSegStatus">Checking…</span>
+          <button class="chk-component-btn" id="animeSegInstall" type="button">Download component</button>
+          <button class="chk-component-btn danger" id="animeSegRemove" type="button" hidden>Remove component</button>
+        </div>
+        <p class="chk-component-note" id="animeSegNote">The model is stored in this device's site storage. Each image still runs locally, but the 44 MB model is not downloaded again. Clearing this site's browser data removes the component.</p>
+        <div class="chk-component-prg" id="animeSegPrg" hidden>
+          <div class="chk-component-track" id="animeSegTrack"><i id="animeSegFill"></i></div>
+          <div class="chk-component-plbl"><span id="animeSegPrgLbl"></span><b id="animeSegPct"></b></div>
+        </div>
+      </div>
+      <label class="chk-cb"><input type="checkbox" id="chkOpenCV" checked><span>Enable OpenCV structural cross-check<small>Checks long lines, slight tilt, collage dividers and line-art edges locally. It is supporting evidence only; a single OpenCV measurement never decides whether the artwork is good or bad.</small></span></label>
       <label class="chk-cb"><input type="checkbox" id="chkBreak"><span>Subject deliberately breaks the frame<small>The piece has an inner panel (white margin, letterbox bar, colour block) and a hand, leg or hem deliberately crosses out of it. Ticking this forces composition to be judged against the inner panel and treats the overflow as intentional. Leave it blank for automatic detection.</small></span></label>
       <label class="chk-cb"><input type="checkbox" id="chkFramed"><span>I used a frame / border composition<small>If checked, center-weight is treated as intentional (no penalty)</small></span></label>
+      <p class="fine" style="margin:8px 2px 10px">Local models/libraries: anime-character-detector (Apache-2.0), anime-seg upstream (Apache-2.0; INT8 mirror by onnx-community), OpenCV.js (Apache-2.0), and lbpcascade_animeface (MIT). All added detection runs in the browser.</p>
       <button class="chk-run" id="chkRun" type="button">✨ Analyze</button>
       <div class="chk-prg" id="chkPrg" hidden><div class="chk-prg-track" id="chkPrgTrack"><i id="chkPrgFill"></i></div><div class="chk-prg-lbl"><span id="chkPrgLbl"></span><b id="chkPrgPct"></b></div></div>
     </div>
@@ -4949,6 +4983,317 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
   function loadScript(src){return new Promise(function(resolve,reject){var s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=reject;document.head.appendChild(s);});}
   async function getModel(){if(modelPromise)return modelPromise;modelPromise=(async function(){try{if(!window.tf)await loadScriptProgress('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js',tt('pr_dl_tf'));if(!window.bodyPix)await loadScriptProgress('https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.2.1/dist/body-pix.min.js',tt('pr_dl_bp'));return await bodyPix.load({architecture:'MobileNetV1',outputStride:16,multiplier:.75,quantBytes:2});}catch(e){console.warn('Segmentation unavailable',e);return null;}})();return modelPromise;}
 
+  /* ===================== free local anime / OpenCV assist =====================
+     All optional inference stays in the visitor's browser. No image is uploaded by these helpers.
+     The cascade remains the fast face fallback; YOLOX adds anime-character boxes; the quantized
+     anime segmentation model is opt-in because its first download is much larger; OpenCV is used
+     only as a structural cross-check and never gets final say by itself. */
+  var ortPromise=null, animeCharSessionPromise=null, animeSegSessionPromise=null, cvPromise=null;
+  var ANIME_CHAR_MODEL_URLS=[
+    'https://raw.githubusercontent.com/ksasao/anime-character-detector/main/docs/character.onnx',
+    'https://ksasao.github.io/anime-character-detector/character.onnx'
+  ];
+  var ANIME_SEG_MODEL_URLS=[
+    'https://huggingface.co/onnx-community/anime-seg-ONNX/resolve/main/onnx/model_int8.onnx'
+  ];
+  function localZh(){return /^zh/i.test(document.documentElement.lang||'');}
+  function lx(zh,en){return localZh()?zh:en;}
+  function animeEnhancedEnabled(){var cb=document.getElementById('chkAnime');return !!(cb&&cb.checked)&&currentView!=='photo';}
+  function animePreciseEnabled(){var cb=document.getElementById('chkAnimePrecise');return !!(cb&&cb.checked)&&animeEnhancedEnabled();}
+  function cvEnabled(){var cb=document.getElementById('chkOpenCV');return !!(cb&&cb.checked);}
+
+  /* ---------- offline model component manager ---------- */
+  var ART_MODEL_CACHE='purenista-art-models-v1';
+  var ANIME_SEG_COMPONENT_VERSION='anime-seg-int8-v1';
+  var animeSegInstalled=false,animeSegBusy=false;
+  function modelCacheSupported(){return typeof window!=='undefined'&&'caches' in window&&window.isSecureContext!==false;}
+  async function openArtModelCache(){if(!modelCacheSupported())return null;try{return await caches.open(ART_MODEL_CACHE);}catch(e){return null;}}
+  async function matchCachedModel(urls){
+    var c=await openArtModelCache();if(!c)return null;
+    for(var i=0;i<urls.length;i++){try{var r=await c.match(urls[i],{ignoreVary:true});if(r)return {url:urls[i],response:r};}catch(e){}}
+    return null;
+  }
+  function setAnimeSegComponentProgress(frac,label,loaded,total){
+    var box=document.getElementById('animeSegPrg'),track=document.getElementById('animeSegTrack'),fill=document.getElementById('animeSegFill'),lbl=document.getElementById('animeSegPrgLbl'),pct=document.getElementById('animeSegPct');
+    if(!box)return;box.hidden=false;
+    if(lbl)lbl.textContent=label||'';
+    if(frac<0){if(track)track.classList.add('ind');if(fill)fill.style.width='';if(pct)pct.textContent=loaded?fmtBytes(loaded):'';}
+    else{if(track)track.classList.remove('ind');if(fill)fill.style.width=Math.round(clamp(frac,0,1)*100)+'%';if(pct)pct.textContent=total?(Math.round(frac*100)+'% · '+fmtBytes(loaded)+' / '+fmtBytes(total)):(Math.round(frac*100)+'%');}
+  }
+  function hideAnimeSegComponentProgress(){var b=document.getElementById('animeSegPrg');if(b)b.hidden=true;}
+  async function refreshAnimeSegComponentUI(){
+    var cb=document.getElementById('chkAnimePrecise'),st=document.getElementById('animeSegStatus'),ins=document.getElementById('animeSegInstall'),rem=document.getElementById('animeSegRemove'),note=document.getElementById('animeSegNote');
+    if(!cb||!st)return;
+    if(!modelCacheSupported()){animeSegInstalled=false;cb.checked=false;cb.disabled=true;st.textContent=lx('此瀏覽器不支援離線元件','Offline components are not supported by this browser');if(ins)ins.hidden=true;if(rem)rem.hidden=true;if(note)note.textContent=lx('請使用 HTTPS 網站與較新的 Safari、Chrome、Edge 或 Firefox。','Use the HTTPS site in a recent Safari, Chrome, Edge or Firefox.');return false;}
+    var hit=await matchCachedModel(ANIME_SEG_MODEL_URLS);animeSegInstalled=!!hit;
+    cb.disabled=!animeSegInstalled||animeSegBusy;if(!animeSegInstalled)cb.checked=false;
+    st.textContent=animeSegInstalled?lx('✓ 已安裝在此裝置','✓ Installed on this device'):lx('未安裝','Not installed');
+    if(ins){ins.hidden=animeSegInstalled;ins.disabled=animeSegBusy;}if(rem){rem.hidden=!animeSegInstalled;rem.disabled=animeSegBusy;}
+    return animeSegInstalled;
+  }
+  async function cacheResponseWithProgress(url,label){
+    var c=await openArtModelCache();if(!c)throw new Error('Cache Storage unavailable');
+    var res=await fetch(url,{mode:'cors',cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status);
+    var total=parseInt(res.headers.get('content-length')||'0',10)||0,loaded=0;
+    if(!res.body||!res.body.getReader){var ab=await res.arrayBuffer();loaded=ab.byteLength;setAnimeSegComponentProgress(1,label,loaded,loaded);var rr=new Response(ab,{status:200,headers:{'content-type':res.headers.get('content-type')||'application/octet-stream','x-purenista-model-version':ANIME_SEG_COMPONENT_VERSION}});await c.put(url,rr);return loaded;}
+    var branches=res.body.tee(),reader=branches[0].getReader();
+    var cacheHeaders=new Headers();cacheHeaders.set('content-type',res.headers.get('content-type')||'application/octet-stream');cacheHeaders.set('x-purenista-model-version',ANIME_SEG_COMPONENT_VERSION);
+    var cacheWrite=c.put(url,new Response(branches[1],{status:200,headers:cacheHeaders}));
+    setAnimeSegComponentProgress(total?0:-1,label,0,total);
+    for(;;){var r=await reader.read();if(r.done)break;loaded+=r.value.byteLength;setAnimeSegComponentProgress(total?loaded/total:-1,label,loaded,total);}
+    await cacheWrite;
+    if(loaded<1024*1024){await c.delete(url,{ignoreVary:true});throw new Error('download too small');}
+    setAnimeSegComponentProgress(1,label,loaded,total||loaded);return loaded;
+  }
+  async function installAnimeSegComponent(){
+    if(animeSegBusy)return;animeSegBusy=true;var ins=document.getElementById('animeSegInstall'),rem=document.getElementById('animeSegRemove'),st=document.getElementById('animeSegStatus');if(ins)ins.disabled=true;if(rem)rem.disabled=true;if(st)st.textContent=lx('下載中…','Downloading…');
+    try{
+      try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist();}catch(e){}
+      var last=null,ok=false;
+      for(var i=0;i<ANIME_SEG_MODEL_URLS.length;i++){try{await cacheResponseWithProgress(ANIME_SEG_MODEL_URLS[i],lx('下載精細動漫分析元件…','Downloading precise anime analysis component…'));ok=true;break;}catch(e){last=e;console.warn('component source failed',ANIME_SEG_MODEL_URLS[i],e);}}
+      if(!ok)throw last||new Error('download failed');
+      localStorage.setItem('purenistaAnimeSegVersion',ANIME_SEG_COMPONENT_VERSION);animeSegSessionPromise=null;
+      if(st)st.textContent=lx('✓ 已安裝在此裝置','✓ Installed on this device');
+    }catch(e){console.warn('component install failed',e);if(st)st.textContent=lx('下載失敗，可稍後重試','Download failed — try again later');}
+    animeSegBusy=false;await refreshAnimeSegComponentUI();setTimeout(hideAnimeSegComponentProgress,900);
+  }
+  async function removeAnimeSegComponent(){
+    if(animeSegBusy)return;animeSegBusy=true;
+    try{var c=await openArtModelCache();if(c){for(var i=0;i<ANIME_SEG_MODEL_URLS.length;i++)try{await c.delete(ANIME_SEG_MODEL_URLS[i],{ignoreVary:true});}catch(e){}}localStorage.removeItem('purenistaAnimeSegVersion');animeSegSessionPromise=null;}catch(e){console.warn('component removal failed',e);}
+    animeSegBusy=false;await refreshAnimeSegComponentUI();
+  }
+  async function cachedModelBytes(urls){
+    var hit=await matchCachedModel(urls);if(!hit)return null;
+    try{var ab=await hit.response.arrayBuffer();if(ab.byteLength<1024*1024)return null;return new Uint8Array(ab);}catch(e){return null;}
+  }
+  function registerArtCheckServiceWorker(){
+    if(!('serviceWorker' in navigator)||!window.isSecureContext)return;
+    navigator.serviceWorker.register('./service-worker.js').catch(function(e){console.warn('service worker unavailable',e);});
+  }
+  function initAnimeSegComponentManager(){
+    var ins=document.getElementById('animeSegInstall'),rem=document.getElementById('animeSegRemove');if(ins)ins.addEventListener('click',installAnimeSegComponent);if(rem)rem.addEventListener('click',removeAnimeSegComponent);refreshAnimeSegComponentUI();registerArtCheckServiceWorker();
+  }
+
+  async function firstBytes(urls,label){
+    var last=null;
+    for(var i=0;i<urls.length;i++){
+      try{
+        var b=await fetchBytesProgress(urls[i],label);
+        if(!b||b.length<1024)throw new Error('download too small');
+        return b;
+      }catch(e){last=e;console.warn('model source failed',urls[i],e);}
+    }
+    throw last||new Error('all model sources failed');
+  }
+
+  async function getOrt(){
+    if(ortPromise)return ortPromise;
+    ortPromise=(async function(){
+      if(window.ort&&window.ort.InferenceSession)return window.ort;
+      var urls=[
+        'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.2/dist/ort.webgpu.min.js',
+        'https://unpkg.com/onnxruntime-web@1.23.2/dist/ort.webgpu.min.js'
+      ],last=null;
+      for(var i=0;i<urls.length;i++){
+        try{await loadScript(urls[i]);if(window.ort&&window.ort.InferenceSession)break;}catch(e){last=e;}
+      }
+      if(!window.ort||!window.ort.InferenceSession)throw last||new Error('ONNX Runtime Web unavailable');
+      try{
+        window.ort.env.wasm.wasmPaths='https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.2/dist/';
+        window.ort.env.wasm.numThreads=(typeof crossOriginIsolated!=='undefined'&&crossOriginIsolated)?Math.min(4,navigator.hardwareConcurrency||2):1;
+      }catch(e){}
+      return window.ort;
+    })().catch(function(e){console.warn('ORT unavailable',e);return null;});
+    return ortPromise;
+  }
+
+  async function createOrtSession(bytes){
+    var o=await getOrt();if(!o)return null;
+    var plans=[];
+    if(typeof navigator!=='undefined'&&navigator.gpu)plans.push([{name:'webgpu',preferredLayout:'NHWC'},'wasm']);
+    plans.push(['wasm']);
+    var last=null;
+    for(var i=0;i<plans.length;i++){
+      try{return await o.InferenceSession.create(bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength),{executionProviders:plans[i],graphOptimizationLevel:'all'});}
+      catch(e){last=e;console.warn('ORT provider failed',plans[i],e);}
+    }
+    throw last||new Error('cannot create ONNX session');
+  }
+
+  async function getAnimeCharSession(){
+    if(animeCharSessionPromise)return animeCharSessionPromise;
+    animeCharSessionPromise=(async function(){
+      try{
+        var b=await firstBytes(ANIME_CHAR_MODEL_URLS,lx('下載動漫角色偵測模型…','Downloading anime character detector…'));
+        return await createOrtSession(b);
+      }catch(e){console.warn('anime character model unavailable',e);return null;}
+    })();
+    return animeCharSessionPromise;
+  }
+  function yoloxPost(preds,numAnchors,numVals,h,w){
+    var strides=[8,16,32],ai=0;
+    for(var si=0;si<strides.length;si++){
+      var st=strides[si],hs=Math.floor(h/st),ws=Math.floor(w/st);
+      for(var y=0;y<hs;y++)for(var x=0;x<ws;x++){
+        if(ai>=numAnchors)return;
+        var b=ai*numVals;
+        preds[b]=(preds[b]+x)*st;preds[b+1]=(preds[b+1]+y)*st;
+        preds[b+2]=Math.exp(preds[b+2])*st;preds[b+3]=Math.exp(preds[b+3])*st;ai++;
+      }
+    }
+  }
+  function boxIou(a,b){
+    var x0=Math.max(a[0],b[0]),y0=Math.max(a[1],b[1]),x1=Math.min(a[2],b[2]),y1=Math.min(a[3],b[3]);
+    if(x1<=x0||y1<=y0)return 0;
+    var inter=(x1-x0)*(y1-y0),aa=Math.max(0,a[2]-a[0])*Math.max(0,a[3]-a[1]),bb=Math.max(0,b[2]-b[0])*Math.max(0,b[3]-b[1]);
+    return inter/Math.max(1e-6,aa+bb-inter);
+  }
+  function simpleNms(boxes,scores,thr){
+    var idx=scores.map(function(_,i){return i;}).sort(function(a,b){return scores[b]-scores[a];}),keep=[];
+    while(idx.length){
+      var i=idx.shift();keep.push(i);
+      idx=idx.filter(function(j){return boxIou(boxes[i],boxes[j])<=thr;});
+    }
+    return keep;
+  }
+  function prepareAnimeChar(canvas,o){
+    var S=640,c=document.createElement('canvas');c.width=S;c.height=S;
+    var g=c.getContext('2d'),ratio=Math.min(S/canvas.height,S/canvas.width),nw=Math.round(canvas.width*ratio),nh=Math.round(canvas.height*ratio);
+    g.fillStyle='rgb(114,114,114)';g.fillRect(0,0,S,S);g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(canvas,0,0,nw,nh);
+    var d=g.getImageData(0,0,S,S).data,n=S*S,x=new Float32Array(n*3);
+    for(var i=0,p=0;i<n;i++,p+=4){x[i]=d[p];x[n+i]=d[p+1];x[n*2+i]=d[p+2];}
+    return {tensor:new o.Tensor('float32',x,[1,3,S,S]),ratio:ratio};
+  }
+  async function detectAnimeCharacters(canvas){
+    if(!animeEnhancedEnabled())return null;
+    var sess=await getAnimeCharSession(),o=await getOrt();if(!sess||!o)return null;
+    try{
+      var inp=prepareAnimeChar(canvas,o),feeds={};feeds[sess.inputNames[0]]=inp.tensor;
+      var out=(await sess.run(feeds))[sess.outputNames[0]],dims=out.dims;
+      if(!dims||dims.length!==3||dims[0]!==1)return null;
+      var na=dims[1],nv=dims[2],pred=out.data instanceof Float32Array?new Float32Array(out.data):new Float32Array(out.data);
+      yoloxPost(pred,na,nv,640,640);
+      var boxes=[],scores=[];
+      for(var i=0;i<na;i++){
+        var b=i*nv,obj=pred[b+4],best=0;
+        for(var c=5;c<nv;c++)best=Math.max(best,obj*pred[b+c]);
+        if(best<0.28)continue;
+        var cx=pred[b],cy=pred[b+1],ww=pred[b+2],hh=pred[b+3];
+        var x0=clamp((cx-ww/2)/inp.ratio,0,canvas.width),y0=clamp((cy-hh/2)/inp.ratio,0,canvas.height);
+        var x1=clamp((cx+ww/2)/inp.ratio,0,canvas.width),y1=clamp((cy+hh/2)/inp.ratio,0,canvas.height);
+        if((x1-x0)*(y1-y0)<canvas.width*canvas.height*.003)continue;
+        boxes.push([x0,y0,x1,y1]);scores.push(best);
+      }
+      var keep=simpleNms(boxes,scores,.45).slice(0,8);
+      return keep.map(function(k){return {box:boxes[k],score:scores[k]};});
+    }catch(e){console.warn('anime character inference failed',e);return null;}
+  }
+
+  async function getAnimeSegSession(){
+    if(animeSegSessionPromise)return animeSegSessionPromise;
+    animeSegSessionPromise=(async function(){
+      try{
+        var b=await cachedModelBytes(ANIME_SEG_MODEL_URLS);
+        if(!b){animeSegInstalled=false;await refreshAnimeSegComponentUI();return null;}
+        return await createOrtSession(b);
+      }catch(e){console.warn('anime segmentation unavailable',e);return null;}
+    })();
+    return animeSegSessionPromise;
+  }
+  async function segmentAnimePrecise(canvas){
+    if(!animePreciseEnabled())return null;
+    var sess=await getAnimeSegSession(),o=await getOrt();if(!sess||!o)return null;
+    try{
+      var S=1024,ratio=Math.min(S/canvas.width,S/canvas.height),nw=Math.max(1,Math.round(canvas.width*ratio)),nh=Math.max(1,Math.round(canvas.height*ratio));
+      var c=document.createElement('canvas');c.width=S;c.height=S;var g=c.getContext('2d');
+      g.fillStyle='rgb(0,0,0)';g.fillRect(0,0,S,S);g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(canvas,0,0,nw,nh);
+      var d=g.getImageData(0,0,S,S).data,n=S*S,x=new Float32Array(n*3);
+      for(var i=0,p=0;i<n;i++,p+=4){x[i]=d[p]/255;x[n+i]=d[p+1]/255;x[n*2+i]=d[p+2]/255;}
+      var feeds={};feeds[sess.inputNames[0]]=new o.Tensor('float32',x,[1,3,S,S]);
+      var out=(await sess.run(feeds))[sess.outputNames[0]],od=out.data,mask=new Uint8Array(canvas.width*canvas.height),cnt=0;
+      for(var y=0;y<canvas.height;y++){
+        var sy=Math.min(nh-1,Math.floor(y*ratio));
+        for(var xx=0;xx<canvas.width;xx++){
+          var sx=Math.min(nw-1,Math.floor(xx*ratio)),v=od[sy*S+sx];
+          if(v>.46){mask[y*canvas.width+xx]=1;cnt++;}
+        }
+      }
+      var cov=cnt/mask.length,bbox=bboxFromMask(mask,canvas.width,canvas.height);
+      if(!bbox||cov<.004||cov>.96)return null;
+      return {mask:mask,bbox:bbox,confidence:clamp(76+Math.min(.18,cov)*70,76,92)};
+    }catch(e){console.warn('precise anime segmentation failed',e);return null;}
+  }
+
+  function restrictFallbackToBox(canvas,box){
+    try{
+      var w=canvas.width,h=canvas.height,id=canvas.getContext('2d').getImageData(0,0,w,h),fb=fallbackMask(id.data,w,h),m=new Uint8Array(w*h);
+      var x0=Math.max(0,Math.floor(box[0])),y0=Math.max(0,Math.floor(box[1])),x1=Math.min(w,Math.ceil(box[2])),y1=Math.min(h,Math.ceil(box[3])),cnt=0;
+      for(var y=y0;y<y1;y++)for(var x=x0;x<x1;x++){var i=y*w+x;if(fb.mask[i]){m[i]=1;cnt++;}}
+      var bb=bboxFromMask(m,w,h);
+      if(bb&&cnt/(w*h)>.003)return {mask:m,bbox:bb,quality:fb.quality};
+      // A detector box is still better evidence for position/count than inventing a full-image subject.
+      var mx=Math.round((x1-x0)*.06),my=Math.round((y1-y0)*.04);cnt=0;
+      for(y=y0+my;y<y1-my;y++)for(x=x0+mx;x<x1-mx;x++){m[y*w+x]=1;cnt++;}
+      bb=bboxFromMask(m,w,h);return bb?{mask:m,bbox:bb,quality:.42}:null;
+    }catch(e){return null;}
+  }
+
+  async function getOpenCv(){
+    if(cvPromise)return cvPromise;
+    cvPromise=(async function(){
+      try{
+        if(!window.cv)await loadScript('https://cdn.jsdelivr.net/npm/@techstark/opencv-js@4.12.0-release.1/dist/opencv.js');
+        var m=window.cv;
+        if(m&&typeof m.then==='function')m=await m;
+        if(m&&m.Mat)return m;
+        m=await new Promise(function(res,rej){
+          var to=setTimeout(function(){rej(new Error('OpenCV init timeout'));},30000);
+          if(!window.cv){clearTimeout(to);rej(new Error('OpenCV unavailable'));return;}
+          window.cv.onRuntimeInitialized=function(){clearTimeout(to);res(window.cv);};
+        });
+        return m;
+      }catch(e){console.warn('OpenCV unavailable',e);return null;}
+    })();
+    return cvPromise;
+  }
+  function clusterCuts(arr,minGap){
+    arr=arr.slice().sort(function(a,b){return a-b;});var out=[];
+    for(var i=0;i<arr.length;i++){
+      if(!out.length||arr[i]-out[out.length-1]>minGap)out.push(arr[i]);
+      else out[out.length-1]=(out[out.length-1]+arr[i])/2;
+    }
+    return out;
+  }
+  async function opencvAssist(canvas){
+    if(!cvEnabled())return null;
+    var C=await getOpenCv();if(!C)return null;
+    var src=null,gray=null,blur=null,edges=null,lines=null;
+    try{
+      src=C.imread(canvas);gray=new C.Mat();blur=new C.Mat();edges=new C.Mat();lines=new C.Mat();
+      C.cvtColor(src,gray,C.COLOR_RGBA2GRAY,0);C.GaussianBlur(gray,blur,new C.Size(5,5),0,0,C.BORDER_DEFAULT);
+      C.Canny(blur,edges,55,145,3,false);
+      var edgeDensity=C.countNonZero(edges)/Math.max(1,canvas.width*canvas.height);
+      C.HoughLinesP(edges,lines,1,Math.PI/180,Math.max(24,Math.round(Math.min(canvas.width,canvas.height)*.11)),
+                    Math.max(24,Math.round(Math.min(canvas.width,canvas.height)*.18)),Math.max(6,Math.round(Math.min(canvas.width,canvas.height)*.02)));
+      var d=lines.data32S||[],sum=0,wsum=0,hCuts=[],vCuts=[],longN=0;
+      for(var i=0;i+3<d.length;i+=4){
+        var x0=d[i],y0=d[i+1],x1=d[i+2],y1=d[i+3],dx=x1-x0,dy=y1-y0,len=Math.hypot(dx,dy);
+        if(len<Math.min(canvas.width,canvas.height)*.16)continue;
+        longN++;var a=Math.atan2(dy,dx)*180/Math.PI;while(a<=-90)a+=180;while(a>90)a-=180;
+        if(Math.abs(a)<=18){sum+=a*len;wsum+=len;if(len>canvas.width*.55){var yy=(y0+y1)/2/canvas.height;if(yy>.1&&yy<.9)hCuts.push(yy);}}
+        if(Math.abs(Math.abs(a)-90)<=18&&len>canvas.height*.55){var xx=(x0+x1)/2/canvas.width;if(xx>.1&&xx<.9)vCuts.push(xx);}
+      }
+      var hc=clusterCuts(hCuts,.07),vc=clusterCuts(vCuts,.07),grid={has:false,rows:1,cols:1,source:'opencv'};
+      if((hc.length||vc.length)&&(currentModes.indexOf('collage')>=0||currentModes.indexOf('layout')>=0||currentModes.indexOf('objects')>=0||currentModes.indexOf('colorblocks')>=0)){
+        grid.rows=Math.min(6,hc.length+1);grid.cols=Math.min(6,vc.length+1);grid.has=grid.rows*grid.cols>=2;
+      }
+      return {edgeDensity:edgeDensity,lineCount:longN,tiltDeg:wsum?sum/wsum:0,
+              tiltStrength:clamp(wsum/Math.max(1,canvas.width*3),0,1),grid:grid};
+    }catch(e){console.warn('OpenCV assist failed',e);return null;}
+    finally{[src,gray,blur,edges,lines].forEach(function(m){try{if(m)m.delete();}catch(e){}});}
+  }
+
+
   /* ===================== anime / illustration face detection =====================
      Model : lbpcascade_animeface  (MIT License, (c) 2011 nagadomi)
              https://github.com/nagadomi/lbpcascade_animeface
@@ -6886,20 +7231,31 @@ function compositionScore(opts) {
   if (opts.deliberate) thirdsPts = 22;
   var nsMap = { active: 26, passive: 13, uneven: 7, frag: 3, crowd: 3 };
   var nsPts = nsMap[opts.ns.verdict] !== undefined ? nsMap[opts.ns.verdict] : 13;
-  var balPts = Math.max(0, Math.min(22, (opts.balanceBase - 55) / 45 * 22));
-  var t = opts.tilt, ad = Math.abs(t.deg), tiltPts;
+
+  /* Visual balance is not the same thing as mirror symmetry. Moderate imbalance can be a
+     deliberate thirds / negative-space decision, while a mathematically perfect 50/50 split
+     is not automatically the strongest composition. Keep a broad high-scoring middle band,
+     taper both extremes gradually, and never collapse every value below one cutoff to zero. */
+  var _bb = Math.max(0, Math.min(100, opts.balanceBase));
+  var balPts;
+  if (_bb < 70) balPts = 20 - (70 - _bb) * 0.40;
+  else if (_bb <= 92) balPts = 22 - Math.abs(_bb - 82) * 0.18;
+  else balPts = 20.2 - (_bb - 92) * 0.30;
+  if (opts.deliberate || opts.thirds === 'clear') balPts += 1.2;
+  balPts = Math.max(3, Math.min(22, balPts));
+
+  var t = opts.tilt, ad = Math.abs(t.deg), tiltPts = null;
   var tiltTrusted = t.strength > 0.05;
-  if (!tiltTrusted) tiltPts = 21;                       // unknown -> neutral, not rewarded
-  else if (ad <= 1.0) tiltPts = 30;
-  else if (ad <= 3.0) tiltPts = 30 * (1 - (ad - 1.0) / 2.0);
-  /* Beyond ~3 degrees a tilt reads as a deliberate angle, not a levelling slip - a Dutch-angle
-     portrait is not a worse photo for being more obviously tilted. Past this point we stop
-     scoring the degree at all and hold it neutral, same as when the measurement isn't trusted. */
-  else tiltPts = 21;
+  var tiltApplicable = tiltTrusted && ad <= 3.0;
+  if (tiltApplicable && ad <= 1.0) tiltPts = 30;
+  else if (tiltApplicable) tiltPts = 30 * (1 - (ad - 1.0) / 2.0);
+  /* Unknown levelness and an obvious Dutch angle are N/A, not neutral points. Their weight is
+     removed and the remaining composition evidence is re-normalised instead. */
 
   var judgePhoto = (typeof currentView === 'undefined') || currentView === 'photo';
-  var s = judgePhoto ? (thirdsPts + nsPts + balPts + tiltPts)
-                     : (thirdsPts + nsPts + balPts) / 70 * 100;
+  var compBase = thirdsPts + nsPts + balPts;
+  var s = (judgePhoto && tiltApplicable) ? (compBase + tiltPts)
+                                         : compBase / 70 * 100;
 
   /* Only a mild tilt (1.5-3 deg) is flagged as something to maybe fix - that range plausibly
      reads as an unintentional un-level horizon. Past 3 degrees it's visually unambiguous as a
@@ -6937,7 +7293,9 @@ function compositionScore(opts) {
     fashion :{wantSubj:0.26,allowFrag:false},
     scene   :{wantSubj:0.00,allowFrag:false},
     collage :{wantSubj:0.00,allowFrag:true},
-    layout  :{wantSubj:0.00,allowFrag:true}
+    layout  :{wantSubj:0.00,allowFrag:true},
+    objects :{wantSubj:0.00,allowFrag:true},
+    colorblocks:{wantSubj:0.00,allowFrag:true}
   };
   function modeProfile(modes){
     var p={wantSubj:0,allowFrag:false};
@@ -6948,6 +7306,84 @@ function compositionScore(opts) {
     }
     return p;
   }
+
+  function hasMode(m){return (typeof currentModes!=='undefined')&&currentModes.indexOf(m)>=0;}
+  function structuredLayoutOnly(){
+    if(!currentModes||!currentModes.length)return false;
+    var ok={collage:1,layout:1,objects:1,colorblocks:1};
+    return currentModes.every(function(m){return !!ok[m];});
+  }
+  function needsCharacterModels(){return currentShot!=='none'&&!structuredLayoutOnly();}
+  function layoutModeLabel(m){
+    return m==='layout'?lx('文字排版','Typography layout'):
+      m==='objects'?lx('物件／文物排版','Object / artifact layout'):
+      m==='colorblocks'?lx('色塊排版','Color-block layout'):
+      m==='collage'?lx('拼貼／多格','Collage / multi-panel'):m;
+  }
+  function scoreAvailable(parts){
+    var s=0,w=0;parts.forEach(function(p){if(p&&p.v!=null&&isFinite(p.v)){s+=p.v*p.w;w+=p.w;}});
+    return w?clamp(s/w,20,98):null;
+  }
+  function layoutSpecificAnalysis(o){
+    var modes=o.modes||[],out={active:false,kinds:[],score:null,confidence:0};
+    var allScores=[];
+    function focusHierarchy(area){
+      if(area==null||!isFinite(area))return null;
+      // Graphic layouts can legitimately be broad. Reward a readable hierarchy without treating
+      // equal-weight grids as a failure.
+      return clamp(94-Math.abs(area-.255)*155,58,96);
+    }
+    function spaceScore(ns,grid){
+      if(grid&&grid.has)return 94;
+      var m={active:94,passive:80,uneven:60,frag:72,crowd:52};
+      return m[ns&&ns.verdict]!==undefined?m[ns.verdict]:76;
+    }
+    if(modes.indexOf('layout')>=0){
+      out.active=true;
+      var align=null;
+      if(o.textLines&&o.textLines.length>=2){
+        var tol=Math.max(4,o.w*.025),hist={},n=o.textLines.length;
+        o.textLines.forEach(function(ln){var k=Math.round(ln.left/tol);hist[k]=(hist[k]||0)+1;});
+        var vals=Object.keys(hist).map(function(k){return hist[k];}).sort(function(a,b){return b-a;});
+        var share=((vals[0]||0)+(vals[1]||0))/Math.max(1,n);
+        align=clamp(42+share*56,42,98);if(o.alignBad)align=Math.min(align,52);
+      }
+      var contrast=null,margin=null;
+      if(o.v3text){
+        contrast=clamp(28+(o.v3text.ratio-1)*21,28,97);
+        margin=clamp(38+o.v3text.margin/.075*58,38,96);
+      }
+      var f=focusHierarchy(o.focusArea);
+      var sc=scoreAvailable([{v:o.balance,w:.30},{v:align,w:.24},{v:contrast,w:.20},{v:margin,w:.11},{v:f,w:.15}]);
+      out.kinds.push({kind:'text',score:sc,detected:!!o.textDetected,lineCount:(o.textLines||[]).length,
+        align:align,contrast:contrast,margin:margin,hierarchy:f});
+      if(sc!=null)allScores.push(sc);
+    }
+    if(modes.indexOf('objects')>=0){
+      out.active=true;
+      var spacing=spaceScore(o.ns,o.grid),rhythm=clamp((o.form.rhythm*.55+o.form.simp*.20+o.form.prop*.25)*100,35,97);
+      var harmony=clamp((o.form.harm*.55+o.col.schemeScore*.45)*100,35,97),hier=focusHierarchy(o.focusArea);
+      var sc2=scoreAvailable([{v:o.balance,w:.28},{v:spacing,w:.25},{v:rhythm,w:.20},{v:harmony,w:.17},{v:hier,w:.10}]);
+      out.kinds.push({kind:'objects',score:sc2,spacing:spacing,rhythm:rhythm,harmony:harmony,hierarchy:hier});
+      if(sc2!=null)allScores.push(sc2);
+    }
+    if(modes.indexOf('colorblocks')>=0){
+      out.active=true;
+      var structure=o.grid&&o.grid.has?96:clamp(48+o.form.rep*22+o.form.rhythm*22+(o.cv&&o.cv.lineCount?8:0),42,96);
+      var colour=clamp((o.col.schemeScore*.52+o.form.harm*.48)*100,32,98);
+      var prop=clamp(o.form.prop*100,35,97),contr=clamp(o.form.contr*100,28,98);
+      var sc3=scoreAvailable([{v:colour,w:.35},{v:structure,w:.25},{v:prop,w:.20},{v:contr,w:.20}]);
+      out.kinds.push({kind:'colorblocks',score:sc3,structure:structure,colour:colour,proportion:prop,contrast:contr});
+      if(sc3!=null)allScores.push(sc3);
+    }
+    out.score=allScores.length?allScores.reduce(function(a,b){return a+b;},0)/allScores.length:null;
+    var evidence=0;
+    if(o.grid&&o.grid.has)evidence+=18;if(o.cv)evidence+=15;if(o.textDetected)evidence+=18;
+    evidence+=Math.min(35,(o.cv&&o.cv.lineCount||0)*2)+Math.min(14,(o.textLines||[]).length*2);
+    out.confidence=clamp(48+evidence,48,94);
+    return out;
+  }
+
   function goAes(sec){
     try{
       var tb=document.querySelector('[data-tab="aes"]'); if(tb)tb.click();
@@ -7061,8 +7497,8 @@ function compositionScore(opts) {
   }
 
   /* ===================== main analysis ===================== */
-  async function analyzePixels(canvas,mask,people,mainKp,segConf,border,framed,animeFaces,visionText){
-    animeFaces=animeFaces||[];
+  async function analyzePixels(canvas,mask,people,mainKp,segConf,border,framed,animeFaces,visionText,cvAssist){
+    animeFaces=animeFaces||[];cvAssist=cvAssist||null;
     var w=canvas.width,h=canvas.height,ctx=canvas.getContext('2d'),id=ctx.getImageData(0,0,w,h),d=id.data;
     var sal=saliency(d,w,h),L=sal.lum,bbox=bboxFromMask(mask,w,h);
     // whole-image luminance + gradient map
@@ -7243,6 +7679,20 @@ function compositionScore(opts) {
     var domHue=null,_hmx=-1;
     try{for(var _h=0;_h<12;_h++){if(hues[_h]>_hmx){_hmx=hues[_h];domHue=_h;}}}catch(e){domHue=null;}
     var v3tilt=tiltAngle(L,w,h);
+    // OpenCV is a cross-check, not an aesthetic judge. Agreement raises trust; disagreement lowers
+    // trust so a decorative diagonal is less likely to be called an accidental horizon error.
+    if(cvAssist&&cvAssist.tiltStrength>.05){
+      var cd=cvAssist.tiltDeg||0,dd=Math.abs((v3tilt.deg||0)-cd);
+      if(v3tilt.strength>.05&&dd<=2.5){
+        var bw=v3tilt.strength,cw=cvAssist.tiltStrength*.75;
+        v3tilt.deg=(v3tilt.deg*bw+cd*cw)/Math.max(.001,bw+cw);
+        v3tilt.strength=clamp(Math.max(v3tilt.strength,cvAssist.tiltStrength*.85),0,1);
+      }else if(v3tilt.strength>.05&&dd>4){
+        v3tilt.strength*=.45;
+      }else if(v3tilt.strength<=.05){
+        v3tilt={deg:cd,strength:clamp(cvAssist.tiltStrength*.7,0,.72),hDeg:cd,vDeg:null};
+      }
+    }
     var v3ns=negSpaceV3(mask,grad,w,h,bbox);
     await step(tt('pr_comp'),.46);
     var v3pat=compPatterns(L,grad,mask,bbox,sal,w,h,people,v3tilt);
@@ -7252,8 +7702,8 @@ function compositionScore(opts) {
       var v3eyY=Math.abs(mainKp.leftEye.position.y-mainKp.rightEye.position.y);
       v3faceH=Math.sqrt(v3ed*v3ed+v3eyY*v3eyY)*3.0;}}catch(e){v3faceH=0;}
     if(!v3faceH&&afMain)v3faceH=afMain.h; // cascade face box height feeds the full/half/close-up split
-    var v3shot=shotType(bbox,v3faceH,w,h);
-    if(currentShot&&currentShot!=='auto'){v3shot.type=(currentShot==='none'?'none':currentShot);v3shot.userSet=true;}
+    var v3shot=layoutOnly?{type:'none',notes:[],layout:true}:shotType(bbox,v3faceH,w,h);
+    if(!layoutOnly&&currentShot&&currentShot!=='auto'){v3shot.type=(currentShot==='none'?'none':currentShot);v3shot.userSet=true;}
     var negQual=v3ns.verdict==='active'?tt('ns_active'):(v3ns.verdict==='crowd'||v3ns.verdict==='frag'||v3ns.verdict==='uneven')?tt('ns_crowd'):tt('ns_passive');
     // balance (luminance-weighted left/right, top/bottom)
     var lw=0,rw=0,tw=0,bw2=0;for(var by2=0;by2<h;by2++)for(var bx2=0;bx2<w;bx2++){var jj=by2*w+bx2,ww=L[jj]+(mask[jj]?60:0);if(bx2<w/2)lw+=ww;else rw+=ww;if(by2<h/2)tw+=ww;else bw2+=ww;}
@@ -7271,6 +7721,9 @@ function compositionScore(opts) {
     var _tls=textLineScore(L,w,h),textScore=_tls.score,textLines=_tls.lines;
     var a_alignBad=false;
     var layoutMode=(typeof currentModes!=='undefined')&&currentModes.indexOf('layout')>=0;
+    var objectLayoutMode=(typeof currentModes!=='undefined')&&currentModes.indexOf('objects')>=0;
+    var colorBlockMode=(typeof currentModes!=='undefined')&&currentModes.indexOf('colorblocks')>=0;
+    var layoutOnly=structuredLayoutOnly();
     var textDetected=layoutMode?(textScore>=.40):false;
     var textHint=(!layoutMode)&&(textScore>=.75);
     var TB=12,txtBlocks=0,totBlocks=0;
@@ -7439,7 +7892,7 @@ function compositionScore(opts) {
     if(hasFrame)types.push(tt('ty_frame'));
     if((p90-p10>170&&darkRatio>.2)||silhouette)types.push(tt('ty_lightexp'));
     if(textDetected&&textRatio>.14)types.push(tt('ty_typo'));
-    if(!types.length){var mm=currentModes[0];types.push(({portrait:tt('ty_portrait'),fashion:tt('ty_fashion'),scene:tt('ty_scene'),collage:tt('ty_collage'),layout:tt('ty_typo')})[mm]||tt('ty_portrait'));}
+    if(!types.length){var mm=currentModes[0];types.push(({portrait:tt('ty_portrait'),fashion:tt('ty_fashion'),scene:tt('ty_scene'),collage:tt('ty_collage'),layout:tt('ty_typo'),objects:lx('物件／文物排版','Object / artifact layout'),colorblocks:lx('色塊排版','Color-block layout')})[mm]||tt('ty_portrait'));}
     types=types.slice(0,2);
 
     await step(tt('pr_light'),.80);
@@ -7481,6 +7934,9 @@ function compositionScore(opts) {
       subjMean:subjMean,bgMean:bgMean,palette:palette,distThird:distThird,
       people:people,textBlocks:textBlocksCount});
 
+    var layoutSpec=layoutSpecificAnalysis({modes:currentModes,w:w,h:h,balance:balance,ns:v3nsAdj,grid:currentGrid,cv:cvAssist,
+      textDetected:textDetected,textLines:textLines,alignBad:v3align,v3text:v3text,focusArea:sal.area50,form:v3form,col:v3col});
+
     /* ---- confidence per module ---- */
     var subjConf=illustrationMode?clamp(segConf+blobCompact*24,segConf,92):segConf;
     if(afMain)subjConf=clamp(subjConf+10,subjConf,93); // a positive face lock is real evidence, even from a cascade
@@ -7504,7 +7960,7 @@ function compositionScore(opts) {
       third:third,thirdDist:distThird,nearest:nearest,symmetry:symmetry,symCorr:symCorr,negRatio:negRatio,negQual:negQual,balance:balance,gaze:gaze,eyeLine:eyeLine,gazeRoom:gazeRoom,hasFrame:hasFrame,frameDesc:frameDesc,suggestion:suggestion,focusConc:sal.concentration,focusArea:(sal.area50==null?null:sal.area50),
       sharp:sharp,sharpVar:sharpVar,noise:noise,noiseV:noiseV,artifacts:artifacts,
       portrait:portrait,dof:dof,dofRatio:dofRatio,separation:separation,
-      types:types,textRatio:textRatio,textBlocksCount:textBlocksCount,domHue:domHue,v3tilt:v3tilt,v3ns:v3nsAdj,v3nsRaw:v3ns,v3prof:v3prof,v3shot:v3shot,v3reasons:v3score.reasons,v3align:v3align,balanceRaw:balanceRaw,textScore:textScore,textDetected:textDetected,textHint:textHint,layoutMode:layoutMode,illustrationMode:illustrationMode,whiteRatio:whiteRatio,peopleCount:peopleCount,
+      types:types,textRatio:textRatio,textBlocksCount:textBlocksCount,domHue:domHue,v3tilt:v3tilt,v3ns:v3nsAdj,v3nsRaw:v3ns,v3prof:v3prof,v3shot:v3shot,v3reasons:v3score.reasons,v3align:v3align,balanceRaw:balanceRaw,textScore:textScore,textDetected:textDetected,textHint:textHint,layoutMode:layoutMode,objectLayoutMode:objectLayoutMode,colorBlockMode:colorBlockMode,layoutOnly:layoutOnly,layoutSpec:layoutSpec,illustrationMode:illustrationMode,whiteRatio:whiteRatio,peopleCount:peopleCount,
       conf:{subj:subjConf,light:lightConf,color:colorConf,comp:compConf,sharp:sharpConf,depth:depthConf,port:portConf}};
   }
 
@@ -7530,8 +7986,6 @@ function compositionScore(opts) {
     var overflow=panel.has?overflowRatio(full,panel):0;
     var frameBreak=panel.has&&(manualBreak||overflow>0.035);
     if(panel.has&&!border.has){
-      // detectBorder returns #FFFFFF as an unused placeholder when it finds nothing, and
-      // carrying that over labelled a solid black surround as white. Measure it instead.
       var _fc=(function(){
         var fd=full.getContext('2d').getImageData(0,0,full.width,full.height).data;
         var fw=full.width,fh=full.height,r=0,g=0,b=0,n=0,x,y,p;
@@ -7547,12 +8001,7 @@ function compositionScore(opts) {
               color:_fc.hex,colorRgb:_fc.rgb};
     }
     var workCanvas=panel.has?cropCanvas(full,panel.left,panel.top,panel.right,panel.bottom):full;
-    // downscale work canvas for segmentation stability
     var wc=downscaleCanvas(workCanvas,420);
-    /* The preview was being drawn from `wc`, which is at most 420px because that is what the
-       segmentation wants. Blowing 420px up to a 900px-wide phone display is why the picture
-       looked soft. The overlay coordinates are all fractions, so the annotations can be drawn
-       over a much larger copy of the ORIGINAL instead - same crop, same geometry, real detail. */
     var previewCanvas=null;
     try{
       var dpr=(typeof devicePixelRatio==='number'&&devicePixelRatio>0)?devicePixelRatio:1;
@@ -7564,29 +8013,74 @@ function compositionScore(opts) {
                                      Math.round(panel.right*k),Math.round(panel.bottom*k));
       }else previewCanvas=big;
     }catch(e){previewCanvas=null;}
-    await step(tt('pr_model'),.06);
-    var w=wc.width,h=wc.height,model=await getModel(),mask,people=[],segConf=0,mainKp=null,framed=framedCB.checked;
-    await step(tt('pr_seg'),.30);
-    if(model){try{
-      var segs=await model.segmentMultiPerson(wc,{flipHorizontal:false,internalResolution:'medium',segmentationThreshold:.7,maxDetections:5,scoreThreshold:.25,nmsRadius:20});
-      segs=segs||[];
-      people=segs.map(function(s){var m=sampleMask(s.data,s.width,s.height,w,h),b=bboxFromMask(m,w,h);if(!b)return null;return {mask:m,bbox:b,box:{x0:b.x*w,y0:b.y*h,x1:(b.x+b.w)*w,y1:(b.y+b.h)*h},poses:s.allPoses||[],score:(s.allPoses&&s.allPoses[0]&&s.allPoses[0].score)||.65};}).filter(function(p){return p&&p.bbox.area>.004;});
-      people.sort(function(a,b){var fa=(1-Math.hypot(a.bbox.cx-.5,a.bbox.cy-.45))*.35,fb=(1-Math.hypot(b.bbox.cx-.5,b.bbox.cy-.45))*.35;return (b.bbox.area+fb)-(a.bbox.area+fa);});
-      if(people.length){mask=people[0].mask;segConf=clamp((people[0].score*.7+Math.min(1,people[0].bbox.area/.12)*.3)*100,45,96);mainKp=poseFor(people[0].box,[people[0]]);}
-    }catch(e){console.warn(e);}}
-    if(!mask){var idata=wc.getContext('2d').getImageData(0,0,w,h);var fbInfo=fallbackMask(idata.data,w,h);mask=fbInfo.mask;segConf=clamp(34+fbInfo.quality*58,34,88);var fbBox=bboxFromMask(mask,w,h);people=fbBox?[{mask:mask,bbox:fbBox,box:{x0:fbBox.x*w,y0:fbBox.y*h,x1:(fbBox.x+fbBox.w)*w,y1:(fbBox.y+fbBox.h)*h},poses:[],score:segConf/100}]:[];}
-    // Cascade only runs when BodyPix gave us no face/pose to work with, and its failure is
-    // non-fatal - the analysis continues without it.
+
+    var w=wc.width,h=wc.height,mask=null,people=[],segConf=0,mainKp=null,framed=framedCB.checked;
+    var segSource='fallback',animeChars=null,cvAssist=null;
+
+    // Structure analysis is independent of subject detection. Run it in parallel with the
+    // first subject-model attempt so enabling OpenCV does not add a full extra serial wait.
+    var cvTask=cvEnabled()?opencvAssist(wc):Promise.resolve(null);
+
+    if(animeEnhancedEnabled()&&needsCharacterModels()){
+      await step(lx('載入動漫角色偵測…','Loading anime character detector…'),.08);
+      animeChars=await detectAnimeCharacters(wc);
+      if(animeChars&&animeChars.length){
+        people=animeChars.map(function(d){
+          var b={x:d.box[0]/w,y:d.box[1]/h,w:(d.box[2]-d.box[0])/w,h:(d.box[3]-d.box[1])/h};
+          b.cx=b.x+b.w/2;b.cy=b.y+b.h/2;b.area=b.w*b.h;
+          return {mask:null,bbox:b,box:{x0:d.box[0],y0:d.box[1],x1:d.box[2],y1:d.box[3]},poses:[],score:d.score};
+        }).filter(function(p){return p.bbox.area>.003;});
+        people.sort(function(a,b){return (b.bbox.area+b.score*.08)-(a.bbox.area+a.score*.08);});
+
+        // Precise segmentation is intentionally a separate checkbox: its quantized model is
+        // ~44 MB on first use. When off, use the YOLO box to constrain the cheap local mask.
+        var precise=animePreciseEnabled()?await segmentAnimePrecise(wc):null;
+        if(precise){
+          mask=precise.mask;segConf=precise.confidence;segSource='anime-seg-int8';
+          if(people.length){people[0].mask=mask;people[0].bbox=precise.bbox;people[0].box={x0:precise.bbox.x*w,y0:precise.bbox.y*h,x1:(precise.bbox.x+precise.bbox.w)*w,y1:(precise.bbox.y+precise.bbox.h)*h};}
+        }else if(people.length){
+          var rf=restrictFallbackToBox(wc,people[0].box?[people[0].box.x0,people[0].box.y0,people[0].box.x1,people[0].box.y1]:animeChars[0].box);
+          if(rf){mask=rf.mask;people[0].mask=mask;people[0].bbox=rf.bbox;segConf=clamp(62+people[0].score*28,62,90);segSource='anime-yolox+local-mask';}
+        }
+      }
+    }
+
+    // BodyPix is now a photo-first / fallback model instead of being downloaded for every anime
+    // image. This preserves the old route for photos and catches stylised work when YOLOX misses.
+    if(!mask&&needsCharacterModels()){
+      await step(tt('pr_model'),.18);
+      var model=await getModel();
+      await step(tt('pr_seg'),.34);
+      if(model){try{
+        var segs=await model.segmentMultiPerson(wc,{flipHorizontal:false,internalResolution:'medium',segmentationThreshold:.7,maxDetections:5,scoreThreshold:.25,nmsRadius:20});
+        segs=segs||[];
+        people=segs.map(function(s){var m=sampleMask(s.data,s.width,s.height,w,h),b=bboxFromMask(m,w,h);if(!b)return null;return {mask:m,bbox:b,box:{x0:b.x*w,y0:b.y*h,x1:(b.x+b.w)*w,y1:(b.y+b.h)*h},poses:s.allPoses||[],score:(s.allPoses&&s.allPoses[0]&&s.allPoses[0].score)||.65};}).filter(function(p){return p&&p.bbox.area>.004;});
+        people.sort(function(a,b){var fa=(1-Math.hypot(a.bbox.cx-.5,a.bbox.cy-.45))*.35,fb=(1-Math.hypot(b.bbox.cx-.5,b.bbox.cy-.45))*.35;return (b.bbox.area+fb)-(a.bbox.area+fa);});
+        if(people.length){mask=people[0].mask;segConf=clamp((people[0].score*.7+Math.min(1,people[0].bbox.area/.12)*.3)*100,45,96);mainKp=poseFor(people[0].box,[people[0]]);segSource='bodypix';}
+      }catch(e){console.warn(e);}
+      }
+    }
+    if(!mask){
+      var idata=wc.getContext('2d').getImageData(0,0,w,h),fbInfo=fallbackMask(idata.data,w,h);
+      mask=fbInfo.mask;segConf=clamp(34+fbInfo.quality*58,34,88);var fbBox=bboxFromMask(mask,w,h);
+      people=structuredLayoutOnly()?[]:(fbBox?[{mask:mask,bbox:fbBox,box:{x0:fbBox.x*w,y0:fbBox.y*h,x1:(fbBox.x+fbBox.w)*w,y1:(fbBox.y+fbBox.h)*h},poses:[],score:segConf/100}]:[]);
+      segSource='local-fallback';
+    }
+
+    // Keep the tiny LBP face detector. It complements the character detector by supplying face
+    // count and an estimated eye line, but it still does not invent a gaze direction.
     var animeFaces=[];
-    // Off by default. A 10MB download is not something to start on someone's behalf, and the
-    // rest of the analysis does not depend on it.
-    if(!mainKp&&afEnabled()){try{await step(tt('pr_anime'));animeFaces=await detectAnimeFaces(wc);}catch(e){console.warn(e);}}
-    var vision=null;
-    var visionState='off'; // AI vision assist removed; keep field so report code never hits ReferenceError
+    if(!mainKp&&afEnabled()&&needsCharacterModels()){try{await step(tt('pr_anime'),.46);animeFaces=await detectAnimeFaces(wc);}catch(e){console.warn(e);}}
+
+    try{cvAssist=await cvTask;}catch(e){cvAssist=null;}
+    if(cvAssist&&cvAssist.grid&&cvAssist.grid.has&&(!currentGrid||!currentGrid.has))currentGrid=cvAssist.grid;
+
+    var vision=null,visionState='off';
     await step(tt('pr_comp'),.62);
-    var _r=await analyzePixels(wc,mask,people,mainKp,segConf,border,framed,animeFaces,vision&&vision.textAreas);
+    var _r=await analyzePixels(wc,mask,people,mainKp,segConf,border,framed,animeFaces,vision&&vision.textAreas,cvAssist);
     _r.vision=vision;_r.visionState=visionState;_r.preview=previewCanvas;
     _r.panel=panel;_r.overflow=overflow;_r.frameBreak=frameBreak;_r.manualBreak=manualBreak;
+    _r.segSource=segSource;_r.animeCharacters=animeChars||[];_r.cvAssist=cvAssist;
     return _r;
   }
   function downscaleCanvas(src,maxSide){var s=Math.min(1,maxSide/Math.max(src.width,src.height));if(s>=1)return src;var w=Math.max(1,Math.round(src.width*s)),h=Math.max(1,Math.round(src.height*s)),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(src,0,0,w,h);return c;}
@@ -7962,10 +8456,10 @@ function compositionScore(opts) {
     html+='<p class="cm-view"><b>'+tt('v6_viewlbl')+tt('colon')+'</b>'+
       (currentView==='design'?tt('v6_note_design'):currentView==='illust'?tt('v6_note_illust'):tt('v6_note_photo'))+'</p>';
     if(a.v3prof&&a.v3prof.allowFrag)html+='<p class="cm-view">'+(a.v3prof.autoGrid
-      ?tt('v6_collage_auto').replace('{R}',a.v3prof.autoGrid.rows+1).replace('{C}',a.v3prof.autoGrid.cols+1)
+      ?tt('v6_collage_auto').replace('{R}',(a.v3prof.autoGrid.source==='opencv'?a.v3prof.autoGrid.rows:a.v3prof.autoGrid.rows+1)).replace('{C}',(a.v3prof.autoGrid.source==='opencv'?a.v3prof.autoGrid.cols:a.v3prof.autoGrid.cols+1))
       :tt('v6_collage'))+'</p>';
     if(a.v3pat&&a.v3pat.deliberate)html+='<p class="cm-view">'+tt('cp_deliberate')+' <a href="javascript:void(0)" class="cm-learn" onclick="__zjkGoAes(\'ae-comp\')">'+tt('v6_learn')+' \u2192</a></p>';
-    html+='<p><b>'+tt('v3_shotlbl')+tt('colon')+'</b>'+
+    if(!a.layoutOnly)html+='<p><b>'+tt('v3_shotlbl')+tt('colon')+'</b>'+
       (a.v3shot.type==='full'?tt('v3_full'):a.v3shot.type==='half'?tt('v3_half'):
        a.v3shot.type==='head'?tt('v3_head'):tt('v3_nosubj'))+'</p>';
     html+='<p><b>'+tt('v3_comp_lbl')+tt('colon')+'</b>'+band+
@@ -8101,8 +8595,13 @@ function compositionScore(opts) {
   }
 
   function confOverview(a){
-    var rows=[['subj',tt('m_subject'),a.conf.subj],['light',tt('m_light'),a.conf.light],['color',tt('m_color'),a.conf.color],['comp',tt('m_comp'),a.conf.comp],['sharp',tt('m_sharp'),a.conf.sharp],['depth',tt('m_depth'),a.conf.depth]];
-    if(a.conf.port)rows.push(['port',tt('m_port'),a.conf.port]);
+    var rows;
+    if(a.layoutOnly){
+      rows=[['layout',lx('版面結構','Layout structure'),a.layoutSpec?a.layoutSpec.confidence:a.conf.comp],['color',tt('m_color'),a.conf.color],['comp',tt('m_comp'),a.conf.comp]];
+    }else{
+      rows=[['subj',tt('m_subject'),a.conf.subj],['light',tt('m_light'),a.conf.light],['color',tt('m_color'),a.conf.color],['comp',tt('m_comp'),a.conf.comp],['sharp',tt('m_sharp'),a.conf.sharp],['depth',tt('m_depth'),a.conf.depth]];
+      if(a.conf.port)rows.push(['port',tt('m_port'),a.conf.port]);
+    }
     return '<div class="chk-conf-grid">'+rows.map(function(r){var c=Math.round(r[2]),cls=c>=75?'ok':c>=60?'warn':'bad';return '<div class="chk-conf-item"><span>'+r[1]+'</span><div class="chk-conf-bar"><i class="'+cls+'" style="width:'+c+'%"></i></div><small>'+c+'%</small></div>';}).join('')+'</div>';
   }
 
@@ -8122,7 +8621,7 @@ function compositionScore(opts) {
     if(a.warmRatio>0.62)out.push(tt('ct_warm'));
     else if(a.warmRatio<0.38)out.push(tt('ct_cool'));
     var lt=a.v3light;
-    if(lt){
+    if(lt&&!a.layoutOnly){
       if(lt.splitStrong)out.push(lt.warmSide==='highlight'?tt('ct_split_hi'):tt('ct_split_sh'));
       else out.push(tt('ct_split_flat'));
       if(lt.ambient==='rich')out.push(tt('ct_amb_rich'));
@@ -8146,19 +8645,31 @@ function compositionScore(opts) {
     html+='<div class="chk-types">'+a.types.map(function(t){return '<span class="chk-type-tag">'+t+'</span>';}).join('')+'</div>';
     if(a.border.has)html+='<p class="chk-border-note">'+tt('border_note')+' <b>'+a.border.color+'</b> · '+[['↑',a.border.top],['↓',a.border.bottom],['←',a.border.left],['→',a.border.right]].filter(function(x){return x[1];}).map(function(x){return x[0]+x[1]+'px';}).join(' ')+'</p>';
     html+='<div class="chk-grid">';
-    // 1 subject
-    html+=section('1. '+tt('m_subject'),c.subj,
-      item(tt('f_status'),status)+
-      item(tt('f_area'),a.bbox?Math.round(a.bbox.area*100)+'%':'0%')+
-      item(tt('f_pos'),pos)+
-      item(tt('f_eyeline'),a.eyeLine)+
-      item(tt('f_gaze'),a.gaze)+
-      item(tt('f_focus'),a.focusArea==null?tt('foc_none'):a.focusArea<.22?tt('foc_conc'):a.focusArea<.28?tt('foc_mid'):tt('foc_spread'),tt('d_focus'))+
-      item(tt('f_secondary'),Math.max(0,a.peopleCount-1)+' '+tt('unit_people'))+
-      item(tt('f_animeface'),a.afUsed?(a.animeFaces.length+' '+tt('unit_face')):(!a.afOn?tt('af_off_user'):a.afTried?tt('af_none'):tt('af_off')),
-        a.afUsed?tt('af_note').replace('{N}',a.animeFaces.length):''));
-    // 2 light
-    html+=section('2. '+tt('m_light'),c.light,
+    // 1 subject / layout structure
+    if(a.layoutOnly){
+      var _lm=(a.layoutSpec&&a.layoutSpec.kinds||[]).map(function(k){return layoutModeLabel(k.kind==='text'?'layout':k.kind);}).join(tt('mid'));
+      html+=section('1. '+lx('版面結構','Layout structure'),a.layoutSpec?a.layoutSpec.confidence:c.comp,
+        item(lx('採用版面標準','Layout standard'),_lm||currentModes.map(layoutModeLabel).join(tt('mid')))+
+        item(lx('格線／分區','Grid / regions'),currentGrid&&currentGrid.has?((currentGrid.source==='opencv'?currentGrid.rows:currentGrid.rows+1)+' × '+(currentGrid.source==='opencv'?currentGrid.cols:currentGrid.cols+1)):tt('na'))+
+        item(tt('f_focus'),a.focusArea==null?tt('foc_none'):a.focusArea<.22?tt('foc_conc'):a.focusArea<.28?tt('foc_mid'):tt('foc_spread'),tt('d_focus'))+
+        item(lx('結構交叉檢查','Structural cross-check'),a.cvAssist?('OpenCV · '+a.cvAssist.lineCount+' '+lx('條長線','long lines')):tt('na'))+
+        item(lx('人物／動漫模型','Person / anime models'),lx('此版面不需要，已略過','Not required for this layout; skipped')));
+    }else{
+      html+=section('1. '+tt('m_subject'),c.subj,
+        item(tt('f_status'),status)+
+        item(tt('f_area'),a.bbox?Math.round(a.bbox.area*100)+'%':'0%')+
+        item(tt('f_pos'),pos)+
+        item(tt('f_eyeline'),a.eyeLine)+
+        item(tt('f_gaze'),a.gaze)+
+        item(tt('f_focus'),a.focusArea==null?tt('foc_none'):a.focusArea<.22?tt('foc_conc'):a.focusArea<.28?tt('foc_mid'):tt('foc_spread'),tt('d_focus'))+
+        item(tt('f_secondary'),Math.max(0,a.peopleCount-1)+' '+tt('unit_people'))+
+        item(lx('主體偵測來源','Subject detection source'),(a.segSource==='anime-seg-int8'?lx('動漫精細分割 INT8','Anime precise segmentation INT8'):a.segSource==='anime-yolox+local-mask'?lx('動漫角色 YOLOX ＋ 本機遮罩','Anime YOLOX + local mask'):a.segSource==='bodypix'?'BodyPix':lx('本機像素備援','Local pixel fallback')))+
+        item(lx('結構交叉檢查','Structural cross-check'),a.cvAssist?('OpenCV · '+a.cvAssist.lineCount+' '+lx('條長線','long lines')):tt('na'))+
+        item(tt('f_animeface'),a.afUsed?(a.animeFaces.length+' '+tt('unit_face')):(!a.afOn?tt('af_off_user'):a.afTried?tt('af_none'):tt('af_off')),
+          a.afUsed?tt('af_note').replace('{N}',a.animeFaces.length):''));
+    }
+    // 2 light (not applicable to pure structural layouts)
+    if(!a.layoutOnly)html+=section('2. '+tt('m_light'),c.light,
       item(tt('f_lightdir'),tt('lp_'+a.v3light.position)+tt('mid')+a.lightDir)+
       item(tt('f_exposure'),a.exposure,a.judgeAsPhoto?tt('d_exposure'):tt('d_photoonly'))+
       item(tt('f_highlight'),a.highlight,a.judgeAsPhoto?tt('d_highlight'):tt('d_highlight_illust'))+
@@ -8190,6 +8701,31 @@ function compositionScore(opts) {
         a.v3pat.list.length?a.v3pat.list.map(function(o){return tt('cp_'+o.k)+' '+Math.round(o.s*100)+'%';}).join(tt('mid')):tt('cp_none'),
         a.v3pat.list.length?tt('cpx_'+a.v3pat.list[0].k)+' '+tt('cp_note'):'')+
       patternAtlas(a));
+    if(a.layoutSpec&&a.layoutSpec.active){
+      var lb='';
+      a.layoutSpec.kinds.forEach(function(k){
+        if(k.kind==='text'){
+          lb+=item(lx('文字結構','Text structure'),k.detected?lx('已可靠偵測','reliably detected'):lx('未可靠偵測；不因此扣分','not reliably detected; not penalized'))+
+            item(lx('共同對齊線','Shared alignment'),k.align==null?tt('na'):Math.round(k.align)+'%')+
+            item(lx('文字／背景對比','Text/background contrast'),k.contrast==null?tt('na'):Math.round(k.contrast)+'%')+
+            item(lx('邊界安全距離','Edge safety'),k.margin==null?tt('na'):Math.round(k.margin)+'%')+
+            item(lx('視覺層級','Visual hierarchy'),k.hierarchy==null?tt('na'):Math.round(k.hierarchy)+'%');
+        }else if(k.kind==='objects'){
+          lb+=item(lx('物件群組與留白','Object grouping & space'),Math.round(k.spacing)+'%')+
+            item(lx('排列節奏','Arrangement rhythm'),Math.round(k.rhythm)+'%')+
+            item(lx('色彩協調','Colour harmony'),Math.round(k.harmony)+'%')+
+            item(lx('視覺主次','Visual hierarchy'),k.hierarchy==null?tt('na'):Math.round(k.hierarchy)+'%');
+        }else if(k.kind==='colorblocks'){
+          lb+=item(lx('色塊結構','Color-block structure'),Math.round(k.structure)+'%')+
+            item(lx('色彩關係','Colour relationship'),Math.round(k.colour)+'%')+
+            item(lx('區塊比例','Block proportion'),Math.round(k.proportion)+'%')+
+            item(lx('明暗／色差','Value / colour contrast'),Math.round(k.contrast)+'%');
+        }
+      });
+      lb+=item(lx('專用版面分數','Layout-specific score'),a.layoutSpec.score==null?tt('na'):Math.round(a.layoutSpec.score)+'%',
+        lx('只評可由像素與結構可靠量到的項目；不讀文字內容，也不猜物件／文物的語意。','Only measurements supported by pixels and structure are scored; text content and object/artifact semantics are not guessed.'));
+      html+=section(lx('4A. 專用版面檢查','4A. Layout-specific check'),a.layoutSpec.confidence,lb);
+    }
     if(a.panel&&a.panel.has){
       html+=section(tt('f_panel'),a.manualBreak?92:70,
         item(tt('f_panel'),a.manualBreak?tt('pn_manual'):tt('pn_found'),tt('pn_d'))+
@@ -8230,7 +8766,7 @@ function compositionScore(opts) {
           ' \u00b7 '+tt('tx_note')+'</div>');
     }
     // 5 sharpness
-    html+=section('5. '+tt('m_sharp'),c.sharp,
+    if(!a.layoutOnly)html+=section('5. '+tt('m_sharp'),c.sharp,
       item(tt('f_sharpness'),a.sharp)+
       item(tt('f_noise'),a.noise)+
       item(tt('f_artifacts'),a.artifacts));
@@ -8242,7 +8778,7 @@ function compositionScore(opts) {
       item(tt('f_skintex'),a.portrait.skinTex)+
       item(tt('f_skintone'),a.portrait.skinTone));}
     // depth
-    html+=section(tt('m_depth'),c.depth,item(tt('f_dof'),a.dof)+item(tt('f_separation'),a.separation));
+    if(!a.layoutOnly)html+=section(tt('m_depth'),c.depth,item(tt('f_dof'),a.dof)+item(tt('f_separation'),a.separation));
     html+='<div class="chk-v2-section"><h3>'+tt('m_colourtalk')+'</h3>'+colourCommentary(a)+'</div>';
     // expert commentary
     html+='<div class="chk-v2-section"><h3>'+tt('m_expert')+'</h3>'+commentary(a)+'</div>';
@@ -8251,21 +8787,38 @@ function compositionScore(opts) {
     if(DEBUG)html+='<pre class="chk-debug">'+JSON.stringify({segConf:a.segConf,clipRatio:a.clipRatio,richness:a.richness,symCorr:a.symCorr,dofRatio:a.dofRatio,sharpVar:a.sharpVar,noiseV:a.noiseV,textRatio:a.textRatio,whiteRatio:a.whiteRatio},null,1)+'</pre>';
 
     // overall score
-    /* Exposure, blown highlights and focus are photographic criteria, and outside Photographer
-       the report says so in as many words - a flat white field is paint, not a blown highlight.
-       The score did not follow: illustration mode rewrites `highlight` to the high-key wording
-       and `shadow` to the low-key wording, neither of which matched a branch here, so both fell
-       to the failing value and a deliberate white-on-white piece was excused in the prose and
-       marked down in the number. Flat shading likewise has low Laplacian variance by
-       construction and always landed on 38. Where the criterion does not apply, it no longer
-       costs anything; where a verdict was genuinely reached (h_good, h_mild, s_rich, s_press)
-       it still counts. */
+    /* Score only evidence that was actually judged. N/A / unknown contributes neither points nor
+       penalties; its weight is redistributed across the remaining measurements. This matters most
+       for illustration, where photographic sharpness is not a meaningful quality criterion. */
     var _photoJudge=a.judgeAsPhoto;
-    var hiScore=a.highlight===tt('h_good')?90:a.highlight===tt('h_mild')?70:(_photoJudge?46:88);
-    var shScore=a.shadow===tt('s_rich')?88:a.shadow===tt('s_press')?66:(_photoJudge?44:82);
-    var spScore=!_photoJudge?88:(a.sharp===tt('sh_sharp')?92:a.sharp===tt('sh_soft')?70:a.sharp===tt('sh_blur')?52:38);
-    var focScore=a.focusConc>.22?88:a.focusConc>.15?70:56;
-    var score=Math.round(clamp(a.balance*.3+spScore*.2+hiScore*.15+shScore*.15+focScore*.2,35,98));
+    var hiScore=null, shScore=null, spScore=null;
+    if(a.highlight===tt('h_good')) hiScore=96;
+    else if(a.highlight===tt('h_mild')) hiScore=68;
+    else if(a.highlight===tt('h_over')) hiScore=32;
+    if(a.shadow===tt('s_rich')) shScore=94;
+    else if(a.shadow===tt('s_press')) shScore=62;
+    else if(a.shadow===tt('s_dead')) shScore=30;
+    if(_photoJudge){
+      if(a.sharp===tt('sh_sharp')) spScore=96;
+      else if(a.sharp===tt('sh_soft')) spScore=68;
+      else if(a.sharp===tt('sh_blur')) spScore=42;
+      else if(a.sharp===tt('sh_oof')) spScore=24;
+    }
+    // Visual-focus concentration is continuous rather than three fixed buckets.
+    var focScore=(typeof a.focusConc==='number'&&isFinite(a.focusConc))?clamp(30+a.focusConc*260,30,96):null;
+    var _sum=0,_w=0;
+    function scorePart(v,w){if(v===null||v===undefined||!isFinite(v))return;_sum+=v*w;_w+=w;}
+    scorePart(a.balance,.30);
+    scorePart(spScore,.20);
+    scorePart(hiScore,.15);
+    scorePart(shScore,.15);
+    scorePart(focScore,.20);
+    var genericScore=clamp(_w>0?_sum/_w:a.balance,20,98);
+    var score;
+    if(a.layoutSpec&&a.layoutSpec.score!=null){
+      score=a.layoutOnly?a.layoutSpec.score:(a.layoutSpec.score*.70+genericScore*.30);
+    }else score=genericScore;
+    score=Math.round(clamp(score,20,98));
     return {html:html,score:score};
   }
 
@@ -8278,7 +8831,7 @@ function compositionScore(opts) {
       document.getElementById('chkScoreTitle').textContent=tt('v3_scorelbl');
       document.getElementById('chkScoreNote').textContent=tt('v3_disclaim');
       scoreLbl.textContent=rep.score>=85?tt('sl_stable'):rep.score>=70?tt('sl_good'):rep.score>=55?tt('sl_adjust'):tt('sl_fix');
-      modeLbl.textContent=tt('modelbl')+' · '+currentModes.map(function(m){return ({portrait:tt('mode_portrait'),fashion:tt('mode_fashion'),scene:tt('mode_scene'),collage:tt('mode_collage'),layout:tt('mode_layout')})[m];}).join(' + ');
+      modeLbl.textContent=tt('modelbl')+' · '+currentModes.map(function(m){return ({portrait:tt('mode_portrait'),fashion:tt('mode_fashion'),scene:tt('mode_scene'),collage:tt('mode_collage'),layout:tt('mode_layout'),objects:lx('物件／文物排版','Object / artifact layout'),colorblocks:lx('色塊排版','Color-block layout')})[m];}).join(' + ');
       var lowColor=a.conf.color<60;
       palEl.innerHTML='<h3>'+tt('pal_title')+' <span class="tag ok">'+tt('pal_tag')+'</span></h3><p class="cond">'+tt('pal_desc')+'</p><div class="chk-sw">'+a.palette.map(function(o){var col=hex(o.r,o.g,o.b);return '<div><span style="background:'+col+'"></span><small>'+colorName(o.r,o.g,o.b)+'<br>'+col+'</small></div>';}).join('')+'</div>'+(lowColor?'<p class="fine">'+tt('pal_lowconf')+'</p>':'');
       repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.5.0</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
@@ -8331,6 +8884,7 @@ function compositionScore(opts) {
   });
   modesEl.addEventListener('click',function(e){var b=e.target.closest('button[data-m]');if(!b)return;if(b.classList.contains('on')){if(currentModes.length<=1)return;b.classList.remove('on');currentModes=currentModes.filter(function(m){return m!==b.dataset.m;});}else{b.classList.add('on');currentModes.push(b.dataset.m);}});
   runBtn.addEventListener('click',function(){if(currentImg)run(currentImg);});
+  initAnimeSegComponentManager();
 })();
 
 
