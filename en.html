@@ -2076,7 +2076,7 @@ body.card-open{overflow:hidden}
           <button class="chk-component-btn" id="openCvInstall" type="button">Download OpenCV analysis component</button>
           <button class="chk-component-btn danger" id="openCvRemove" type="button" hidden>Remove component</button>
         </div>
-        <p class="chk-component-note" id="openCvNote">The first click downloads the compressed public OpenCV.js component into this browser. Later visits prepare it locally in the background instead of waiting until analysis starts. If initialization fails, OpenCV is safely skipped and every other check remains available.</p>
+        <p class="chk-component-note" id="openCvNote">The first click only downloads the compressed public OpenCV.js component into this browser; installation no longer forces it to start. Phones load it locally only when analysis needs it. If OpenCV is unsuitable for the device it is safely skipped, the downloaded component is kept, and every other check remains available.</p>
         <div class="chk-component-prg" id="openCvPrg" hidden>
           <div class="chk-component-track" id="openCvTrack"><i id="openCvFill"></i></div>
           <div class="chk-component-plbl"><span id="openCvPrgLbl"></span><b id="openCvPct"></b></div>
@@ -5010,12 +5010,14 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
   var ANIME_SEG_MODEL_SIZE=44182552;
   var OPENCV_COMPONENT_URL='https://cdn.jsdelivr.net/npm/@techstark/opencv-js@4.12.0-release.1/dist/opencv.js';
   var OPENCV_COMPONENT_SIZE=10872779,OPENCV_COMPONENT_VERSION='opencv-js-4.12.0-release.1';
-  var openCvInstalled=false,openCvBusy=false;
+  var openCvInstalled=false,openCvBusy=false,openCvRuntimeFailed=false;
   function localZh(){return /^zh/i.test(document.documentElement.lang||'');}
   function lx(zh,en){return localZh()?zh:en;}
   function animeEnhancedEnabled(){var cb=document.getElementById('chkAnime');return !!(cb&&cb.checked)&&currentView!=='photo';}
   function animePreciseEnabled(){var cb=document.getElementById('chkAnimePrecise');return !!(cb&&cb.checked)&&animeEnhancedEnabled();}
   function cvEnabled(){var cb=document.getElementById('chkOpenCV');return !!(cb&&cb.checked&&!cb.disabled);}
+  function openCvMobileDevice(){try{return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent||'')||innerWidth<700||((matchMedia('(pointer:coarse)').matches)&&innerWidth<900);}catch(e){return false;}}
+  function shouldPrewarmOpenCv(){try{return !openCvMobileDevice()&&(!navigator.deviceMemory||navigator.deviceMemory>=6);}catch(e){return false;}}
 
   /* ---------- opt-in public model component manager ----------
      The visitor explicitly downloads the pinned public model once. It is written directly to
@@ -5369,7 +5371,7 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
     var cb=document.getElementById('chkOpenCV'),st=document.getElementById('openCvStatus'),ins=document.getElementById('openCvInstall'),rem=document.getElementById('openCvRemove'),note=document.getElementById('openCvNote');if(!cb||!st)return false;
     if(!modelCacheSupported()){openCvInstalled=false;cb.checked=false;cb.disabled=true;st.textContent=lx('此瀏覽器不支援離線元件','Offline components are not supported by this browser');if(ins)ins.hidden=true;if(rem)rem.hidden=true;if(note)note.textContent=lx('請使用 HTTPS 網站與較新的 Safari、Chrome、Edge 或 Firefox。','Use the HTTPS site in a recent Safari, Chrome, Edge or Firefox.');return false;}
     openCvInstalled=await openCvComponentCached();cb.disabled=!openCvInstalled||openCvBusy;if(!openCvInstalled)cb.checked=false;
-    var ready=openCvInstalled&&!!(window.cv&&window.cv.Mat);st.textContent=ready?lx('✓ 已準備完成','✓ Ready'):openCvInstalled?lx('✓ 已安裝，背景準備中','✓ Installed, preparing in background'):lx('未安裝','Not installed');
+    var ready=openCvInstalled&&!!(window.cv&&window.cv.Mat);st.textContent=ready?lx('✓ 已準備完成','✓ Ready'):openCvInstalled&&openCvRuntimeFailed?lx('✓ 已安裝；此裝置本次略過啟動','✓ Installed; runtime skipped on this device'):openCvInstalled?lx('✓ 已安裝；需要時從本機載入','✓ Installed; loads locally when needed'):lx('未安裝','Not installed');
     if(ins){ins.hidden=openCvInstalled;ins.disabled=openCvBusy;if(!openCvBusy&&!openCvInstalled)ins.textContent=lx('下載 OpenCV 分析元件','Download OpenCV analysis component');}if(rem){rem.hidden=!openCvInstalled;rem.disabled=openCvBusy;}return openCvInstalled;
   }
   async function cacheOpenCvComponentWithProgress(){
@@ -5385,13 +5387,14 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
       var bytes=await res.arrayBuffer();loaded=bytes.byteLength;if(loaded!==OPENCV_COMPONENT_SIZE)throw new Error('unexpected OpenCV component size');await c.put(modelCacheKey(OPENCV_COMPONENT_URL),new Response(bytes,{status:200,headers:headers}));
     }
     if(loaded!==OPENCV_COMPONENT_SIZE){await c.delete(modelCacheKey(OPENCV_COMPONENT_URL),{ignoreVary:true});throw new Error('unexpected OpenCV component size');}
-    setOpenCvComponentProgress(1,lx('下載完成，正在初始化…','Download complete; initializing…'),loaded,OPENCV_COMPONENT_SIZE,speed);return loaded;
+    setOpenCvComponentProgress(1,lx('下載完成，已儲存在此裝置','Download complete; saved on this device'),loaded,OPENCV_COMPONENT_SIZE,speed);return loaded;
   }
   async function loadCachedOpenCvScript(){
     var r=await cachedOpenCvResponse();if(!r)throw new Error('OpenCV component is not installed');var blob=await r.blob();if(blob.size!==OPENCV_COMPONENT_SIZE)throw new Error('invalid cached OpenCV component');
     var url=URL.createObjectURL(blob);try{await loadScript(url);}finally{setTimeout(function(){URL.revokeObjectURL(url);},60000);}
   }
   async function getOpenCv(){
+    if(openCvRuntimeFailed)return null;
     if(cvPromise)return cvPromise;
     cvPromise=(async function(){
       try{
@@ -5399,20 +5402,20 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
         var m=window.cv;if(m&&typeof m.then==='function'){m=await m;window.cv=m;}
         if(!m||!m.Mat)m=await new Promise(function(res,rej){var to=setTimeout(function(){rej(new Error('OpenCV init timeout'));},60000);if(!window.cv){clearTimeout(to);rej(new Error('OpenCV unavailable'));return;}window.cv.onRuntimeInitialized=function(){clearTimeout(to);res(window.cv);};});
         if(!m||!m.Mat)throw new Error('OpenCV runtime unavailable');window.cv=m;setOpenCvComponentProgress(1,lx('OpenCV 已準備完成','OpenCV is ready'),OPENCV_COMPONENT_SIZE,OPENCV_COMPONENT_SIZE,0);setTimeout(hideOpenCvComponentProgress,900);await refreshOpenCvComponentUI();return m;
-      }catch(e){console.warn('OpenCV unavailable',e);await clearOpenCvComponentCache();cvPromise=null;await refreshOpenCvComponentUI();return null;}
+      }catch(e){console.warn('OpenCV unavailable',e);openCvRuntimeFailed=true;cvPromise=null;await refreshOpenCvComponentUI();return null;}
     })();
     return cvPromise;
   }
   async function installOpenCvComponent(){
     if(openCvBusy)return;openCvBusy=true;var cb=document.getElementById('chkOpenCV'),st=document.getElementById('openCvStatus'),ins=document.getElementById('openCvInstall'),rem=document.getElementById('openCvRemove');if(ins){ins.disabled=true;ins.textContent=lx('下載中…','Downloading…');}if(rem)rem.disabled=true;if(st)st.textContent=lx('下載中…','Downloading…');var failed=false;
-    try{try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist();}catch(e){}await cacheOpenCvComponentWithProgress();cvPromise=null;if(st)st.textContent=lx('初始化中…','Initializing…');var ready=await getOpenCv();if(!ready)throw new Error('OpenCV initialization failed');if(cb)cb.checked=true;}
+    try{try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist();}catch(e){}await cacheOpenCvComponentWithProgress();openCvRuntimeFailed=false;cvPromise=null;if(cb)cb.checked=true;}
     catch(e){failed=true;console.warn('OpenCV component install failed; structural cross-check will remain disabled',e);await clearOpenCvComponentCache();cvPromise=null;}
-    openCvBusy=false;await refreshOpenCvComponentUI();if(failed){if(st)st.textContent=lx('下載或初始化失敗；其他健檢仍可使用','Download or initialization failed; other checks remain available');if(ins)ins.textContent=lx('重試下載 OpenCV 分析元件','Retry OpenCV component download');setOpenCvComponentProgress(0,lx('元件未完成，可按重試','Component incomplete — you can retry'),0,OPENCV_COMPONENT_SIZE,0);}
+    openCvBusy=false;await refreshOpenCvComponentUI();if(failed){if(st)st.textContent=lx('下載失敗；其他健檢仍可使用','Download failed; other checks remain available');if(ins)ins.textContent=lx('重試下載 OpenCV 分析元件','Retry OpenCV component download');setOpenCvComponentProgress(0,lx('元件未完成，可按重試','Component incomplete — you can retry'),0,OPENCV_COMPONENT_SIZE,0);}else{setTimeout(hideOpenCvComponentProgress,1200);if(shouldPrewarmOpenCv())getOpenCv();}
   }
-  async function removeOpenCvComponent(){if(openCvBusy)return;openCvBusy=true;await clearOpenCvComponentCache();cvPromise=null;var cb=document.getElementById('chkOpenCV');if(cb)cb.checked=false;openCvBusy=false;await refreshOpenCvComponentUI();}
+  async function removeOpenCvComponent(){if(openCvBusy)return;openCvBusy=true;await clearOpenCvComponentCache();cvPromise=null;openCvRuntimeFailed=false;var cb=document.getElementById('chkOpenCV');if(cb)cb.checked=false;openCvBusy=false;await refreshOpenCvComponentUI();}
   function initOpenCvComponentManager(){
     var ins=document.getElementById('openCvInstall'),rem=document.getElementById('openCvRemove');if(ins)ins.addEventListener('click',installOpenCvComponent);if(rem)rem.addEventListener('click',removeOpenCvComponent);
-    refreshOpenCvComponentUI().then(function(installed){if(installed)getOpenCv();});
+    refreshOpenCvComponentUI().then(function(installed){if(installed&&shouldPrewarmOpenCv())getOpenCv();});
   }
   function clusterCuts(arr,minGap){
     arr=arr.slice().sort(function(a,b){return a-b;});var out=[];
