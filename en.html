@@ -2062,7 +2062,7 @@ body.card-open{overflow:hidden}
           <button class="chk-component-btn" id="animeSegInstall" type="button">Download precise anime analysis component</button>
           <button class="chk-component-btn danger" id="animeSegRemove" type="button" hidden>Remove component</button>
         </div>
-        <p class="chk-component-note" id="animeSegNote">The first click downloads model_int8.onnx from the public Hugging Face source with percentage, speed and remaining size shown; failed downloads can be retried. Once complete, it stays in this browser cache and later analyses run locally without downloading it again or using a paid AI API.</p>
+        <p class="chk-component-note" id="animeSegNote">The first click downloads model_int8.onnx in resumable parts from the public Hugging Face source, with percentage, speed and remaining size shown. Interrupted downloads continue from completed parts. Once complete, it stays in this browser cache and later analyses run locally without downloading it again or using a paid AI API.</p>
         <div class="chk-component-prg" id="animeSegPrg" hidden>
           <div class="chk-component-track" id="animeSegTrack"><i id="animeSegFill"></i></div>
           <div class="chk-component-plbl"><span id="animeSegPrgLbl"></span><b id="animeSegPct"></b></div>
@@ -5006,6 +5006,7 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
      Cache Storage and later sessions read the ONNX bytes locally; no Service Worker is needed. */
   var ART_MODEL_CACHE='purenista-art-models-v2';
   var ANIME_SEG_COMPONENT_VERSION='anime-seg-int8-v1-public-25f233d';
+  var ANIME_SEG_PART_BYTES=4*1024*1024,ANIME_SEG_PARALLEL=3;
   var animeSegInstalled=false,animeSegBusy=false;
   function modelCacheSupported(){return typeof window!=='undefined'&&'caches' in window&&window.isSecureContext!==false;}
   function modelCacheKey(url){try{return new URL(url,location.href).href;}catch(e){return url;}}
@@ -5021,6 +5022,20 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
     }catch(e){return null;}
   }
   async function animeSegModelCached(){return modelCacheSupported()&&!!(await cachedAnimeSegResponse());}
+  function animeSegPartCount(){return Math.ceil(ANIME_SEG_MODEL_SIZE/ANIME_SEG_PART_BYTES);}
+  function animeSegPartBounds(index){var start=index*ANIME_SEG_PART_BYTES,end=Math.min(ANIME_SEG_MODEL_SIZE,start+ANIME_SEG_PART_BYTES)-1;return {start:start,end:end,size:end-start+1};}
+  function animeSegPartKey(index){return modelCacheKey(ANIME_SEG_MODEL_URL)+'&purenista-part='+encodeURIComponent(ANIME_SEG_COMPONENT_VERSION+'-'+index);}
+  async function animeSegCachedParts(c){
+    c=c||await openArtModelCache();var present=[],loaded=0;if(!c)return {present:present,loaded:0};
+    for(var i=0;i<animeSegPartCount();i++){
+      var r=null;try{r=await c.match(animeSegPartKey(i),{ignoreVary:true});}catch(e){}
+      var b=animeSegPartBounds(i),size=r?parseInt(r.headers.get('content-length')||'0',10)||0:0,version=r?r.headers.get('x-purenista-model-version'):'';
+      if(r&&size===b.size&&version===ANIME_SEG_COMPONENT_VERSION){present[i]=true;loaded+=b.size;}
+      else{present[i]=false;if(r)try{await c.delete(animeSegPartKey(i),{ignoreVary:true});}catch(e){}}
+    }
+    return {present:present,loaded:loaded};
+  }
+  async function removeAnimeSegParts(c){c=c||await openArtModelCache();if(!c)return;for(var i=0;i<animeSegPartCount();i++)try{await c.delete(animeSegPartKey(i),{ignoreVary:true});}catch(e){}}
   function setAnimeSegComponentProgress(frac,label,loaded,total,speed){
     var box=document.getElementById('animeSegPrg'),track=document.getElementById('animeSegTrack'),fill=document.getElementById('animeSegFill'),lbl=document.getElementById('animeSegPrgLbl'),pct=document.getElementById('animeSegPct');
     if(!box)return;box.hidden=false;
@@ -5034,14 +5049,13 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
     var cb=document.getElementById('chkAnimePrecise'),st=document.getElementById('animeSegStatus'),ins=document.getElementById('animeSegInstall'),rem=document.getElementById('animeSegRemove'),note=document.getElementById('animeSegNote');
     if(!cb||!st)return;
     if(!modelCacheSupported()){animeSegInstalled=false;cb.checked=false;cb.disabled=true;st.textContent=lx('此瀏覽器不支援離線元件','Offline components are not supported by this browser');if(ins)ins.hidden=true;if(rem)rem.hidden=true;if(note)note.textContent=lx('請使用 HTTPS 網站與較新的 Safari、Chrome、Edge 或 Firefox。','Use the HTTPS site in a recent Safari, Chrome, Edge or Firefox.');return false;}
-    animeSegInstalled=await animeSegModelCached();
+    animeSegInstalled=await animeSegModelCached();var partial=animeSegInstalled?0:(await animeSegCachedParts()).loaded;
     cb.disabled=!animeSegInstalled||animeSegBusy;if(!animeSegInstalled)cb.checked=false;
-    st.textContent=animeSegInstalled?lx('✓ 已安裝在此裝置','✓ Installed on this device'):lx('未安裝','Not installed');
-    if(ins){ins.hidden=animeSegInstalled;ins.disabled=animeSegBusy;if(!animeSegBusy&&!animeSegInstalled)ins.textContent=lx('下載精細動漫分析元件','Download precise anime analysis component');}if(rem){rem.hidden=!animeSegInstalled;rem.disabled=animeSegBusy;}
+    st.textContent=animeSegInstalled?lx('✓ 已安裝在此裝置','✓ Installed on this device'):(partial?lx('已下載 '+fmtBytes(partial)+'，可接續','Downloaded '+fmtBytes(partial)+' — ready to resume'):lx('未安裝','Not installed'));
+    if(ins){ins.hidden=animeSegInstalled;ins.disabled=animeSegBusy;if(!animeSegBusy&&!animeSegInstalled)ins.textContent=partial?lx('繼續下載精細動漫分析元件','Resume precise anime component download'):lx('下載精細動漫分析元件','Download precise anime analysis component');}if(rem){rem.hidden=!animeSegInstalled;rem.disabled=animeSegBusy;}
     return animeSegInstalled;
   }
-  async function cacheAnimeSegModelWithProgress(label){
-    var c=await openArtModelCache();if(!c)throw new Error('Cache Storage unavailable');
+  async function cacheAnimeSegModelSingleStream(c,label){
     var abs=modelCacheKey(ANIME_SEG_MODEL_URL),res=await fetch(ANIME_SEG_MODEL_URL,{mode:'cors',cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status+' '+ANIME_SEG_MODEL_URL);
     var total=parseInt(res.headers.get('content-length')||'0',10)||0;
     if(total&&total!==ANIME_SEG_MODEL_SIZE)throw new Error('unexpected model size');
@@ -5063,6 +5077,61 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
     if(savedSize!==ANIME_SEG_MODEL_SIZE){await c.delete(abs,{ignoreVary:true});throw new Error('unexpected cached model size');}
     setAnimeSegComponentProgress(1,label,savedSize,savedSize);return savedSize;
   }
+  async function cacheAnimeSegModelInParts(c,label){
+    var scan=await animeSegCachedParts(c),present=scan.present,completed=scan.loaded,active={},transferred=0,speed=0,next=0;
+    var clock=function(){return typeof performance!=='undefined'&&performance.now?performance.now():Date.now();},lastAt=clock(),lastTransferred=0;
+    var partLabel=completed?lx('接續下載 model_int8.onnx…','Resuming model_int8.onnx…'):label;
+    function report(force){
+      var now=clock(),elapsed=now-lastAt;if(!force&&elapsed<250)return;
+      if(elapsed>0){var instant=(transferred-lastTransferred)*1000/elapsed;if(instant>0)speed=speed?speed*.7+instant*.3:instant;lastAt=now;lastTransferred=transferred;}
+      var visible=completed;Object.keys(active).forEach(function(k){visible+=active[k]||0;});
+      setAnimeSegComponentProgress(visible/ANIME_SEG_MODEL_SIZE,partLabel,visible,ANIME_SEG_MODEL_SIZE,speed);
+    }
+    async function fetchPart(index){
+      var b=animeSegPartBounds(index),last=null;
+      for(var attempt=0;attempt<2;attempt++){
+        active[index]=0;report(true);
+        try{
+          var res=await fetch(ANIME_SEG_MODEL_URL,{mode:'cors',cache:'no-store',headers:{Range:'bytes='+b.start+'-'+b.end}});
+          if(res.status!==206){try{if(res.body)await res.body.cancel();}catch(e){}var unsupported=new Error('range downloads unavailable');unsupported.rangeUnsupported=true;throw unsupported;}
+          var announced=parseInt(res.headers.get('content-length')||'0',10)||0;if(announced&&announced!==b.size)throw new Error('unexpected range size');
+          if(!res.body)throw new Error('streaming response unavailable');
+          var received=0,monitor=new TransformStream({transform:function(chunk,controller){received+=chunk.byteLength;active[index]=received;transferred+=chunk.byteLength;report(false);controller.enqueue(chunk);}});
+          var headers=new Headers({'content-type':'application/octet-stream','content-length':String(b.size),'x-purenista-model-version':ANIME_SEG_COMPONENT_VERSION,'x-purenista-part':String(index)});
+          await c.put(animeSegPartKey(index),new Response(res.body.pipeThrough(monitor),{status:200,headers:headers}));
+          if(received!==b.size){await c.delete(animeSegPartKey(index),{ignoreVary:true});throw new Error('incomplete range');}
+          completed+=b.size;delete active[index];present[index]=true;report(true);return;
+        }catch(e){last=e;delete active[index];report(true);if(e&&e.rangeUnsupported)throw e;}
+      }
+      throw last||new Error('range download failed');
+    }
+    while(next<animeSegPartCount()&&present[next])next++;
+    if(next<animeSegPartCount()){var probe=next++;await fetchPart(probe);}
+    async function worker(){while(true){while(next<animeSegPartCount()&&present[next])next++;if(next>=animeSegPartCount())return;var index=next++;await fetchPart(index);}}
+    var jobs=[];for(var w=0;w<ANIME_SEG_PARALLEL;w++)jobs.push(worker());var results=await Promise.allSettled(jobs),failedJob=results.find(function(r){return r.status==='rejected';});if(failedJob)throw failedJob.reason;
+    var partIndex=0,reader=null;
+    var combined=new ReadableStream({pull:async function(controller){
+      try{
+        while(partIndex<animeSegPartCount()){
+          if(!reader){var r=await c.match(animeSegPartKey(partIndex),{ignoreVary:true});if(!r||!r.body)throw new Error('cached range missing');reader=r.body.getReader();}
+          var item=await reader.read();if(item.done){reader=null;partIndex++;continue;}controller.enqueue(item.value);return;
+        }
+        controller.close();
+      }catch(e){controller.error(e);}
+    },cancel:function(reason){if(reader)return reader.cancel(reason);}});
+    var abs=modelCacheKey(ANIME_SEG_MODEL_URL),finalHeaders=new Headers({'content-type':'application/octet-stream','content-length':String(ANIME_SEG_MODEL_SIZE),'x-purenista-model-version':ANIME_SEG_COMPONENT_VERSION});
+    await c.put(abs,new Response(combined,{status:200,headers:finalHeaders}));
+    var saved=await c.match(abs,{ignoreVary:true});if(!saved||parseInt(saved.headers.get('content-length')||'0',10)!==ANIME_SEG_MODEL_SIZE)throw new Error('model cache write failed');
+    await removeAnimeSegParts(c);setAnimeSegComponentProgress(1,label,ANIME_SEG_MODEL_SIZE,ANIME_SEG_MODEL_SIZE,speed);return ANIME_SEG_MODEL_SIZE;
+  }
+  async function cacheAnimeSegModelWithProgress(label){
+    var c=await openArtModelCache();if(!c)throw new Error('Cache Storage unavailable');
+    if(typeof TransformStream==='undefined'||typeof ReadableStream==='undefined')return cacheAnimeSegModelSingleStream(c,label);
+    try{return await cacheAnimeSegModelInParts(c,label);}catch(e){
+      if(!(e&&e.rangeUnsupported))throw e;
+      await removeAnimeSegParts(c);return cacheAnimeSegModelSingleStream(c,lx('此來源不支援續傳，改用一般下載…','Resume unavailable; using standard download…'));
+    }
+  }
   async function installAnimeSegComponent(){
     if(animeSegBusy)return;animeSegBusy=true;
     var ins=document.getElementById('animeSegInstall'),rem=document.getElementById('animeSegRemove'),st=document.getElementById('animeSegStatus');if(ins){ins.disabled=true;ins.textContent=lx('下載中…','Downloading…');}if(rem)rem.disabled=true;if(st)st.textContent=lx('下載中…','Downloading…');
@@ -5082,7 +5151,7 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
   }
   async function removeAnimeSegComponent(){
     if(animeSegBusy)return;animeSegBusy=true;
-    try{var c=await openArtModelCache();if(c)try{await c.delete(modelCacheKey(ANIME_SEG_MODEL_URL),{ignoreVary:true});}catch(e){}try{localStorage.removeItem('purenistaAnimeSegVersion');}catch(e){}animeSegSessionPromise=null;}catch(e){console.warn('component removal failed',e);}
+    try{var c=await openArtModelCache();if(c){try{await c.delete(modelCacheKey(ANIME_SEG_MODEL_URL),{ignoreVary:true});}catch(e){}await removeAnimeSegParts(c);}try{localStorage.removeItem('purenistaAnimeSegVersion');}catch(e){}animeSegSessionPromise=null;}catch(e){console.warn('component removal failed',e);}
     animeSegBusy=false;await refreshAnimeSegComponentUI();
   }
   async function cachedAnimeSegBytes(){
