@@ -2072,7 +2072,20 @@ body.card-open{overflow:hidden}
           <div class="chk-component-plbl"><span id="animeSegPrgLbl"></span><b id="animeSegPct"></b></div>
         </div>
       </div>
-      <label class="chk-cb"><input type="checkbox" id="chkOpenCV" checked><span>啟用 OpenCV 結構交叉檢查<small>本機檢查長直線、輕微傾斜、拼貼分隔與線稿邊緣；只作第二證據，不會因單一 OpenCV 數值直接判作品好壞。</small></span></label>
+      <label class="chk-cb"><input type="checkbox" id="chkOpenCV" checked disabled><span>啟用 OpenCV 結構交叉檢查<small>本機檢查長直線、輕微傾斜、拼貼分隔與線稿邊緣；只作第二證據，不會因單一 OpenCV 數值直接判作品好壞。</small></span></label>
+      <div class="chk-component" id="openCvComponent">
+        <div class="chk-component-row">
+          <b>OpenCV 結構分析元件 · 下載約 3.2 MB</b>
+          <span class="chk-component-status" id="openCvStatus">檢查中…</span>
+          <button class="chk-component-btn" id="openCvInstall" type="button">下載 OpenCV 分析元件</button>
+          <button class="chk-component-btn danger" id="openCvRemove" type="button" hidden>刪除元件</button>
+        </div>
+        <p class="chk-component-note" id="openCvNote">第一次按下載時會取得公開的 OpenCV.js 壓縮元件並存進瀏覽器；之後開啟網站會從本機背景準備，不再等到開始分析才下載。初始化失敗時會安全略過 OpenCV，其他健檢仍正常執行。</p>
+        <div class="chk-component-prg" id="openCvPrg" hidden>
+          <div class="chk-component-track" id="openCvTrack"><i id="openCvFill"></i></div>
+          <div class="chk-component-plbl"><span id="openCvPrgLbl"></span><b id="openCvPct"></b></div>
+        </div>
+      </div>
       <label class="chk-cb"><input type="checkbox" id="chkBreak"><span>角色刻意突出邊框／出血<small>作品有內框（白邊、黑條、色塊底），而角色的手腳或裙襬故意壓出框外。勾選會強制以內框為畫面來判讀構圖，並把溢出視為刻意設計。留空則自動偵測。</small></span></label>
       <label class="chk-cb"><input type="checkbox" id="chkFramed"><span>使用了外框／相框構圖<small>勾選後，會把「重心在中央」視為刻意設計、不扣分</small></span></label>
       <p class="fine" style="margin:8px 2px 10px">本機模型／函式庫：anime-character-detector（Apache-2.0）、anime-seg 上游（Apache-2.0；INT8 由 onnx-community 鏡像）、OpenCV.js（Apache-2.0）、lbpcascade_animeface（MIT）。所有新增偵測皆在瀏覽器端執行。</p>
@@ -4995,11 +5008,14 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
   ];
   var ANIME_SEG_MODEL_URL='https://huggingface.co/onnx-community/anime-seg-ONNX/resolve/25f233dc9f60e116dc79a5ba7e9575585388a36f/onnx/model_int8.onnx?download=true';
   var ANIME_SEG_MODEL_SIZE=44182552;
+  var OPENCV_COMPONENT_URL='https://cdn.jsdelivr.net/npm/@techstark/opencv-js@4.12.0-release.1/dist/opencv.js';
+  var OPENCV_COMPONENT_SIZE=10872779,OPENCV_COMPONENT_VERSION='opencv-js-4.12.0-release.1';
+  var openCvInstalled=false,openCvBusy=false;
   function localZh(){return /^zh/i.test(document.documentElement.lang||'');}
   function lx(zh,en){return localZh()?zh:en;}
   function animeEnhancedEnabled(){var cb=document.getElementById('chkAnime');return !!(cb&&cb.checked)&&currentView!=='photo';}
   function animePreciseEnabled(){var cb=document.getElementById('chkAnimePrecise');return !!(cb&&cb.checked)&&animeEnhancedEnabled();}
-  function cvEnabled(){var cb=document.getElementById('chkOpenCV');return !!(cb&&cb.checked);}
+  function cvEnabled(){var cb=document.getElementById('chkOpenCV');return !!(cb&&cb.checked&&!cb.disabled);}
 
   /* ---------- opt-in public model component manager ----------
      The visitor explicitly downloads the pinned public model once. It is written directly to
@@ -5331,23 +5347,72 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
     }catch(e){return null;}
   }
 
+  async function cachedOpenCvResponse(){
+    var c=await openArtModelCache();if(!c)return null;
+    try{
+      var r=await c.match(modelCacheKey(OPENCV_COMPONENT_URL),{ignoreVary:true});if(!r)return null;
+      var size=parseInt(r.headers.get('content-length')||'0',10)||0,version=r.headers.get('x-purenista-component-version')||'';
+      if(size!==OPENCV_COMPONENT_SIZE||version!==OPENCV_COMPONENT_VERSION){await c.delete(modelCacheKey(OPENCV_COMPONENT_URL),{ignoreVary:true});return null;}
+      return r;
+    }catch(e){return null;}
+  }
+  async function openCvComponentCached(){return modelCacheSupported()&&!!(await cachedOpenCvResponse());}
+  function setOpenCvComponentProgress(frac,label,loaded,total,speed){
+    var box=document.getElementById('openCvPrg'),track=document.getElementById('openCvTrack'),fill=document.getElementById('openCvFill'),lbl=document.getElementById('openCvPrgLbl'),pct=document.getElementById('openCvPct');
+    if(!box)return;box.hidden=false;if(lbl)lbl.textContent=label||'';
+    if(frac<0){if(track)track.classList.add('ind');if(fill)fill.style.width='';}else{if(track)track.classList.remove('ind');if(fill)fill.style.width=Math.round(clamp(frac,0,1)*100)+'%';}
+    if(pct){var bits=[];if(frac>=0)bits.push(Math.round(clamp(frac,0,1)*100)+'%');if(total||loaded)bits.push(fmtBytes(loaded)+' / '+fmtBytes(total));if(total&&loaded<=total)bits.push(lx('剩餘 ','Remaining ')+fmtBytes(total-loaded));if(speed>0)bits.push(fmtBytes(speed)+'/s');pct.textContent=bits.join(' · ');}
+  }
+  function hideOpenCvComponentProgress(){var b=document.getElementById('openCvPrg');if(b)b.hidden=true;}
+  async function clearOpenCvComponentCache(){var c=await openArtModelCache();if(c)try{await c.delete(modelCacheKey(OPENCV_COMPONENT_URL),{ignoreVary:true});}catch(e){}}
+  async function refreshOpenCvComponentUI(){
+    var cb=document.getElementById('chkOpenCV'),st=document.getElementById('openCvStatus'),ins=document.getElementById('openCvInstall'),rem=document.getElementById('openCvRemove'),note=document.getElementById('openCvNote');if(!cb||!st)return false;
+    if(!modelCacheSupported()){openCvInstalled=false;cb.checked=false;cb.disabled=true;st.textContent=lx('此瀏覽器不支援離線元件','Offline components are not supported by this browser');if(ins)ins.hidden=true;if(rem)rem.hidden=true;if(note)note.textContent=lx('請使用 HTTPS 網站與較新的 Safari、Chrome、Edge 或 Firefox。','Use the HTTPS site in a recent Safari, Chrome, Edge or Firefox.');return false;}
+    openCvInstalled=await openCvComponentCached();cb.disabled=!openCvInstalled||openCvBusy;if(!openCvInstalled)cb.checked=false;
+    var ready=openCvInstalled&&!!(window.cv&&window.cv.Mat);st.textContent=ready?lx('✓ 已準備完成','✓ Ready'):openCvInstalled?lx('✓ 已安裝，背景準備中','✓ Installed, preparing in background'):lx('未安裝','Not installed');
+    if(ins){ins.hidden=openCvInstalled;ins.disabled=openCvBusy;if(!openCvBusy&&!openCvInstalled)ins.textContent=lx('下載 OpenCV 分析元件','Download OpenCV analysis component');}if(rem){rem.hidden=!openCvInstalled;rem.disabled=openCvBusy;}return openCvInstalled;
+  }
+  async function cacheOpenCvComponentWithProgress(){
+    var c=await openArtModelCache();if(!c)throw new Error('Cache Storage unavailable');
+    var res=await fetch(OPENCV_COMPONENT_URL,{mode:'cors',cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status+' '+OPENCV_COMPONENT_URL);
+    var loaded=0,speed=0,clock=function(){return typeof performance!=='undefined'&&performance.now?performance.now():Date.now();},lastAt=clock(),lastLoaded=0,cacheResponse;
+    var headers=new Headers({'content-type':'application/javascript; charset=utf-8','content-length':String(OPENCV_COMPONENT_SIZE),'x-purenista-component-version':OPENCV_COMPONENT_VERSION});
+    if(res.body&&typeof TransformStream!=='undefined'){
+      var monitor=new TransformStream({transform:function(chunk,controller){loaded+=chunk.byteLength;var now=clock(),elapsed=now-lastAt;if(elapsed>=200){var instant=(loaded-lastLoaded)*1000/elapsed;speed=speed?speed*.7+instant*.3:instant;lastAt=now;lastLoaded=loaded;setOpenCvComponentProgress(loaded/OPENCV_COMPONENT_SIZE,lx('下載並解壓 OpenCV.js…','Downloading and unpacking OpenCV.js…'),loaded,OPENCV_COMPONENT_SIZE,speed);}controller.enqueue(chunk);}});
+      cacheResponse=new Response(res.body.pipeThrough(monitor),{status:200,headers:headers});setOpenCvComponentProgress(0,lx('下載並解壓 OpenCV.js…','Downloading and unpacking OpenCV.js…'),0,OPENCV_COMPONENT_SIZE,0);
+      await c.put(modelCacheKey(OPENCV_COMPONENT_URL),cacheResponse);
+    }else{
+      var bytes=await res.arrayBuffer();loaded=bytes.byteLength;if(loaded!==OPENCV_COMPONENT_SIZE)throw new Error('unexpected OpenCV component size');await c.put(modelCacheKey(OPENCV_COMPONENT_URL),new Response(bytes,{status:200,headers:headers}));
+    }
+    if(loaded!==OPENCV_COMPONENT_SIZE){await c.delete(modelCacheKey(OPENCV_COMPONENT_URL),{ignoreVary:true});throw new Error('unexpected OpenCV component size');}
+    setOpenCvComponentProgress(1,lx('下載完成，正在初始化…','Download complete; initializing…'),loaded,OPENCV_COMPONENT_SIZE,speed);return loaded;
+  }
+  async function loadCachedOpenCvScript(){
+    var r=await cachedOpenCvResponse();if(!r)throw new Error('OpenCV component is not installed');var blob=await r.blob();if(blob.size!==OPENCV_COMPONENT_SIZE)throw new Error('invalid cached OpenCV component');
+    var url=URL.createObjectURL(blob);try{await loadScript(url);}finally{setTimeout(function(){URL.revokeObjectURL(url);},60000);}
+  }
   async function getOpenCv(){
     if(cvPromise)return cvPromise;
     cvPromise=(async function(){
       try{
-        if(!window.cv)await loadScript('https://cdn.jsdelivr.net/npm/@techstark/opencv-js@4.12.0-release.1/dist/opencv.js');
-        var m=window.cv;
-        if(m&&typeof m.then==='function')m=await m;
-        if(m&&m.Mat)return m;
-        m=await new Promise(function(res,rej){
-          var to=setTimeout(function(){rej(new Error('OpenCV init timeout'));},30000);
-          if(!window.cv){clearTimeout(to);rej(new Error('OpenCV unavailable'));return;}
-          window.cv.onRuntimeInitialized=function(){clearTimeout(to);res(window.cv);};
-        });
-        return m;
-      }catch(e){console.warn('OpenCV unavailable',e);return null;}
+        if(!window.cv){if(!await openCvComponentCached())return null;setOpenCvComponentProgress(-1,lx('從本機準備 OpenCV…','Preparing OpenCV locally…'),0,0,0);await loadCachedOpenCvScript();}
+        var m=window.cv;if(m&&typeof m.then==='function'){m=await m;window.cv=m;}
+        if(!m||!m.Mat)m=await new Promise(function(res,rej){var to=setTimeout(function(){rej(new Error('OpenCV init timeout'));},60000);if(!window.cv){clearTimeout(to);rej(new Error('OpenCV unavailable'));return;}window.cv.onRuntimeInitialized=function(){clearTimeout(to);res(window.cv);};});
+        if(!m||!m.Mat)throw new Error('OpenCV runtime unavailable');window.cv=m;setOpenCvComponentProgress(1,lx('OpenCV 已準備完成','OpenCV is ready'),OPENCV_COMPONENT_SIZE,OPENCV_COMPONENT_SIZE,0);setTimeout(hideOpenCvComponentProgress,900);await refreshOpenCvComponentUI();return m;
+      }catch(e){console.warn('OpenCV unavailable',e);await clearOpenCvComponentCache();cvPromise=null;await refreshOpenCvComponentUI();return null;}
     })();
     return cvPromise;
+  }
+  async function installOpenCvComponent(){
+    if(openCvBusy)return;openCvBusy=true;var cb=document.getElementById('chkOpenCV'),st=document.getElementById('openCvStatus'),ins=document.getElementById('openCvInstall'),rem=document.getElementById('openCvRemove');if(ins){ins.disabled=true;ins.textContent=lx('下載中…','Downloading…');}if(rem)rem.disabled=true;if(st)st.textContent=lx('下載中…','Downloading…');var failed=false;
+    try{try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist();}catch(e){}await cacheOpenCvComponentWithProgress();cvPromise=null;if(st)st.textContent=lx('初始化中…','Initializing…');var ready=await getOpenCv();if(!ready)throw new Error('OpenCV initialization failed');if(cb)cb.checked=true;}
+    catch(e){failed=true;console.warn('OpenCV component install failed; structural cross-check will remain disabled',e);await clearOpenCvComponentCache();cvPromise=null;}
+    openCvBusy=false;await refreshOpenCvComponentUI();if(failed){if(st)st.textContent=lx('下載或初始化失敗；其他健檢仍可使用','Download or initialization failed; other checks remain available');if(ins)ins.textContent=lx('重試下載 OpenCV 分析元件','Retry OpenCV component download');setOpenCvComponentProgress(0,lx('元件未完成，可按重試','Component incomplete — you can retry'),0,OPENCV_COMPONENT_SIZE,0);}
+  }
+  async function removeOpenCvComponent(){if(openCvBusy)return;openCvBusy=true;await clearOpenCvComponentCache();cvPromise=null;var cb=document.getElementById('chkOpenCV');if(cb)cb.checked=false;openCvBusy=false;await refreshOpenCvComponentUI();}
+  function initOpenCvComponentManager(){
+    var ins=document.getElementById('openCvInstall'),rem=document.getElementById('openCvRemove');if(ins)ins.addEventListener('click',installOpenCvComponent);if(rem)rem.addEventListener('click',removeOpenCvComponent);
+    refreshOpenCvComponentUI().then(function(installed){if(installed)getOpenCv();});
   }
   function clusterCuts(arr,minGap){
     arr=arr.slice().sort(function(a,b){return a-b;});var out=[];
@@ -8979,6 +9044,7 @@ function compositionScore(opts) {
   modesEl.addEventListener('click',function(e){var b=e.target.closest('button[data-m]');if(!b)return;if(b.classList.contains('on')){if(currentModes.length<=1)return;b.classList.remove('on');currentModes=currentModes.filter(function(m){return m!==b.dataset.m;});}else{b.classList.add('on');currentModes.push(b.dataset.m);}});
   runBtn.addEventListener('click',function(){if(currentImg)run(currentImg);});
   initAnimeSegComponentManager();
+  initOpenCvComponentManager();
 })();
 
 
