@@ -5039,7 +5039,11 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
       return r;
     }catch(e){return null;}
   }
-  async function animeSegModelCached(){return modelCacheSupported()&&!!(await cachedAnimeSegResponse());}
+  async function animeSegModelCached(){
+    if(!modelCacheSupported())return false;
+    if(await cachedAnimeSegResponse())return true;
+    var scan=await animeSegCachedParts();return scan.loaded===ANIME_SEG_MODEL_SIZE;
+  }
   function animeSegPartCount(){return Math.ceil(ANIME_SEG_MODEL_SIZE/ANIME_SEG_PART_BYTES);}
   function animeSegPartBounds(index){var start=index*ANIME_SEG_PART_BYTES,end=Math.min(ANIME_SEG_MODEL_SIZE,start+ANIME_SEG_PART_BYTES)-1;return {start:start,end:end,size:end-start+1};}
   function animeSegPartKey(index){return modelCacheKey(ANIME_SEG_MODEL_URL)+'&purenista-part='+encodeURIComponent(ANIME_SEG_COMPONENT_VERSION+'-'+index);}
@@ -5077,23 +5081,16 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
     var abs=modelCacheKey(ANIME_SEG_MODEL_URL),res=await fetch(ANIME_SEG_MODEL_URL,{mode:'cors',cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status+' '+ANIME_SEG_MODEL_URL);
     var total=parseInt(res.headers.get('content-length')||'0',10)||0;
     if(total&&total!==ANIME_SEG_MODEL_SIZE)throw new Error('unexpected model size');
-    // Count bytes in the one stream Cache Storage consumes. This preserves game-style progress
-    // without teeing the 44 MB response or buffering a second copy in memory.
-    var loaded=0,speed=0,clock=function(){return typeof performance!=='undefined'&&performance.now?performance.now():Date.now();},lastAt=clock(),lastLoaded=0,cacheResponse=res;
-    if(res.body&&typeof TransformStream!=='undefined'){
-      var monitor=new TransformStream({transform:function(chunk,controller){
-        loaded+=chunk.byteLength;var now=clock(),elapsed=now-lastAt;
-        if(elapsed>=250){var instant=(loaded-lastLoaded)*1000/elapsed;speed=speed?speed*.7+instant*.3:instant;lastAt=now;lastLoaded=loaded;setAnimeSegComponentProgress(total?loaded/total:-1,label,loaded,total,speed);}
-        controller.enqueue(chunk);
-      },flush:function(){var now=clock(),elapsed=Math.max(1,now-lastAt),instant=(loaded-lastLoaded)*1000/elapsed;speed=speed?speed*.7+instant*.3:instant;setAnimeSegComponentProgress(total?loaded/total:-1,label,loaded,total,speed);}});
-      cacheResponse=new Response(res.body.pipeThrough(monitor),{status:res.status,statusText:res.statusText,headers:res.headers});
-      setAnimeSegComponentProgress(total?0:-1,label,0,total,0);
-    }else setAnimeSegComponentProgress(-1,label,0,total,0);
-    await c.put(abs,cacheResponse);
-    var saved=await c.match(abs,{ignoreVary:true});if(!saved)throw new Error('model cache write failed');
-    var savedSize=loaded||parseInt(saved.headers.get('content-length')||'0',10)||total||ANIME_SEG_MODEL_SIZE;
-    if(savedSize!==ANIME_SEG_MODEL_SIZE){await c.delete(abs,{ignoreVary:true});throw new Error('unexpected cached model size');}
-    setAnimeSegComponentProgress(1,label,savedSize,savedSize);return savedSize;
+    var loaded=0,speed=0,chunks=[],clock=function(){return typeof performance!=='undefined'&&performance.now?performance.now():Date.now();},lastAt=clock(),lastLoaded=0;
+    setAnimeSegComponentProgress(total?0:-1,label,0,total,0);
+    if(res.body&&res.body.getReader){
+      var reader=res.body.getReader();for(;;){var item=await reader.read();if(item.done)break;chunks.push(item.value);loaded+=item.value.byteLength;var now=clock(),elapsed=now-lastAt;if(elapsed>=250){var instant=(loaded-lastLoaded)*1000/elapsed;speed=speed?speed*.7+instant*.3:instant;lastAt=now;lastLoaded=loaded;setAnimeSegComponentProgress(total?loaded/total:-1,label,loaded,total,speed);}}
+    }else{var fallbackBytes=await res.arrayBuffer();chunks=[fallbackBytes];loaded=fallbackBytes.byteLength;}
+    var blob=new Blob(chunks,{type:'application/octet-stream'});chunks=null;if(blob.size!==ANIME_SEG_MODEL_SIZE)throw new Error('unexpected model size');
+    var headers=new Headers({'content-type':'application/octet-stream','content-length':String(blob.size),'x-purenista-model-version':ANIME_SEG_COMPONENT_VERSION});
+    await c.put(abs,new Response(blob,{status:200,headers:headers}));
+    var saved=await c.match(abs,{ignoreVary:true});if(!saved||parseInt(saved.headers.get('content-length')||'0',10)!==ANIME_SEG_MODEL_SIZE)throw new Error('model cache write failed');
+    setAnimeSegComponentProgress(1,label,blob.size,blob.size,speed);return blob.size;
   }
   async function cacheAnimeSegModelInParts(c,label){
     var scan=await animeSegCachedParts(c),present=scan.present,completed=scan.loaded,active={},transferred=0,speed=0,next=0;
@@ -5113,38 +5110,29 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
           var res=await fetch(ANIME_SEG_MODEL_URL,{mode:'cors',cache:'no-store',headers:{Range:'bytes='+b.start+'-'+b.end}});
           if(res.status!==206){try{if(res.body)await res.body.cancel();}catch(e){}var unsupported=new Error('range downloads unavailable');unsupported.rangeUnsupported=true;throw unsupported;}
           var announced=parseInt(res.headers.get('content-length')||'0',10)||0;if(announced&&announced!==b.size)throw new Error('unexpected range size');
-          if(!res.body)throw new Error('streaming response unavailable');
-          var received=0,monitor=new TransformStream({transform:function(chunk,controller){received+=chunk.byteLength;active[index]=received;transferred+=chunk.byteLength;report(false);controller.enqueue(chunk);}});
+          var received=0,chunks=[];
+          if(res.body&&res.body.getReader){var reader=res.body.getReader();for(;;){var item=await reader.read();if(item.done)break;chunks.push(item.value);received+=item.value.byteLength;active[index]=received;transferred+=item.value.byteLength;report(false);}}
+          else{var bytes=await res.arrayBuffer();chunks=[bytes];received=bytes.byteLength;active[index]=received;transferred+=received;report(true);}
+          var blob=new Blob(chunks,{type:'application/octet-stream'});chunks=null;
           var headers=new Headers({'content-type':'application/octet-stream','content-length':String(b.size),'x-purenista-model-version':ANIME_SEG_COMPONENT_VERSION,'x-purenista-part':String(index)});
-          await c.put(animeSegPartKey(index),new Response(res.body.pipeThrough(monitor),{status:200,headers:headers}));
-          if(received!==b.size){await c.delete(animeSegPartKey(index),{ignoreVary:true});throw new Error('incomplete range');}
+          if(received!==b.size||blob.size!==b.size){await c.delete(animeSegPartKey(index),{ignoreVary:true});throw new Error('incomplete range');}
+          await c.put(animeSegPartKey(index),new Response(blob,{status:200,headers:headers}));
           completed+=b.size;delete active[index];present[index]=true;report(true);return;
-        }catch(e){last=e;delete active[index];report(true);if(e&&e.rangeUnsupported)throw e;}
+        }catch(e){last=e;delete active[index];report(true);if(e&&e.rangeUnsupported)throw e;if(attempt<2)await new Promise(function(resolve){setTimeout(resolve,700*(attempt+1));});}
       }
       throw last||new Error('range download failed');
     }
     while(next<animeSegPartCount()&&present[next])next++;
     if(next<animeSegPartCount()){var probe=next++;await fetchPart(probe);}
     async function worker(){while(true){while(next<animeSegPartCount()&&present[next])next++;if(next>=animeSegPartCount())return;var index=next++;await fetchPart(index);}}
-    var jobs=[];for(var w=0;w<ANIME_SEG_PARALLEL;w++)jobs.push(worker());var results=await Promise.allSettled(jobs),failedJob=results.find(function(r){return r.status==='rejected';});if(failedJob)throw failedJob.reason;
-    var partIndex=0,reader=null;
-    var combined=new ReadableStream({pull:async function(controller){
-      try{
-        while(partIndex<animeSegPartCount()){
-          if(!reader){var r=await c.match(animeSegPartKey(partIndex),{ignoreVary:true});if(!r||!r.body)throw new Error('cached range missing');reader=r.body.getReader();}
-          var item=await reader.read();if(item.done){reader=null;partIndex++;continue;}controller.enqueue(item.value);return;
-        }
-        controller.close();
-      }catch(e){controller.error(e);}
-    },cancel:function(reason){if(reader)return reader.cancel(reason);}});
-    var abs=modelCacheKey(ANIME_SEG_MODEL_URL),finalHeaders=new Headers({'content-type':'application/octet-stream','content-length':String(ANIME_SEG_MODEL_SIZE),'x-purenista-model-version':ANIME_SEG_COMPONENT_VERSION});
-    await c.put(abs,new Response(combined,{status:200,headers:finalHeaders}));
-    var saved=await c.match(abs,{ignoreVary:true});if(!saved||parseInt(saved.headers.get('content-length')||'0',10)!==ANIME_SEG_MODEL_SIZE)throw new Error('model cache write failed');
-    await removeAnimeSegParts(c);setAnimeSegComponentProgress(1,label,ANIME_SEG_MODEL_SIZE,ANIME_SEG_MODEL_SIZE,speed);return ANIME_SEG_MODEL_SIZE;
+    var parallel=openCvMobileDevice()?1:ANIME_SEG_PARALLEL,jobs=[];for(var w=0;w<parallel;w++)jobs.push(worker());var results=await Promise.allSettled(jobs),failedJob=results.find(function(r){return r.status==='rejected';});if(failedJob)throw failedJob.reason;
+    var finalScan=await animeSegCachedParts(c);if(finalScan.loaded!==ANIME_SEG_MODEL_SIZE)throw new Error('cached range missing');
+    // Keep the verified parts as the installed resource. Combining them into another 44 MB cache
+    // entry temporarily doubled storage and repeatedly failed on quota-constrained phones.
+    setAnimeSegComponentProgress(1,label,ANIME_SEG_MODEL_SIZE,ANIME_SEG_MODEL_SIZE,speed);return ANIME_SEG_MODEL_SIZE;
   }
   async function cacheAnimeSegModelWithProgress(label){
     var c=await openArtModelCache();if(!c)throw new Error('Cache Storage unavailable');
-    if(typeof TransformStream==='undefined'||typeof ReadableStream==='undefined')return cacheAnimeSegModelSingleStream(c,label);
     try{return await cacheAnimeSegModelInParts(c,label);}catch(e){
       if(!(e&&e.rangeUnsupported))throw e;
       await removeAnimeSegParts(c);return cacheAnimeSegModelSingleStream(c,lx('此來源不支援續傳，改用一般下載…','Resume unavailable; using standard download…'));
@@ -5164,7 +5152,7 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
       var c=await openArtModelCache();if(c)try{await c.delete(modelCacheKey(ANIME_SEG_MODEL_URL),{ignoreVary:true});}catch(_e){}
     }
     animeSegBusy=false;await refreshAnimeSegComponentUI();
-    if(failed){if(st)st.textContent=lx('下載失敗；已安全改用原有分析','Download failed; existing analysis remains available');if(ins)ins.textContent=lx('重試下載精細動漫分析元件','Retry precise anime component download');setAnimeSegComponentProgress(0,lx('下載中斷，可按重試','Download interrupted — you can retry'),0,ANIME_SEG_MODEL_SIZE,0);}
+    if(failed){var partial=(await animeSegCachedParts()).loaded;if(st)st.textContent=partial?lx('下載中斷；已保存 '+fmtBytes(partial)+'，可繼續','Download interrupted; '+fmtBytes(partial)+' saved — ready to resume'):lx('下載失敗；已安全改用原有分析','Download failed; existing analysis remains available');if(ins)ins.textContent=partial?lx('繼續下載精細動漫分析元件','Resume precise anime component download'):lx('重試下載精細動漫分析元件','Retry precise anime component download');setAnimeSegComponentProgress(partial/ANIME_SEG_MODEL_SIZE,lx('已保存進度，可繼續下載','Progress saved — ready to resume'),partial,ANIME_SEG_MODEL_SIZE,0);}
     else setTimeout(hideAnimeSegComponentProgress,900);
   }
   async function removeAnimeSegComponent(){
@@ -5173,11 +5161,13 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
     animeSegBusy=false;await refreshAnimeSegComponentUI();
   }
   async function cachedAnimeSegBytes(){
-    var r=await cachedAnimeSegResponse();if(!r)return null;
+    var r=await cachedAnimeSegResponse();
     try{
-      var ab=await r.arrayBuffer();
-      if(ab.byteLength!==ANIME_SEG_MODEL_SIZE){var c=await openArtModelCache();if(c)await c.delete(modelCacheKey(ANIME_SEG_MODEL_URL),{ignoreVary:true});return null;}
-      return new Uint8Array(ab);
+      if(r){var ab=await r.arrayBuffer();if(ab.byteLength!==ANIME_SEG_MODEL_SIZE){var badCache=await openArtModelCache();if(badCache)await badCache.delete(modelCacheKey(ANIME_SEG_MODEL_URL),{ignoreVary:true});return null;}return new Uint8Array(ab);}
+      var c=await openArtModelCache();if(!c)return null;var scan=await animeSegCachedParts(c);if(scan.loaded!==ANIME_SEG_MODEL_SIZE)return null;
+      var out=new Uint8Array(ANIME_SEG_MODEL_SIZE),offset=0;
+      for(var i=0;i<animeSegPartCount();i++){var part=await c.match(animeSegPartKey(i),{ignoreVary:true});if(!part)return null;var partBytes=new Uint8Array(await part.arrayBuffer()),bounds=animeSegPartBounds(i);if(partBytes.byteLength!==bounds.size)return null;out.set(partBytes,offset);offset+=partBytes.byteLength;}
+      return offset===ANIME_SEG_MODEL_SIZE?out:null;
     }catch(e){return null;}
   }
   function initAnimeSegComponentManager(){
@@ -5377,16 +5367,16 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
   async function cacheOpenCvComponentWithProgress(){
     var c=await openArtModelCache();if(!c)throw new Error('Cache Storage unavailable');
     var res=await fetch(OPENCV_COMPONENT_URL,{mode:'cors',cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status+' '+OPENCV_COMPONENT_URL);
-    var loaded=0,speed=0,clock=function(){return typeof performance!=='undefined'&&performance.now?performance.now():Date.now();},lastAt=clock(),lastLoaded=0,cacheResponse;
+    var loaded=0,speed=0,chunks=[],clock=function(){return typeof performance!=='undefined'&&performance.now?performance.now():Date.now();},lastAt=clock(),lastLoaded=0;
     var headers=new Headers({'content-type':'application/javascript; charset=utf-8','content-length':String(OPENCV_COMPONENT_SIZE),'x-purenista-component-version':OPENCV_COMPONENT_VERSION});
-    if(res.body&&typeof TransformStream!=='undefined'){
-      var monitor=new TransformStream({transform:function(chunk,controller){loaded+=chunk.byteLength;var now=clock(),elapsed=now-lastAt;if(elapsed>=200){var instant=(loaded-lastLoaded)*1000/elapsed;speed=speed?speed*.7+instant*.3:instant;lastAt=now;lastLoaded=loaded;setOpenCvComponentProgress(loaded/OPENCV_COMPONENT_SIZE,lx('下載並解壓 OpenCV.js…','Downloading and unpacking OpenCV.js…'),loaded,OPENCV_COMPONENT_SIZE,speed);}controller.enqueue(chunk);}});
-      cacheResponse=new Response(res.body.pipeThrough(monitor),{status:200,headers:headers});setOpenCvComponentProgress(0,lx('下載並解壓 OpenCV.js…','Downloading and unpacking OpenCV.js…'),0,OPENCV_COMPONENT_SIZE,0);
-      await c.put(modelCacheKey(OPENCV_COMPONENT_URL),cacheResponse);
-    }else{
-      var bytes=await res.arrayBuffer();loaded=bytes.byteLength;if(loaded!==OPENCV_COMPONENT_SIZE)throw new Error('unexpected OpenCV component size');await c.put(modelCacheKey(OPENCV_COMPONENT_URL),new Response(bytes,{status:200,headers:headers}));
-    }
-    if(loaded!==OPENCV_COMPONENT_SIZE){await c.delete(modelCacheKey(OPENCV_COMPONENT_URL),{ignoreVary:true});throw new Error('unexpected OpenCV component size');}
+    setOpenCvComponentProgress(0,lx('下載並解壓 OpenCV.js…','Downloading and unpacking OpenCV.js…'),0,OPENCV_COMPONENT_SIZE,0);
+    if(res.body&&res.body.getReader){var reader=res.body.getReader();for(;;){var item=await reader.read();if(item.done)break;chunks.push(item.value);loaded+=item.value.byteLength;var now=clock(),elapsed=now-lastAt;if(elapsed>=200){var instant=(loaded-lastLoaded)*1000/elapsed;speed=speed?speed*.7+instant*.3:instant;lastAt=now;lastLoaded=loaded;setOpenCvComponentProgress(loaded/OPENCV_COMPONENT_SIZE,lx('下載並解壓 OpenCV.js…','Downloading and unpacking OpenCV.js…'),loaded,OPENCV_COMPONENT_SIZE,speed);}}}
+    else{var bytes=await res.arrayBuffer();chunks=[bytes];loaded=bytes.byteLength;}
+    var blob=new Blob(chunks,{type:'application/javascript; charset=utf-8'});chunks=null;
+    if(blob.size!==OPENCV_COMPONENT_SIZE){await c.delete(modelCacheKey(OPENCV_COMPONENT_URL),{ignoreVary:true});throw new Error('unexpected OpenCV component size');}
+    // Buffer the decoded file before Cache Storage. Some mobile browsers fail when Cache.put()
+    // consumes a transformed network stream even though the complete download arrived.
+    await c.put(modelCacheKey(OPENCV_COMPONENT_URL),new Response(blob,{status:200,headers:headers}));
     setOpenCvComponentProgress(1,lx('下載完成，已儲存在此裝置','Download complete; saved on this device'),loaded,OPENCV_COMPONENT_SIZE,speed);return loaded;
   }
   async function loadCachedOpenCvScript(){
