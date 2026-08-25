@@ -2689,7 +2689,18 @@ body.card-open{overflow:hidden}
     <h3>Changelog <span class="tag ok">actively maintained</span></h3>
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.5.0 <span class="chg-build">current・Werewolf, shared work, alerts and permission hardening</span></div>
+      <div class="chg-ver">Version 5.5.1 <span class="chg-build">current · Full Japanese localization audit</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>Japanese localization rechecked across the entire site</b></p>
+      <ul class="tips">
+        <li>Rechecked static pages, all 11 lazy-loaded sections, tables, diagrams and embedded labels, input guidance, and post-action notices, warnings, and errors. Remaining English interface text in the Japanese edition was translated into Japanese.</li>
+        <li>Updated the title generator so every style in the Japanese edition produces Japanese title suggestions and hashtags. Also completed Japanese text in profile-card previews, Works Check, FAQ, and the language switcher.</li>
+        <li>The official brand spellings <b>Deux</b>, <b>melem</b>, and <b>By(e)</b> remain unchanged. URLs, color codes, units, specification names, filenames, and program identifiers were preserved to protect behavior and references.</li>
+        <li>Japanese content remains fully embedded in <code>ja.html</code>; it does not switch to English content.</li>
+      </ul>
+      <p class="fine">📅 2026-08-25 · Revalidated Japanese display text, tab mappings, identifiers, placeholders, and JavaScript syntax.</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.5.0 <span class="chg-build">Werewolf, shared work, alerts and permission hardening</span></div>
       <p class="cond" style="margin:12px 0 4px"><b>Added: Werewolf (dealing only)</b></p>
       <ul class="tips">
         <li>The site handles only <b>the part that has to stay hidden</b>: dealing roles, letting wolves recognise each other, and the seer's private check. Discussion and voting happen over voice — this is the deck of cards, not the moderator.</li>
@@ -8986,7 +8997,7 @@ function compositionScore(opts) {
       modeLbl.textContent=tt('modelbl')+' · '+currentModes.map(function(m){return ({portrait:tt('mode_portrait'),fashion:tt('mode_fashion'),scene:tt('mode_scene'),collage:tt('mode_collage'),layout:tt('mode_layout'),objects:lx('物件／文物排版','Object / artifact layout'),colorblocks:lx('色塊排版','Color-block layout')})[m];}).join(' + ');
       var lowColor=a.conf.color<60;
       palEl.innerHTML='<h3>'+tt('pal_title')+' <span class="tag ok">'+tt('pal_tag')+'</span></h3><p class="cond">'+tt('pal_desc')+'</p><div class="chk-sw">'+a.palette.map(function(o){var col=hex(o.r,o.g,o.b);return '<div><span style="background:'+col+'"></span><small>'+colorName(o.r,o.g,o.b)+'<br>'+col+'</small></div>';}).join('')+'</div>'+(lowColor?'<p class="fine">'+tt('pal_lowconf')+'</p>':'');
-      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.5.0</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
+      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.5.1</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
       hideProg();
       result.style.display='block';result.scrollIntoView({behavior:'smooth',block:'start'});
     }catch(err){

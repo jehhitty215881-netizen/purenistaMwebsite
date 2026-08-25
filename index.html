@@ -2694,7 +2694,18 @@ body.card-open{overflow:hidden}
     <h3>更新紀錄 <span class="tag ok">持續維護中</span></h3>
     <p class="cond">這裡會列出每次網站更新的內容，讓大家知道網站一直有人在維護、修 bug、加新功能。</p>
     <div class="chg-entry">
-      <div class="chg-ver">Version 5.5.0 <span class="chg-build">目前版本・狼人殺、創作分享、通知與權限修補</span></div>
+      <div class="chg-ver">Version 5.5.1 <span class="chg-build">目前版本・日文顯示全面檢查</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>重新檢查全站日文在地化</b></p>
+      <ul class="tips">
+        <li>重新檢查固定頁面、11 個延遲載入區塊、表格、圖解、圖中文字、輸入提示，以及操作後的通知、警告與錯誤訊息，將日文版殘留的英文介面文字統一翻成日文。</li>
+        <li>修正標題產生器，確保日文版不論選擇哪種風格，都只產生日文標題與日文標籤；並補齊名片預覽、作品診斷、常見問題與語言切換中殘留的英文。</li>
+        <li>官方品牌名稱 <b>Deux</b>、<b>melem</b>、<b>By(e)</b> 保留原文；URL、色碼、單位、規格名稱、檔名與程式識別字未變更，以免影響功能與參照。</li>
+        <li>日文內容繼續完整內嵌於 <code>ja.html</code>，不會切換到英文內容。</li>
+      </ul>
+      <p class="fine">📅 2026-08-25・已重新驗證日文顯示、分頁對應、識別字、佔位符與程式語法。</p>
+    </div>
+    <div class="chg-entry">
+      <div class="chg-ver">Version 5.5.0 <span class="chg-build">狼人殺、創作分享、通知與權限修補</span></div>
       <p class="cond" style="margin:12px 0 4px"><b>新增：狼人殺（發牌用）</b></p>
       <ul class="tips">
         <li>網站只負責<b>不能被偷看的那部分</b>：發身分牌、狼人互相認人、預言家私下查驗。討論、投票、開票請自己開語音——這是牌堆，不是主持人。</li>
@@ -9021,7 +9032,7 @@ function compositionScore(opts) {
       modeLbl.textContent=tt('modelbl')+' · '+currentModes.map(function(m){return ({portrait:tt('mode_portrait'),fashion:tt('mode_fashion'),scene:tt('mode_scene'),collage:tt('mode_collage'),layout:tt('mode_layout'),objects:lx('物件／文物排版','Object / artifact layout'),colorblocks:lx('色塊排版','Color-block layout')})[m];}).join(' + ');
       var lowColor=a.conf.color<60;
       palEl.innerHTML='<h3>'+tt('pal_title')+' <span class="tag ok">'+tt('pal_tag')+'</span></h3><p class="cond">'+tt('pal_desc')+'</p><div class="chk-sw">'+a.palette.map(function(o){var col=hex(o.r,o.g,o.b);return '<div><span style="background:'+col+'"></span><small>'+colorName(o.r,o.g,o.b)+'<br>'+col+'</small></div>';}).join('')+'</div>'+(lowColor?'<p class="fine">'+tt('pal_lowconf')+'</p>':'');
-      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.5.0</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
+      repEl.innerHTML='<h3>'+tt('rep_title')+' <span class="tag warn">'+tt('rep_tag')+'</span><span class="buildtag">v5.5.1</span></h3>'+briefCard(a,rep.score)+dnaCard(a)+tabifyReport(rep.html)+'<p class="fine">'+tt('rep_foot')+'</p>'+(a.afUsed?'<p class="fine">'+tt('af_credit')+'</p>':'')+'<p class="fine">'+tt('v6_footstamp').replace('{V}',currentView==='design'?tt('v6_design'):currentView==='illust'?tt('v6_illust'):tt('v6_photo'))+'</p>';
       hideProg();
       result.style.display='block';result.scrollIntoView({behavior:'smooth',block:'start'});
     }catch(err){
