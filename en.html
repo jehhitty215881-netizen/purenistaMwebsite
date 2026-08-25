@@ -1458,6 +1458,7 @@ body.card-open{overflow:hidden}
   <h1><span class="gname">Purenista M</span>Trade Reference Guide<span class="drop" aria-hidden="true"></span></h1>
   <p class="sub">A fan-made, unofficial guide — global server only.<br>All ratios are community habits, not hard rules; whatever both sides agree on works, and please trade politely ✿<br>Trade ratios, BRAND dyeing, pull costs and top-up VIP — all on one page.</p>
   <a class="langlink" href="index.html">🌐 中文版</a>
+  <a class="langlink" href="ja.html">🌐 日本語</a>
 </header>
 
 <div class="nav-select" id="navSelectWrap">
@@ -5104,16 +5105,11 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
     }
     async function fetchPart(index){
       var b=animeSegPartBounds(index),last=null;
-      /* 原本只試兩次、間隔不到一秒。44 MB 拆成 11 段跨網域抓，行動網路上
-       偶爾掉一段是常態，兩次很容易就把整包安裝判定為失敗。
-       改成五次並指數退讓，另外把 429（對方限流）分開處理：那種情況要等，
-       立刻重試只會被繼續擋。 */
-    for(var attempt=0;attempt<5;attempt++){
+      for(var attempt=0;attempt<2;attempt++){
         active[index]=0;report(true);
         try{
           var res=await fetch(ANIME_SEG_MODEL_URL,{mode:'cors',cache:'no-store',headers:{Range:'bytes='+b.start+'-'+b.end}});
-          if(res.status===429||res.status===503){try{if(res.body)await res.body.cancel();}catch(e){}var busy=new Error('source busy');busy.rateLimited=true;throw busy;}
-      if(res.status!==206){try{if(res.body)await res.body.cancel();}catch(e){}var unsupported=new Error('range downloads unavailable');unsupported.rangeUnsupported=true;throw unsupported;}
+          if(res.status!==206){try{if(res.body)await res.body.cancel();}catch(e){}var unsupported=new Error('range downloads unavailable');unsupported.rangeUnsupported=true;throw unsupported;}
           var announced=parseInt(res.headers.get('content-length')||'0',10)||0;if(announced&&announced!==b.size)throw new Error('unexpected range size');
           var received=0,chunks=[];
           if(res.body&&res.body.getReader){var reader=res.body.getReader();for(;;){var item=await reader.read();if(item.done)break;chunks.push(item.value);received+=item.value.byteLength;active[index]=received;transferred+=item.value.byteLength;report(false);}}
@@ -5123,29 +5119,14 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
           if(received!==b.size||blob.size!==b.size){await c.delete(animeSegPartKey(index),{ignoreVary:true});throw new Error('incomplete range');}
           await c.put(animeSegPartKey(index),new Response(blob,{status:200,headers:headers}));
           completed+=b.size;delete active[index];present[index]=true;report(true);return;
-        }catch(e){last=e;delete active[index];report(true);if(e&&e.rangeUnsupported)throw e;
-        if(attempt<4){
-          var wait=e&&e.rateLimited?4000*(attempt+1):600*Math.pow(2,attempt);
-          await new Promise(function(resolve){setTimeout(resolve,Math.min(wait,15000));});
-        }}
+        }catch(e){last=e;delete active[index];report(true);if(e&&e.rangeUnsupported)throw e;if(attempt<2)await new Promise(function(resolve){setTimeout(resolve,700*(attempt+1));});}
       }
       throw last||new Error('range download failed');
     }
     while(next<animeSegPartCount()&&present[next])next++;
     if(next<animeSegPartCount()){var probe=next++;await fetchPart(probe);}
     async function worker(){while(true){while(next<animeSegPartCount()&&present[next])next++;if(next>=animeSegPartCount())return;var index=next++;await fetchPart(index);}}
-    var parallel=openCvMobileDevice()?1:ANIME_SEG_PARALLEL,jobs=[];for(var w=0;w<parallel;w++)jobs.push(worker());var results=await Promise.allSettled(jobs),failedJob=results.find(function(r){return r.status==='rejected';});
-    if(failedJob){
-      /* 已經寫進快取的分段不會因此消失，所以把「拿到幾段」一併帶出去，
-         畫面才能顯示還差多少，而不是只說「失敗」。 */
-      var partial=await animeSegCachedParts(c);
-      if(partial.loaded>0&&!failedJob.reason.rangeUnsupported){
-        var pe=new Error('partial download');
-        pe.partialLoaded=partial.loaded;pe.partialTotal=ANIME_SEG_MODEL_SIZE;pe.cause=failedJob.reason;
-        throw pe;
-      }
-      throw failedJob.reason;
-    }
+    var parallel=openCvMobileDevice()?1:ANIME_SEG_PARALLEL,jobs=[];for(var w=0;w<parallel;w++)jobs.push(worker());var results=await Promise.allSettled(jobs),failedJob=results.find(function(r){return r.status==='rejected';});if(failedJob)throw failedJob.reason;
     var finalScan=await animeSegCachedParts(c);if(finalScan.loaded!==ANIME_SEG_MODEL_SIZE)throw new Error('cached range missing');
     // Keep the verified parts as the installed resource. Combining them into another 44 MB cache
     // entry temporarily doubled storage and repeatedly failed on quota-constrained phones.
@@ -5386,21 +5367,7 @@ document.querySelectorAll("#aesSeg button").forEach(b=>b.addEventListener("click
   }
   async function cacheOpenCvComponentWithProgress(){
     var c=await openArtModelCache();if(!c)throw new Error('Cache Storage unavailable');
-    /* 這裡原本一次 fetch 就決定成敗，10.8 MB 在行動網路上掉一次就整個失敗，
-       而且沒有分段可以接續。至少讓它重試，並且對限流退讓。 */
-    var res=null,cvLast=null;
-    for(var cvTry=0;cvTry<4;cvTry++){
-      try{
-        res=await fetch(OPENCV_COMPONENT_URL,{mode:'cors',cache:'no-store'});
-        if(res.status===429||res.status===503){try{if(res.body)await res.body.cancel();}catch(e){}throw new Error('source busy');}
-        if(!res.ok)throw new Error('HTTP '+res.status+' '+OPENCV_COMPONENT_URL);
-        break;
-      }catch(e){
-        cvLast=e;res=null;
-        if(cvTry<3)await new Promise(function(r){setTimeout(r,800*Math.pow(2,cvTry));});
-      }
-    }
-    if(!res)throw cvLast||new Error('OpenCV download failed');
+    var res=await fetch(OPENCV_COMPONENT_URL,{mode:'cors',cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status+' '+OPENCV_COMPONENT_URL);
     var loaded=0,speed=0,chunks=[],clock=function(){return typeof performance!=='undefined'&&performance.now?performance.now():Date.now();},lastAt=clock(),lastLoaded=0;
     var headers=new Headers({'content-type':'application/javascript; charset=utf-8','content-length':String(OPENCV_COMPONENT_SIZE),'x-purenista-component-version':OPENCV_COMPONENT_VERSION});
     setOpenCvComponentProgress(0,lx('下載並解壓 OpenCV.js…','Downloading and unpacking OpenCV.js…'),0,OPENCV_COMPONENT_SIZE,0);
