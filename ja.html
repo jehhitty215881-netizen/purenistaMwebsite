@@ -1507,6 +1507,7 @@ body.card-open{overflow:hidden}
   <button data-tab="aes">美学コラム</button>
   <button data-tab="qa">よくある質問</button>
   <span class="navgrp">交流</span>
+  <button data-tab="member">会員ページ</button>
   <button data-tab="board">掲示板</button>
   <button data-tab="wolf">人狼ゲーム</button>
   <span class="navgrp">サイト情報</span>
@@ -1547,7 +1548,14 @@ body.card-open{overflow:hidden}
     <p class="fine">開催済みの日時は公式告知、「予測」と付くものは当サイトの推算です。終了は台北 22:59／日本 23:59。</p>
   </div>
     
-<div class="card" id="smartGuide">
+<div class="card" id="memberQuick" style="border-left:3px solid var(--violet)">
+    <h3>会員ページ</h3>
+    <p class="cond">ログイン・新規登録、承認状況の確認、ゲームID・名前・プロフィールカードの変更ができます。掲示板、人狼ゲーム、作品シェア、キャラ設定はすべて同じアカウントです。</p>
+    <p class="cond" id="memberQuickStatus" style="margin-top:6px;font-weight:700;color:var(--ink)"></p>
+    <p style="margin:8px 0 0"><button type="button" class="jump-tool" data-jump="member">会員ページへ →</button></p>
+  </div>
+
+  <div class="card" id="smartGuide">
     <h3>スマートガイド <span class="tag ok">ブラウザ内で完結・ログイン不要</span></h3>
     <p class="cond">今の目的を選ぶと、おすすめの順路をすぐに表示します。すべてブラウザ内で動作し、<b>バックエンドもアカウントも不要</b>です。</p>
     <div class="sg-roles" id="sgRoles">
@@ -2775,8 +2783,7 @@ body.card-open{overflow:hidden}
   <div class="card">
     <h3>掲示板 <span class="tag ok">日本語版</span></h3>
     <p class="cond">ここには掲示板の一覧があります。開くと個別のチャットルームに入ります。管理者は掲示板を追加できます。日本語版の掲示板は中国語版・英語版とは分かれています。</p>
-    <div id="boardAuth" class="board-auth"></div>
-    <div id="boardUser" class="board-user" hidden></div>
+    <div id="boardAcctStrip" class="board-user"></div>
     <div id="boardErr" class="board-err" hidden></div>
 
     
@@ -2784,28 +2791,13 @@ body.card-open{overflow:hidden}
       <h4>通知<button type="button" id="boardInboxRead" class="back" style="float:right">すべて既読</button></h4>
       <div id="boardInboxList"><p class="board-empty">読み込み中...</p></div>
     </div>
-    <div id="boardReports" class="board-inbox" hidden>
-      <h4>レポート処理</h4>
-      <div id="boardReportList"><p class="board-empty">読み込み中...</p></div>
-    </div>
     <div id="boardBlocks" class="board-inbox" hidden>
       <h4>ブロックリスト</h4>
       <div id="boardBlockList"><p class="board-empty">読み込み中...</p></div>
     </div>
-
-    <div id="boardPending" class="board-pending" hidden></div>
     
     <div id="boardBanBanner" class="board-ban-banner" hidden></div>
     <div id="boardMuteBanner" class="board-mute-banner" hidden></div>
-    <div id="boardMod" class="board-mod" hidden>
-      <h4>ブロック・ミュート管理</h4>
-      <div id="boardModList"><p class="board-empty">読み込み中...</p></div>
-    </div>
-
-    <div id="boardReview" class="board-review" hidden>
-      <h4>承認待ちの登録</h4>
-      <div id="boardReviewList"><p class="board-empty">読み込み中...</p></div>
-    </div>
 
 
     <div id="boardHome" class="board-home">
@@ -2853,32 +2845,6 @@ body.card-open{overflow:hidden}
       </div>
     </div>
   </div>
-  <div class="card">
-    <h3>プロフィール設定</h3>
-    <p class="cond">ログイン後に表示名やプロフィールを変更できます。</p>
-    <div class="board-auth">
-      <input id="boardDisplayEdit" maxlength="30" placeholder="表示名" />
-      <input id="boardGameId" maxlength="40" placeholder="ゲームID（任意）" />
-      <input id="boardBio" maxlength="200" placeholder="自己紹介（プロフィール・200文字以内）" />
-      <input id="boardCardColors" maxlength="60" placeholder="プロフィールの配色（カラーコード最大4色。マイパレットからコピー可）" />
-      <div id="boardCardPreview" class="board-card-prev"></div>
-
-      <p class="cond" style="margin-top:8px">プロフィールフレーム（左右にスワイプして選択）</p>
-      <div class="theme-picker" id="boardThemeGrid">
-        <div class="tp-cat"><span class="tp-cat-label">夜空</span><div class="tp-row" data-cat="night"></div></div>
-        <div class="tp-cat"><span class="tp-cat-label">パープル</span><div class="tp-row" data-cat="purple"></div></div>
-        <div class="tp-cat"><span class="tp-cat-label">ライト</span><div class="tp-row" data-cat="light"></div></div>
-        <div class="tp-cat"><span class="tp-cat-label">クラシック</span><div class="tp-row" data-cat="classic"></div></div>
-        <div class="tp-cat"><span class="tp-cat-label">動的</span><div class="tp-row" data-cat="css"></div></div>
-      </div>
-      <input type="hidden" id="boardCardTheme" value="none" />
-
-      <label class="board-card-opt"><input type="checkbox" id="boardCardPublic" checked /> プロフィールを公開</label>
-      <div class="board-actions">
-        <button type="button" class="pri" id="boardSaveProfile">保存</button>
-      </div>
-    </div>
-  </div>
 </section>
 
 
@@ -2921,6 +2887,68 @@ body.card-open{overflow:hidden}
 </ul>
 </section>
 
+<section id="member">
+  <div class="card">
+    <h3>会員ページ</h3>
+    <p class="cond">ログイン・新規登録、アカウントの承認状況、プロフィールカードはここで管理します。掲示板、人狼ゲーム、作品シェア、キャラ設定はすべて同じアカウントです。</p>
+    <div id="memberErr" class="board-err" hidden></div>
+    <div id="boardAuth" class="board-auth"></div>
+    <div id="boardUser" class="board-user" hidden></div>
+    <div id="boardPending" class="board-pending" hidden></div>
+  </div>
+  <div class="card" id="memberChars" hidden>
+    <h3>マイキャラ</h3>
+    <p class="cond">作成した OC と自分キャラを管理します。</p>
+    <p style="margin:8px 0 0;display:flex;gap:8px;flex-wrap:wrap">
+      <button type="button" class="jump-tool" data-oc-show="mine">自分のキャラ →</button>
+      <button type="button" class="jump-tool" data-jump="chars" data-oc-create>キャラを作成 →</button>
+    </p>
+  </div>
+  <div class="card" id="memberAdmin" hidden>
+    <h3>管理者</h3>
+    <p class="cond">新規登録の審査、停止・ミュートと通報の対応、自分キャラ枠の申請を扱います。</p>
+    <p style="margin:8px 0 12px"><button type="button" class="jump-tool" data-oc-show="req">自分キャラ枠の申請 →</button></p>
+    <div id="boardReview" class="board-review" hidden>
+      <h4>承認待ちの登録</h4>
+      <div id="boardReviewList"><p class="board-empty">読み込み中...</p></div>
+    </div>
+    <div id="boardMod" class="board-mod" hidden>
+      <h4>ブロック・ミュート管理</h4>
+      <div id="boardModList"><p class="board-empty">読み込み中...</p></div>
+    </div>
+    <div id="boardReports" class="board-inbox" hidden>
+      <h4>レポート処理</h4>
+      <div id="boardReportList"><p class="board-empty">読み込み中...</p></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>プロフィール設定</h3>
+    <p class="cond">ログイン後に表示名やプロフィールを変更できます。</p>
+    <div class="board-auth">
+      <input id="boardDisplayEdit" maxlength="30" placeholder="表示名" />
+      <input id="boardGameId" maxlength="40" placeholder="ゲームID（任意）" />
+      <input id="boardBio" maxlength="200" placeholder="自己紹介（プロフィール・200文字以内）" />
+      <input id="boardCardColors" maxlength="60" placeholder="プロフィールの配色（カラーコード最大4色。マイパレットからコピー可）" />
+      <div id="boardCardPreview" class="board-card-prev"></div>
+
+      <p class="cond" style="margin-top:8px">プロフィールフレーム（左右にスワイプして選択）</p>
+      <div class="theme-picker" id="boardThemeGrid">
+        <div class="tp-cat"><span class="tp-cat-label">夜空</span><div class="tp-row" data-cat="night"></div></div>
+        <div class="tp-cat"><span class="tp-cat-label">パープル</span><div class="tp-row" data-cat="purple"></div></div>
+        <div class="tp-cat"><span class="tp-cat-label">ライト</span><div class="tp-row" data-cat="light"></div></div>
+        <div class="tp-cat"><span class="tp-cat-label">クラシック</span><div class="tp-row" data-cat="classic"></div></div>
+        <div class="tp-cat"><span class="tp-cat-label">動的</span><div class="tp-row" data-cat="css"></div></div>
+      </div>
+      <input type="hidden" id="boardCardTheme" value="none" />
+
+      <label class="board-card-opt"><input type="checkbox" id="boardCardPublic" checked /> プロフィールを公開</label>
+      <div class="board-actions">
+        <button type="button" class="pri" id="boardSaveProfile">保存</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="chars">
   <div class="card">
     <h3>キャラ設定 <span class="tag ok">新規</span></h3>
@@ -2934,7 +2962,32 @@ body.card-open{overflow:hidden}
     <h3>更新履歴 <span class="tag ok">メンテナンス中</span></h3>
     <p class="cond">各 ウェブサイト更新の内容はここにリストされ、ウェブサイトが維持され、バグが修正され、新機能が追加されたことを全員に知らせます。 </p>
         <div class="chg-entry">
-      <div class="chg-ver">バージョン 5.7.0 <span class="chg-build">現在のバージョン・OC と自分キャラ</span></div>
+      <div class="chg-ver">バージョン 5.8.2 <span class="chg-build">現在のバージョン・スマートガイドに会員ページ</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>スマートガイドに会員ページへの入口を追加</b></p>
+      <ul class="tips">
+        <li><b>会員ページをスマートガイドの上に</b>ガイドページの「スマートガイド」カードのすぐ上に「会員ページ」カードを追加しました。ログイン状況が表示され、ログイン・新規登録・プロフィール設定にすぐ移動できます。</li>
+        <li><b>「交流」ルートは会員ページから</b>「交流」ルートの最初の行き先を会員ページにしました。アカウントを用意してから、掲示板、人狼ゲーム、作品シェア、キャラ設定へ進めます。</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">バージョン 5.8.1 <span class="chg-build">登録時にゲーム名とIDを入力</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>新規登録でゲーム内の名前とゲームIDを入力</b></p>
+      <ul class="tips">
+        <li><b>必須項目が 2 つに</b>登録フォームの「表示名」を「ゲーム内の名前」に変更し、「ゲームID」欄を追加しました。どちらも必須です。ログインはこれまでどおりメールとパスワードだけです。</li>
+        <li><b>審査時にすぐ確認できる</b>ゲームIDは登録時にアカウントに保存されるので、管理者は「承認待ち」の一覧ですぐ確認できます。</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">バージョン 5.8.0 <span class="chg-build">会員ページを追加</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>「会員ページ」タブを追加</b></p>
+      <ul class="tips">
+        <li><b>アカウント関連をひとまとめに</b>ログイン、新規登録、承認状況、ゲーム ID・表示名、プロフィールカードの設定を、掲示板から「交流」グループの新しいタブ「会員ページ」に移しました。掲示板の上部はログイン状況の 1 行表示になり、未ログインならボタンで移動できます。</li>
+        <li><b>管理者は掲示板に行かなくて OK</b>新規登録の審査、停止・ミュート管理、通報対応は会員ページの「管理者」ブロックに移り、開くとすぐ読み込みます。自分キャラ枠の申請へのボタンもあります。</li>
+        <li><b>マイキャラへの近道</b>ログインすると会員ページに「自分のキャラ」「キャラを作成」ボタンが表示されます。キャラ設定でログインが必要なときもここに案内します。</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">バージョン 5.7.0 <span class="chg-build">OC と自分キャラ</span></div>
       <p class="cond" style="margin:12px 0 4px"><b>キャラ設定を OC と自分キャラに分類</b></p>
       <ul class="tips">
         <li><b>OC には入力条件</b>OC はプロフィールを 3 項目以上（項目名と内容の両方）、イラスト・文章の本文を合計 150 字以上入力する必要があります。編集画面で達成状況がリアルタイムに表示され、条件を満たすと緑色になります。</li>
@@ -4156,6 +4209,7 @@ function goTab(name){
     });
   }else if(name==="branddata"||name==="feedback")__lzNeed("sec-"+name);
   if(name==="chars"&&window.__ocMount)window.__ocMount();
+  if(name==="member"&&window.__pmBoard)window.__pmBoard.refreshAdmin();
   syncGuideBtn(name);
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -4326,7 +4380,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     check:'作品診断',workspace:'制作チャレンジ',colorinspire:'アイデアバンク',naming:'タイトル・タグ',
     charcheck:'キャラクターランダム生成',flow:'制作フロー',aes:'美学コラム',lore:'豆知識',qa:'よくある質問',
     board:'掲示板',feedback:'ご意見',notes:'備考',changelog:'更新履歴',
-    swatch:'カラーパレット',symbols:'特殊記号',hexconv:'カラーコード変換',gallery:'作品シェア',wolf:'人狼ゲーム',chars:'キャラ設定'
+    swatch:'カラーパレット',symbols:'特殊記号',hexconv:'カラーコード変換',gallery:'作品シェア',wolf:'人狼ゲーム',chars:'キャラ設定',member:'会員ページ'
   };
   var PATHS={
     newbie:{
@@ -4362,7 +4416,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     social:{
       title:'一緒に遊ぶ',
       blurb:'掲示板で仲間を探し、人狼ゲームで遊んだり、みんなの作品を見たりできます。',
-      steps:['board','wolf','gallery','chars']
+      steps:['member','board','wolf','gallery','chars']
     },
     browse:{
       title:'気ままに見る',
@@ -10340,9 +10394,10 @@ function compositionScore(opts) {
     return;
   }
   var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  window.__pmBoard = { refreshAdmin: function(){ loadReview(); loadModList(); loadReportsAdmin(); paintMemberBits(); } };
   /* 人設版共用同一個 client（兩個 client 會搶同一份登入狀態） */
   window.PH_CHARS = { client: sb, lang: BOARD_LOCALE, profileNameCol: 'display_name', onLoginRequest: function(){
-    if(typeof goTab==='function') goTab('board');
+    if(typeof goTab==='function') goTab('member');
     setTimeout(function(){ var a=document.getElementById('boardAuth'); if(a&&!a.hidden) a.scrollIntoView({behavior:'smooth',block:'center'}); }, 350);
   } };
   var state = {
@@ -10353,10 +10408,12 @@ function compositionScore(opts) {
 
   function $(id){ return document.getElementById(id); }
   function err(msg){
-    var el = $('boardErr');
-    if(!el) return;
-    if(!msg){ el.hidden = true; el.textContent=''; return; }
-    el.hidden = false; el.textContent = msg;
+    ['boardErr','memberErr'].forEach(function(id){
+      var el = $(id);
+      if(!el) return;
+      if(!msg){ el.hidden = true; el.textContent=''; return; }
+      el.hidden = false; el.textContent = msg;
+    });
   }
   function esc(s){
     return String(s||'').replace(/[&<>"']/g, function(c){
@@ -10650,6 +10707,19 @@ function compositionScore(opts) {
       if(res.data) res.data.approval = 'approved';
     }
     state.profile = res.data;
+    /* 註冊時填的遊戲 ID／名字存在帳號資料裡；個人資料還空著就補上（資料庫觸發器沒裝時的後備） */
+    try{
+      var um = (state.user && state.user.user_metadata) || {};
+      if(state.profile){
+        var fix = {};
+        if(!state.profile.game_id && um.game_id) fix.game_id = String(um.game_id).slice(0,40);
+        if(!state.profile.display_name && um.display_name) fix.display_name = String(um.display_name).slice(0,30);
+        if(Object.keys(fix).length){
+          var fx = await sb.from('profiles').update(fix).eq('id', state.user.id);
+          if(!fx.error){ Object.keys(fix).forEach(function(k){ state.profile[k] = fix[k]; }); }
+        }
+      }
+    }catch(e){}
     if(state.profile && state.profile.approval == null) state.profile.approval = 'approved';
     var gi = $('boardGameId');
     if(gi) gi.value = (state.profile && state.profile.game_id) || '';
@@ -10713,7 +10783,8 @@ function compositionScore(opts) {
         + '<input id="boardEmail" type="email" placeholder="'+T.email+'" autocomplete="username" />'
         + '<input id="boardPass" type="password" placeholder="'+T.pass+'" autocomplete="current-password" />'
         + '</div>'
-        + '<input id="boardDisplay" type="text" placeholder="'+T.display+'" maxlength="30" />'
+        + '<input id="boardDisplay" type="text" placeholder="'+esc(MEMBER_STR.g_name)+'" maxlength="30" autocomplete="nickname" />'
+        + '<input id="boardSignGid" type="text" placeholder="'+esc(MEMBER_STR.g_id)+'" maxlength="40" autocomplete="off" />'
         + '<div class="board-actions">'
         + '<button type="button" class="pri" id="boardLogin">'+T.login+'</button>'
         + '<button type="button" id="boardSignup">'+T.signup+'</button>'
@@ -10727,6 +10798,32 @@ function compositionScore(opts) {
     }
     paintPending();
     loadReview();
+    paintMemberBits();
+  }
+  var MEMBER_STR = { q_out: 'ログインしていません。ログインすると投稿、作品シェア、キャラ作成ができます。', g_name: 'ゲーム内の名前（登録時必須）', g_id: 'ゲームID（登録時必須）', g_need: '登録にはゲーム内の名前とゲームIDが必要です。ログインはメールとパスワードだけで OK です。', s_in: 'ログイン中：', s_pend: ' · 承認待ち', s_btn: '会員ページ', s_out: 'チャットするにはログインしてください。', s_btn2: 'ログイン／新規登録へ' };
+  function paintMemberBits(){
+    var strip = $('boardAcctStrip');
+    if(strip){
+      if(state.user){
+        var nm = (state.profile && state.profile.display_name) || (state.user.email||'');
+        strip.innerHTML = MEMBER_STR.s_in + '<b>'+esc(nm)+'</b>' + (isApproved() ? '' : esc(MEMBER_STR.s_pend))
+          + ' <button type="button" data-jump="member" style="margin-left:8px">'+esc(MEMBER_STR.s_btn)+'</button>';
+      }else{
+        strip.innerHTML = esc(MEMBER_STR.s_out) + ' <button type="button" class="pri" data-jump="member" style="margin-left:8px">'+esc(MEMBER_STR.s_btn2)+'</button>';
+      }
+    }
+    var mq = $('memberQuickStatus');
+    if(mq){
+      if(state.user){
+        var nm2 = (state.profile && state.profile.display_name) || (state.user.email||'');
+        var gd2 = (state.profile && state.profile.game_id) || '';
+        mq.textContent = MEMBER_STR.s_in + nm2 + (gd2 ? ' · ' + gd2 : '') + (isApproved() ? '' : MEMBER_STR.s_pend);
+      }else{
+        mq.textContent = MEMBER_STR.q_out;
+      }
+    }
+    var adm = $('memberAdmin'); if(adm) adm.hidden = !isAdmin();
+    var mc = $('memberChars'); if(mc) mc.hidden = !state.user;
   }
 
   
@@ -10761,9 +10858,11 @@ function compositionScore(opts) {
     var email = ($('boardEmail')||{}).value||'';
     var pass = ($('boardPass')||{}).value||'';
     var display = (($('boardDisplay')||{}).value||'').trim();
+    var gidIn = (($('boardSignGid')||{}).value||'').trim();
+    if(!display || !gidIn){ err(MEMBER_STR.g_need); return; }
     var res = await sb.auth.signUp({
       email: email.trim(), password: pass,
-      options: { data: { display_name: display || undefined } }
+      options: { data: { display_name: display, game_id: gidIn } }
     });
     if(res.error){ err(translateAuthError(res.error.message)); return; }
     err(T.signup_ok);
@@ -13598,7 +13697,7 @@ document.addEventListener('click',function(e){
       return el;
     }
 
-    var me = null, booted = false, wantCreate = false;
+    var me = null, booted = false, wantCreate = false, startTab = null;
     var tab = 'public', query = '', list = [], listErr = '', listLoading = false;
     var names = {}, editing = false;
 
@@ -14220,25 +14319,34 @@ document.addEventListener('click',function(e){
       });
       await loadMine();
       booted = true;
+      if (startTab && me) { tab = startTab; startTab = null; if (tab === 'req' && !isAdmin) tab = 'mine'; if (!wantCreate) { loadList(); return; } }
       var startId = null;
       try { startId = new URL(location.href).searchParams.get('char'); } catch (e) {}
       if (wantCreate) { wantCreate = false; if (me) { renderEdit(null); return; } if (cfg.onLoginRequest) { cfg.onLoginRequest(); } }
       if (startId && /^[0-9a-f-]{36}$/i.test(startId)) openDetail(startId); else loadList();
     }
     boot();
-    return { reload: loadList, open: openDetail, create: create };
+    function show(t) {
+      if (!booted) { startTab = t; return; }
+      if (!me) { if (cfg.onLoginRequest) cfg.onLoginRequest(); return; }
+      if (t === 'req' && !isAdmin) t = 'mine';
+      tab = t; loadList();
+    }
+    return { reload: loadList, open: openDetail, create: create, show: show };
   }
 
-  var instance = null, pendingCreate = false;
+  var instance = null, pendingCreate = false, pendingShow = null;
   window.PHChars = {
     mount: function (el, opts) {
       if (instance) return instance;
       instance = mount(el, opts);
       if (instance && pendingCreate) { pendingCreate = false; instance.create(); }
+      if (instance && pendingShow) { instance.show(pendingShow); pendingShow = null; }
       return instance;
     },
     create: function () { if (instance) instance.create(); else pendingCreate = true; },
-    open: function (id) { if (instance) instance.open(id); }
+    open: function (id) { if (instance) instance.open(id); },
+    show: function (t) { if (instance) instance.show(t); else pendingShow = t; }
   };
   /* goTab('chars') 呼叫這個；只在第一次開分頁時真正掛載 */
   window.__ocMount = function () {
@@ -14253,6 +14361,12 @@ document.addEventListener('click',function(e){
   document.addEventListener('click', function(e){
     var b = e.target.closest && e.target.closest('[data-oc-create]');
     if(b && window.PHChars) window.PHChars.create();
+  });
+  document.addEventListener('click', function(e){
+    var b = e.target.closest && e.target.closest('[data-oc-show]');
+    if(!b) return;
+    if(typeof goTab==='function') goTab('chars');
+    if(window.PHChars) window.PHChars.show(b.getAttribute('data-oc-show'));
   });
 })();
 </script>

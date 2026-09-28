@@ -1508,6 +1508,7 @@ body.card-open{overflow:hidden}
   <button data-tab="aes">美學專欄</button>
   <button data-tab="qa">QA</button>
   <span class="navgrp">同樂</span>
+  <button data-tab="member">會員專區</button>
   <button data-tab="board">留言板</button>
   <button data-tab="wolf">狼人殺</button>
   <span class="navgrp">關於</span>
@@ -1548,7 +1549,14 @@ body.card-open{overflow:hidden}
     <p class="fine">已開池的時間為官方公告，標「預測」者為本站推算。收池一律台北 22:59／日本 23:59。</p>
   </div>
     
-<div class="card" id="smartGuide">
+<div class="card" id="memberQuick" style="border-left:3px solid var(--violet)">
+    <h3>會員專區</h3>
+    <p class="cond">登入、註冊、查看審核狀態，也能修改遊戲 ID、暱稱和名片。留言板、狼人殺、創作分享、人設版都用同一個帳號。</p>
+    <p class="cond" id="memberQuickStatus" style="margin-top:6px;font-weight:700;color:var(--ink)"></p>
+    <p style="margin:8px 0 0"><button type="button" class="jump-tool" data-jump="member">前往會員專區 →</button></p>
+  </div>
+
+  <div class="card" id="smartGuide">
     <h3>智能導覽 <span class="tag ok">純前端・免登入</span></h3>
     <p class="cond">選你現在的身分，立刻推薦一條路徑。全部在瀏覽器內完成，<b>不需要後端或帳號</b>。</p>
     <div class="sg-roles" id="sgRoles">
@@ -2776,8 +2784,7 @@ body.card-open{overflow:hidden}
   <div class="card">
     <h3>聊天專版 <span class="tag ok">分版</span></h3>
     <p class="cond">外面是專版列表（類似論壇板塊）；點進去才是該版的獨立聊天室。管理員可新增專版。中文／英文站聊天室分開，互不共通。</p>
-    <div id="boardAuth" class="board-auth"></div>
-    <div id="boardUser" class="board-user" hidden></div>
+    <div id="boardAcctStrip" class="board-user"></div>
     <div id="boardErr" class="board-err" hidden></div>
 
     
@@ -2785,28 +2792,13 @@ body.card-open{overflow:hidden}
       <h4>通知 <button type="button" id="boardInboxRead" class="back" style="float:right">全部已讀</button></h4>
       <div id="boardInboxList"><p class="board-empty">載入中…</p></div>
     </div>
-    <div id="boardReports" class="board-inbox" hidden>
-      <h4>檢舉處理</h4>
-      <div id="boardReportList"><p class="board-empty">載入中…</p></div>
-    </div>
     <div id="boardBlocks" class="board-inbox" hidden>
       <h4>我的黑名單</h4>
       <div id="boardBlockList"><p class="board-empty">載入中…</p></div>
     </div>
-
-    <div id="boardPending" class="board-pending" hidden></div>
     
     <div id="boardBanBanner" class="board-ban-banner" hidden></div>
     <div id="boardMuteBanner" class="board-mute-banner" hidden></div>
-    <div id="boardMod" class="board-mod" hidden>
-      <h4>封鎖／禁言管理</h4>
-      <div id="boardModList"><p class="board-empty">載入中…</p></div>
-    </div>
-
-    <div id="boardReview" class="board-review" hidden>
-      <h4>待審核註冊</h4>
-      <div id="boardReviewList"><p class="board-empty">載入中…</p></div>
-    </div>
 
 
     <div id="boardHome" class="board-home">
@@ -2854,32 +2846,6 @@ body.card-open{overflow:hidden}
       </div>
     </div>
   </div>
-  <div class="card">
-    <h3>設定遊戲 ID / 暱稱</h3>
-    <p class="cond">登入後可修改，方便各專版聊天室辨識。</p>
-    <div class="board-auth">
-      <input id="boardDisplayEdit" maxlength="30" placeholder="顯示暱稱" />
-      <input id="boardGameId" maxlength="40" placeholder="遊戲 ID（選填）" />
-      <input id="boardBio" maxlength="200" placeholder="簡介（名片，200 字以內）" />
-      <input id="boardCardColors" maxlength="60" placeholder="名片配色（最多 4 個色碼，可從我的色票複製）" />
-      <div id="boardCardPreview" class="board-card-prev"></div>
-
-      <p class="cond" style="margin-top:8px">名片外框（左右滑動選擇）</p>
-      <div class="theme-picker" id="boardThemeGrid">
-        <div class="tp-cat"><span class="tp-cat-label">夜空</span><div class="tp-row" data-cat="night"></div></div>
-        <div class="tp-cat"><span class="tp-cat-label">紫系</span><div class="tp-row" data-cat="purple"></div></div>
-        <div class="tp-cat"><span class="tp-cat-label">淺色</span><div class="tp-row" data-cat="light"></div></div>
-        <div class="tp-cat"><span class="tp-cat-label">經典</span><div class="tp-row" data-cat="classic"></div></div>
-        <div class="tp-cat"><span class="tp-cat-label">動態</span><div class="tp-row" data-cat="css"></div></div>
-      </div>
-      <input type="hidden" id="boardCardTheme" value="none" />
-
-      <label class="board-card-opt"><input type="checkbox" id="boardCardPublic" checked /> 公開我的名片</label>
-      <div class="board-actions">
-        <button type="button" class="pri" id="boardSaveProfile">儲存</button>
-      </div>
-    </div>
-  </div>
 </section>
 
 
@@ -2922,6 +2888,68 @@ body.card-open{overflow:hidden}
 </ul>
 </section>
 
+<section id="member">
+  <div class="card">
+    <h3>會員專區</h3>
+    <p class="cond">登入、註冊、帳號審核狀態和個人名片都在這裡。留言板、狼人殺、創作分享、人設版共用同一個帳號。</p>
+    <div id="memberErr" class="board-err" hidden></div>
+    <div id="boardAuth" class="board-auth"></div>
+    <div id="boardUser" class="board-user" hidden></div>
+    <div id="boardPending" class="board-pending" hidden></div>
+  </div>
+  <div class="card" id="memberChars" hidden>
+    <h3>我的人設</h3>
+    <p class="cond">管理你建立的 OC 與自設。</p>
+    <p style="margin:8px 0 0;display:flex;gap:8px;flex-wrap:wrap">
+      <button type="button" class="jump-tool" data-oc-show="mine">我的人設 →</button>
+      <button type="button" class="jump-tool" data-jump="chars" data-oc-create>建立人設 →</button>
+    </p>
+  </div>
+  <div class="card" id="memberAdmin" hidden>
+    <h3>管理員</h3>
+    <p class="cond">審核新註冊、處理封鎖禁言與檢舉，以及人設的自設名額申請。</p>
+    <p style="margin:8px 0 12px"><button type="button" class="jump-tool" data-oc-show="req">人設名額申請 →</button></p>
+    <div id="boardReview" class="board-review" hidden>
+      <h4>待審核註冊</h4>
+      <div id="boardReviewList"><p class="board-empty">載入中…</p></div>
+    </div>
+    <div id="boardMod" class="board-mod" hidden>
+      <h4>封鎖／禁言管理</h4>
+      <div id="boardModList"><p class="board-empty">載入中…</p></div>
+    </div>
+    <div id="boardReports" class="board-inbox" hidden>
+      <h4>檢舉處理</h4>
+      <div id="boardReportList"><p class="board-empty">載入中…</p></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>設定遊戲 ID / 暱稱</h3>
+    <p class="cond">登入後可修改，方便各專版聊天室辨識。</p>
+    <div class="board-auth">
+      <input id="boardDisplayEdit" maxlength="30" placeholder="顯示暱稱" />
+      <input id="boardGameId" maxlength="40" placeholder="遊戲 ID（選填）" />
+      <input id="boardBio" maxlength="200" placeholder="簡介（名片，200 字以內）" />
+      <input id="boardCardColors" maxlength="60" placeholder="名片配色（最多 4 個色碼，可從我的色票複製）" />
+      <div id="boardCardPreview" class="board-card-prev"></div>
+
+      <p class="cond" style="margin-top:8px">名片外框（左右滑動選擇）</p>
+      <div class="theme-picker" id="boardThemeGrid">
+        <div class="tp-cat"><span class="tp-cat-label">夜空</span><div class="tp-row" data-cat="night"></div></div>
+        <div class="tp-cat"><span class="tp-cat-label">紫系</span><div class="tp-row" data-cat="purple"></div></div>
+        <div class="tp-cat"><span class="tp-cat-label">淺色</span><div class="tp-row" data-cat="light"></div></div>
+        <div class="tp-cat"><span class="tp-cat-label">經典</span><div class="tp-row" data-cat="classic"></div></div>
+        <div class="tp-cat"><span class="tp-cat-label">動態</span><div class="tp-row" data-cat="css"></div></div>
+      </div>
+      <input type="hidden" id="boardCardTheme" value="none" />
+
+      <label class="board-card-opt"><input type="checkbox" id="boardCardPublic" checked /> 公開我的名片</label>
+      <div class="board-actions">
+        <button type="button" class="pri" id="boardSaveProfile">儲存</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="chars">
   <div class="card">
     <h3>人設版 <span class="tag ok">新</span></h3>
@@ -2935,7 +2963,32 @@ body.card-open{overflow:hidden}
     <h3>更新紀錄 <span class="tag ok">持續維護中</span></h3>
     <p class="cond">這裡會列出每次網站更新的內容，讓大家知道網站一直有人在維護、修 bug、加新功能。</p>
         <div class="chg-entry">
-      <div class="chg-ver">Version 5.7.0 <span class="chg-build">目前版本・人設分成 OC 與自設</span></div>
+      <div class="chg-ver">Version 5.8.2 <span class="chg-build">目前版本・智能導覽加入會員專區</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>智能導覽加入會員專區入口</b></p>
+      <ul class="tips">
+        <li><b>會員專區放在智能導覽上方</b>導覽頁在「智能導覽」卡的正上方多了一張「會員專區」卡，會顯示目前的登入狀態，點一下就能登入、註冊或修改個人資料。</li>
+        <li><b>「一起玩」路線先到會員專區</b>「一起玩」這條路線的第一站改成會員專區，先把帳號準備好，再去留言板、狼人殺、創作分享和人設版。</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">Version 5.8.1 <span class="chg-build">註冊改填遊戲名字與遊戲 ID</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>註冊資料改成遊戲名字與遊戲 ID</b></p>
+      <ul class="tips">
+        <li><b>註冊必填兩欄</b>註冊表單的「顯示名稱」改成「遊戲名字」，並多一欄「遊戲 ID」，兩欄都必填。登入仍然只需要 Email 和密碼。</li>
+        <li><b>審核時直接看得到</b>遊戲 ID 在註冊當下就寫進帳號資料，管理員在「待審核註冊」就能看到，不用再私訊確認是誰。</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">Version 5.8.0 <span class="chg-build">新增會員專區</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>新增「會員專區」分頁</b></p>
+      <ul class="tips">
+        <li><b>帳號相關都集中在這裡</b>登入、註冊、審核狀態、遊戲 ID／暱稱與名片設定，從留言板搬到「同樂」組的新分頁「會員專區」。留言板上方改成一行登入狀態，沒登入時有按鈕直接帶過去。</li>
+        <li><b>管理員不用再進留言板</b>待審核註冊、封鎖／禁言管理、檢舉處理都移到會員專區的「管理員」區塊，一打開就會載入。人設的自設名額申請也有按鈕直接前往。</li>
+        <li><b>我的人設捷徑</b>登入後，會員專區有「我的人設」和「建立人設」按鈕。人設版需要登入時也會帶到這裡。</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">Version 5.7.0 <span class="chg-build">人設分成 OC 與自設</span></div>
       <p class="cond" style="margin:12px 0 4px"><b>人設分成 OC 與自設</b></p>
       <ul class="tips">
         <li><b>OC 有內容門檻</b>建立 OC 時，角色檔案至少要填 3 項（項目和內容都要有），圖文內文合計至少 150 字。編輯畫面會即時顯示目前填了多少，達標會變綠色。</li>
@@ -4128,6 +4181,7 @@ function goTab(name){
     });
   }else if(name==="branddata"||name==="feedback")__lzNeed("sec-"+name);
   if(name==="chars"&&window.__ocMount)window.__ocMount();
+  if(name==="member"&&window.__pmBoard)window.__pmBoard.refreshAdmin();
   syncGuideBtn(name);
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -4298,7 +4352,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     check:'作品健檢',workspace:'創作挑戰',colorinspire:'靈感庫',naming:'命名與標籤',
     charcheck:'角色隨機生成',flow:'創作動線',aes:'美學專欄',lore:'科普',qa:'QA',
     board:'留言板',feedback:'意見專欄',notes:'備註',changelog:'更新紀錄',
-    swatch:'色票工具',symbols:'特殊符號',hexconv:'色碼轉換',gallery:'創作分享',wolf:'狼人殺',chars:'人設版'
+    swatch:'色票工具',symbols:'特殊符號',hexconv:'色碼轉換',gallery:'創作分享',wolf:'狼人殺',chars:'人設版',member:'會員專區'
   };
   var PATHS={
     newbie:{
@@ -4334,7 +4388,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>goTab(b.dataset.tab)));
     social:{
       title:'同樂路徑',
       blurb:'想找人一起的時候：先到留言板看看有誰在，約好了就開一局狼人殺，也可以順手逛逛大家公開分享的創作。',
-      steps:['board','wolf','gallery','chars']
+      steps:['member','board','wolf','gallery','chars']
     },
     browse:{
       title:'隨便逛逛',
@@ -10312,9 +10366,10 @@ function compositionScore(opts) {
     return;
   }
   var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  window.__pmBoard = { refreshAdmin: function(){ loadReview(); loadModList(); loadReportsAdmin(); paintMemberBits(); } };
   /* 人設版共用同一個 client（兩個 client 會搶同一份登入狀態） */
   window.PH_CHARS = { client: sb, lang: BOARD_LOCALE, profileNameCol: 'display_name', onLoginRequest: function(){
-    if(typeof goTab==='function') goTab('board');
+    if(typeof goTab==='function') goTab('member');
     setTimeout(function(){ var a=document.getElementById('boardAuth'); if(a&&!a.hidden) a.scrollIntoView({behavior:'smooth',block:'center'}); }, 350);
   } };
   var state = {
@@ -10325,10 +10380,12 @@ function compositionScore(opts) {
 
   function $(id){ return document.getElementById(id); }
   function err(msg){
-    var el = $('boardErr');
-    if(!el) return;
-    if(!msg){ el.hidden = true; el.textContent=''; return; }
-    el.hidden = false; el.textContent = msg;
+    ['boardErr','memberErr'].forEach(function(id){
+      var el = $(id);
+      if(!el) return;
+      if(!msg){ el.hidden = true; el.textContent=''; return; }
+      el.hidden = false; el.textContent = msg;
+    });
   }
   function esc(s){
     return String(s||'').replace(/[&<>"']/g, function(c){
@@ -10622,6 +10679,19 @@ function compositionScore(opts) {
       if(res.data) res.data.approval = 'approved';
     }
     state.profile = res.data;
+    /* 註冊時填的遊戲 ID／名字存在帳號資料裡；個人資料還空著就補上（資料庫觸發器沒裝時的後備） */
+    try{
+      var um = (state.user && state.user.user_metadata) || {};
+      if(state.profile){
+        var fix = {};
+        if(!state.profile.game_id && um.game_id) fix.game_id = String(um.game_id).slice(0,40);
+        if(!state.profile.display_name && um.display_name) fix.display_name = String(um.display_name).slice(0,30);
+        if(Object.keys(fix).length){
+          var fx = await sb.from('profiles').update(fix).eq('id', state.user.id);
+          if(!fx.error){ Object.keys(fix).forEach(function(k){ state.profile[k] = fix[k]; }); }
+        }
+      }
+    }catch(e){}
     if(state.profile && state.profile.approval == null) state.profile.approval = 'approved';
     var gi = $('boardGameId');
     if(gi) gi.value = (state.profile && state.profile.game_id) || '';
@@ -10685,7 +10755,8 @@ function compositionScore(opts) {
         + '<input id="boardEmail" type="email" placeholder="'+T.email+'" autocomplete="username" />'
         + '<input id="boardPass" type="password" placeholder="'+T.pass+'" autocomplete="current-password" />'
         + '</div>'
-        + '<input id="boardDisplay" type="text" placeholder="'+T.display+'" maxlength="30" />'
+        + '<input id="boardDisplay" type="text" placeholder="'+esc(MEMBER_STR.g_name)+'" maxlength="30" autocomplete="nickname" />'
+        + '<input id="boardSignGid" type="text" placeholder="'+esc(MEMBER_STR.g_id)+'" maxlength="40" autocomplete="off" />'
         + '<div class="board-actions">'
         + '<button type="button" class="pri" id="boardLogin">'+T.login+'</button>'
         + '<button type="button" id="boardSignup">'+T.signup+'</button>'
@@ -10699,6 +10770,32 @@ function compositionScore(opts) {
     }
     paintPending();
     loadReview();
+    paintMemberBits();
+  }
+  var MEMBER_STR = { q_out: '還沒登入。登入後才能發言、分享創作和建立人設。', g_name: '遊戲名字（註冊必填）', g_id: '遊戲 ID（註冊必填）', g_need: '註冊需要填寫遊戲名字和遊戲 ID。登入只要 Email 和密碼。', s_in: '已登入：', s_pend: ' · 帳號審核中', s_btn: '會員專區', s_out: '要聊天請先登入。', s_btn2: '前往會員專區登入／註冊' };
+  function paintMemberBits(){
+    var strip = $('boardAcctStrip');
+    if(strip){
+      if(state.user){
+        var nm = (state.profile && state.profile.display_name) || (state.user.email||'');
+        strip.innerHTML = MEMBER_STR.s_in + '<b>'+esc(nm)+'</b>' + (isApproved() ? '' : esc(MEMBER_STR.s_pend))
+          + ' <button type="button" data-jump="member" style="margin-left:8px">'+esc(MEMBER_STR.s_btn)+'</button>';
+      }else{
+        strip.innerHTML = esc(MEMBER_STR.s_out) + ' <button type="button" class="pri" data-jump="member" style="margin-left:8px">'+esc(MEMBER_STR.s_btn2)+'</button>';
+      }
+    }
+    var mq = $('memberQuickStatus');
+    if(mq){
+      if(state.user){
+        var nm2 = (state.profile && state.profile.display_name) || (state.user.email||'');
+        var gd2 = (state.profile && state.profile.game_id) || '';
+        mq.textContent = MEMBER_STR.s_in + nm2 + (gd2 ? ' · ' + gd2 : '') + (isApproved() ? '' : MEMBER_STR.s_pend);
+      }else{
+        mq.textContent = MEMBER_STR.q_out;
+      }
+    }
+    var adm = $('memberAdmin'); if(adm) adm.hidden = !isAdmin();
+    var mc = $('memberChars'); if(mc) mc.hidden = !state.user;
   }
 
   
@@ -10733,9 +10830,11 @@ function compositionScore(opts) {
     var email = ($('boardEmail')||{}).value||'';
     var pass = ($('boardPass')||{}).value||'';
     var display = (($('boardDisplay')||{}).value||'').trim();
+    var gidIn = (($('boardSignGid')||{}).value||'').trim();
+    if(!display || !gidIn){ err(MEMBER_STR.g_need); return; }
     var res = await sb.auth.signUp({
       email: email.trim(), password: pass,
-      options: { data: { display_name: display || undefined } }
+      options: { data: { display_name: display, game_id: gidIn } }
     });
     if(res.error){ err(translateAuthError(res.error.message)); return; }
     err(T.signup_ok);
@@ -13568,7 +13667,7 @@ document.addEventListener('click',function(e){
       return el;
     }
 
-    var me = null, booted = false, wantCreate = false;
+    var me = null, booted = false, wantCreate = false, startTab = null;
     var tab = 'public', query = '', list = [], listErr = '', listLoading = false;
     var names = {}, editing = false;
 
@@ -14190,25 +14289,34 @@ document.addEventListener('click',function(e){
       });
       await loadMine();
       booted = true;
+      if (startTab && me) { tab = startTab; startTab = null; if (tab === 'req' && !isAdmin) tab = 'mine'; if (!wantCreate) { loadList(); return; } }
       var startId = null;
       try { startId = new URL(location.href).searchParams.get('char'); } catch (e) {}
       if (wantCreate) { wantCreate = false; if (me) { renderEdit(null); return; } if (cfg.onLoginRequest) { cfg.onLoginRequest(); } }
       if (startId && /^[0-9a-f-]{36}$/i.test(startId)) openDetail(startId); else loadList();
     }
     boot();
-    return { reload: loadList, open: openDetail, create: create };
+    function show(t) {
+      if (!booted) { startTab = t; return; }
+      if (!me) { if (cfg.onLoginRequest) cfg.onLoginRequest(); return; }
+      if (t === 'req' && !isAdmin) t = 'mine';
+      tab = t; loadList();
+    }
+    return { reload: loadList, open: openDetail, create: create, show: show };
   }
 
-  var instance = null, pendingCreate = false;
+  var instance = null, pendingCreate = false, pendingShow = null;
   window.PHChars = {
     mount: function (el, opts) {
       if (instance) return instance;
       instance = mount(el, opts);
       if (instance && pendingCreate) { pendingCreate = false; instance.create(); }
+      if (instance && pendingShow) { instance.show(pendingShow); pendingShow = null; }
       return instance;
     },
     create: function () { if (instance) instance.create(); else pendingCreate = true; },
-    open: function (id) { if (instance) instance.open(id); }
+    open: function (id) { if (instance) instance.open(id); },
+    show: function (t) { if (instance) instance.show(t); else pendingShow = t; }
   };
   /* goTab('chars') 呼叫這個；只在第一次開分頁時真正掛載 */
   window.__ocMount = function () {
@@ -14223,6 +14331,12 @@ document.addEventListener('click',function(e){
   document.addEventListener('click', function(e){
     var b = e.target.closest && e.target.closest('[data-oc-create]');
     if(b && window.PHChars) window.PHChars.create();
+  });
+  document.addEventListener('click', function(e){
+    var b = e.target.closest && e.target.closest('[data-oc-show]');
+    if(!b) return;
+    if(typeof goTab==='function') goTab('chars');
+    if(window.PHChars) window.PHChars.show(b.getAttribute('data-oc-show'));
   });
 })();
 </script>
