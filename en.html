@@ -1526,7 +1526,7 @@ body.card-open{overflow:hidden}
 <section id="home" class="show">
   <div class="card" id="ocAnnounce" style="border-left:3px solid var(--rose)">
     <h3>Character sheets are here <span class="tag hot">new</span></h3>
-    <p class="cond">Put your original characters into one sheet: portrait, in-game looks, eyes, hair, accessories and items. Keep it to yourself or make it public for everyone to see.</p>
+    <p class="cond">Put your original characters into one sheet: portrait, eyes, hair, accessories and items. Keep it to yourself or make it public for everyone to see.</p>
     <p style="margin:8px 0 0;display:flex;gap:8px;flex-wrap:wrap">
       <button type="button" class="jump-tool" data-jump="chars">Browse characters →</button>
       <button type="button" class="jump-tool" data-jump="chars" data-oc-create>Create mine →</button>
@@ -2920,7 +2920,7 @@ body.card-open{overflow:hidden}
 <section id="chars">
   <div class="card">
     <h3>Characters <span class="tag ok">new</span></h3>
-    <p class="cond">Player-made character sheets: portraits, in-game looks, eyes, items and backstory. Approved accounts can create their own; public sheets are visible to everyone.</p>
+    <p class="cond">Player-made character sheets: portraits, eyes, hair, accessories, items and backstory. Approved accounts can create their own; public sheets are visible to everyone.</p>
   </div>
   <div id="oc-root"></div>
 </section>
@@ -2930,7 +2930,23 @@ body.card-open{overflow:hidden}
     <h3>Changelog <span class="tag ok">actively maintained</span></h3>
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
         <div class="chg-entry">
-      <div class="chg-ver">Version 5.6.3 <span class="chg-build">current · Lighter character images</span></div>
+      <div class="chg-ver">Version 5.6.5 <span class="chg-build">current · In-game looks removed</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>"In-game looks" removed from character sheets</b></p>
+      <ul class="tips">
+        <li><b>Focused on the character and items</b>Sheets no longer hold batches of outfit screenshots. What remains is the portrait, eyes, hair, accessories, items and gallery, so opening a sheet goes straight to the character and their items.</li>
+        <li><b>Old look images are cleaned up</b>If a sheet already had look images, they are deleted from storage the next time it is edited and saved.</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">Version 5.6.4 <span class="chg-build">Pool and item names on character sheets</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>Tag looks and items with their pool</b></p>
+      <ul class="tips">
+        <li><b>Pool and item name on every image</b>Looks, eyes, hair, accessories and items now have "Pool" and "Item name" fields. The pool field suggests every Deux, melem and By(e) pool as you type, or you can enter your own.</li>
+        <li><b>Pool tags on the character page</b>The item name shows under each image and the pool appears as a small tag, so others can tell which pool it came from.</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">Version 5.6.3 <span class="chg-build">Lighter character images</span></div>
       <p class="cond" style="margin:12px 0 4px"><b>Character images now load thumbnails first</b></p>
       <ul class="tips">
         <li><b>Thumbnails in lists and grids</b>Each upload also saves a ~480px thumbnail. The character list, looks, eyes, hair, accessories and items show thumbnails; the full image loads when you tap. The list page now uses roughly a tenth of the bandwidth.</li>
@@ -13183,7 +13199,7 @@ document.addEventListener('click',function(e){
     zh: {
       tabPublic: '公開人設', tabMine: '我的人設', search: '搜尋角色名稱', count: '共 {n} 位角色',
       create: '＋ 建立人設', loginToCreate: '登入後建立人設', loading: '載入中…', loadFail: '讀取失敗，請重新整理再試一次。',
-      emptyMineT: '你還沒有人設', emptyMineP: '建立角色，放上立繪、遊戲外觀、眼睛和道具。', createBtn: '建立人設',
+      emptyMineT: '你還沒有人設', emptyMineP: '建立角色，放上立繪、眼睛、頭髮、配件飾品和道具。', createBtn: '建立人設',
       emptyPubT: '還沒有公開的人設', emptyPubIn: '成為第一個公開人設的玩家吧。', emptyPubOut: '登入後就能建立並公開自己的人設。',
       noMatch: '找不到符合「{q}」的角色。', unnamed: '未命名', priv: '未公開', you: '你', player: '玩家', createdBy: '{name} 建立',
       privSuffix: '・未公開', copyLink: '複製分享連結', copied: '已複製連結', copyFail: '複製失敗', back: '← 人設一覽',
@@ -13198,7 +13214,7 @@ document.addEventListener('click',function(e){
       basic: '基本資料', basicHint: '立繪會用在人設一覽與角色頁頂端。', name: '角色名稱', title: '稱號／身分', quote: '代表台詞',
       color: '代表色（角色頁的名字與強調色）', fileT: '角色檔案', fileHint: '空白的項目不會顯示，項目名稱可以自由修改。',
       addField: '＋ 新增項目', fieldK: '項目', fieldV: '內容', storyHint: '個性、背景故事、人際關係等。',
-      looksHint: '藝術照、穿搭、不同版本的造型截圖。', caption: '說明', captionPh: '例如：Deux #16 原色', addLook: '＋ 新增外觀',
+      looksHint: '藝術照、穿搭、不同版本的造型截圖。', caption: '說明', captionPh: '例如：原色、換色版', pool: '池子名稱', poolPh: '例如：Deux #16', gName: '道具名稱', gNamePh: '遊戲裡的道具名稱', addLook: '＋ 新增外觀',
       eyesHint: '瞳色、眼型特寫與設定說明。', eyeColorsLbl: '瞳色', addEyeColor: '＋ 瞳色', delEyeColor: '刪除此瞳色',
       eyeNote: '眼睛設定', eyeNotePh: '例如：左右異色，情緒激動時會發光', addEye: '＋ 新增眼睛圖片',
       itemsHint: '武器、飾品、隨身物品。去背的 PNG 效果最好。', itemName: '道具名稱', addItem: '＋ 新增道具',
@@ -13213,7 +13229,7 @@ document.addEventListener('click',function(e){
     en: {
       tabPublic: 'Public', tabMine: 'Mine', search: 'Search by name', count: '{n} characters', count1: '1 character',
       create: '+ New character', loginToCreate: 'Sign in to create', loading: 'Loading…', loadFail: 'Couldn\u2019t load. Refresh and try again.',
-      emptyMineT: 'No characters yet', emptyMineP: 'Create one with a portrait, in-game looks, eyes and items.', createBtn: 'New character',
+      emptyMineT: 'No characters yet', emptyMineP: 'Create one with a portrait, eyes, hair, accessories and items.', createBtn: 'New character',
       emptyPubT: 'No public characters yet', emptyPubIn: 'Be the first to share one.', emptyPubOut: 'Sign in to create and share your own.',
       noMatch: 'No characters match \u201c{q}\u201d.', unnamed: 'Untitled', priv: 'Private', you: 'You', player: 'Player', createdBy: 'By {name}',
       privSuffix: ' · private', copyLink: 'Copy share link', copied: 'Link copied', copyFail: 'Copy failed', back: '\u2190 All characters',
@@ -13228,7 +13244,7 @@ document.addEventListener('click',function(e){
       basic: 'Basics', basicHint: 'The portrait appears in the list and at the top of the character page.', name: 'Name', title: 'Title / role', quote: 'Signature line',
       color: 'Theme colour (name and accents on the page)', fileT: 'Character sheet', fileHint: 'Empty rows are hidden. Rename any field.',
       addField: '+ Add field', fieldK: 'Field', fieldV: 'Value', storyHint: 'Personality, backstory, relationships.',
-      looksHint: 'Photos, outfits, different versions of the look.', caption: 'Caption', captionPh: 'e.g. Deux #16 original colour', addLook: '+ Add look',
+      looksHint: 'Photos, outfits, different versions of the look.', caption: 'Notes', captionPh: 'e.g. original colour, dyed version', pool: 'Pool', poolPh: 'e.g. Deux #16', gName: 'Item name', gNamePh: 'Name in the game', addLook: '+ Add look',
       eyesHint: 'Eye colour, close-ups and notes.', eyeColorsLbl: 'Eye colours', addEyeColor: '+ Colour', delEyeColor: 'Remove this colour',
       eyeNote: 'Eye notes', eyeNotePh: 'e.g. Heterochromia; glows when upset', addEye: '+ Add eye image',
       itemsHint: 'Weapons, accessories, keepsakes. Transparent PNGs look best.', itemName: 'Item name', addItem: '+ Add item',
@@ -13243,7 +13259,7 @@ document.addEventListener('click',function(e){
     ja: {
       tabPublic: '公開キャラ', tabMine: '自分のキャラ', search: 'キャラ名で検索', count: '{n} 人のキャラ',
       create: '＋ キャラを作成', loginToCreate: 'ログインして作成', loading: '読み込み中…', loadFail: '読み込みに失敗しました。再読み込みしてください。',
-      emptyMineT: 'まだキャラがいません', emptyMineP: '立ち絵、ゲーム内の見た目、目、アイテムを登録しましょう。', createBtn: 'キャラを作成',
+      emptyMineT: 'まだキャラがいません', emptyMineP: '立ち絵、目、髪、アクセサリー、アイテムを登録しましょう。', createBtn: 'キャラを作成',
       emptyPubT: '公開キャラはまだありません', emptyPubIn: '最初に公開してみませんか。', emptyPubOut: 'ログインすると自分のキャラを作成・公開できます。',
       noMatch: '「{q}」に一致するキャラはありません。', unnamed: '名前未設定', priv: '非公開', you: 'あなた', player: 'プレイヤー', createdBy: '作成：{name}',
       privSuffix: '・非公開', copyLink: '共有リンクをコピー', copied: 'コピーしました', copyFail: 'コピーできませんでした', back: '← キャラ一覧',
@@ -13258,7 +13274,7 @@ document.addEventListener('click',function(e){
       basic: '基本情報', basicHint: '立ち絵は一覧とキャラページの上部に表示されます。', name: 'キャラ名', title: '肩書き・立場', quote: '代表セリフ',
       color: 'テーマカラー（名前と強調色）', fileT: 'プロフィール', fileHint: '空欄の項目は表示されません。項目名は自由に変更できます。',
       addField: '＋ 項目を追加', fieldK: '項目', fieldV: '内容', storyHint: '性格、生い立ち、人間関係など。',
-      looksHint: 'アート写真、コーデ、見た目のバリエーション。', caption: '説明', captionPh: '例：Deux #16 原色', addLook: '＋ 見た目を追加',
+      looksHint: 'アート写真、コーデ、見た目のバリエーション。', caption: '説明', captionPh: '例：原色、染色版', pool: 'ガチャ名', poolPh: '例：Deux #16', gName: 'アイテム名', gNamePh: 'ゲーム内のアイテム名', addLook: '＋ 見た目を追加',
       eyesHint: '瞳の色、目のアップ、設定メモ。', eyeColorsLbl: '瞳の色', addEyeColor: '＋ 色', delEyeColor: 'この色を削除',
       eyeNote: '目の設定', eyeNotePh: '例：オッドアイ。感情が高ぶると光る', addEye: '＋ 目の画像を追加',
       itemsHint: '武器、アクセサリー、持ち物。背景透過の PNG がおすすめ。', itemName: 'アイテム名', addItem: '＋ アイテムを追加',
@@ -13331,7 +13347,9 @@ document.addEventListener('click',function(e){
     '.oc-eyes{display:grid;gap:12px}',
     '@media(min-width:700px){.oc-eyes{grid-template-columns:repeat(2,1fr)}}',
     '.oc-eyes img{width:100%;aspect-ratio:2/1;object-fit:cover;border-radius:12px;cursor:zoom-in}',
-    '.oc figcaption{font-size:12.5px;color:var(--ink-soft,#6B6180);margin-top:4px}',
+    '.oc figcaption{font-size:12.5px;color:var(--ink-soft,#6B6180);margin-top:4px;line-height:1.55}',
+    '.oc figcaption b{display:block;color:var(--ink,#2A2138);font-size:13.5px}',
+    '.oc-pool{display:inline-block;font-size:11px;font-weight:700;color:var(--oc-accent2);background:var(--violet-soft,#EDEAF7);border-radius:999px;padding:0 8px;margin:2px 0}',
     '.oc-sw{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 14px;padding:0;list-style:none}',
     '.oc-sw li{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-soft,#6B6180)}',
     '.oc-sw span{width:28px;height:28px;border-radius:50%;border:2px solid var(--panel,#fff);box-shadow:0 0 0 1px var(--line,#DDD6E8)}',
@@ -13441,14 +13459,14 @@ document.addEventListener('click',function(e){
     function norm(r) {
       var c = Object.assign(blank(), r || {});
       c.fields = arr(c.fields).map(function (f) { return { k: str(f && f.k), v: str(f && f.v) }; });
-      c.looks = arr(c.looks).map(function (x) { return { img: str(x && x.img), caption: str(x && x.caption) }; });
-      c.eyes = arr(c.eyes).map(function (x) { return { img: str(x && x.img), caption: str(x && x.caption) }; });
-      c.items = arr(c.items).map(function (x) { return { img: str(x && x.img), name: str(x && x.name), desc: str(x && x.desc) }; });
+      c.looks = arr(c.looks).map(function (x) { return { img: str(x && x.img), pool: str(x && x.pool), name: str(x && x.name), caption: str(x && x.caption) }; });
+      c.eyes = arr(c.eyes).map(function (x) { return { img: str(x && x.img), pool: str(x && x.pool), name: str(x && x.name), caption: str(x && x.caption) }; });
+      c.items = arr(c.items).map(function (x) { return { img: str(x && x.img), pool: str(x && x.pool), name: str(x && x.name), desc: str(x && x.desc) }; });
       c.posts = arr(c.posts).map(function (x) { return { img: str(x && x.img), title: str(x && x.title), text: str(x && x.text) }; });
       c.eye_colors = arr(c.eye_colors).filter(function (x) { return HEX.test(x); });
       c.hair_colors = arr(c.hair_colors).filter(function (x) { return HEX.test(x); });
-      c.hair = arr(c.hair).map(function (x) { return { img: str(x && x.img), caption: str(x && x.caption) }; });
-      c.accessories = arr(c.accessories).map(function (x) { return { img: str(x && x.img), name: str(x && x.name), desc: str(x && x.desc) }; });
+      c.hair = arr(c.hair).map(function (x) { return { img: str(x && x.img), pool: str(x && x.pool), name: str(x && x.name), caption: str(x && x.caption) }; });
+      c.accessories = arr(c.accessories).map(function (x) { return { img: str(x && x.img), pool: str(x && x.pool), name: str(x && x.name), desc: str(x && x.desc) }; });
       ['name', 'title', 'quote', 'story', 'eye_note', 'hair_note', 'portrait'].forEach(function (k) { c[k] = str(c[k]); });
       return c;
     }
@@ -13551,6 +13569,11 @@ document.addEventListener('click',function(e){
       document.body.append(lb); lb.focus();
     }
     function zimg(p, alt) { return timg(p, { alt: alt || '', onclick: function () { zoom(imgUrl(p)); } }); }
+    function poolTag(x) { return x.pool ? h('span', { class: 'oc-pool' }, x.pool) : null; }
+    function fig(x) {
+      var cap = (x.name || x.pool || x.caption) ? h('figcaption', null, x.name && h('b', null, x.name), poolTag(x), x.caption && h('div', null, x.caption)) : null;
+      return h('figure', null, zimg(x.img, x.name || x.caption), cap);
+    }
     function zfull(p, alt) { return h('img', { src: imgUrl(p), alt: alt || '', loading: 'lazy', onclick: function () { zoom(imgUrl(p)); } }); }
 
     async function openDetail(id) {
@@ -13591,27 +13614,25 @@ document.addEventListener('click',function(e){
 
       var secs = [];
       if (c.story) secs.push(['story', T.sStory, h('p', { class: 'oc-prose' }, c.story)]);
-      var looks = c.looks.filter(function (x) { return x.img; });
-      if (looks.length) secs.push(['looks', T.sLooks, h('div', { class: 'oc-gal' }, looks.map(function (x) { return h('figure', null, zimg(x.img, x.caption), x.caption && h('figcaption', null, x.caption)); }))]);
       var eyes = c.eyes.filter(function (x) { return x.img; });
       if (eyes.length || c.eye_colors.length || c.eye_note) secs.push(['eyes', T.sEyes, [
         c.eye_colors.length > 0 && h('ul', { class: 'oc-sw', 'aria-label': T.eyeColorsAria }, c.eye_colors.map(function (col) { return h('li', null, h('span', { style: 'background:' + col }), col.toUpperCase()); })),
         c.eye_note && h('p', { class: 'oc-prose', style: 'margin-bottom:14px' }, c.eye_note),
-        eyes.length > 0 && h('div', { class: 'oc-eyes' }, eyes.map(function (x) { return h('figure', null, zimg(x.img, x.caption), x.caption && h('figcaption', null, x.caption)); }))]]);
+        eyes.length > 0 && h('div', { class: 'oc-eyes' }, eyes.map(fig))]]);
       var hair = c.hair.filter(function (x) { return x.img; });
       if (hair.length || c.hair_colors.length || c.hair_note) secs.push(['hair', T.sHair, [
         c.hair_colors.length > 0 && h('ul', { class: 'oc-sw', 'aria-label': T.hairColorsAria }, c.hair_colors.map(function (col) { return h('li', null, h('span', { style: 'background:' + col }), col.toUpperCase()); })),
         c.hair_note && h('p', { class: 'oc-prose', style: 'margin-bottom:14px' }, c.hair_note),
-        hair.length > 0 && h('div', { class: 'oc-gal' }, hair.map(function (x) { return h('figure', null, zimg(x.img, x.caption), x.caption && h('figcaption', null, x.caption)); }))]]);
+        hair.length > 0 && h('div', { class: 'oc-gal' }, hair.map(fig))]]);
       var accs = c.accessories.filter(function (x) { return x.img || x.name; });
       if (accs.length) secs.push(['acc', T.sAcc, h('div', { class: 'oc-items' }, accs.map(function (x) {
         return h('div', { class: 'oc-item' }, x.img ? zimg(x.img, x.name) : h('div', { class: 'no' }),
-          h('div', null, h('h4', null, x.name || T.untitledAcc), x.desc && h('p', null, x.desc)));
+          h('div', null, h('h4', null, x.name || T.untitledAcc), poolTag(x), x.desc && h('p', null, x.desc)));
       }))]);
-      var items = c.items.filter(function (x) { return x.img || x.name; });
+      var items = c.items.filter(function (x) { return x.img || x.name || x.pool; });
       if (items.length) secs.push(['items', T.sItems, h('div', { class: 'oc-items' }, items.map(function (x) {
         return h('div', { class: 'oc-item' }, x.img ? zimg(x.img, x.name) : h('div', { class: 'no' }),
-          h('div', null, h('h4', null, x.name || T.untitledItem), x.desc && h('p', null, x.desc)));
+          h('div', null, h('h4', null, x.name || T.untitledItem), poolTag(x), x.desc && h('p', null, x.desc)));
       }))]);
       var posts = c.posts.filter(function (x) { return x.img || x.text || x.title; });
       if (posts.length) secs.push(['posts', T.sPosts, h('div', { class: 'oc-posts' }, posts.map(function (x) {
@@ -13700,11 +13721,20 @@ document.addEventListener('click',function(e){
     /* ---------- edit ---------- */
     function txt(label, get, set, o) {
       o = o || {};
+      var listAttr = o.list || null;
       var el = o.area ? h('textarea', { class: o.long ? 'long' : '', maxlength: o.max || null, placeholder: o.ph || '', oninput: function (e) { set(e.target.value); } })
-                      : h('input', { type: 'text', maxlength: o.max || null, placeholder: o.ph || '', oninput: function (e) { set(e.target.value); } });
+                      : h('input', { type: 'text', list: listAttr, maxlength: o.max || null, placeholder: o.ph || '', oninput: function (e) { set(e.target.value); } });
       el.value = get() || '';
       return label ? h('label', { class: 'f' }, h('span', null, label), el) : el;
     }
+    var POOLS = (function () {
+      var a = [], i;
+      for (i = 1; i <= 16; i++) a.push('Deux #' + i);
+      for (i = 1; i <= 4; i++) a.push('melem #' + i);
+      for (i = 1; i <= 3; i++) a.push('By(e) #' + i);
+      return a;
+    })();
+    function poolField(x) { return txt(T.pool, function () { return x.pool; }, function (v) { x.pool = v; }, { ph: T.poolPh, max: 40, list: 'oc-pools' }); }
     function listEditor(list, max, rowFn, blankFn, addLabel) {
       var rows = h('div', { class: 'oc-rows' });
       var add = h('button', { type: 'button', class: 'oc-btn ghost', onclick: function () { if (list.length < max) { list.push(blankFn()); draw(); } } });
@@ -13779,34 +13809,30 @@ document.addEventListener('click',function(e){
         basic,
         fs(T.fileT, T.fileHint, kvBox, kvAdd),
         fs(T.sStory, T.storyHint, txt(null, function () { return d.story; }, function (v) { d.story = v; }, { area: true, long: true, max: 20000 })),
-        fs(T.sLooks, T.looksHint, listEditor(d.looks, LIMIT.looks, function (x, ctrl) {
-          return h('div', { class: 'oc-row wide' }, imageSlot(function () { return x.img; }, function (v) { x.img = v; }, uploads),
-            h('div', null, txt(T.caption, function () { return x.caption; }, function (v) { x.caption = v; }, { ph: T.captionPh, max: 100 }), ctrl));
-        }, function () { return { img: '', caption: '' }; }, T.addLook)),
         fs(T.sEyes, T.eyesHint,
           h('label', { class: 'f' }, h('span', null, T.eyeColorsLbl), swBox),
           txt(T.eyeNote, function () { return d.eye_note; }, function (v) { d.eye_note = v; }, { area: true, max: 2000, ph: T.eyeNotePh }),
           listEditor(d.eyes, LIMIT.eyes, function (x, ctrl) {
             return h('div', { class: 'oc-row wide' }, imageSlot(function () { return x.img; }, function (v) { x.img = v; }, uploads, { ratio: '2/1' }),
-              h('div', null, txt(T.caption, function () { return x.caption; }, function (v) { x.caption = v; }, { max: 100 }), ctrl));
-          }, function () { return { img: '', caption: '' }; }, T.addEye)),
+              h('div', null, poolField(x), txt(T.gName, function () { return x.name; }, function (v) { x.name = v; }, { ph: T.gNamePh, max: 60 }), txt(T.caption, function () { return x.caption; }, function (v) { x.caption = v; }, { max: 100 }), ctrl));
+          }, function () { return { img: '', pool: '', name: '', caption: '' }; }, T.addEye)),
         fs(T.sHair, T.hairHint,
           h('label', { class: 'f' }, h('span', null, T.hairColorsLbl), hswBox),
           txt(T.hairNote, function () { return d.hair_note; }, function (v) { d.hair_note = v; }, { area: true, max: 2000, ph: T.hairNotePh }),
           listEditor(d.hair, LIMIT.hair, function (x, ctrl) {
             return h('div', { class: 'oc-row wide' }, imageSlot(function () { return x.img; }, function (v) { x.img = v; }, uploads),
-              h('div', null, txt(T.caption, function () { return x.caption; }, function (v) { x.caption = v; }, { max: 100 }), ctrl));
-          }, function () { return { img: '', caption: '' }; }, T.addHair)),
+              h('div', null, poolField(x), txt(T.gName, function () { return x.name; }, function (v) { x.name = v; }, { ph: T.gNamePh, max: 60 }), txt(T.caption, function () { return x.caption; }, function (v) { x.caption = v; }, { max: 100 }), ctrl));
+          }, function () { return { img: '', pool: '', name: '', caption: '' }; }, T.addHair)),
         fs(T.sAcc, T.accHint, listEditor(d.accessories, LIMIT.acc, function (x, ctrl) {
           return h('div', { class: 'oc-row' }, imageSlot(function () { return x.img; }, function (v) { x.img = v; }, uploads, { ratio: '1/1', contain: true, label: T.uploadShort }),
-            h('div', null, txt(T.accName, function () { return x.name; }, function (v) { x.name = v; }, { max: 40 }),
+            h('div', null, poolField(x), txt(T.accName, function () { return x.name; }, function (v) { x.name = v; }, { max: 40 }),
               txt(T.caption, function () { return x.desc; }, function (v) { x.desc = v; }, { area: true, max: 500 }), ctrl));
-        }, function () { return { img: '', name: '', desc: '' }; }, T.addAcc)),
+        }, function () { return { img: '', pool: '', name: '', desc: '' }; }, T.addAcc)),
         fs(T.sItems, T.itemsHint, listEditor(d.items, LIMIT.items, function (x, ctrl) {
           return h('div', { class: 'oc-row' }, imageSlot(function () { return x.img; }, function (v) { x.img = v; }, uploads, { ratio: '1/1', contain: true, label: T.uploadShort }),
-            h('div', null, txt(T.itemName, function () { return x.name; }, function (v) { x.name = v; }, { max: 40 }),
+            h('div', null, poolField(x), txt(T.itemName, function () { return x.name; }, function (v) { x.name = v; }, { max: 40 }),
               txt(T.caption, function () { return x.desc; }, function (v) { x.desc = v; }, { area: true, max: 500 }), ctrl));
-        }, function () { return { img: '', name: '', desc: '' }; }, T.addItem)),
+        }, function () { return { img: '', pool: '', name: '', desc: '' }; }, T.addItem)),
         fs(T.sPosts, T.postsHint, listEditor(d.posts, LIMIT.posts, function (x, ctrl) {
           return h('div', { class: 'oc-row wide' }, imageSlot(function () { return x.img; }, function (v) { x.img = v; }, uploads, { ratio: '4/3', contain: true }),
             h('div', null, txt(T.postTitle, function () { return x.title; }, function (v) { x.title = v; }, { max: 60 }),
@@ -13851,13 +13877,13 @@ document.addEventListener('click',function(e){
           name: d.name.trim().slice(0, 40), title: d.title.trim(), quote: d.quote.trim(), color: tint(d.color), portrait: d.portrait,
           fields: d.fields.filter(function (f) { return f.k.trim() || f.v.trim(); }),
           story: d.story, eye_note: d.eye_note, hair_note: d.hair_note,
-          looks: d.looks.filter(function (x) { return x.img || x.caption; }),
+          looks: [],
           eye_colors: d.eye_colors.filter(function (x) { return HEX.test(x); }),
-          eyes: d.eyes.filter(function (x) { return x.img || x.caption; }),
+          eyes: d.eyes.filter(function (x) { return x.img || x.caption || x.name || x.pool; }),
           hair_colors: d.hair_colors.filter(function (x) { return HEX.test(x); }),
-          hair: d.hair.filter(function (x) { return x.img || x.caption; }),
-          accessories: d.accessories.filter(function (x) { return x.img || x.name || x.desc; }),
-          items: d.items.filter(function (x) { return x.img || x.name || x.desc; }),
+          hair: d.hair.filter(function (x) { return x.img || x.caption || x.name || x.pool; }),
+          accessories: d.accessories.filter(function (x) { return x.img || x.name || x.desc || x.pool; }),
+          items: d.items.filter(function (x) { return x.img || x.name || x.desc || x.pool; }),
           posts: d.posts.filter(function (x) { return x.img || x.title || x.text; }),
           is_public: !!d.is_public
         };
@@ -13881,6 +13907,7 @@ document.addEventListener('click',function(e){
         h('div', { class: 'oc-bar' }, h('button', { type: 'button', class: 'oc-back', onclick: cancel }, T.backCancel)),
         h('h3', { style: 'margin:0 0 14px;font-family:"Noto Serif TC",serif;font-weight:900;font-size:20px' }, isNew ? T.createT : T.editT),
         form,
+        h('datalist', { id: 'oc-pools' }, POOLS.map(function (p) { return h('option', { value: p }); })),
         h('div', { class: 'oc-save' }, msg, h('button', { type: 'button', class: 'oc-btn ghost', onclick: cancel }, T.cancel), saveBtn)));
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
