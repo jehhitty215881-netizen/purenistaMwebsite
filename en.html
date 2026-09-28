@@ -1524,16 +1524,14 @@ body.card-open{overflow:hidden}
 
 <!-- ================= Smart guide ================= -->
 <section id="home" class="show">
-  <!-- RAINBOW-TEMP start: Rainbow Market, time-limited. Auto-hides after 30 Sep; safe to delete the whole block -->
-  <div class="card" id="rbBanner" hidden style="border-left:3px solid var(--rose)">
-    <h3>Rainbow Market is open <span class="tag hot" id="rbBannerTag">Limited time</span></h3>
-    <p class="cond" id="rbBannerLine">—</p>
+  <div class="card" id="ocAnnounce" style="border-left:3px solid var(--rose)">
+    <h3>Character sheets are here <span class="tag hot">new</span></h3>
+    <p class="cond">Put your original characters into one sheet: portrait, in-game looks, eyes, hair, accessories and items. Keep it to yourself or make it public for everyone to see.</p>
     <p style="margin:8px 0 0;display:flex;gap:8px;flex-wrap:wrap">
-      <button type="button" class="jump-tool" data-jump-tool="calc:t-fee">Fee calculator →</button>
-      <button type="button" class="jump-tool" data-jump-tool="market:rbSched">Prices and rules →</button>
+      <button type="button" class="jump-tool" data-jump="chars">Browse characters →</button>
+      <button type="button" class="jump-tool" data-jump="chars" data-oc-create>Create mine →</button>
     </p>
   </div>
-  <!-- RAINBOW-TEMP end -->
   <div class="card" id="bpNow">
     <h3>Brand basket status <span class="tag hot" id="bpTag">—</span></h3>
     <div id="bpBody"><p class="cond">—</p></div>
@@ -1566,15 +1564,6 @@ body.card-open{overflow:hidden}
         <span>Head to the board to swap notes on trades, palettes and pulls. Sign in to post.</span>
       </div>
       <button type="button" data-jump="board">Go to the board →</button>
-    </div>
-
-    <div class="sg-jump">
-      <div class="sgj-txt">
-        <b>Characters</b>
-        <span>Browse other players’ original characters, or put yours together: portrait, looks, eyes and items in one sheet.</span>
-      </div>
-      <button type="button" data-jump="chars">Browse characters →</button>
-      <button type="button" data-jump="chars" data-oc-create style="background:var(--panel);color:var(--violet);border:1.5px solid var(--violet)">Create mine</button>
     </div>
 
   </div>
@@ -2941,7 +2930,33 @@ body.card-open{overflow:hidden}
     <h3>Changelog <span class="tag ok">actively maintained</span></h3>
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
         <div class="chg-entry">
-      <div class="chg-ver">Version 5.6.0 <span class="chg-build">current · Character sheets</span></div>
+      <div class="chg-ver">Version 5.6.3 <span class="chg-build">current · Lighter character images</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>Character images now load thumbnails first</b></p>
+      <ul class="tips">
+        <li><b>Thumbnails in lists and grids</b>Each upload also saves a ~480px thumbnail. The character list, looks, eyes, hair, accessories and items show thumbnails; the full image loads when you tap. The list page now uses roughly a tenth of the bandwidth.</li>
+        <li><b>Smaller originals</b>Uploaded originals are now 1400px instead of 1600px, with no visible difference and smaller files.</li>
+        <li><b>Older images still work</b>Images uploaded before this change have no thumbnail and fall back to the original automatically. No need to re-upload.</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">Version 5.6.2 <span class="chg-build">Character sheets on the guide page</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>Guide page changes</b></p>
+      <ul class="tips">
+        <li><b>Character sheets announced at the top</b>The first card on the guide page now introduces character sheets, with buttons to browse or start your own. The shortcut that used to sit inside the smart guide card moved here, so it only appears once.</li>
+        <li><b>Rainbow Market card removed</b>Both market rounds this month are over, so the time-limited card is gone from the guide page. The schedule and fee calculator in the Rainbow Market tab are unchanged.</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">Version 5.6.1 <span class="chg-build">Hair and accessories</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>Two new sections on character sheets</b></p>
+      <ul class="tips">
+        <li><b>Hair</b>Works like Eyes: hair colour swatches, notes and images.</li>
+        <li><b>Accessories</b>Separate from Items: headpieces, earrings, necklaces, bracelets, rings, each with an image, name and description.</li>
+        <li><b>Page order</b>Profile → looks → eyes → hair → accessories → items → gallery. Empty sections stay hidden.</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">Version 5.6.0 <span class="chg-build">Character sheets</span></div>
       <p class="cond" style="margin:12px 0 4px"><b>New: character sheets for original characters</b></p>
       <ul class="tips">
         <li><b>A new "Characters" tab</b>Under "Finished", next to Shared work. Each character has a portrait, a sheet with editable fields (age, height and so on), a profile, in-game looks, eyes (colour swatches and close-ups), items and a gallery.</li>
@@ -13160,7 +13175,7 @@ document.addEventListener('click',function(e){
   if (window.PHChars) return;
 
   var BUCKET = 'characters';
-  var LIMIT = { fields: 20, looks: 30, eyeColors: 6, eyes: 10, items: 40, posts: 30 };
+  var LIMIT = { fields: 20, looks: 30, eyeColors: 6, eyes: 10, hairColors: 6, hair: 10, acc: 40, items: 40, posts: 30 };
   var DEFAULT_TINT = '#8A5FC0';
   var HEX = /^#[0-9A-Fa-f]{6}$/;
 
@@ -13173,7 +13188,10 @@ document.addEventListener('click',function(e){
       noMatch: '找不到符合「{q}」的角色。', unnamed: '未命名', priv: '未公開', you: '你', player: '玩家', createdBy: '{name} 建立',
       privSuffix: '・未公開', copyLink: '複製分享連結', copied: '已複製連結', copyFail: '複製失敗', back: '← 人設一覽',
       notFound: '找不到這位角色，可能已被刪除或設為不公開。', edit: '編輯',
-      sStory: '人物設定', sLooks: '遊戲外觀', sEyes: '眼睛', sItems: '道具', sPosts: '圖文', untitledItem: '未命名道具', eyeColorsAria: '瞳色',
+      sStory: '人物設定', sLooks: '遊戲外觀', sEyes: '眼睛', sHair: '頭髮', sAcc: '配件飾品', untitledAcc: '未命名配件', hairColorsAria: '髮色',
+      hairHint: '髮色、髮型與設定說明。', hairColorsLbl: '髮色', addHairColor: '＋ 髮色', delHairColor: '刪除此髮色', hairNote: '頭髮設定', hairNotePh: '例如：黑色長直髮，髮尾挑染成紫色', addHair: '＋ 新增頭髮圖片',
+      accHint: '頭飾、耳環、項鍊、手環、戒指等。去背的 PNG 效果最好。', accName: '配件名稱', addAcc: '＋ 新增配件',
+      sItems: '道具', sPosts: '圖文', untitledItem: '未命名道具', eyeColorsAria: '瞳色',
       badType: '只支援 PNG、JPG、WebP、GIF', tooBig: '圖片超過 5MB，請換小一點的', notApproved: '無法上傳：帳號尚未通過審核',
       uploadFail: '上傳失敗，點此重試', uploading: '上傳中…', uploadImg: '＋ 上傳圖片', uploadPortrait: '＋ 上傳立繪', uploadShort: '＋ 圖片',
       replace: '更換', remove: '移除', moveUp: '上移', del: '刪除', delField: '刪除此項', limit: '已達上限（{n}）',
@@ -13200,7 +13218,10 @@ document.addEventListener('click',function(e){
       noMatch: 'No characters match \u201c{q}\u201d.', unnamed: 'Untitled', priv: 'Private', you: 'You', player: 'Player', createdBy: 'By {name}',
       privSuffix: ' · private', copyLink: 'Copy share link', copied: 'Link copied', copyFail: 'Copy failed', back: '\u2190 All characters',
       notFound: 'This character no longer exists or isn\u2019t public.', edit: 'Edit',
-      sStory: 'Profile', sLooks: 'In-game looks', sEyes: 'Eyes', sItems: 'Items', sPosts: 'Gallery', untitledItem: 'Untitled item', eyeColorsAria: 'Eye colours',
+      sStory: 'Profile', sLooks: 'In-game looks', sEyes: 'Eyes', sHair: 'Hair', sAcc: 'Accessories', untitledAcc: 'Untitled accessory', hairColorsAria: 'Hair colours',
+      hairHint: 'Hair colour, style and notes.', hairColorsLbl: 'Hair colours', addHairColor: '+ Colour', delHairColor: 'Remove this colour', hairNote: 'Hair notes', hairNotePh: 'e.g. Long straight black hair with purple tips', addHair: '+ Add hair image',
+      accHint: 'Headpieces, earrings, necklaces, bracelets, rings. Transparent PNGs look best.', accName: 'Accessory name', addAcc: '+ Add accessory',
+      sItems: 'Items', sPosts: 'Gallery', untitledItem: 'Untitled item', eyeColorsAria: 'Eye colours',
       badType: 'PNG, JPG, WebP or GIF only', tooBig: 'Over 5 MB \u2014 try a smaller image', notApproved: 'Can\u2019t upload: account not approved yet',
       uploadFail: 'Upload failed \u2014 tap to retry', uploading: 'Uploading…', uploadImg: '+ Upload image', uploadPortrait: '+ Upload portrait', uploadShort: '+ Image',
       replace: 'Replace', remove: 'Remove', moveUp: 'Up', del: 'Delete', delField: 'Delete this row', limit: 'Limit reached ({n})',
@@ -13227,7 +13248,10 @@ document.addEventListener('click',function(e){
       noMatch: '「{q}」に一致するキャラはありません。', unnamed: '名前未設定', priv: '非公開', you: 'あなた', player: 'プレイヤー', createdBy: '作成：{name}',
       privSuffix: '・非公開', copyLink: '共有リンクをコピー', copied: 'コピーしました', copyFail: 'コピーできませんでした', back: '← キャラ一覧',
       notFound: 'このキャラは削除されたか、非公開になっています。', edit: '編集',
-      sStory: 'キャラ設定', sLooks: 'ゲーム内の見た目', sEyes: '目', sItems: 'アイテム', sPosts: 'イラスト・文章', untitledItem: '名前未設定のアイテム', eyeColorsAria: '瞳の色',
+      sStory: 'キャラ設定', sLooks: 'ゲーム内の見た目', sEyes: '目', sHair: '髪', sAcc: 'アクセサリー', untitledAcc: '名前未設定のアクセサリー', hairColorsAria: '髪の色',
+      hairHint: '髪の色、髪型、設定メモ。', hairColorsLbl: '髪の色', addHairColor: '＋ 色', delHairColor: 'この色を削除', hairNote: '髪の設定', hairNotePh: '例：黒のロングストレート、毛先は紫', addHair: '＋ 髪の画像を追加',
+      accHint: 'ヘッドドレス、イヤリング、ネックレス、ブレスレット、指輪など。背景透過の PNG がおすすめ。', accName: 'アクセサリー名', addAcc: '＋ アクセサリーを追加',
+      sItems: 'アイテム', sPosts: 'イラスト・文章', untitledItem: '名前未設定のアイテム', eyeColorsAria: '瞳の色',
       badType: 'PNG・JPG・WebP・GIF のみ対応', tooBig: '5MB を超えています。小さい画像にしてください', notApproved: 'アップロード不可：アカウントが未承認です',
       uploadFail: 'アップロード失敗。タップで再試行', uploading: 'アップロード中…', uploadImg: '＋ 画像をアップロード', uploadPortrait: '＋ 立ち絵をアップロード', uploadShort: '＋ 画像',
       replace: '変更', remove: '削除', moveUp: '上へ', del: '削除', delField: 'この項目を削除', limit: '上限に達しました（{n}）',
@@ -13412,7 +13436,7 @@ document.addEventListener('click',function(e){
     function blank() {
       return { id: null, owner: null, name: '', title: '', quote: '', color: DEFAULT_TINT, portrait: '',
         fields: T.defaults.map(function (k) { return { k: k, v: '' }; }),
-        story: '', looks: [], eye_colors: [], eye_note: '', eyes: [], items: [], posts: [], is_public: false };
+        story: '', looks: [], eye_colors: [], eye_note: '', eyes: [], hair_colors: [], hair_note: '', hair: [], accessories: [], items: [], posts: [], is_public: false };
     }
     function norm(r) {
       var c = Object.assign(blank(), r || {});
@@ -13422,12 +13446,25 @@ document.addEventListener('click',function(e){
       c.items = arr(c.items).map(function (x) { return { img: str(x && x.img), name: str(x && x.name), desc: str(x && x.desc) }; });
       c.posts = arr(c.posts).map(function (x) { return { img: str(x && x.img), title: str(x && x.title), text: str(x && x.text) }; });
       c.eye_colors = arr(c.eye_colors).filter(function (x) { return HEX.test(x); });
-      ['name', 'title', 'quote', 'story', 'eye_note', 'portrait'].forEach(function (k) { c[k] = str(c[k]); });
+      c.hair_colors = arr(c.hair_colors).filter(function (x) { return HEX.test(x); });
+      c.hair = arr(c.hair).map(function (x) { return { img: str(x && x.img), caption: str(x && x.caption) }; });
+      c.accessories = arr(c.accessories).map(function (x) { return { img: str(x && x.img), name: str(x && x.name), desc: str(x && x.desc) }; });
+      ['name', 'title', 'quote', 'story', 'eye_note', 'hair_note', 'portrait'].forEach(function (k) { c[k] = str(c[k]); });
       return c;
     }
     function imagePaths(c) {
       return [c.portrait].concat(c.looks.map(function (x) { return x.img; }), c.eyes.map(function (x) { return x.img; }),
-        c.items.map(function (x) { return x.img; }), c.posts.map(function (x) { return x.img; })).filter(Boolean);
+        c.hair.map(function (x) { return x.img; }), c.accessories.map(function (x) { return x.img; }),
+        c.items.map(function (x) { return x.img; }), c.posts.map(function (x) { return x.img; })).filter(Boolean)
+        .reduce(function (a, p) { a.push(p, thumbOf(p)); return a; }, []);
+    }
+    /* 縮圖與原圖同名，副檔名換成 .t.webp；舊圖沒有縮圖時自動退回原圖 */
+    function thumbOf(p) { return p.replace(/\.[a-z0-9]+$/i, '') + '.t.webp'; }
+    function timg(p, attrs) {
+      var a = Object.assign({ src: imgUrl(thumbOf(p)), alt: '', loading: 'lazy' }, attrs || {});
+      var el = h('img', a);
+      el.addEventListener('error', function once() { el.removeEventListener('error', once); el.src = imgUrl(p); });
+      return el;
     }
 
     var me = null, booted = false, wantCreate = false;
@@ -13496,7 +13533,7 @@ document.addEventListener('click',function(e){
           h('div', { class: 'oc-grid' }, shown.map(function (c) {
             return h('button', { type: 'button', class: 'oc-card', style: '--t:' + tint(c.color), onclick: function () { openDetail(c.id); } },
               h('div', { class: 'pic' },
-                c.portrait ? h('img', { src: imgUrl(c.portrait), alt: '', loading: 'lazy' }) : h('div', { class: 'ph' }, (c.name || '?').slice(0, 1)),
+                c.portrait ? timg(c.portrait) : h('div', { class: 'ph' }, (c.name || '?').slice(0, 1)),
                 tab === 'mine' && !c.is_public && h('span', { class: 'priv' }, T.priv)),
               h('h4', null, c.name || T.unnamed),
               c.title && h('p', null, c.title),
@@ -13513,7 +13550,8 @@ document.addEventListener('click',function(e){
         onclick: function () { lb.remove(); }, onkeydown: function (e) { if (e.key === 'Escape') lb.remove(); } }, h('img', { src: src, alt: '' }));
       document.body.append(lb); lb.focus();
     }
-    function zimg(p, alt) { return h('img', { src: imgUrl(p), alt: alt || '', loading: 'lazy', onclick: function () { zoom(imgUrl(p)); } }); }
+    function zimg(p, alt) { return timg(p, { alt: alt || '', onclick: function () { zoom(imgUrl(p)); } }); }
+    function zfull(p, alt) { return h('img', { src: imgUrl(p), alt: alt || '', loading: 'lazy', onclick: function () { zoom(imgUrl(p)); } }); }
 
     async function openDetail(id) {
       editing = false;
@@ -13560,6 +13598,16 @@ document.addEventListener('click',function(e){
         c.eye_colors.length > 0 && h('ul', { class: 'oc-sw', 'aria-label': T.eyeColorsAria }, c.eye_colors.map(function (col) { return h('li', null, h('span', { style: 'background:' + col }), col.toUpperCase()); })),
         c.eye_note && h('p', { class: 'oc-prose', style: 'margin-bottom:14px' }, c.eye_note),
         eyes.length > 0 && h('div', { class: 'oc-eyes' }, eyes.map(function (x) { return h('figure', null, zimg(x.img, x.caption), x.caption && h('figcaption', null, x.caption)); }))]]);
+      var hair = c.hair.filter(function (x) { return x.img; });
+      if (hair.length || c.hair_colors.length || c.hair_note) secs.push(['hair', T.sHair, [
+        c.hair_colors.length > 0 && h('ul', { class: 'oc-sw', 'aria-label': T.hairColorsAria }, c.hair_colors.map(function (col) { return h('li', null, h('span', { style: 'background:' + col }), col.toUpperCase()); })),
+        c.hair_note && h('p', { class: 'oc-prose', style: 'margin-bottom:14px' }, c.hair_note),
+        hair.length > 0 && h('div', { class: 'oc-gal' }, hair.map(function (x) { return h('figure', null, zimg(x.img, x.caption), x.caption && h('figcaption', null, x.caption)); }))]]);
+      var accs = c.accessories.filter(function (x) { return x.img || x.name; });
+      if (accs.length) secs.push(['acc', T.sAcc, h('div', { class: 'oc-items' }, accs.map(function (x) {
+        return h('div', { class: 'oc-item' }, x.img ? zimg(x.img, x.name) : h('div', { class: 'no' }),
+          h('div', null, h('h4', null, x.name || T.untitledAcc), x.desc && h('p', null, x.desc)));
+      }))]);
       var items = c.items.filter(function (x) { return x.img || x.name; });
       if (items.length) secs.push(['items', T.sItems, h('div', { class: 'oc-items' }, items.map(function (x) {
         return h('div', { class: 'oc-item' }, x.img ? zimg(x.img, x.name) : h('div', { class: 'no' }),
@@ -13568,7 +13616,7 @@ document.addEventListener('click',function(e){
       var posts = c.posts.filter(function (x) { return x.img || x.text || x.title; });
       if (posts.length) secs.push(['posts', T.sPosts, h('div', { class: 'oc-posts' }, posts.map(function (x) {
         return h('article', { class: 'oc-post' + (x.img ? ' img' : '') },
-          x.img && h('div', { class: 'pimg' }, zimg(x.img)),
+          x.img && h('div', { class: 'pimg' }, zfull(x.img)),
           h('div', null, x.title && h('h4', null, x.title), x.text && h('p', { class: 'oc-prose' }, x.text)));
       }))]);
 
@@ -13586,18 +13634,22 @@ document.addEventListener('click',function(e){
 
     /* ---------- upload ---------- */
     async function prepImage(file) {
-      if (file.type === 'image/gif') return file;
+      if (file.type === 'image/gif') return { full: file, thumb: null };
       var bmp = await createImageBitmap(file);
-      var s = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
-      var cv = document.createElement('canvas');
-      cv.width = Math.round(bmp.width * s); cv.height = Math.round(bmp.height * s);
-      cv.getContext('2d').drawImage(bmp, 0, 0, cv.width, cv.height);
-      function toBlob(type, q) { return new Promise(function (r) { cv.toBlob(r, type, q); }); }
-      var out = await toBlob('image/webp', 0.86);
-      if (!out || out.type !== 'image/webp') {
-        out = (file.type === 'image/png' && file.size < 3e6) ? file : await toBlob('image/jpeg', 0.88);
+      function render(max, type, q) {
+        var s = Math.min(1, max / Math.max(bmp.width, bmp.height));
+        var cv = document.createElement('canvas');
+        cv.width = Math.round(bmp.width * s); cv.height = Math.round(bmp.height * s);
+        cv.getContext('2d').drawImage(bmp, 0, 0, cv.width, cv.height);
+        return new Promise(function (r) { cv.toBlob(r, type, q); });
       }
-      return out || file;
+      var out = await render(1400, 'image/webp', 0.82);
+      var webpOk = out && out.type === 'image/webp';
+      if (!webpOk) {
+        out = (file.type === 'image/png' && file.size < 3e6) ? file : await render(1400, 'image/jpeg', 0.85);
+      }
+      var thumb = webpOk ? await render(480, 'image/webp', 0.78) : null;
+      return { full: out || file, thumb: thumb && thumb.type === 'image/webp' ? thumb : null };
     }
     var EXT = { 'image/webp': 'webp', 'image/png': 'png', 'image/jpeg': 'jpg', 'image/gif': 'gif' };
 
@@ -13610,7 +13662,7 @@ document.addEventListener('click',function(e){
         wrap.replaceChildren(input);
         var p = get();
         if (p && !msg) {
-          wrap.append(h('img', { src: imgUrl(p), alt: '' }), h('div', { class: 'acts' },
+          wrap.append(timg(p, { loading: null }), h('div', { class: 'acts' },
             h('button', { type: 'button', class: 'oc-mini', onclick: function () { input.click(); } }, T.replace),
             h('button', { type: 'button', class: 'oc-mini', onclick: function () { set(''); draw(); } }, T.remove)));
         } else {
@@ -13623,16 +13675,22 @@ document.addEventListener('click',function(e){
         if (!/^image\/(png|jpeg|webp|gif)$/.test(f.type)) return draw(T.badType);
         busy = true; draw(T.uploading);
         try {
-          var b = await prepImage(f);
+          var pr = await prepImage(f), b = pr.full;
           if (b.size > 5 * 1024 * 1024) throw { tooBig: true };
           var path = me + '/' + uuid() + '.' + (EXT[b.type] || 'jpg');
           var res = await sb.storage.from(BUCKET).upload(path, b, { contentType: b.type, cacheControl: '31536000', upsert: false });
           if (res.error) throw res.error;
-          uploads.add(path); set(path); busy = false; draw();
+          uploads.add(path);
+          if (pr.thumb) {
+            var tp = thumbOf(path);
+            var tr = await sb.storage.from(BUCKET).upload(tp, pr.thumb, { contentType: 'image/webp', cacheControl: '31536000', upsert: false });
+            if (!tr.error) uploads.add(tp);
+          }
+          set(path); busy = false; draw();
         } catch (e) {
           busy = false;
           var m = String((e && (e.message || e.statusCode)) || '');
-          draw(e && e.tooBig ? T.tooBig : /row-level|policy|Unauthorized|403/i.test(m) ? T.notApproved : T.uploadFail);
+          draw(e && e.tooBig ? T.tooBig : ((/row-level|policy|Unauthorized|403/i.test(m) ? T.notApproved : T.uploadFail) + (m ? ' [' + m.slice(0, 90) + ']' : '')));
         }
       });
       draw();
@@ -13707,6 +13765,16 @@ document.addEventListener('click',function(e){
       }
       drawSW();
 
+      var hswBox = h('div', { class: 'oc-swe' });
+      function drawHSW() {
+        hswBox.replaceChildren.apply(hswBox, d.hair_colors.map(function (col, i) {
+          return h('div', { class: 'one' },
+            h('input', { type: 'color', value: col, 'aria-label': T.hairColorsLbl + ' ' + (i + 1), oninput: function (e) { d.hair_colors[i] = e.target.value; } }),
+            h('button', { type: 'button', class: 'oc-mini', 'aria-label': T.delHairColor, onclick: function () { d.hair_colors.splice(i, 1); drawHSW(); } }, '✕'));
+        }).concat([h('button', { type: 'button', class: 'oc-mini', disabled: d.hair_colors.length >= LIMIT.hairColors, onclick: function () { d.hair_colors.push('#3A2A28'); drawHSW(); } }, T.addHairColor)]));
+      }
+      drawHSW();
+
       var form = h('div', { class: 'oc-form' },
         basic,
         fs(T.fileT, T.fileHint, kvBox, kvAdd),
@@ -13722,6 +13790,18 @@ document.addEventListener('click',function(e){
             return h('div', { class: 'oc-row wide' }, imageSlot(function () { return x.img; }, function (v) { x.img = v; }, uploads, { ratio: '2/1' }),
               h('div', null, txt(T.caption, function () { return x.caption; }, function (v) { x.caption = v; }, { max: 100 }), ctrl));
           }, function () { return { img: '', caption: '' }; }, T.addEye)),
+        fs(T.sHair, T.hairHint,
+          h('label', { class: 'f' }, h('span', null, T.hairColorsLbl), hswBox),
+          txt(T.hairNote, function () { return d.hair_note; }, function (v) { d.hair_note = v; }, { area: true, max: 2000, ph: T.hairNotePh }),
+          listEditor(d.hair, LIMIT.hair, function (x, ctrl) {
+            return h('div', { class: 'oc-row wide' }, imageSlot(function () { return x.img; }, function (v) { x.img = v; }, uploads),
+              h('div', null, txt(T.caption, function () { return x.caption; }, function (v) { x.caption = v; }, { max: 100 }), ctrl));
+          }, function () { return { img: '', caption: '' }; }, T.addHair)),
+        fs(T.sAcc, T.accHint, listEditor(d.accessories, LIMIT.acc, function (x, ctrl) {
+          return h('div', { class: 'oc-row' }, imageSlot(function () { return x.img; }, function (v) { x.img = v; }, uploads, { ratio: '1/1', contain: true, label: T.uploadShort }),
+            h('div', null, txt(T.accName, function () { return x.name; }, function (v) { x.name = v; }, { max: 40 }),
+              txt(T.caption, function () { return x.desc; }, function (v) { x.desc = v; }, { area: true, max: 500 }), ctrl));
+        }, function () { return { img: '', name: '', desc: '' }; }, T.addAcc)),
         fs(T.sItems, T.itemsHint, listEditor(d.items, LIMIT.items, function (x, ctrl) {
           return h('div', { class: 'oc-row' }, imageSlot(function () { return x.img; }, function (v) { x.img = v; }, uploads, { ratio: '1/1', contain: true, label: T.uploadShort }),
             h('div', null, txt(T.itemName, function () { return x.name; }, function (v) { x.name = v; }, { max: 40 }),
@@ -13770,10 +13850,13 @@ document.addEventListener('click',function(e){
         var row = {
           name: d.name.trim().slice(0, 40), title: d.title.trim(), quote: d.quote.trim(), color: tint(d.color), portrait: d.portrait,
           fields: d.fields.filter(function (f) { return f.k.trim() || f.v.trim(); }),
-          story: d.story, eye_note: d.eye_note,
+          story: d.story, eye_note: d.eye_note, hair_note: d.hair_note,
           looks: d.looks.filter(function (x) { return x.img || x.caption; }),
           eye_colors: d.eye_colors.filter(function (x) { return HEX.test(x); }),
           eyes: d.eyes.filter(function (x) { return x.img || x.caption; }),
+          hair_colors: d.hair_colors.filter(function (x) { return HEX.test(x); }),
+          hair: d.hair.filter(function (x) { return x.img || x.caption; }),
+          accessories: d.accessories.filter(function (x) { return x.img || x.name || x.desc; }),
           items: d.items.filter(function (x) { return x.img || x.name || x.desc; }),
           posts: d.posts.filter(function (x) { return x.img || x.title || x.text; }),
           is_public: !!d.is_public
@@ -13784,7 +13867,7 @@ document.addEventListener('click',function(e){
         if (res.error) {
           saveBtn.disabled = false;
           var code = res.error.code;
-          msg.textContent = (code === '42501' || code === 'PGRST116') ? T.errAuth : code === '23514' ? T.errLimit : T.errGen;
+          msg.textContent = (code === '42501' || code === 'PGRST116') ? T.errAuth : code === '23514' ? T.errLimit : T.errGen + ' [' + (code || '?') + '] ' + String(res.error.message || '').slice(0, 120);
           msg.className = 'msg err';
           return;
         }
