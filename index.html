@@ -2925,7 +2925,7 @@ body.card-open{overflow:hidden}
 <section id="chars">
   <div class="card">
     <h3>人設版 <span class="tag ok">新</span></h3>
-    <p class="cond">玩家自創角色的設定集：立繪、眼睛、頭髮、配件飾品、道具與人物設定。登入並通過審核後就能建立自己的人設，公開的人設所有人都看得到。</p>
+    <p class="cond">玩家自創角色的設定集：立繪、眼睛、頭髮、配件飾品、道具與人物設定。人設分成兩種：<b>OC</b> 需要填至少 3 項角色檔案、圖文內文合計 150 字以上；<b>自設</b>每人 5 個，想放更多要向管理員申請並說明原因。登入並通過審核後就能建立自己的人設，公開的人設所有人都看得到。</p>
   </div>
   <div id="oc-root"></div>
 </section>
@@ -2935,7 +2935,26 @@ body.card-open{overflow:hidden}
     <h3>更新紀錄 <span class="tag ok">持續維護中</span></h3>
     <p class="cond">這裡會列出每次網站更新的內容，讓大家知道網站一直有人在維護、修 bug、加新功能。</p>
         <div class="chg-entry">
-      <div class="chg-ver">Version 5.6.5 <span class="chg-build">目前版本・人設版移除遊戲外觀</span></div>
+      <div class="chg-ver">Version 5.7.0 <span class="chg-build">目前版本・人設分成 OC 與自設</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>人設分成 OC 與自設</b></p>
+      <ul class="tips">
+        <li><b>OC 有內容門檻</b>建立 OC 時，角色檔案至少要填 3 項（項目和內容都要有），圖文內文合計至少 150 字。編輯畫面會即時顯示目前填了多少，達標會變綠色。</li>
+        <li><b>自設每人 5 個</b>自設每個帳號最多 5 個。想放更多，在「我的人設」按「申請更多自設名額」，填希望的上限和原因，管理員核准後就會調高。</li>
+        <li><b>管理員審核名額申請</b>管理員在人設版會多一個「名額申請」分頁，可以核准（也能改核准的數字）或拒絕，並留備註給申請者。</li>
+        <li><b>卡片標示類型</b>人設卡片右上角和角色頁會標示 OC 或自設。之前建立的人設一律先歸為 OC，下次編輯時可以改成自設。</li>
+        <li><b>規則在資料庫層把關</b>上限和門檻都寫在資料庫裡，改網頁繞不過去。</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">Version 5.6.6 <span class="chg-build">人設版可用玩家 ID 搜尋</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>人設版搜尋分成兩種</b></p>
+      <ul class="tips">
+        <li><b>角色名／玩家 ID 切換</b>搜尋框左邊可以切換「角色名」或「玩家 ID」。選玩家 ID 時，打遊戲 ID 或暱稱都找得到，一次列出那位玩家公開的所有人設。</li>
+        <li><b>卡片顯示遊戲 ID</b>公開人設的卡片和角色頁會在建立者暱稱後面附上遊戲 ID（有填的話），方便認人。</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">Version 5.6.5 <span class="chg-build">人設版移除遊戲外觀</span></div>
       <p class="cond" style="margin:12px 0 4px"><b>人設版拿掉「遊戲外觀」區塊</b></p>
       <ul class="tips">
         <li><b>專注在人設與道具</b>人設頁不再放整批的外觀截圖，只保留立繪、眼睛、頭髮、配件飾品、道具和圖文，點進去就能直接看到角色與道具。</li>
@@ -13217,7 +13236,7 @@ document.addEventListener('click',function(e){
 
   var STR = {
     zh: {
-      tabPublic: '公開人設', tabMine: '我的人設', search: '搜尋角色名稱', count: '共 {n} 位角色',
+      tabPublic: '公開人設', tabMine: '我的人設', search: '搜尋角色名稱', searchP: '搜尋玩家 ID 或暱稱', modeName: '角色名', modePlayer: '玩家 ID', searchBy: '搜尋方式', count: '共 {n} 位角色',
       create: '＋ 建立人設', loginToCreate: '登入後建立人設', loading: '載入中…', loadFail: '讀取失敗，請重新整理再試一次。',
       emptyMineT: '你還沒有人設', emptyMineP: '建立角色，放上立繪、眼睛、頭髮、配件飾品和道具。', createBtn: '建立人設',
       emptyPubT: '還沒有公開的人設', emptyPubIn: '成為第一個公開人設的玩家吧。', emptyPubOut: '登入後就能建立並公開自己的人設。',
@@ -13244,10 +13263,18 @@ document.addEventListener('click',function(e){
       needName: '請先填寫角色名稱', saving: '儲存中…', save: '儲存人設', errAuth: '無法儲存：帳號尚未通過審核或已被停權',
       errLimit: '無法儲存：有欄位超過長度或數量上限', errGen: '儲存失敗，請再試一次', cancel: '取消', backCancel: '← 取消',
       createT: '建立人設', editT: '編輯人設', noClient: '人設版暫時無法連線，請重新整理頁面。', zoom: '圖片預覽', sections: '段落',
+      kindLbl: '人設類型', kindOc: 'OC', kindSelf: '自設',
+      kindOcHint: 'OC：角色檔案至少填 3 項，圖文內文合計至少 150 字。', kindSelfHint: '自設：每人 {n} 個，超過需向管理員申請。',
+      selfUsed: '你的自設：{a} / {b}', reqMore: '申請更多自設名額', fieldsCount: '角色檔案已填 {a} / 3 項', postsCount: '圖文內文 {a} / 150 字',
+      errSelfLimit: '自設已達上限（{n} 個）。請改成 OC，或先向管理員申請更多名額。', errOcFields: 'OC 需要至少填 3 項角色檔案（項目和內容都要填）。', errOcPosts: 'OC 的圖文內文合計需要至少 150 字。',
+      reqTitle: '申請更多自設名額', reqIntro: '說明你為什麼需要更多自設，管理員審核後會調整你的上限。', reqWanted: '希望的自設上限（6～50）', reqReason: '說明原因（至少 10 字）',
+      reqReasonPh: '例如：這些角色會用在哪裡、為什麼需要這麼多', reqSend: '送出申請', reqSent: '已送出，等待管理員審核。', reqPending: '申請審核中：希望上限 {n} 個', reqWithdraw: '撤回申請',
+      reqRejected: '上次申請未通過', reqApproved: '已核准：上限 {n} 個', reqFail: '送出失敗，請再試一次', reqShort: '原因至少要 10 字', reqBadNum: '上限請填 6～50 之間的數字',
+      tabReq: '名額申請', reqNone: '目前沒有待審的申請。', approve: '核准', reject: '拒絕', reqFrom: '申請上限 {n} 個・目前自設 {c} 個', adminNote: '給申請者的備註（選填）', approveAs: '核准的上限',
       defaults: ['年齡', '身高', '生日', '種族', '陣營', '職業']
     },
     en: {
-      tabPublic: 'Public', tabMine: 'Mine', search: 'Search by name', count: '{n} characters', count1: '1 character',
+      tabPublic: 'Public', tabMine: 'Mine', search: 'Search character name', searchP: 'Search player ID or name', modeName: 'Character', modePlayer: 'Player ID', searchBy: 'Search by', count: '{n} characters', count1: '1 character',
       create: '+ New character', loginToCreate: 'Sign in to create', loading: 'Loading…', loadFail: 'Couldn\u2019t load. Refresh and try again.',
       emptyMineT: 'No characters yet', emptyMineP: 'Create one with a portrait, eyes, hair, accessories and items.', createBtn: 'New character',
       emptyPubT: 'No public characters yet', emptyPubIn: 'Be the first to share one.', emptyPubOut: 'Sign in to create and share your own.',
@@ -13274,10 +13301,18 @@ document.addEventListener('click',function(e){
       needName: 'Add a name first', saving: 'Saving…', save: 'Save character', errAuth: 'Can\u2019t save: account not approved or banned',
       errLimit: 'Can\u2019t save: a field is over its length or count limit', errGen: 'Save failed, try again', cancel: 'Cancel', backCancel: '\u2190 Cancel',
       createT: 'New character', editT: 'Edit character', noClient: 'Characters can\u2019t connect right now. Refresh the page.', zoom: 'Image preview', sections: 'Sections',
+      kindLbl: 'Type', kindOc: 'OC', kindSelf: 'Persona',
+      kindOcHint: 'OC: at least 3 filled sheet fields and 150+ characters of gallery text.', kindSelfHint: 'Persona: {n} per person. Ask an admin for more.',
+      selfUsed: 'Your personas: {a} / {b}', reqMore: 'Request more persona slots', fieldsCount: 'Sheet fields filled: {a} / 3', postsCount: 'Gallery text: {a} / 150 characters',
+      errSelfLimit: 'You\u2019ve reached your persona limit ({n}). Switch to OC or request more slots from an admin.', errOcFields: 'An OC needs at least 3 sheet fields with both a name and a value.', errOcPosts: 'An OC needs at least 150 characters of gallery text in total.',
+      reqTitle: 'Request more persona slots', reqIntro: 'Tell us why you need more personas. An admin will review and adjust your limit.', reqWanted: 'Limit you\u2019d like (6\u201350)', reqReason: 'Reason (10+ characters)',
+      reqReasonPh: 'e.g. where these characters are used and why you need this many', reqSend: 'Send request', reqSent: 'Sent. Waiting for an admin.', reqPending: 'Request pending: limit {n}', reqWithdraw: 'Withdraw',
+      reqRejected: 'Your last request was declined', reqApproved: 'Approved: limit {n}', reqFail: 'Couldn\u2019t send, try again', reqShort: 'The reason needs at least 10 characters', reqBadNum: 'Enter a limit between 6 and 50',
+      tabReq: 'Requests', reqNone: 'No pending requests.', approve: 'Approve', reject: 'Decline', reqFrom: 'Wants {n} · has {c} personas', adminNote: 'Note to the player (optional)', approveAs: 'Approved limit',
       defaults: ['Age', 'Height', 'Birthday', 'Race', 'Faction', 'Occupation']
     },
     ja: {
-      tabPublic: '公開キャラ', tabMine: '自分のキャラ', search: 'キャラ名で検索', count: '{n} 人のキャラ',
+      tabPublic: '公開キャラ', tabMine: '自分のキャラ', search: 'キャラ名で検索', searchP: 'プレイヤーIDまたは名前で検索', modeName: 'キャラ名', modePlayer: 'プレイヤーID', searchBy: '検索方法', count: '{n} 人のキャラ',
       create: '＋ キャラを作成', loginToCreate: 'ログインして作成', loading: '読み込み中…', loadFail: '読み込みに失敗しました。再読み込みしてください。',
       emptyMineT: 'まだキャラがいません', emptyMineP: '立ち絵、目、髪、アクセサリー、アイテムを登録しましょう。', createBtn: 'キャラを作成',
       emptyPubT: '公開キャラはまだありません', emptyPubIn: '最初に公開してみませんか。', emptyPubOut: 'ログインすると自分のキャラを作成・公開できます。',
@@ -13304,6 +13339,14 @@ document.addEventListener('click',function(e){
       needName: 'キャラ名を入力してください', saving: '保存中…', save: '保存する', errAuth: '保存できません：アカウントが未承認か停止されています',
       errLimit: '保存できません：文字数または件数の上限を超えています', errGen: '保存できませんでした。再試行してください', cancel: 'キャンセル', backCancel: '← キャンセル',
       createT: 'キャラを作成', editT: 'キャラを編集', noClient: '現在接続できません。ページを再読み込みしてください。', zoom: '画像プレビュー', sections: 'セクション',
+      kindLbl: '種類', kindOc: 'OC', kindSelf: '自分キャラ',
+      kindOcHint: 'OC：プロフィールを 3 項目以上、イラスト・文章の本文を合計 150 字以上。', kindSelfHint: '自分キャラ：1 人 {n} 体まで。それ以上は管理者に申請してください。',
+      selfUsed: 'あなたの自分キャラ：{a} / {b}', reqMore: '自分キャラ枠を申請', fieldsCount: 'プロフィール {a} / 3 項目', postsCount: 'イラスト・文章の本文 {a} / 150 字',
+      errSelfLimit: '自分キャラの上限（{n} 体）に達しています。OC に変更するか、管理者に枠を申請してください。', errOcFields: 'OC はプロフィールを 3 項目以上（項目名と内容の両方）入力してください。', errOcPosts: 'OC はイラスト・文章の本文を合計 150 字以上入力してください。',
+      reqTitle: '自分キャラ枠を申請', reqIntro: '枠が必要な理由を書いてください。管理者が確認して上限を調整します。', reqWanted: '希望する上限（6〜50）', reqReason: '理由（10 字以上）',
+      reqReasonPh: '例：どこで使うキャラか、なぜこの数が必要か', reqSend: '申請する', reqSent: '申請しました。管理者の確認をお待ちください。', reqPending: '審査中：希望上限 {n} 体', reqWithdraw: '取り下げる',
+      reqRejected: '前回の申請は承認されませんでした', reqApproved: '承認済み：上限 {n} 体', reqFail: '送信できませんでした。再試行してください', reqShort: '理由は 10 字以上にしてください', reqBadNum: '上限は 6〜50 の数字で入力してください',
+      tabReq: '枠の申請', reqNone: '審査待ちの申請はありません。', approve: '承認', reject: '却下', reqFrom: '希望 {n} 体・現在 {c} 体', adminNote: '申請者へのメモ（任意）', approveAs: '承認する上限',
       defaults: ['年齢', '身長', '誕生日', '種族', '陣営', '職業']
     }
   };
@@ -13322,6 +13365,10 @@ document.addEventListener('click',function(e){
     '.oc-mini[disabled]{opacity:.45;cursor:default}',
     '.oc-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 16px}',
     '.oc-bar .grow{flex:1 1 160px;min-width:0}',
+    '.oc-srch{display:flex;gap:6px;align-items:center;flex:1 1 100%;min-width:0;order:3}',
+    '.oc-srch .oc-tabs{flex:none}',
+    '.oc-srch .oc-tabs button{padding:5px 10px;font-size:12.5px}',
+    '.oc-srch input{flex:1 1 auto;min-width:0}',
     '.oc-search{width:100%;border:1.5px solid var(--line,#DDD6E8);background:var(--panel,#fff);border-radius:999px;padding:8px 14px;font-size:14px}',
     '.oc-tabs{display:inline-flex;border:1.5px solid var(--line,#DDD6E8);border-radius:999px;padding:3px;background:var(--panel,#fff)}',
     '.oc-tabs button{border:0;background:transparent;padding:5px 14px;border-radius:999px;cursor:pointer;font-size:13.5px;color:var(--ink-soft,#6B6180);font-weight:600}',
@@ -13420,6 +13467,21 @@ document.addEventListener('click',function(e){
     '.oc-save{position:sticky;bottom:0;z-index:5;background:color-mix(in srgb,var(--bg,#F6F4FB) 92%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1.5px solid var(--line,#DDD6E8);padding:10px 2px calc(10px + env(safe-area-inset-bottom,0px));display:flex;gap:8px;align-items:center;margin-top:14px}',
     '.oc-save .msg{color:var(--ink-soft,#6B6180);font-size:12.5px;margin-right:auto}',
     '.oc-save .msg.err{color:#B3261E}',
+    '.oc-kind{position:absolute;right:8px;top:8px;background:var(--t);color:#fff;font-size:11px;font-weight:800;padding:1px 8px;border-radius:999px}',
+    '.oc-kind.self{background:var(--panel,#fff);color:var(--t);border:1.5px solid var(--t)}',
+    '.oc-kbadge{display:inline-block;vertical-align:middle;margin-left:8px;font-size:11px;font-weight:800;padding:1px 9px;border-radius:999px;background:var(--t);color:#fff;font-family:inherit}',
+    '.oc-kbadge.self{background:transparent;color:var(--t);border:1.5px solid var(--t)}',
+    '.oc-kpick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 8px}',
+    '.oc-kpick button{border:1.5px solid var(--line,#DDD6E8);background:var(--panel,#fff);border-radius:14px;padding:10px;cursor:pointer;font-weight:800;font-size:15px}',
+    '.oc-kpick button[aria-pressed="true"]{border-color:var(--oc-accent);background:var(--rose-soft,#F1EAFA);color:var(--oc-accent)}',
+    '.oc-live{font-size:12.5px;font-weight:700;margin:0 0 10px;color:var(--ink-soft,#6B6180)}',
+    '.oc-live.ok{color:var(--teal,#3D8E8A)}.oc-live.bad{color:#B3261E}',
+    '.oc-quota{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft,#6B6180);margin:0 0 12px}',
+    '.oc-req{background:var(--panel,#fff);border:1.5px solid var(--line,#DDD6E8);border-radius:14px;padding:14px;margin-bottom:10px}',
+    '.oc-req .who{font-weight:800}.oc-req .meta{font-size:12.5px;color:var(--ink-soft,#6B6180)}',
+    '.oc-req .why{white-space:pre-wrap;margin:8px 0;overflow-wrap:anywhere}',
+    '.oc-req .acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}',
+    '.oc input[type=number]{width:80px;border:1.5px solid var(--line,#DDD6E8);background:var(--bg,#F6F4FB);border-radius:10px;padding:6px 8px;font-size:15px}',
     '.oc-dz{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}',
     '.oc-dz p{margin:0;color:var(--ink-soft,#6B6180);font-size:13px}'
   ].join('\n');
@@ -13463,7 +13525,7 @@ document.addEventListener('click',function(e){
   }
 
   function mount(root, opts) {
-    var cfg = Object.assign({ lang: 'zh', profileTable: 'profiles', profileIdCol: 'id', profileNameCol: 'display_name', onLoginRequest: null, tabName: 'chars' },
+    var cfg = Object.assign({ lang: 'zh', profileTable: 'profiles', profileIdCol: 'id', profileNameCol: 'display_name', profileGidCol: 'game_id', onLoginRequest: null, tabName: 'chars' },
       window.PH_CHARS || {}, opts || {});
     var T = STR[cfg.lang] || STR.zh;
     var sb = cfg.client;
@@ -13474,7 +13536,7 @@ document.addEventListener('click',function(e){
     function blank() {
       return { id: null, owner: null, name: '', title: '', quote: '', color: DEFAULT_TINT, portrait: '',
         fields: T.defaults.map(function (k) { return { k: k, v: '' }; }),
-        story: '', looks: [], eye_colors: [], eye_note: '', eyes: [], hair_colors: [], hair_note: '', hair: [], accessories: [], items: [], posts: [], is_public: false };
+        story: '', looks: [], eye_colors: [], eye_note: '', eyes: [], hair_colors: [], hair_note: '', hair: [], accessories: [], items: [], posts: [], is_public: false, kind: 'oc' };
     }
     function norm(r) {
       var c = Object.assign(blank(), r || {});
@@ -13487,6 +13549,7 @@ document.addEventListener('click',function(e){
       c.hair_colors = arr(c.hair_colors).filter(function (x) { return HEX.test(x); });
       c.hair = arr(c.hair).map(function (x) { return { img: str(x && x.img), pool: str(x && x.pool), name: str(x && x.name), caption: str(x && x.caption) }; });
       c.accessories = arr(c.accessories).map(function (x) { return { img: str(x && x.img), pool: str(x && x.pool), name: str(x && x.name), desc: str(x && x.desc) }; });
+      c.kind = c.kind === 'self' ? 'self' : 'oc';
       ['name', 'title', 'quote', 'story', 'eye_note', 'hair_note', 'portrait'].forEach(function (k) { c[k] = str(c[k]); });
       return c;
     }
@@ -13525,18 +13588,54 @@ document.addEventListener('click',function(e){
     async function loadNames(ids) {
       var need = Array.from(new Set(ids)).filter(function (i) { return i && !(i in names); });
       if (!need.length) return;
-      need.forEach(function (i) { names[i] = ''; });
+      need.forEach(function (i) { names[i] = { n: '', g: '' }; });
       try {
-        var res = await sb.from(cfg.profileTable).select(cfg.profileIdCol + ',' + cfg.profileNameCol).in(cfg.profileIdCol, need);
-        if (!res.error && res.data) res.data.forEach(function (r) { names[r[cfg.profileIdCol]] = str(r[cfg.profileNameCol]); });
+        var res = await sb.from(cfg.profileTable).select(cfg.profileIdCol + ',' + cfg.profileNameCol + ',' + cfg.profileGidCol).in(cfg.profileIdCol, need);
+        if (res.error) res = await sb.from(cfg.profileTable).select(cfg.profileIdCol + ',' + cfg.profileNameCol).in(cfg.profileIdCol, need);
+        if (!res.error && res.data) res.data.forEach(function (r) { names[r[cfg.profileIdCol]] = { n: str(r[cfg.profileNameCol]), g: str(r[cfg.profileGidCol]) }; });
       } catch (e) {}
     }
-    function authorName(id) { return id === me ? T.you : (names[id] || T.player); }
+    function authorName(id) { return id === me ? T.you : ((names[id] && names[id].n) || T.player); }
+    function authorLine(id) { var g = names[id] && names[id].g; return authorName(id) + (g ? ' · ' + g : ''); }
+    function authorText(id) { var p = names[id] || {}; return ((p.n || '') + ' ' + (p.g || '')).toLowerCase(); }
+    var mode = 'name';
+    var isAdmin = false, selfCount = 0, selfLimit = 5, myReqs = [], pendingReqs = 0;
+    function kindLabel(k) { return k === 'self' ? T.kindSelf : T.kindOc; }
+    function filledFields(d) { return d.fields.filter(function (f) { return f.k.trim() && f.v.trim(); }).length; }
+    function postChars(d) { return d.posts.reduce(function (n, p) { return n + (p.text || '').replace(/\s/g, '').length; }, 0); }
+    async function loadMine() {
+      isAdmin = false; selfCount = 0; selfLimit = 5; myReqs = []; pendingReqs = 0;
+      if (!me) return;
+      try {
+        var p = await sb.from(cfg.profileTable).select('role').eq(cfg.profileIdCol, me).maybeSingle();
+        isAdmin = !!(p.data && p.data.role === 'admin');
+        var c = await sb.from('characters').select('id', { count: 'exact', head: true }).eq('owner', me).eq('kind', 'self');
+        selfCount = c.count || 0;
+        var q = await sb.from('char_quota_requests').select('*').eq('user_id', me).order('created_at', { ascending: false }).limit(10);
+        myReqs = q.data || [];
+        myReqs.forEach(function (x) { if (x.status === 'approved' && x.wanted > selfLimit) selfLimit = x.wanted; });
+        if (isAdmin) {
+          var pr = await sb.from('char_quota_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending');
+          pendingReqs = pr.count || 0;
+        }
+      } catch (e) {}
+    }
+    function myPending() { return myReqs.filter(function (x) { return x.status === 'pending'; })[0] || null; }
+    function quotaLine() {
+      if (!me || isAdmin) return null;
+      var pend = myPending(), last = myReqs[0];
+      return h('div', { class: 'oc-quota' },
+        h('span', null, fmt(T.selfUsed, { a: selfCount, b: selfLimit })),
+        pend ? h('span', null, '・' + fmt(T.reqPending, { n: pend.wanted }))
+             : [last && last.status === 'rejected' && h('span', null, '・' + T.reqRejected + (last.admin_note ? ' · ' + last.admin_note : '')),
+                h('button', { type: 'button', class: 'oc-mini', onclick: function () { renderReq(); } }, T.reqMore)]);
+    }
 
     /* ---------- list ---------- */
     async function loadList() {
+      if (tab === 'req') return loadReqs();
       editing = false; listLoading = true; listErr = ''; renderList();
-      var q = sb.from('characters').select('id,owner,name,title,color,portrait,is_public,updated_at').order('updated_at', { ascending: false }).limit(300);
+      var q = sb.from('characters').select('id,owner,name,title,color,portrait,is_public,updated_at,kind').order('updated_at', { ascending: false }).limit(300);
       q = (tab === 'mine' && me) ? q.eq('owner', me) : q.eq('is_public', true);
       var res = await q;
       listLoading = false;
@@ -13546,12 +13645,26 @@ document.addEventListener('click',function(e){
     }
     function renderList() {
       setUrlChar(null);
+      var input = h('input', { class: 'oc-search', type: 'search', placeholder: mode === 'player' ? T.searchP : T.search, 'aria-label': mode === 'player' ? T.searchP : T.search, value: query,
+        oninput: function (e) { query = e.target.value; drawGrid(); } });
+      function modeBtn(k, label) {
+        return h('button', { type: 'button', 'aria-pressed': String(mode === k), onclick: function () {
+          if (mode === k) return;
+          mode = k;
+          Array.prototype.forEach.call(modeBox.children, function (b) { b.setAttribute('aria-pressed', String(b === this)); }, this);
+          input.placeholder = mode === 'player' ? T.searchP : T.search;
+          input.setAttribute('aria-label', input.placeholder);
+          drawGrid(); input.focus();
+        } }, label);
+      }
+      var modeBox = h('div', { class: 'oc-tabs', role: 'group', 'aria-label': T.searchBy }, modeBtn('name', T.modeName), modeBtn('player', T.modePlayer));
+      var searchRow = h('div', { class: 'oc-srch' }, modeBox, input);
       var bar = h('div', { class: 'oc-bar' },
         me && h('div', { class: 'oc-tabs', role: 'group' },
           h('button', { type: 'button', 'aria-pressed': String(tab === 'public'), onclick: function () { if (tab !== 'public') { tab = 'public'; loadList(); } } }, T.tabPublic),
-          h('button', { type: 'button', 'aria-pressed': String(tab === 'mine'), onclick: function () { if (tab !== 'mine') { tab = 'mine'; loadList(); } } }, T.tabMine)),
-        h('div', { class: 'grow' }, h('input', { class: 'oc-search', type: 'search', placeholder: T.search, 'aria-label': T.search, value: query,
-          oninput: function (e) { query = e.target.value; drawGrid(); } })),
+          h('button', { type: 'button', 'aria-pressed': String(tab === 'mine'), onclick: function () { if (tab !== 'mine') { tab = 'mine'; loadList(); } } }, T.tabMine),
+          isAdmin && h('button', { type: 'button', 'aria-pressed': String(tab === 'req'), onclick: function () { tab = 'req'; loadReqs(); } }, T.tabReq + (pendingReqs ? '（' + pendingReqs + '）' : ''))),
+        searchRow,
         me ? h('button', { type: 'button', class: 'oc-btn', onclick: function () { renderEdit(null); } }, T.create)
            : h('button', { type: 'button', class: 'oc-btn ghost', onclick: function () { if (cfg.onLoginRequest) cfg.onLoginRequest(); } }, T.loginToCreate));
       var box = h('div');
@@ -13559,7 +13672,9 @@ document.addEventListener('click',function(e){
         if (listLoading) return box.replaceChildren(h('p', { class: 'oc-note' }, T.loading));
         if (listErr) return box.replaceChildren(h('p', { class: 'oc-note oc-err' }, listErr));
         var ql = query.trim().toLowerCase();
-        var shown = ql ? list.filter(function (c) { return (c.name + ' ' + c.title).toLowerCase().indexOf(ql) >= 0; }) : list;
+        var shown = !ql ? list : list.filter(function (c) {
+          return mode === 'player' ? authorText(c.owner).indexOf(ql) >= 0 : (c.name + ' ' + c.title).toLowerCase().indexOf(ql) >= 0;
+        });
         if (!list.length) {
           return box.replaceChildren(h('div', { class: 'oc-empty' }, tab === 'mine'
             ? [h('strong', null, T.emptyMineT), h('p', null, T.emptyMineP), h('button', { type: 'button', class: 'oc-btn', onclick: function () { renderEdit(null); } }, T.createBtn)]
@@ -13572,14 +13687,15 @@ document.addEventListener('click',function(e){
             return h('button', { type: 'button', class: 'oc-card', style: '--t:' + tint(c.color), onclick: function () { openDetail(c.id); } },
               h('div', { class: 'pic' },
                 c.portrait ? timg(c.portrait) : h('div', { class: 'ph' }, (c.name || '?').slice(0, 1)),
-                tab === 'mine' && !c.is_public && h('span', { class: 'priv' }, T.priv)),
+                tab === 'mine' && !c.is_public && h('span', { class: 'priv' }, T.priv),
+                h('span', { class: 'oc-kind' + (c.kind === 'self' ? ' self' : '') }, kindLabel(c.kind))),
               h('h4', null, c.name || T.unnamed),
               c.title && h('p', null, c.title),
-              tab === 'public' && h('p', null, authorName(c.owner)));
+              tab === 'public' && h('p', null, authorLine(c.owner)));
           })));
       }
       drawGrid();
-      root.replaceChildren(bar, box);
+      root.replaceChildren.apply(root, [bar, tab === 'mine' ? quotaLine() : null, box].filter(Boolean));
     }
 
     /* ---------- detail ---------- */
@@ -13627,10 +13743,10 @@ document.addEventListener('click',function(e){
                      : h('div', { class: 'portrait ph' }, (c.name || '?').slice(0, 1)),
           h('div', { class: 'oc-vname' }, c.name)),
         h('div', { class: 'oc-info' },
-          c.title && h('p', { class: 'title' }, c.title),
+          h('p', { class: 'title' }, c.title || '', h('span', { class: 'oc-kbadge' + (c.kind === 'self' ? ' self' : '') }, kindLabel(c.kind))),
           c.quote && h('p', { class: 'quote' }, c.quote),
           fields.length > 0 && h('dl', { class: 'oc-stats' }, fields.map(function (f) { return [h('dt', null, f.k), h('dd', null, f.v)]; })),
-          h('div', { class: 'oc-meta' }, h('span', null, fmt(T.createdBy, { name: authorName(c.owner) }) + (c.is_public ? '' : T.privSuffix)), shareBtn)));
+          h('div', { class: 'oc-meta' }, h('span', null, fmt(T.createdBy, { name: authorLine(c.owner) }) + (c.is_public ? '' : T.privSuffix)), shareBtn)));
 
       var secs = [];
       if (c.story) secs.push(['story', T.sStory, h('p', { class: 'oc-prose' }, c.story)]);
@@ -13775,6 +13891,95 @@ document.addEventListener('click',function(e){
       return h('div', { class: 'oc-fs' }, title && h('h3', null, title), hint && h('p', { class: 'hint' }, hint), kids);
     }
 
+    function renderReq(back) {
+      back = back || function () { tab = 'mine'; loadList(); };
+      var pend = myPending();
+      var wrap = h('div', { class: 'oc-form' });
+      var head = h('div', { class: 'oc-bar' }, h('button', { type: 'button', class: 'oc-back', onclick: back }, T.backCancel));
+      if (pend) {
+        var wd = h('button', { type: 'button', class: 'oc-btn ghost' }, T.reqWithdraw);
+        wd.addEventListener('click', async function () {
+          wd.disabled = true;
+          await sb.from('char_quota_requests').delete().eq('id', pend.id);
+          await loadMine(); back();
+        });
+        wrap.append(fs(T.reqTitle, null, h('p', null, fmt(T.reqPending, { n: pend.wanted })), h('p', { class: 'oc-prose' }, pend.reason), wd));
+        root.replaceChildren(head, wrap); return;
+      }
+      var num = h('input', { type: 'number', min: '6', max: '50', value: String(Math.min(50, Math.max(6, selfLimit + 3))) });
+      var reason = h('textarea', { maxlength: 1000, placeholder: T.reqReasonPh });
+      var msg = h('p', { class: 'oc-err', style: 'margin:8px 0 0;font-size:13px' });
+      var send = h('button', { type: 'button', class: 'oc-btn' }, T.reqSend);
+      send.addEventListener('click', async function () {
+        var n = parseInt(num.value, 10), why = reason.value.trim();
+        if (!(n >= 6 && n <= 50)) { msg.textContent = T.reqBadNum; return; }
+        if (why.length < 10) { msg.textContent = T.reqShort; return; }
+        send.disabled = true; msg.textContent = '';
+        var res = await sb.from('char_quota_requests').insert({ wanted: n, reason: why });
+        if (res.error) { send.disabled = false; msg.textContent = (res.error.code === '42501' ? T.errAuth : T.reqFail); return; }
+        await loadMine();
+        wrap.replaceChildren(fs(T.reqTitle, null, h('p', null, T.reqSent), h('button', { type: 'button', class: 'oc-btn ghost', onclick: back }, T.back)));
+      });
+      wrap.append(fs(T.reqTitle, T.reqIntro,
+        h('p', { class: 'oc-quota' }, fmt(T.selfUsed, { a: selfCount, b: selfLimit })),
+        h('label', { class: 'f' }, h('span', null, T.reqWanted), num),
+        h('label', { class: 'f' }, h('span', null, T.reqReason), reason),
+        send, msg));
+      root.replaceChildren(head, wrap);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function loadReqs() {
+      editing = false; setUrlChar(null);
+      var tabs = h('div', { class: 'oc-bar' }, h('div', { class: 'oc-tabs', role: 'group' },
+        h('button', { type: 'button', 'aria-pressed': 'false', onclick: function () { tab = 'public'; loadList(); } }, T.tabPublic),
+        h('button', { type: 'button', 'aria-pressed': 'false', onclick: function () { tab = 'mine'; loadList(); } }, T.tabMine),
+        h('button', { type: 'button', 'aria-pressed': 'true' }, T.tabReq)));
+      var box = h('div', null, h('p', { class: 'oc-note' }, T.loading));
+      root.replaceChildren(tabs, box);
+      var res = await sb.from('char_quota_requests').select('*').eq('status', 'pending').order('created_at', { ascending: true }).limit(100);
+      if (res.error) { box.replaceChildren(h('p', { class: 'oc-note oc-err' }, T.loadFail)); return; }
+      var rows = res.data || [];
+      pendingReqs = rows.length;
+      if (!rows.length) { box.replaceChildren(h('p', { class: 'oc-note' }, T.reqNone)); return; }
+      var ids = rows.map(function (x) { return x.user_id; });
+      await loadNames(ids);
+      var counts = {};
+      try {
+        var cr = await sb.from('characters').select('owner').eq('kind', 'self').in('owner', ids);
+        (cr.data || []).forEach(function (x) { counts[x.owner] = (counts[x.owner] || 0) + 1; });
+      } catch (e) {}
+      box.replaceChildren.apply(box, rows.map(function (x) {
+        var num = h('input', { type: 'number', min: '6', max: '50', value: String(x.wanted), 'aria-label': T.approveAs });
+        var note = h('input', { type: 'text', maxlength: 300, placeholder: T.adminNote });
+        var out = h('span', { class: 'meta' });
+        async function decide(status) {
+          var patch = { status: status, admin_note: note.value.trim() };
+          if (status === 'approved') {
+            var n = parseInt(num.value, 10);
+            if (!(n >= 6 && n <= 50)) { out.textContent = T.reqBadNum; return; }
+            patch.wanted = n;
+          }
+          card.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+          var u = await sb.from('char_quota_requests').update(patch).eq('id', x.id);
+          if (u.error) { out.textContent = T.errGen; card.querySelectorAll('button').forEach(function (b) { b.disabled = false; }); return; }
+          card.remove(); pendingReqs = Math.max(0, pendingReqs - 1);
+          if (!box.querySelector('.oc-req')) box.replaceChildren(h('p', { class: 'oc-note' }, T.reqNone));
+        }
+        var card = h('div', { class: 'oc-req' },
+          h('div', { class: 'who' }, authorLine(x.user_id)),
+          h('div', { class: 'meta' }, fmt(T.reqFrom, { n: x.wanted, c: counts[x.user_id] || 0 }) + '・' + new Date(x.created_at).toLocaleDateString()),
+          h('p', { class: 'why' }, x.reason),
+          h('div', { class: 'acts' },
+            h('label', { class: 'meta' }, T.approveAs + ' ', num),
+            note,
+            h('button', { type: 'button', class: 'oc-btn', onclick: function () { decide('approved'); } }, T.approve),
+            h('button', { type: 'button', class: 'oc-btn ghost', onclick: function () { decide('rejected'); } }, T.reject),
+            out));
+        return card;
+      }));
+    }
+
     function renderEdit(src) {
       if (!me) { if (cfg.onLoginRequest) cfg.onLoginRequest(); return; }
       editing = true;
@@ -13782,6 +13987,27 @@ document.addEventListener('click',function(e){
       var orig = isNew ? blank() : norm(clone(src));
       var d = norm(clone(orig));
       var uploads = new Set();
+
+      var kindHint = h('p', { class: 'hint', style: 'margin:0' });
+      var kindWarn = h('div');
+      var kindBox = h('div', { class: 'oc-kpick', role: 'group', 'aria-label': T.kindLbl });
+      var liveFields = h('p', { class: 'oc-live' }), livePosts = h('p', { class: 'oc-live' });
+      function selfBlocked() { return !isAdmin && d.kind === 'self' && orig.kind !== 'self' && selfCount >= selfLimit; }
+      function refresh() {
+        Array.prototype.forEach.call(kindBox.children, function (b) { b.setAttribute('aria-pressed', String(b.dataset.k === d.kind)); });
+        kindHint.textContent = d.kind === 'oc' ? T.kindOcHint : fmt(T.kindSelfHint, { n: selfLimit });
+        kindWarn.replaceChildren();
+        if (selfBlocked()) kindWarn.append(h('p', { class: 'oc-live bad', style: 'margin:8px 0 0' }, fmt(T.errSelfLimit, { n: selfLimit }), ' ',
+          h('button', { type: 'button', class: 'oc-mini', onclick: function () { renderReq(function () { renderEdit(src); }); } }, T.reqMore)));
+        var ff = filledFields(d), pc = postChars(d), oc = d.kind === 'oc';
+        liveFields.hidden = !oc; livePosts.hidden = !oc;
+        liveFields.textContent = fmt(T.fieldsCount, { a: ff }); liveFields.className = 'oc-live ' + (ff >= 3 ? 'ok' : 'bad');
+        livePosts.textContent = fmt(T.postsCount, { a: pc }); livePosts.className = 'oc-live ' + (pc >= 150 ? 'ok' : 'bad');
+      }
+      ['oc', 'self'].forEach(function (k) {
+        kindBox.append(h('button', { type: 'button', 'data-k': k, onclick: function () { d.kind = k; refresh(); } }, kindLabel(k)));
+      });
+      var kindFs = fs(T.kindLbl, null, kindBox, kindHint, kindWarn, !isAdmin && h('p', { class: 'oc-quota', style: 'margin:8px 0 0' }, fmt(T.selfUsed, { a: selfCount, b: selfLimit })));
 
       var basic = fs(T.basic, T.basicHint, h('div', { class: 'oc-pe' },
         imageSlot(function () { return d.portrait; }, function (v) { d.portrait = v; }, uploads, { label: T.uploadPortrait }),
@@ -13826,8 +14052,9 @@ document.addEventListener('click',function(e){
       drawHSW();
 
       var form = h('div', { class: 'oc-form' },
+        kindFs,
         basic,
-        fs(T.fileT, T.fileHint, kvBox, kvAdd),
+        fs(T.fileT, T.fileHint, liveFields, kvBox, kvAdd),
         fs(T.sStory, T.storyHint, txt(null, function () { return d.story; }, function (v) { d.story = v; }, { area: true, long: true, max: 20000 })),
         fs(T.sEyes, T.eyesHint,
           h('label', { class: 'f' }, h('span', null, T.eyeColorsLbl), swBox),
@@ -13853,7 +14080,7 @@ document.addEventListener('click',function(e){
             h('div', null, poolField(x), txt(T.itemName, function () { return x.name; }, function (v) { x.name = v; }, { max: 40 }),
               txt(T.caption, function () { return x.desc; }, function (v) { x.desc = v; }, { area: true, max: 500 }), ctrl));
         }, function () { return { img: '', pool: '', name: '', desc: '' }; }, T.addItem)),
-        fs(T.sPosts, T.postsHint, listEditor(d.posts, LIMIT.posts, function (x, ctrl) {
+        fs(T.sPosts, T.postsHint, livePosts, listEditor(d.posts, LIMIT.posts, function (x, ctrl) {
           return h('div', { class: 'oc-row wide' }, imageSlot(function () { return x.img; }, function (v) { x.img = v; }, uploads, { ratio: '4/3', contain: true }),
             h('div', null, txt(T.postTitle, function () { return x.title; }, function (v) { x.title = v; }, { max: 60 }),
               txt(T.postBody, function () { return x.text; }, function (v) { x.text = v; }, { area: true, max: 3000 }), ctrl));
@@ -13862,6 +14089,9 @@ document.addEventListener('click',function(e){
           h('input', { type: 'checkbox', checked: d.is_public, onchange: function (e) { d.is_public = e.target.checked; } }),
           h('span', null, T.pubLbl, h('small', null, T.pubHint)))));
 
+      form.addEventListener('input', refresh);
+      form.addEventListener('click', function () { setTimeout(refresh, 0); });
+      refresh();
       var msg = h('span', { class: 'msg' });
       var saveBtn = h('button', { type: 'button', class: 'oc-btn', onclick: save }, T.save);
 
@@ -13885,6 +14115,7 @@ document.addEventListener('click',function(e){
           var res = await sb.from('characters').delete().eq('id', orig.id);
           if (res.error) { del.disabled = false; msg.textContent = T.delFail; msg.className = 'msg err'; return; }
           await cleanup([]);
+          await loadMine();
           editing = false; tab = 'mine'; loadList();
         });
         form.append(h('div', { class: 'oc-fs oc-dz' }, h('p', null, T.delHint), del));
@@ -13892,6 +14123,12 @@ document.addEventListener('click',function(e){
 
       async function save() {
         if (!d.name.trim()) { msg.textContent = T.needName; msg.className = 'msg err'; basic.scrollIntoView({ behavior: 'smooth' }); return; }
+        if (!isAdmin) {
+          var bad = selfBlocked() ? fmt(T.errSelfLimit, { n: selfLimit })
+            : d.kind === 'oc' && filledFields(d) < 3 ? T.errOcFields
+            : d.kind === 'oc' && postChars(d) < 150 ? T.errOcPosts : '';
+          if (bad) { msg.textContent = bad; msg.className = 'msg err'; return; }
+        }
         saveBtn.disabled = true; msg.textContent = T.saving; msg.className = 'msg';
         var row = {
           name: d.name.trim().slice(0, 40), title: d.title.trim(), quote: d.quote.trim(), color: tint(d.color), portrait: d.portrait,
@@ -13905,7 +14142,8 @@ document.addEventListener('click',function(e){
           accessories: d.accessories.filter(function (x) { return x.img || x.name || x.desc || x.pool; }),
           items: d.items.filter(function (x) { return x.img || x.name || x.desc || x.pool; }),
           posts: d.posts.filter(function (x) { return x.img || x.title || x.text; }),
-          is_public: !!d.is_public
+          is_public: !!d.is_public,
+          kind: d.kind
         };
         var res = isNew
           ? await sb.from('characters').insert(row).select('*').single()
@@ -13913,12 +14151,15 @@ document.addEventListener('click',function(e){
         if (res.error) {
           saveBtn.disabled = false;
           var code = res.error.code;
-          msg.textContent = (code === '42501' || code === 'PGRST116') ? T.errAuth : code === '23514' ? T.errLimit : T.errGen + ' [' + (code || '?') + '] ' + String(res.error.message || '').slice(0, 120);
+          var em = String(res.error.message || '');
+          msg.textContent = /SELF_LIMIT/.test(em) ? fmt(T.errSelfLimit, { n: selfLimit }) : /OC_FIELDS/.test(em) ? T.errOcFields : /OC_POSTS/.test(em) ? T.errOcPosts :
+            (code === '42501' || code === 'PGRST116') ? T.errAuth : code === '23514' ? T.errLimit : T.errGen + ' [' + (code || '?') + '] ' + String(res.error.message || '').slice(0, 120);
           msg.className = 'msg err';
           return;
         }
         var saved = norm(res.data);
         await cleanup(imagePaths(saved));
+        await loadMine();
         editing = false;
         renderDetail(saved);
       }
@@ -13945,8 +14186,9 @@ document.addEventListener('click',function(e){
         if (next === me) return;
         me = next;
         if (!me) tab = 'public';
-        if (!editing) loadList();
+        loadMine().then(function () { if (!editing) loadList(); });
       });
+      await loadMine();
       booted = true;
       var startId = null;
       try { startId = new URL(location.href).searchParams.get('char'); } catch (e) {}
