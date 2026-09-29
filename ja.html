@@ -1550,9 +1550,16 @@ body.card-open{overflow:hidden}
     
 <div class="card" id="memberQuick" style="border-left:3px solid var(--violet)">
     <h3>会員ページ</h3>
-    <p class="cond">ログイン・新規登録、承認状況の確認、ゲームID・名前・プロフィールカードの変更ができます。掲示板、人狼ゲーム、作品シェア、キャラ設定はすべて同じアカウントです。</p>
-    <p class="cond" id="memberQuickStatus" style="margin-top:6px;font-weight:700;color:var(--ink)"></p>
-    <p style="margin:8px 0 0"><button type="button" class="jump-tool" data-jump="member">会員ページへ →</button></p>
+    <p class="cond">1 つのアカウントでサイト全体を利用できます：掲示板、人狼ゲーム、作品シェア、キャラ設定。まだアカウントがない方は下のフォームから登録してください。管理者の承認後に投稿できるようになります。</p>
+    <div id="authSlotHome">
+      <div id="authBlock">
+      <div id="memberErr" class="board-err" hidden></div>
+      <div id="boardAuth" class="board-auth"></div>
+      <div id="boardUser" class="board-user" hidden></div>
+      <div id="boardPending" class="board-pending" hidden></div>
+      </div>
+    </div>
+    <p style="margin:12px 0 0"><button type="button" class="jump-tool" data-jump="member">プロフィールカード・マイキャラ →</button></p>
   </div>
 
   <div class="card" id="smartGuide">
@@ -2890,11 +2897,8 @@ body.card-open{overflow:hidden}
 <section id="member">
   <div class="card">
     <h3>会員ページ</h3>
-    <p class="cond">ログイン・新規登録、アカウントの承認状況、プロフィールカードはここで管理します。掲示板、人狼ゲーム、作品シェア、キャラ設定はすべて同じアカウントです。</p>
-    <div id="memberErr" class="board-err" hidden></div>
-    <div id="boardAuth" class="board-auth"></div>
-    <div id="boardUser" class="board-user" hidden></div>
-    <div id="boardPending" class="board-pending" hidden></div>
+    <p class="cond">ゲームID・名前・プロフィールカードの変更や、キャラの管理ができます。ログインと新規登録はガイドページにもあります。</p>
+    <div id="authSlotMember"></div>
   </div>
   <div class="card" id="memberChars" hidden>
     <h3>マイキャラ</h3>
@@ -2962,7 +2966,26 @@ body.card-open{overflow:hidden}
     <h3>更新履歴 <span class="tag ok">メンテナンス中</span></h3>
     <p class="cond">各 ウェブサイト更新の内容はここにリストされ、ウェブサイトが維持され、バグが修正され、新機能が追加されたことを全員に知らせます。 </p>
         <div class="chg-entry">
-      <div class="chg-ver">バージョン 5.8.2 <span class="chg-build">現在のバージョン・スマートガイドに会員ページ</span></div>
+      <div class="chg-ver">バージョン 5.8.4 <span class="chg-build">現在のバージョン・掲示板の修正と通信量削減</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>新着が表示されなくなる不具合を修正し、通信量を大幅に削減</b></p>
+      <ul class="tips">
+        <li><b>150 件を超えると新着が出ない</b>チャットは「古い順に 150 件」を読んでいたため、150 件を超えた掲示板では新しい投稿が表示されませんでした。最新 150 件を読むように修正しました。</li>
+        <li><b>新着は 1 件分だけ取得</b>新しい投稿のたびに、開いている全員が 150 件を再取得していました。今は最後の投稿以降だけを取得し、非表示・ピン留め・削除のときだけ全体を再取得します。</li>
+        <li><b>掲示板一覧は件数だけ取得</b>一覧を開くたびにサイト全体の投稿を数えるため全件をダウンロードしており、1000 件を超えると件数もずれていました。件数だけをデータベースに問い合わせるようにしました。</li>
+        <li><b>人狼ゲームはバックグラウンドで停止</b>タブが裏にあっても 5 秒ごとに更新していました。裏に回ると停止し、戻ったときにすぐ更新します。</li>
+        <li><b>Supabase ライブラリのバージョンを固定</b>「最新の 2.x」を読み込んでいたため、上流の更新で知らないうちに動作が変わる可能性がありました。2.117.2 に固定しました。</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">バージョン 5.8.3 <span class="chg-build">ガイドページでログイン・登録</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>ガイドページでログイン・新規登録</b></p>
+      <ul class="tips">
+        <li><b>ログインフォームをガイドページに</b>ガイドページの「会員ページ」カードにログイン・新規登録フォームを置きました。サイトに来てすぐ登録できます。ログイン後は名前、ゲームID、ログアウトボタンが表示されます。</li>
+        <li><b>会員ページタブでもそのまま使える</b>「会員ページ」タブを開くと同じフォームがそちらに移動するので、どちらでも使えます。ログイン欄が 2 つになることはありません。</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">バージョン 5.8.2 <span class="chg-build">スマートガイドに会員ページ</span></div>
       <p class="cond" style="margin:12px 0 4px"><b>スマートガイドに会員ページへの入口を追加</b></p>
       <ul class="tips">
         <li><b>会員ページをスマートガイドの上に</b>ガイドページの「スマートガイド」カードのすぐ上に「会員ページ」カードを追加しました。ログイン状況が表示され、ログイン・新規登録・プロフィール設定にすぐ移動できます。</li>
@@ -4210,6 +4233,7 @@ function goTab(name){
   }else if(name==="branddata"||name==="feedback")__lzNeed("sec-"+name);
   if(name==="chars"&&window.__ocMount)window.__ocMount();
   if(name==="member"&&window.__pmBoard)window.__pmBoard.refreshAdmin();
+  if(name==="member"||name==="home"){var ab=document.getElementById("authBlock"),sl=document.getElementById(name==="member"?"authSlotMember":"authSlotHome");if(ab&&sl&&ab.parentNode!==sl)sl.appendChild(ab);}
   syncGuideBtn(name);
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -10381,7 +10405,7 @@ function compositionScore(opts) {
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
 <script>
 (function(){
   var BOARD_LOCALE = 'ja';
@@ -11355,21 +11379,21 @@ function compositionScore(opts) {
     }
     paintUnreadOpt();
     var counts = {}, unread = {};
+    /* 只問「幾則」，不下載訊息本身：原本每次都把全站所有訊息抓下來數，
+       訊息越多越吃流量，超過 1000 則後數字也會算錯 */
     try{
-      var mc = await sb.from('messages').select('board_id,created_at,user_id')
-        .not('board_id','is',null).neq('status','deleted');
-      if(mc.data){
-        mc.data.forEach(function(r){
-          if(r.board_id==null) return;
-          counts[r.board_id] = (counts[r.board_id]||0)+1;
-          var lr = getLastRead(r.board_id);
-          if(!lr) return;                                          // 還沒有基準就先不算
-          if(state.user && r.user_id === state.user.id) return;    // 自己發的不算未讀
-          if(Date.parse(r.created_at) > Date.parse(lr)){
-            unread[r.board_id] = (unread[r.board_id]||0)+1;
-          }
-        });
-      }
+      await Promise.all(state.boards.map(async function(b){
+        var c = await sb.from('messages').select('id', { count: 'exact', head: true })
+          .eq('board_id', b.id).neq('status','deleted');
+        counts[b.id] = c.count || 0;
+        var lr = getLastRead(b.id);
+        if(!lr || !unreadEnabled()) return;                        // 還沒有基準就先不算
+        var q = sb.from('messages').select('id', { count: 'exact', head: true })
+          .eq('board_id', b.id).neq('status','deleted').gt('created_at', lr);
+        if(state.user) q = q.neq('user_id', state.user.id);        // 自己發的不算未讀
+        var u = await q;
+        unread[b.id] = u.count || 0;
+      }));
     }catch(e){}
     // 第一次看到的專版先記下基準，避免一進站就跳出幾十則「未讀」
     state.boards.forEach(function(b){ if(!getLastRead(b.id)) setLastRead(b.id, null); });
@@ -11575,19 +11599,38 @@ function compositionScore(opts) {
     }
   }
 
-  async function loadMessages(){
+  var MSG_COLS = 'id,body,status,created_at,user_id,parent_id,board_id, profiles:user_id(display_name,game_id,role)';
+  async function loadMessages(onlyNew){
     var list = $('boardList');
     if(!state.board){
       state.rows = [];
       if(list) list.innerHTML = '';
       return;
     }
-    var res = await sb.from('messages')
-      .select('id,body,status,created_at,user_id,parent_id,board_id, profiles:user_id(display_name,game_id,role)')
-      .eq('board_id', state.board.id)
-      .neq('status','deleted')
-      .order('created_at', { ascending: true })
-      .limit(150);
+    var bidNow = state.board.id;
+    var res;
+    if(onlyNew && state.rows.length){
+      /* 只有新訊息進來：只抓最後一則之後的，不再整批重抓 150 則 */
+      var last = state.rows[state.rows.length-1];
+      res = await sb.from('messages').select(MSG_COLS)
+        .eq('board_id', bidNow).neq('status','deleted')
+        .gte('created_at', last.created_at)
+        .order('created_at', { ascending: true }).limit(150);
+      if(!res.error){
+        var seen = {}, k;
+        for(k=0;k<state.rows.length;k++) seen[state.rows[k].id] = 1;
+        var merged = state.rows.slice();
+        (res.data||[]).forEach(function(m){ if(!seen[m.id]) merged.push(m); });
+        res = { data: merged.slice(-150), error: null };
+      }
+    }else{
+      /* 取「最新」150 則（原本是最舊的 150 則，超過 150 則後新訊息會看不到） */
+      res = await sb.from('messages').select(MSG_COLS)
+        .eq('board_id', bidNow).neq('status','deleted')
+        .order('created_at', { ascending: false }).limit(150);
+      if(!res.error && res.data) res.data = res.data.slice().reverse();
+    }
+    if(!state.board || state.board.id !== bidNow) return;
     if(res.error){
       // only wipe the list if there is nothing worth keeping on screen
       if(list && !state.rows.length){
@@ -11864,12 +11907,14 @@ function compositionScore(opts) {
 
   /* Realtime can fire several times in a burst (a message insert, a status
      update, a moderator action). Coalesce them into one refetch. */
-  var reloadTimer = null;
-  function queueReload(){
+  var reloadTimer = null, reloadFull = false;
+  function queueReload(kind){
+    if(kind !== 'INSERT') reloadFull = true;   // 隱藏、置頂、刪除等改動才整批重抓
     if(reloadTimer) return;
     reloadTimer = setTimeout(function(){
       reloadTimer = null;
-      loadMessages();
+      var full = reloadFull; reloadFull = false;
+      loadMessages(!full);
     }, 120);
   }
 
@@ -11887,7 +11932,7 @@ function compositionScore(opts) {
         .on('postgres_changes', {
           event: '*', schema: 'public', table: 'messages',
           filter: 'board_id=eq.'+bid
-        }, function(){ queueReload(); })
+        }, function(p){ queueReload(p && p.eventType); })
         .subscribe(function(status){
           setStatus(status === 'SUBSCRIBED', status === 'SUBSCRIBED' ? T.live_on : T.live_off);
         });
@@ -12672,9 +12717,10 @@ function wfEndedHTML(){
 
   function wfStartPoll(){
     wfStopPoll();
-    wf.timer = setInterval(function(){ if(wf.game) wfLoad(); }, 5000);
+    wf.timer = setInterval(function(){ if(wf.game && !document.hidden) wfLoad(); }, 5000);
     wfStartTick();
   }
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden && wf.timer && wf.game) wfLoad(); });
   function wfStopPoll(){
     if(wf.timer){ clearInterval(wf.timer); wf.timer = null; }
   }

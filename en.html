@@ -1546,9 +1546,16 @@ body.card-open{overflow:hidden}
     
 <div class="card" id="memberQuick" style="border-left:3px solid var(--violet)">
     <h3>Members</h3>
-    <p class="cond">Sign in, sign up, check your approval status, and edit your game ID, name and profile card. The board, Werewolf, Shared work and Characters all use this one account.</p>
-    <p class="cond" id="memberQuickStatus" style="margin-top:6px;font-weight:700;color:var(--ink)"></p>
-    <p style="margin:8px 0 0"><button type="button" class="jump-tool" data-jump="member">Go to Members →</button></p>
+    <p class="cond">One account for the whole site: the board, Werewolf, Shared work and Characters. No account yet? Sign up below. Once an admin approves you, you can start posting.</p>
+    <div id="authSlotHome">
+      <div id="authBlock">
+      <div id="memberErr" class="board-err" hidden></div>
+      <div id="boardAuth" class="board-auth"></div>
+      <div id="boardUser" class="board-user" hidden></div>
+      <div id="boardPending" class="board-pending" hidden></div>
+      </div>
+    </div>
+    <p style="margin:12px 0 0"><button type="button" class="jump-tool" data-jump="member">Profile card & my characters →</button></p>
   </div>
 
   <div class="card" id="smartGuide">
@@ -2886,11 +2893,8 @@ body.card-open{overflow:hidden}
 <section id="member">
   <div class="card">
     <h3>Members</h3>
-    <p class="cond">Sign in, sign up, approval status and your profile card live here. The board, Werewolf, Shared work and Characters all use this one account.</p>
-    <div id="memberErr" class="board-err" hidden></div>
-    <div id="boardAuth" class="board-auth"></div>
-    <div id="boardUser" class="board-user" hidden></div>
-    <div id="boardPending" class="board-pending" hidden></div>
+    <p class="cond">Edit your game ID, name and profile card here, and manage your characters. Sign-in and sign-up are also on the guide page.</p>
+    <div id="authSlotMember"></div>
   </div>
   <div class="card" id="memberChars" hidden>
     <h3>My characters</h3>
@@ -2958,7 +2962,26 @@ body.card-open{overflow:hidden}
     <h3>Changelog <span class="tag ok">actively maintained</span></h3>
     <p class="cond">Each site update will be listed here, so you can see the site is actively maintained — bug fixes, new tools, etc.</p>
         <div class="chg-entry">
-      <div class="chg-ver">Version 5.8.2 <span class="chg-build">current · Members shortcut in the smart guide</span></div>
+      <div class="chg-ver">Version 5.8.4 <span class="chg-build">current · Board fixes and lower bandwidth</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>A board bug that hid new messages, plus much lower bandwidth</b></p>
+      <ul class="tips">
+        <li><b>New messages stopped showing after 150</b>Rooms loaded the oldest 150 messages, so once a board passed 150, new posts never appeared. It now loads the newest 150.</li>
+        <li><b>Only the new message is fetched</b>Every new post used to make every open room re-download all 150 messages. Now only messages after the last one are fetched; hides, pins and deletes still trigger a full reload.</li>
+        <li><b>Board list asks for counts only</b>Opening the board list used to download every message on the site just to count them, which got slower and wrong past 1,000 messages. It now asks the database for the count.</li>
+        <li><b>Werewolf pauses in the background</b>Werewolf refreshed every 5 seconds even in a background tab. It now pauses and catches up when you come back.</li>
+        <li><b>Supabase library version pinned</b>The page loaded "latest 2.x", so an upstream update could change behaviour unnoticed. It is now pinned to 2.117.2.</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">Version 5.8.3 <span class="chg-build">Sign in from the guide page</span></div>
+      <p class="cond" style="margin:12px 0 4px"><b>Sign in and sign up from the guide page</b></p>
+      <ul class="tips">
+        <li><b>Sign-in form on the guide page</b>The Members card on the guide page now holds the sign-in and sign-up form, so new players can register right away. Once signed in, it shows your name, game ID and a sign-out button.</li>
+        <li><b>Still works in the Members tab</b>Opening the Members tab moves the same form there, so it works in both places without two separate sign-in boxes.</li>
+      </ul>
+    </div>
+        <div class="chg-entry">
+      <div class="chg-ver">Version 5.8.2 <span class="chg-build">Members shortcut in the smart guide</span></div>
       <p class="cond" style="margin:12px 0 4px"><b>Members shortcut in the smart guide</b></p>
       <ul class="tips">
         <li><b>Members card above the smart guide</b>A "Members" card now sits right above the smart guide on the guide page. It shows whether you are signed in and takes you straight to sign-in, sign-up and your profile settings.</li>
@@ -4178,6 +4201,7 @@ function goTab(name){
   }else if(name==="branddata"||name==="feedback")__lzNeed("sec-"+name);
   if(name==="chars"&&window.__ocMount)window.__ocMount();
   if(name==="member"&&window.__pmBoard)window.__pmBoard.refreshAdmin();
+  if(name==="member"||name==="home"){var ab=document.getElementById("authBlock"),sl=document.getElementById(name==="member"?"authSlotMember":"authSlotHome");if(ab&&sl&&ab.parentNode!==sl)sl.appendChild(ab);}
   syncGuideBtn(name);
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -10320,7 +10344,7 @@ function compositionScore(opts) {
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
 <script>
 (function(){
   var BOARD_LOCALE = 'en';
@@ -11307,21 +11331,21 @@ if(key === 'naming'){
     }
     paintUnreadOpt();
     var counts = {}, unread = {};
+    /* 只問「幾則」，不下載訊息本身：原本每次都把全站所有訊息抓下來數，
+       訊息越多越吃流量，超過 1000 則後數字也會算錯 */
     try{
-      var mc = await sb.from('messages').select('board_id,created_at,user_id')
-        .not('board_id','is',null).neq('status','deleted');
-      if(mc.data){
-        mc.data.forEach(function(r){
-          if(r.board_id==null) return;
-          counts[r.board_id] = (counts[r.board_id]||0)+1;
-          var lr = getLastRead(r.board_id);
-          if(!lr) return;                                          // 還沒有基準就先不算
-          if(state.user && r.user_id === state.user.id) return;    // 自己發的不算未讀
-          if(Date.parse(r.created_at) > Date.parse(lr)){
-            unread[r.board_id] = (unread[r.board_id]||0)+1;
-          }
-        });
-      }
+      await Promise.all(state.boards.map(async function(b){
+        var c = await sb.from('messages').select('id', { count: 'exact', head: true })
+          .eq('board_id', b.id).neq('status','deleted');
+        counts[b.id] = c.count || 0;
+        var lr = getLastRead(b.id);
+        if(!lr || !unreadEnabled()) return;                        // 還沒有基準就先不算
+        var q = sb.from('messages').select('id', { count: 'exact', head: true })
+          .eq('board_id', b.id).neq('status','deleted').gt('created_at', lr);
+        if(state.user) q = q.neq('user_id', state.user.id);        // 自己發的不算未讀
+        var u = await q;
+        unread[b.id] = u.count || 0;
+      }));
     }catch(e){}
     // 第一次看到的專版先記下基準，避免一進站就跳出幾十則「未讀」
     state.boards.forEach(function(b){ if(!getLastRead(b.id)) setLastRead(b.id, null); });
@@ -11527,19 +11551,38 @@ if(key === 'naming'){
     }
   }
 
-  async function loadMessages(){
+  var MSG_COLS = 'id,body,status,created_at,user_id,parent_id,board_id, profiles:user_id(display_name,game_id,role)';
+  async function loadMessages(onlyNew){
     var list = $('boardList');
     if(!state.board){
       state.rows = [];
       if(list) list.innerHTML = '';
       return;
     }
-    var res = await sb.from('messages')
-      .select('id,body,status,created_at,user_id,parent_id,board_id, profiles:user_id(display_name,game_id,role)')
-      .eq('board_id', state.board.id)
-      .neq('status','deleted')
-      .order('created_at', { ascending: true })
-      .limit(150);
+    var bidNow = state.board.id;
+    var res;
+    if(onlyNew && state.rows.length){
+      /* 只有新訊息進來：只抓最後一則之後的，不再整批重抓 150 則 */
+      var last = state.rows[state.rows.length-1];
+      res = await sb.from('messages').select(MSG_COLS)
+        .eq('board_id', bidNow).neq('status','deleted')
+        .gte('created_at', last.created_at)
+        .order('created_at', { ascending: true }).limit(150);
+      if(!res.error){
+        var seen = {}, k;
+        for(k=0;k<state.rows.length;k++) seen[state.rows[k].id] = 1;
+        var merged = state.rows.slice();
+        (res.data||[]).forEach(function(m){ if(!seen[m.id]) merged.push(m); });
+        res = { data: merged.slice(-150), error: null };
+      }
+    }else{
+      /* 取「最新」150 則（原本是最舊的 150 則，超過 150 則後新訊息會看不到） */
+      res = await sb.from('messages').select(MSG_COLS)
+        .eq('board_id', bidNow).neq('status','deleted')
+        .order('created_at', { ascending: false }).limit(150);
+      if(!res.error && res.data) res.data = res.data.slice().reverse();
+    }
+    if(!state.board || state.board.id !== bidNow) return;
     if(res.error){
       // only wipe the list if there is nothing worth keeping on screen
       if(list && !state.rows.length){
@@ -11814,12 +11857,14 @@ if(key === 'naming'){
 
   /* Realtime can fire several times in a burst (a message insert, a status
      update, a moderator action). Coalesce them into one refetch. */
-  var reloadTimer = null;
-  function queueReload(){
+  var reloadTimer = null, reloadFull = false;
+  function queueReload(kind){
+    if(kind !== 'INSERT') reloadFull = true;   // 隱藏、置頂、刪除等改動才整批重抓
     if(reloadTimer) return;
     reloadTimer = setTimeout(function(){
       reloadTimer = null;
-      loadMessages();
+      var full = reloadFull; reloadFull = false;
+      loadMessages(!full);
     }, 120);
   }
 
@@ -11837,7 +11882,7 @@ if(key === 'naming'){
         .on('postgres_changes', {
           event: '*', schema: 'public', table: 'messages',
           filter: 'board_id=eq.'+bid
-        }, function(){ queueReload(); })
+        }, function(p){ queueReload(p && p.eventType); })
         .subscribe(function(status){
           setStatus(status === 'SUBSCRIBED', status === 'SUBSCRIBED' ? T.live_on : T.live_off);
         });
@@ -12622,9 +12667,10 @@ function wfEndedHTML(){
 
   function wfStartPoll(){
     wfStopPoll();
-    wf.timer = setInterval(function(){ if(wf.game) wfLoad(); }, 5000);
+    wf.timer = setInterval(function(){ if(wf.game && !document.hidden) wfLoad(); }, 5000);
     wfStartTick();
   }
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden && wf.timer && wf.game) wfLoad(); });
   function wfStopPoll(){
     if(wf.timer){ clearInterval(wf.timer); wf.timer = null; }
   }
